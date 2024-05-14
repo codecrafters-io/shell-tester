@@ -50,6 +50,8 @@ func (b *ShellExecutable) Run(args ...string) error {
 }
 
 func (b *ShellExecutable) HasExited() bool {
+	// Call Result() before HasExited(), Result will wait until everything is synced
+	// So we get the correct result from HasExited()
 	return b.executable.HasExited()
 }
 
@@ -62,4 +64,26 @@ func (b *ShellExecutable) Kill() error {
 
 	b.logger.Debugf("Program terminated successfully")
 	return nil // When does this happen?
+}
+
+func (b *ShellExecutable) feedStdin(command []byte) error {
+	n, err := b.executable.StdinPipe.Write(command)
+	b.logger.Debugf("Wrote %d bytes to stdin", n)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (b *ShellExecutable) FeedStdin(command []byte) error {
+	commandWithEnter := append(command, []byte("\n")...)
+	return b.feedStdin(commandWithEnter)
+}
+
+func (b *ShellExecutable) Result() (executable.ExecutableResult, error) {
+	return b.executable.Result()
+}
+
+func (b *ShellExecutable) ResultWithWait() (executable.ExecutableResult, error) {
+	return b.executable.ResultWithWait()
 }

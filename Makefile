@@ -17,9 +17,14 @@ build:
 test:
 	go test -count=1 -p 1 -v ./internal/...
 
-test_with_shell: build
+test_with_bash: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/pass_all \
-	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"init\",\"tester_log_prefix\":\"stage-0\",\"title\":\"Stage #0: Test Bash\"}]" \
+	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"init\",\"tester_log_prefix\":\"stage-1\",\"title\":\"Stage #1: Shell Prompt\"}, {\"slug\":\"missing-command\",\"tester_log_prefix\":\"stage-2\",\"title\":\"Stage #2: Missing Command\"}, {\"slug\":\"repl\",\"tester_log_prefix\":\"stage-3\",\"title\":\"Stage #3: REPL\"}, {\"slug\":\"exit\",\"tester_log_prefix\":\"stage-4\",\"title\":\"Stage #4: Exit\"}]" \
+	dist/main.out
+
+test_paul: build
+	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/paul_shell \
+	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"missing-command\",\"tester_log_prefix\":\"stage-2\",\"title\":\"Stage #2: Missing Command\"}, {\"slug\":\"repl\",\"tester_log_prefix\":\"stage-3\",\"title\":\"Stage #3: REPL\"}]" \
 	dist/main.out
 
 record_fixtures:
