@@ -12,13 +12,13 @@ type ExactBufferAssertion struct {
 	ActualValue   string
 }
 
-func (a *ExactBufferAssertion) Run(executable *shell_executable.ShellExecutable, dataPipeSelector string) error {
-	bytesValue, err := executable.ReadBuffer(dataPipeSelector)
+func (a *ExactBufferAssertion) Run(buffer *shell_executable.TruncatedBuffer) error {
+	bytesValue, err := buffer.ReadBuffer()
 	if err != nil {
 		return err
 	}
 
-	value := string(removeControlSequence(bytesValue))
+	value := string(shell_executable.RemoveControlSequence(bytesValue))
 	a.ActualValue = value
 
 	if len(value) == 0 {

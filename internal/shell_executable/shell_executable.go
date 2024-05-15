@@ -1,6 +1,7 @@
 package shell_executable
 
 import (
+	"bytes"
 	"strings"
 
 	"github.com/codecrafters-io/tester-utils/executable"
@@ -76,6 +77,14 @@ func (b *ShellExecutable) feedStdin(command []byte) error {
 func (b *ShellExecutable) FeedStdin(command []byte) error {
 	commandWithEnter := append(command, []byte("\n")...)
 	return b.feedStdin(commandWithEnter)
+}
+
+func (b *ShellExecutable) GetStdErrBuffer() *bytes.Buffer {
+	return b.executable.StderrBuffer
+}
+
+func (b *ShellExecutable) GetStdOutBuffer() *bytes.Buffer {
+	return b.executable.StdoutBuffer
 }
 
 func (b *ShellExecutable) Wait() (executable.ExecutableResult, error) {

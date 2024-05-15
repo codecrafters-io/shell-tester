@@ -20,6 +20,7 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	tries := random.RandomInt(3, 5)
 	a := assertions.BufferAssertion{}
+	truncatedStdErrBuf := shell_executable.NewTruncatedBuffer(b.GetStdErrBuffer())
 
 	for i := 0; i < tries; i++ {
 		command := "nonexistent" + strconv.Itoa(i)
@@ -27,11 +28,12 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 		expectedErrorMessage := fmt.Sprintf("%s: command not found", command)
 
 		a.ExpectedValue = expectedErrorMessage
-		if err := a.Run(b, "stderr"); err != nil {
+		if err := a.Run(&truncatedStdErrBuf); err != nil {
 			return err
 		}
 
-		a.UpdateOffsetToCurrentLength()
+		truncatedStdErrBuf.UpdateOffsetToCurrentLength()
+		logger.Debugf("Received message: %q", a.ActualValue)
 
 		if strings.Contains(a.ActualValue, "\n") {
 			lines := strings.Split(a.ActualValue, "\n")

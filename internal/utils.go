@@ -29,29 +29,9 @@ func removeNonPrintable(data []byte) []byte {
 	return buffer.Bytes()
 }
 
-func removeControlSequence(data []byte) []byte {
-	PROMPT_START := '$'
-
-	for startIdx, r := range string(data) {
-		// Standard escape codes are prefixed with Escape (27)
-		if r == 27 {
-			// remove from here upto PROMPT_START
-			for endIdx, r2 := range string(data[startIdx:]) {
-				if r2 == PROMPT_START {
-					// Remove from start_idx to end_idx-1
-					data = append(data[:startIdx], data[endIdx:]...)
-					break
-				}
-			}
-		}
-	}
-
-	return data
-}
-
 func printAllChars(data []byte) {
 	for _, r := range string(data) {
-		fmt.Printf("%d ", r)
+		fmt.Printf("%q ", r)
 	}
 	fmt.Println()
 }

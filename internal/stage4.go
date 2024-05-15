@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -16,19 +17,24 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	logger := stageHarness.Logger
 	command := "nonexistent"
+	expectedErrorMessage := fmt.Sprintf("%s: command not found", command)
 	b.FeedStdin([]byte(command))
 
-	buffer, err := b.ReadBuffer("stderr")
-	if err != nil {
+	a := assertions.BufferAssertion{ExpectedValue: expectedErrorMessage}
+	truncatedStdErrBuf := shell_executable.NewTruncatedBuffer(b.GetStdErrBuffer())
+	if err := a.Run(&truncatedStdErrBuf); err != nil {
 		return err
 	}
+	logger.Debugf("Received message: %q", a.ActualValue)
 
-	errorMessage := string(buffer)
-
-	if !strings.Contains(errorMessage, command+": command not found") {
-		return fmt.Errorf("Expected error message to contain '%s: command not found', but got '%s'", command, errorMessage)
+	if strings.Contains(a.ActualValue, "\n") {
+		lines := strings.Split(a.ActualValue, "\n")
+		if len(lines) > 2 {
+			a.ActualValue = lines[len(lines)-2]
+		}
 	}
-	logger.Successf(strings.Split(errorMessage, "\n")[1])
+
+	logger.Successf("Received error message: %q", a.ActualValue)
 
 	if b.HasExited() {
 		return fmt.Errorf("Program exited before all commands were sent")
@@ -55,7 +61,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 		return fmt.Errorf("Program did not exit after sending 'exit'")
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("Program did not exit with status 0 after sending 'exit'")
+		return fmt.Errorf("Expected exit code 0, but got %d", result.ExitCode)
 	}
 
 	return nil

@@ -16,12 +16,12 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	logger := stageHarness.Logger
 
-	// XXX: selector ?
-	// XXX: Why is stdout empty ?
 	expectedPrompt := "$ "
 
 	a := assertions.ExactBufferAssertion{ExpectedValue: expectedPrompt}
-	if err := a.Run(b, "stderr"); err != nil {
+	truncatedStdErrBuf := shell_executable.NewTruncatedBuffer(b.GetStdErrBuffer())
+
+	if err := a.Run(&truncatedStdErrBuf); err != nil {
 		return err
 	}
 	logger.Successf("Received prompt: %q", a.ActualValue)
