@@ -50,8 +50,6 @@ func (b *ShellExecutable) Run(args ...string) error {
 }
 
 func (b *ShellExecutable) HasExited() bool {
-	// Call Result() before HasExited(), Result will wait until everything is synced
-	// So we get the correct result from HasExited()
 	return b.executable.HasExited()
 }
 
@@ -80,10 +78,6 @@ func (b *ShellExecutable) FeedStdin(command []byte) error {
 	return b.feedStdin(commandWithEnter)
 }
 
-func (b *ShellExecutable) Result() (executable.ExecutableResult, error) {
-	return b.executable.Result()
-}
-
-func (b *ShellExecutable) ResultWithWait() (executable.ExecutableResult, error) {
-	return b.executable.ResultWithWait()
+func (b *ShellExecutable) Wait() (executable.ExecutableResult, error) {
+	return b.executable.Wait()
 }

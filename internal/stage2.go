@@ -18,13 +18,12 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	command := "nonexistent"
 	b.FeedStdin([]byte(command))
 
-	res, err := b.Result()
+	buffer, err := b.ReadBuffer("stderr")
 	if err != nil {
 		return err
 	}
-	result := NewDetailedResult(res)
 
-	errorMessage := string(result.CurrentCommandStdErr(true))
+	errorMessage := string(buffer)
 
 	if !strings.Contains(errorMessage, command+": command not found") {
 		return fmt.Errorf("Expected error message to contain '%s: command not found', but got '%s'", command, errorMessage)

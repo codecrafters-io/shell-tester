@@ -15,29 +15,29 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	logger := stageHarness.Logger
-	b.FeedStdin([]byte(""))
 
-	res, err := b.Result()
+	// XXX: selector ?
+	// XXX: Why is stdout empty ?
+	buffer, err := b.ReadBuffer("stderr")
 	if err != nil {
 		return err
 	}
-	result := NewDetailedResult(res)
 
-	// XXX: Why is stdout empty ?
-	prompt := strings.TrimSpace(string(result.CurrentCommandStdErr(false)))
+	cleanedBuffer := removeControlSequence(buffer)
+	prompt := string(cleanedBuffer)
+	expectedPrompt := "$ "
 
 	if len(prompt) == 0 {
 		return fmt.Errorf("Expected to receive prompt, but got nothing")
 	}
 
-	// bash will send extra characters apart from $ prompt
-	if !strings.Contains(prompt, "$") {
-		return fmt.Errorf("Expected prompt to be '$', but got '%s'", prompt)
+	if !strings.EqualFold(prompt, expectedPrompt) {
+		return fmt.Errorf("Expected prompt to be %q, but got %q", expectedPrompt, prompt)
 	}
-	logger.Successf("Received prompt: %q", strings.Split(prompt, "\n")[1])
+	logger.Successf("Received prompt: %q", prompt)
 
 	if b.HasExited() {
-		return fmt.Errorf("Program has exited")
+		return fmt.Errorf("Expected shell to be running, but it has exited")
 	}
 	logger.Successf("Shell is still running")
 
