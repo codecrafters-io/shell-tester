@@ -2,8 +2,8 @@ package internal
 
 import (
 	"fmt"
-	"strings"
 
+	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -18,23 +18,13 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// XXX: selector ?
 	// XXX: Why is stdout empty ?
-	buffer, err := b.ReadBuffer("stderr")
-	if err != nil {
-		return err
-	}
-
-	cleanedBuffer := removeControlSequence(buffer)
-	prompt := string(cleanedBuffer)
 	expectedPrompt := "$ "
 
-	if len(prompt) == 0 {
-		return fmt.Errorf("Expected to receive prompt, but got nothing")
+	a := assertions.ExactBufferAssertion{ExpectedValue: expectedPrompt}
+	if err := a.Run(b, "stderr"); err != nil {
+		return err
 	}
-
-	if !strings.EqualFold(prompt, expectedPrompt) {
-		return fmt.Errorf("Expected prompt to be %q, but got %q", expectedPrompt, prompt)
-	}
-	logger.Successf("Received prompt: %q", prompt)
+	logger.Successf("Received prompt: %q", a.ActualValue)
 
 	if b.HasExited() {
 		return fmt.Errorf("Expected shell to be running, but it has exited")

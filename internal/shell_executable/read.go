@@ -12,6 +12,17 @@ func (b *ShellExecutable) ReadBuffer(selector string) ([]byte, error) {
 	return b.ReadBufferWithTimeout(10*time.Millisecond, selector)
 }
 
+// Use it like this:
+// buffer, err := b.ReadBufferCustom(50*time.Millisecond, "stderr", func(b []byte) bool { return len(b) > 50*(i+1) })
+func (b *ShellExecutable) ReadBufferCustom(timeout time.Duration, selector string, shouldStopReadingBuffer func([]byte) bool) ([]byte, error) {
+	data, err := b.readUntil(shouldStopReadingBuffer, timeout, selector)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
+
 func (b *ShellExecutable) ReadBufferWithTimeout(timeout time.Duration, selector string) ([]byte, error) {
 	shouldStopReadingBuffer := func(buf []byte) bool {
 		if len(buf) < 2 {
@@ -34,6 +45,7 @@ func (b *ShellExecutable) readUntil(condition func([]byte) bool, timeout time.Du
 	deadline := time.Now().Add(timeout)
 
 	for !time.Now().After(deadline) {
+		time.Sleep(1 * time.Millisecond) // Let's give some time for the buffer to fill up
 
 		var readData []byte
 		switch selector {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -16,18 +17,21 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	logger := stageHarness.Logger
 	command := "nonexistent"
+	expectedErrorMessage := fmt.Sprintf("%s: command not found", command)
 	b.FeedStdin([]byte(command))
 
-	buffer, err := b.ReadBuffer("stderr")
-	if err != nil {
+	a := assertions.BufferAssertion{ExpectedValue: expectedErrorMessage}
+	if err := a.Run(b, "stderr"); err != nil {
 		return err
 	}
 
-	errorMessage := string(buffer)
-
-	if !strings.Contains(errorMessage, command+": command not found") {
-		return fmt.Errorf("Expected error message to contain '%s: command not found', but got '%s'", command, errorMessage)
+	if strings.Contains(a.ActualValue, "\n") {
+		lines := strings.Split(a.ActualValue, "\n")
+		if len(lines) > 2 {
+			a.ActualValue = lines[len(lines)-2]
+		}
 	}
-	logger.Successf(strings.Split(errorMessage, "\n")[1])
+
+	logger.Successf("Received error message: %q", a.ActualValue)
 	return nil
 }
