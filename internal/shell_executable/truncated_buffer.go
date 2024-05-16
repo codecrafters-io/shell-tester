@@ -53,7 +53,7 @@ func (t *TruncatedBuffer) readUntil(condition func([]byte) bool, timeout time.Du
 	deadline := time.Now().Add(timeout)
 
 	for !time.Now().After(deadline) {
-		time.Sleep(1 * time.Millisecond) // Let's give some time for the buffer to fill up
+		time.Sleep(5 * time.Millisecond) // Let's give some time for the buffer to fill up
 
 		bytesData := t.buffer.Bytes()
 

@@ -40,17 +40,6 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 		return fmt.Errorf("Program exited before all commands were sent")
 	}
 
-	// // BUG: ReadBuffer's condition is breaking, because shell is only sending the output to stdout
-	// // Not the prompt or any other output
-	// b.FeedStdin([]byte("echo foo"))
-	// buffer, err = b.ReadBuffer("stderr")
-	// if err != nil {
-	// 	return err
-	// }
-	// response = string(buffer)
-	// fmt.Println("response", errorMessage)
-
-	// Note: When we run exit, it exits the shell with the status of the last command executed, which is still 127 in this case.
 	b.FeedStdin([]byte("exit 0"))
 	result, err := b.Wait()
 	if err != nil {
