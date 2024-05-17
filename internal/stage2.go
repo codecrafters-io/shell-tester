@@ -22,14 +22,14 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	a := assertions.BufferAssertion{ExpectedValue: expectedErrorMessage}
 	truncatedStdErrBuf := shell_executable.NewTruncatedBuffer(b.GetStdErrBuffer())
-	if err := a.Run(&truncatedStdErrBuf); err != nil {
+	if err := a.Run(&truncatedStdErrBuf, assertions.CoreTestInexact); err != nil {
 		return err
 	}
 	logger.Debugf("Received message: %q", a.ActualValue)
 
 	if strings.Contains(a.ActualValue, "\n") {
 		lines := strings.Split(a.ActualValue, "\n")
-		if len(lines) > 2 {
+		if len(lines) >= 2 {
 			a.ActualValue = lines[len(lines)-2]
 		}
 	}

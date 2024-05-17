@@ -28,7 +28,7 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 		expectedErrorMessage := fmt.Sprintf("%s: command not found", command)
 
 		a.ExpectedValue = expectedErrorMessage
-		if err := a.Run(&truncatedStdErrBuf); err != nil {
+		if err := a.Run(&truncatedStdErrBuf, assertions.CoreTestInexact); err != nil {
 			return err
 		}
 

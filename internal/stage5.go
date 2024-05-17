@@ -8,28 +8,27 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
+func testEcho(stageHarness *test_case_harness.TestCaseHarness) error {
 	b := shell_executable.NewShellExecutable(stageHarness)
 	if err := b.Run(); err != nil {
 		return err
 	}
 
 	logger := stageHarness.Logger
+	message := "Hello World!"
+	command := fmt.Sprintf("echo %s", message)
+	b.FeedStdin([]byte(command))
 
-	expectedPrompt := "$"
-
-	a := assertions.BufferAssertion{ExpectedValue: expectedPrompt}
-	truncatedStdErrBuf := shell_executable.NewTruncatedBuffer(b.GetStdErrBuffer())
-
+	a := assertions.BufferAssertion{ExpectedValue: message}
+	truncatedStdErrBuf := shell_executable.NewTruncatedBuffer(b.GetStdOutBuffer())
 	if err := a.Run(&truncatedStdErrBuf, assertions.CoreTestExact); err != nil {
 		return err
 	}
-	logger.Successf("Received prompt: %q", a.ActualValue)
+	logger.Successf("Received message: %q", a.ActualValue)
 
 	if b.HasExited() {
-		return fmt.Errorf("Expected shell to be running, but it has exited")
+		return fmt.Errorf("Program exited before all commands were sent")
 	}
-	logger.Successf("Shell is still running")
 
 	return nil
 }

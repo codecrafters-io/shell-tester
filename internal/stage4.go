@@ -22,7 +22,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	a := assertions.BufferAssertion{ExpectedValue: expectedErrorMessage}
 	truncatedStdErrBuf := shell_executable.NewTruncatedBuffer(b.GetStdErrBuffer())
-	if err := a.Run(&truncatedStdErrBuf); err != nil {
+	if err := a.Run(&truncatedStdErrBuf, assertions.CoreTestInexact); err != nil {
 		return err
 	}
 	logger.Debugf("Received message: %q", a.ActualValue)

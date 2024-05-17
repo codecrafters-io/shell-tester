@@ -27,21 +27,12 @@ func (t *TruncatedBuffer) updateOffsetToCurrentLength() {
 	t.offset = t.buffer.Len()
 }
 
-func (t *TruncatedBuffer) ReadBuffer() ([]byte, error) {
-	return t.ReadBufferWithTimeout(10 * time.Millisecond)
+func (t *TruncatedBuffer) ReadBuffer(shouldStopReadingBuffer func(string, []byte) error, expectedValue string) ([]byte, error) {
+	return t.ReadBufferWithTimeout(10*time.Millisecond, shouldStopReadingBuffer, expectedValue)
 }
 
-func (t *TruncatedBuffer) ReadBufferWithTimeout(timeout time.Duration) ([]byte, error) {
-	shouldStopReadingBuffer := func(buf []byte) bool {
-		if len(buf) < 2 {
-			return false
-		}
-		// After completing the current command, the shell would move on to the next line with the prompt
-		// XXX : What about users without this functionality ?
-		return string(buf[len(buf)-2:]) == "$ "
-	}
-
-	data, err := t.readUntil(shouldStopReadingBuffer, timeout)
+func (t *TruncatedBuffer) ReadBufferWithTimeout(timeout time.Duration, shouldStopReadingBuffer func(string, []byte) error, expectedValue string) ([]byte, error) {
+	data, err := t.readUntil(shouldStopReadingBuffer, timeout, expectedValue)
 	if err != nil {
 		return nil, err
 	}
@@ -49,17 +40,18 @@ func (t *TruncatedBuffer) ReadBufferWithTimeout(timeout time.Duration) ([]byte, 
 	return data, nil
 }
 
-func (t *TruncatedBuffer) readUntil(condition func([]byte) bool, timeout time.Duration) ([]byte, error) {
+func (t *TruncatedBuffer) readUntil(condition func(string, []byte) error, timeout time.Duration, expectedValue string) ([]byte, error) {
 	deadline := time.Now().Add(timeout)
 
 	for !time.Now().After(deadline) {
-		time.Sleep(5 * time.Millisecond) // Let's give some time for the buffer to fill up
+		time.Sleep(1 * time.Millisecond) // Let's give some time for the buffer to fill up
 
 		bytesData := t.buffer.Bytes()
 
 		truncatedData := bytesData[t.offset:]
 		t.lastReadValueLength = len(truncatedData)
-		if condition(bytesData) {
+
+		if errToBool(condition(expectedValue, bytesData)) {
 			return truncatedData, nil
 		} else {
 			time.Sleep(1 * time.Millisecond) // Let's wait a bit before trying again
@@ -72,7 +64,6 @@ func (t *TruncatedBuffer) UpdateOffsetToCurrentLength() {
 	t.offset += t.lastReadValueLength
 }
 
-// Duplicated for now
 func RemoveControlSequence(data []byte) []byte {
 	PROMPT_START := '$'
 
@@ -91,4 +82,8 @@ func RemoveControlSequence(data []byte) []byte {
 	}
 
 	return data
+}
+
+func errToBool(err error) bool {
+	return err == nil
 }
