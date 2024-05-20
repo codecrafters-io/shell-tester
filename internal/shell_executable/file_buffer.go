@@ -22,13 +22,8 @@ func NewFileBuffer(descriptor *os.File) FileBuffer {
 	}
 }
 
-// func (b FileBuffer) FeedStdin(command []byte) error {
-// 	commandWithEnter := append(command, []byte("\n")...)
-// 	return b.feedStdin(commandWithEnter)
-// }
-
 func (t *FileBuffer) ReadBuffer(shouldStopReadingBuffer func([]byte) error) ([]byte, error) {
-	return t.ReadBufferWithTimeout(100*time.Millisecond, shouldStopReadingBuffer)
+	return t.ReadBufferWithTimeout(2000*time.Millisecond, shouldStopReadingBuffer)
 }
 
 func (t *FileBuffer) ReadBufferWithTimeout(timeout time.Duration, shouldStopReadingBuffer func([]byte) error) ([]byte, error) {
@@ -48,16 +43,21 @@ func (t *FileBuffer) readUntil(condition func([]byte) error, timeout time.Durati
 		readByte, err := t.bufferedReader.ReadByteWithTimeout(2 * time.Millisecond)
 		if err != nil {
 			if err == async_buffered_reader.ErrNoData {
+				// fmt.Println("No data available")
+				time.Sleep(2 * time.Millisecond) // Let's wait a bit before trying again
 				continue
+			} else {
+				// fmt.Printf("Error while reading: %v\n", err)
+				return readBytes, err
 			}
 		}
 
+		// fmt.Printf("readByte: %q\n", string(readByte))
 		readBytes = append(readBytes, readByte)
 
+		// If the condition is met, return. Else the loop runs again
 		if condition(readBytes) == nil {
 			return readBytes, nil
-		} else {
-			time.Sleep(2 * time.Millisecond) // Let's wait a bit before trying again
 		}
 	}
 

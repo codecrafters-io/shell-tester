@@ -2,7 +2,6 @@ package async_buffered_reader
 
 import (
 	"errors"
-	"fmt"
 	"io"
 	"time"
 )
@@ -34,7 +33,6 @@ func (c *AsyncBufferedReader) ReadByteWithTimeout(timeout time.Duration) (byte, 
 		return 0, ErrNoData
 	case readByte, ok := <-c.data:
 		if !ok {
-			fmt.Println("channel read error")
 			return 0, c.err
 		}
 
@@ -44,7 +42,7 @@ func (c *AsyncBufferedReader) ReadByteWithTimeout(timeout time.Duration) (byte, 
 
 // Keeps reading forever until an error or EOF
 func (c *AsyncBufferedReader) start() {
-	for {
+		for {
 		buf := make([]byte, 1024)
 		n, err := c.r.Read(buf)
 

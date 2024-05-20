@@ -1,2 +1,2 @@
 #!/bin/sh
-PS1='$ ' exec zsh
+exec zsh

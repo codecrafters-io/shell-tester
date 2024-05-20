@@ -37,15 +37,18 @@ test_dash: build
 	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}]" \
 	dist/main.out
 
+test_ryan: build
+	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/ryan_shell \
+	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}]" \
+	dist/main.out
+
+test_all: test_bash test_ryan test_dash
+
 test_paul: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/paul_shell \
 	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}]" \
 	dist/main.out
 
-test_ryan: build
-	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/ryan_shell \
-	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}]" \
-	dist/main.out
 
 record_fixtures:
 	CODECRAFTERS_RECORD_FIXTURES=true make test

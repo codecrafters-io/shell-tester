@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"regexp"
 	"strings"
 
 	"github.com/codecrafters-io/tester-utils/executable"
@@ -42,10 +43,7 @@ func (b *ShellExecutable) Start(args ...string) error {
 
 	cmd := exec.Command(b.executable.Path)
 
-	// TODO: Find a way to take current environment but still sanitize ZSH-specific stuff
-	cmd.Env = []string{}
-	cmd.Env = append(cmd.Env, "ZDOTDIR=/Users/rohitpaulk/experiments/codecrafters/testers/shell-tester/internal/test_helpers/zsh_config/")
-	cmd.Env = append(cmd.Env, "BASH_SILENCE_DEPRECATION_WARNING=1")
+	cmd.Env = os.Environ()
 	cmd.Env = append(cmd.Env, "PS1=$ ")
 	cmd.Env = append(cmd.Env, "TERM=dumb")
 
@@ -60,6 +58,28 @@ func (b *ShellExecutable) Start(args ...string) error {
 	return nil
 }
 
+func (b *ShellExecutable) AssertOutputMatchesRegex(regexp *regexp.Regexp) error {
+	shouldStopReadingBuffer := func(buf []byte) error {
+		if regexp.Match(StripANSI(buf)) {
+			return nil
+		} else {
+			return fmt.Errorf("Expected output to match regex")
+		}
+	}
+
+	if actualValue, err := b.ptyBuffer.ReadBuffer(shouldStopReadingBuffer); err != nil {
+		// b.logger.Debugf("Read bytes: %q", actualValue)
+		// TODO: Add regex to log message here
+		return fmt.Errorf("Expected output to match regex, but got %q", string(actualValue))
+	} else {
+		// b.logger.Debugf("Read bytes: %q", actualValue)
+		b.programLogger.Plainf("%s", string(StripANSI(actualValue)))
+	}
+
+	return nil
+}
+
+// TODO: Convert this to "AssertOutput", and "AssertNoMoreOutput"?
 func (b *ShellExecutable) AssertPrompt(prompt string) error {
 	shouldStopReadingBuffer := func(buf []byte) error {
 		if string(StripANSI(buf)) == prompt {
@@ -71,6 +91,12 @@ func (b *ShellExecutable) AssertPrompt(prompt string) error {
 
 	if actualValue, err := b.ptyBuffer.ReadBuffer(shouldStopReadingBuffer); err != nil {
 		// b.logger.Debugf("Read bytes: %q", actualValue)
+
+		// If the user sent any output, let's print it.
+		if len(actualValue) > 0 {
+			b.programLogger.Plainf("%s", string(StripANSI(actualValue)))
+		}
+
 		return fmt.Errorf("Expected %q, but got %q", prompt, string(actualValue))
 	} else {
 		// b.logger.Debugf("Read bytes: %q", actualValue)

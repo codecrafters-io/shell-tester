@@ -1,6 +1,8 @@
 package internal
 
 import (
+	"regexp"
+
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -17,11 +19,11 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	if err := shell.SendCommand("missing"); err != nil {
+	if err := shell.SendCommand("inexistent"); err != nil {
 		return err
 	}
 
-	if err := shell.AssertPrompt("bash: missing: command not found"); err != nil {
+	if err := shell.AssertOutputMatchesRegex(regexp.MustCompile(`inexistent: (command )?not found`)); err != nil {
 		return err
 	}
 
