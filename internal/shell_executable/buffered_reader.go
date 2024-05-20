@@ -63,6 +63,7 @@ func (t *FileBuffer) readUntil(condition func(string, []byte) error, timeout tim
 			}
 			panic(err)
 		}
+		fmt.Printf("Read %d bytes: %q\n", n, string(buf[:n]))
 		fullBuf = append(fullBuf, buf[:n]...)
 		// cleanedFullBuf := StripANSI(fullBuf)
 		cleanedFullBuf := fullBuf
