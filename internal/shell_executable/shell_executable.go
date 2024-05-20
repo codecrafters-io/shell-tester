@@ -18,8 +18,9 @@ type ShellExecutable struct {
 	programLogger *logger.Logger
 
 	// Set after starting
-	args []string
-	pty  *os.File
+	args      []string
+	pty       *os.File
+	ptyBuffer FileBuffer
 }
 
 func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellExecutable {
@@ -29,6 +30,7 @@ func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellE
 		programLogger: logger.GetLogger(stageHarness.Logger.IsDebug, "[your_program] "),
 	}
 
+	// TODO: Kill pty process?
 	// stageHarness.RegisterTeardownFunc(func() { b.Kill() })
 
 	return b
@@ -36,8 +38,7 @@ func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellE
 
 func (b *ShellExecutable) Start(args ...string) error {
 	b.args = args
-	log := b.getInitialLogLine()
-	b.logger.Infof(log)
+	b.logger.Infof(b.getInitialLogLine())
 
 	cmd := exec.Command(b.executable.Path)
 
@@ -54,13 +55,12 @@ func (b *ShellExecutable) Start(args ...string) error {
 	}
 
 	b.pty = pty
+	b.ptyBuffer = NewFileBuffer(b.pty)
 
 	return nil
 }
 
 func (b *ShellExecutable) AssertPrompt(prompt string) error {
-	ptyBuffer := NewFileBuffer(b.pty)
-
 	shouldStopReadingBuffer := func(buf []byte) error {
 		if string(StripANSI(buf)) == prompt {
 			return nil
@@ -69,7 +69,7 @@ func (b *ShellExecutable) AssertPrompt(prompt string) error {
 		}
 	}
 
-	if actualValue, err := ptyBuffer.ReadBuffer(shouldStopReadingBuffer); err != nil {
+	if actualValue, err := b.ptyBuffer.ReadBuffer(shouldStopReadingBuffer); err != nil {
 		// b.logger.Debugf("Read bytes: %q", actualValue)
 		return fmt.Errorf("Expected %q, but got %q", prompt, string(actualValue))
 	} else {
@@ -96,43 +96,29 @@ func (b *ShellExecutable) writeAndReadReflection(command string) error {
 	expectedReflection := command + "\r\n"
 	readBytes := []byte{}
 
-	for len(readBytes) < len(expectedReflection) {
-		singleByteBuf := make([]byte, 1)
-		n, err := b.pty.Read(singleByteBuf)
-		if err != nil {
-			if strings.Contains(err.Error(), "resource temporarily unavailable") {
-				continue
-			}
-
-			return err
+	shouldStopReadingBuffer := func(buf []byte) error {
+		if string(buf) == expectedReflection {
+			return nil
+		} else {
+			return fmt.Errorf("Expected %q, but got %q", expectedReflection, string(buf))
 		}
-
-		if n != 1 {
-			return fmt.Errorf("Expected to read %d bytes, but read %d", len(expectedReflection), n)
-		}
-
-		readBytes = append(readBytes, singleByteBuf...)
 	}
 
-	if string(readBytes) != expectedReflection {
-		return fmt.Errorf("Expected to read %q, but read %q", expectedReflection, string(readBytes))
+	readBytes, err := b.ptyBuffer.ReadBuffer(shouldStopReadingBuffer)
+	if err != nil {
+		return fmt.Errorf("Expected %q, but got %q", expectedReflection, string(readBytes))
 	}
 
 	return nil
 }
 
-// func (b *ShellExecutable) FeedStdin(command []byte) error {
-// 	commandWithEnter := append(command, []byte("\n")...)
-// 	return b.feedStdin(commandWithEnter)
-// }
-
 func (b *ShellExecutable) getInitialLogLine() string {
 	var log string
 
 	if b.args == nil || len(b.args) == 0 {
-		log = ("$ ./spawn_shell.sh")
+		log = ("Running ./spawn_shell.sh")
 	} else {
-		log += "$ ./spawn_shell.sh"
+		log += "Running ./spawn_shell.sh"
 		for _, arg := range b.args {
 			if strings.Contains(arg, " ") {
 				log += " \"" + arg + "\""

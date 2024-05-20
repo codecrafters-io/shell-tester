@@ -39,7 +39,7 @@ test_paul: build
 
 test_one: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/bash \
-	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"missing-command\",\"tester_log_prefix\":\"stage-2\",\"title\":\"Stage #2: Missing Command\"}]" \
+	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}]" \
 	dist/main.out
 
 test_ryan: build
