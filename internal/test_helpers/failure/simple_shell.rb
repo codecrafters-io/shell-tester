@@ -9,8 +9,8 @@
 # $stdout.write("$ ")
 # sleep 5
 
-# loop do
-#   $stdout.write("$ ")
-#   a = gets
-#   puts a.chomp
-# end
+loop do
+  $stdout.write("$ ")
+  a = gets
+  puts a.chomp
+end

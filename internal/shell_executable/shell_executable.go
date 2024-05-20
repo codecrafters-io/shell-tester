@@ -68,13 +68,15 @@ func (b *ShellExecutable) AssertOutputMatchesRegex(regexp *regexp.Regexp) error 
 		}
 	}
 
-	if actualValue, err := b.ptyBuffer.ReadBuffer(shouldStopReadingBuffer); err != nil {
+	actualValue, err := b.ptyBuffer.ReadBuffer(shouldStopReadingBuffer)
+	if len(actualValue) > 0 {
+		b.programLogger.Plainf("%s", string(StripANSI(actualValue)))
+	}
+
+	if err != nil {
 		// b.logger.Debugf("Read bytes: %q", actualValue)
 		// TODO: Add regex to log message here
 		return fmt.Errorf("Expected output to match regex, but got %q", string(actualValue))
-	} else {
-		// b.logger.Debugf("Read bytes: %q", actualValue)
-		b.programLogger.Plainf("%s", string(StripANSI(actualValue)))
 	}
 
 	return nil
