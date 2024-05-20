@@ -1,4 +1,4 @@
-package async_buffered_reader
+package async_bytewise_reader
 
 import (
 	"errors"
@@ -9,14 +9,14 @@ import (
 var ErrNoData = errors.New("no data available")
 
 // Inspired by https://benjamincongdon.me/blog/2020/04/23/Cancelable-Reads-in-Go/
-type AsyncBufferedReader struct {
+type AsyncBytewiseReader struct {
 	data chan byte
 	err  error
 	r    io.Reader
 }
 
-func New(r io.Reader) *AsyncBufferedReader {
-	c := &AsyncBufferedReader{
+func New(r io.Reader) *AsyncBytewiseReader {
+	c := &AsyncBytewiseReader{
 		r:    r,
 		data: make(chan byte),
 	}
@@ -27,7 +27,7 @@ func New(r io.Reader) *AsyncBufferedReader {
 	return c
 }
 
-func (c *AsyncBufferedReader) ReadByteWithTimeout(timeout time.Duration) (byte, error) {
+func (c *AsyncBytewiseReader) ReadByteWithTimeout(timeout time.Duration) (byte, error) {
 	select {
 	case <-time.After(timeout):
 		return 0, ErrNoData
@@ -41,8 +41,8 @@ func (c *AsyncBufferedReader) ReadByteWithTimeout(timeout time.Duration) (byte, 
 }
 
 // Keeps reading forever until an error or EOF
-func (c *AsyncBufferedReader) start() {
-		for {
+func (c *AsyncBytewiseReader) start() {
+	for {
 		buf := make([]byte, 1024)
 		n, err := c.r.Read(buf)
 

@@ -9,13 +9,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/codecrafters-io/shell-tester/internal/condition_reader"
 	"github.com/codecrafters-io/tester-utils/executable"
 	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 	ptylib "github.com/creack/pty"
 )
-
-var conditionFailedError = errors.New("condition failed")
 
 type ShellExecutable struct {
 	executable    *executable.Executable
@@ -25,7 +24,7 @@ type ShellExecutable struct {
 	// Set after starting
 	args      []string
 	pty       *os.File
-	ptyBuffer FileBuffer
+	ptyReader condition_reader.ConditionReader
 }
 
 func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellExecutable {
@@ -57,13 +56,13 @@ func (b *ShellExecutable) Start(args ...string) error {
 	}
 
 	b.pty = pty
-	b.ptyBuffer = NewFileBuffer(b.pty)
+	b.ptyReader = condition_reader.NewConditionReader(b.pty)
 
 	return nil
 }
 
 func (b *ShellExecutable) ReadBytesUntil(condition func([]byte) bool) ([]byte, error) {
-	return b.ptyBuffer.ReadUntilCondition(condition)
+	return b.ptyReader.ReadUntilCondition(condition)
 }
 
 func (b *ShellExecutable) AssertOutputMatchesRegex(regexp *regexp.Regexp) error {
@@ -71,7 +70,7 @@ func (b *ShellExecutable) AssertOutputMatchesRegex(regexp *regexp.Regexp) error 
 		return regexp.Match(StripANSI(buf))
 	}
 
-	actualValue, err := b.ptyBuffer.ReadUntilCondition(regexMatchCondition)
+	actualValue, err := b.ptyReader.ReadUntilCondition(regexMatchCondition)
 	if len(actualValue) > 0 {
 		b.programLogger.Plainf("%s", string(StripANSI(actualValue)))
 	}
@@ -90,7 +89,7 @@ func (b *ShellExecutable) AssertPrompt(prompt string) error {
 		return string(StripANSI(buf)) == prompt
 	}
 
-	actualValue, err := b.ptyBuffer.ReadUntilCondition(matchesPromptCondition)
+	actualValue, err := b.ptyReader.ReadUntilCondition(matchesPromptCondition)
 
 	if err != nil {
 		// If the user sent any output, let's print it before the error message.
@@ -101,7 +100,7 @@ func (b *ShellExecutable) AssertPrompt(prompt string) error {
 		return fmt.Errorf("Expected %q, got %q", prompt, string(actualValue))
 	}
 
-	extraOutput, extraOutputErr := b.ptyBuffer.ReadUntilTimeout(10 * time.Millisecond)
+	extraOutput, extraOutputErr := b.ptyReader.ReadUntilTimeout(10 * time.Millisecond)
 	fullOutput := append(actualValue, extraOutput...)
 
 	// Whether the value matches our expecations or not, we print it
@@ -139,7 +138,7 @@ func (b *ShellExecutable) writeAndReadReflection(command string) error {
 		return string(buf) == expectedReflection
 	}
 
-	readBytes, err := b.ptyBuffer.ReadUntilCondition(reflectionCondition)
+	readBytes, err := b.ptyReader.ReadUntilCondition(reflectionCondition)
 	if err != nil {
 		return fmt.Errorf("Expected %q, but got %q", expectedReflection, string(readBytes))
 	}
