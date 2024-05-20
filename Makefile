@@ -37,7 +37,6 @@ test_dash: build
 	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}]" \
 	dist/main.out
 
-
 test_paul: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/paul_shell \
 	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}]" \

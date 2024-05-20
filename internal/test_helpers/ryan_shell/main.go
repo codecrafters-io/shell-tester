@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func main1() {
+func main() {
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Fprint(os.Stdout, "$ ")
@@ -27,15 +27,15 @@ func main1() {
 	}
 }
 
-func main() {
-	reader := bufio.NewReader(os.Stdin)
-	for {
-		_, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
-	}
-}
+// func main() {
+// 	reader := bufio.NewReader(os.Stdin)
+// 	for {
+// 		_, err := reader.ReadString('\n')
+// 		if err != nil {
+// 			fmt.Fprintln(os.Stderr, err)
+// 		}
+// 	}
+// }
 
 func locateProgram(program string) (string, error) {
 	path, err := exec.LookPath(program)
