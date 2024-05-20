@@ -2,15 +2,11 @@ package shell_executable
 
 import (
 	"bufio"
-	"errors"
 	"os"
-	"regexp"
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/async_buffered_reader"
 )
-
-var conditionTimeoutError = errors.New("timeout while waiting for condition")
 
 type FileBuffer struct {
 	descriptor     *os.File
@@ -24,33 +20,26 @@ func NewFileBuffer(descriptor *os.File) FileBuffer {
 	}
 }
 
-func (t *FileBuffer) ReadBuffer(shouldStopReadingBuffer func([]byte) error) ([]byte, error) {
-	return t.ReadBufferWithTimeout(2000*time.Millisecond, shouldStopReadingBuffer)
-}
-
-func (t *FileBuffer) ReadBufferWithTimeout(timeout time.Duration, shouldStopReadingBuffer func([]byte) error) ([]byte, error) {
-	data, err := t.readUntil(shouldStopReadingBuffer, timeout)
-	if err != nil {
-		return data, err
+func (t *FileBuffer) ReadUntilTimeout(timeout time.Duration) ([]byte, error) {
+	alwaysFalseCondition := func([]byte) bool {
+		return false
 	}
 
-	return data, nil
-}
-
-func (t *FileBuffer) ReadAvailableWithTimeout(timeout time.Duration) ([]byte, error) {
-	data, err := t.readUntil(func(buf []byte) error {
-		return errors.New("keep reading")
-	}, timeout)
+	data, err := t.ReadUntilConditionWithTimeout(alwaysFalseCondition, timeout)
 
 	// We expect that the condition is never met, so let's return nil as the error
-	if err == conditionTimeoutError {
+	if err == conditionFailedError {
 		return data, nil
 	}
 
 	return data, err
 }
 
-func (t *FileBuffer) readUntil(condition func([]byte) error, timeout time.Duration) ([]byte, error) {
+func (t *FileBuffer) ReadUntilCondition(condition func([]byte) bool) ([]byte, error) {
+	return t.ReadUntilConditionWithTimeout(condition, 2000*time.Millisecond)
+}
+
+func (t *FileBuffer) ReadUntilConditionWithTimeout(condition func([]byte) bool, timeout time.Duration) ([]byte, error) {
 	deadline := time.Now().Add(timeout)
 	readBytes := []byte{}
 
@@ -71,19 +60,10 @@ func (t *FileBuffer) readUntil(condition func([]byte) error, timeout time.Durati
 		readBytes = append(readBytes, readByte)
 
 		// If the condition is met, return. Else the loop runs again
-		if condition(readBytes) == nil {
+		if condition(readBytes) {
 			return readBytes, nil
 		}
 	}
 
-	return readBytes, conditionTimeoutError
-}
-
-func StripANSI(data []byte) []byte {
-	// https://github.com/acarl005/stripansi/blob/master/stripansi.go
-	const ansi = "[\u001B\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[a-zA-Z\\d]*)*)?\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PRZcf-ntqry=><~]))"
-
-	var re = regexp.MustCompile(ansi)
-
-	return re.ReplaceAll(data, []byte(""))
+	return readBytes, conditionFailedError
 }

@@ -1,6 +1,7 @@
 package shell_executable
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -13,6 +14,8 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 	ptylib "github.com/creack/pty"
 )
+
+var conditionFailedError = errors.New("condition failed")
 
 type ShellExecutable struct {
 	executable    *executable.Executable
@@ -59,22 +62,21 @@ func (b *ShellExecutable) Start(args ...string) error {
 	return nil
 }
 
+func (b *ShellExecutable) ReadBytesUntil(condition func([]byte) bool) ([]byte, error) {
+	return b.ptyBuffer.ReadUntilCondition(condition)
+}
+
 func (b *ShellExecutable) AssertOutputMatchesRegex(regexp *regexp.Regexp) error {
-	shouldStopReadingBuffer := func(buf []byte) error {
-		if regexp.Match(StripANSI(buf)) {
-			return nil
-		} else {
-			return fmt.Errorf("Expected output to match regex")
-		}
+	regexMatchCondition := func(buf []byte) bool {
+		return regexp.Match(StripANSI(buf))
 	}
 
-	actualValue, err := b.ptyBuffer.ReadBuffer(shouldStopReadingBuffer)
+	actualValue, err := b.ptyBuffer.ReadUntilCondition(regexMatchCondition)
 	if len(actualValue) > 0 {
 		b.programLogger.Plainf("%s", string(StripANSI(actualValue)))
 	}
 
 	if err != nil {
-		// b.logger.Debugf("Read bytes: %q", actualValue)
 		// TODO: Add regex to log message here
 		return fmt.Errorf("Expected output to match regex, but got %q", string(actualValue))
 	}
@@ -84,15 +86,11 @@ func (b *ShellExecutable) AssertOutputMatchesRegex(regexp *regexp.Regexp) error 
 
 // TODO: Convert this to "AssertOutput", and "AssertNoMoreOutput"?
 func (b *ShellExecutable) AssertPrompt(prompt string) error {
-	shouldStopReadingBuffer := func(buf []byte) error {
-		if string(StripANSI(buf)) == prompt {
-			return nil
-		} else {
-			return fmt.Errorf("Prompt not found")
-		}
+	matchesPromptCondition := func(buf []byte) bool {
+		return string(StripANSI(buf)) == prompt
 	}
 
-	actualValue, err := b.ptyBuffer.ReadBuffer(shouldStopReadingBuffer)
+	actualValue, err := b.ptyBuffer.ReadUntilCondition(matchesPromptCondition)
 
 	if err != nil {
 		// If the user sent any output, let's print it before the error message.
@@ -103,7 +101,7 @@ func (b *ShellExecutable) AssertPrompt(prompt string) error {
 		return fmt.Errorf("Expected %q, got %q", prompt, string(actualValue))
 	}
 
-	extraOutput, extraOutputErr := b.ptyBuffer.ReadAvailableWithTimeout(10 * time.Millisecond)
+	extraOutput, extraOutputErr := b.ptyBuffer.ReadUntilTimeout(10 * time.Millisecond)
 	fullOutput := append(actualValue, extraOutput...)
 
 	// Whether the value matches our expecations or not, we print it
@@ -137,15 +135,11 @@ func (b *ShellExecutable) writeAndReadReflection(command string) error {
 	expectedReflection := command + "\r\n"
 	readBytes := []byte{}
 
-	shouldStopReadingBuffer := func(buf []byte) error {
-		if string(buf) == expectedReflection {
-			return nil
-		} else {
-			return fmt.Errorf("Expected %q, but got %q", expectedReflection, string(buf))
-		}
+	reflectionCondition := func(buf []byte) bool {
+		return string(buf) == expectedReflection
 	}
 
-	readBytes, err := b.ptyBuffer.ReadBuffer(shouldStopReadingBuffer)
+	readBytes, err := b.ptyBuffer.ReadUntilCondition(reflectionCondition)
 	if err != nil {
 		return fmt.Errorf("Expected %q, but got %q", expectedReflection, string(readBytes))
 	}
@@ -170,4 +164,14 @@ func (b *ShellExecutable) getInitialLogLine() string {
 	}
 
 	return log
+}
+
+// TODO: Use a library for this
+func StripANSI(data []byte) []byte {
+	// https://github.com/acarl005/stripansi/blob/master/stripansi.go
+	const ansi = "[\u001B\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[a-zA-Z\\d]*)*)?\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PRZcf-ntqry=><~]))"
+
+	var re = regexp.MustCompile(ansi)
+
+	return re.ReplaceAll(data, []byte(""))
 }
