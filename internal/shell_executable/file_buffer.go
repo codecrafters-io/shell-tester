@@ -2,13 +2,15 @@ package shell_executable
 
 import (
 	"bufio"
-	"fmt"
+	"errors"
 	"os"
 	"regexp"
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/async_buffered_reader"
 )
+
+var conditionTimeoutError = errors.New("timeout while waiting for condition")
 
 type FileBuffer struct {
 	descriptor     *os.File
@@ -33,6 +35,19 @@ func (t *FileBuffer) ReadBufferWithTimeout(timeout time.Duration, shouldStopRead
 	}
 
 	return data, nil
+}
+
+func (t *FileBuffer) ReadAvailableWithTimeout(timeout time.Duration) ([]byte, error) {
+	data, err := t.readUntil(func(buf []byte) error {
+		return errors.New("keep reading")
+	}, timeout)
+
+	// We expect that the condition is never met, so let's return nil as the error
+	if err == conditionTimeoutError {
+		return data, nil
+	}
+
+	return data, err
 }
 
 func (t *FileBuffer) readUntil(condition func([]byte) error, timeout time.Duration) ([]byte, error) {
@@ -61,8 +76,7 @@ func (t *FileBuffer) readUntil(condition func([]byte) error, timeout time.Durati
 		}
 	}
 
-	// TODO: Use a better error message here?
-	return readBytes, fmt.Errorf("timeout while waiting for condition")
+	return readBytes, conditionTimeoutError
 }
 
 func StripANSI(data []byte) []byte {

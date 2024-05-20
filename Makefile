@@ -28,20 +28,32 @@ test_bash: build
 test_dash: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/dash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
-		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}\
+		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AX2\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"} \
 	]" \
 	dist/main.out
 
 test_ryan: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/ryan_shell \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AX2\",\"title\":\"Stage #2: Missing Command\"}, \
 		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"} \
 	]" \
 	dist/main.out
 
-test_all: test_bash test_ryan test_dash
+test_all_success: test_bash test_ryan test_dash
+
+test_failure: build
+	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/failure \
+	CODECRAFTERS_TEST_CASES_JSON="[ \
+		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AX2\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"} \
+	]" \
+	dist/main.out
+
 
 record_fixtures:
 	CODECRAFTERS_RECORD_FIXTURES=true make test

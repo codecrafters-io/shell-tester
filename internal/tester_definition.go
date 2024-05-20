@@ -9,11 +9,11 @@ import (
 var testerDefinition = tester_definition.TesterDefinition{
 	ExecutableFileName: "spawn_shell.sh",
 	TestCases: []tester_definition.TestCase{
-		// {
-		// 	Slug:     "init",
-		// 	TestFunc: testPrompt,
-		// 	Timeout:  15 * time.Second,
-		// },
+		{
+			Slug:     "init",
+			TestFunc: testPrompt,
+			Timeout:  15 * time.Second,
+		},
 		{
 			Slug:     "missing-command",
 			TestFunc: testMissingCommand,

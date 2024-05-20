@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/codecrafters-io/tester-utils/executable"
 	"github.com/codecrafters-io/tester-utils/logger"
@@ -89,18 +90,30 @@ func (b *ShellExecutable) AssertPrompt(prompt string) error {
 		}
 	}
 
-	if actualValue, err := b.ptyBuffer.ReadBuffer(shouldStopReadingBuffer); err != nil {
-		// b.logger.Debugf("Read bytes: %q", actualValue)
+	actualValue, err := b.ptyBuffer.ReadBuffer(shouldStopReadingBuffer)
 
-		// If the user sent any output, let's print it.
+	if err != nil {
+		// If the user sent any output, let's print it before the error message.
 		if len(actualValue) > 0 {
 			b.programLogger.Plainf("%s", string(StripANSI(actualValue)))
 		}
 
-		return fmt.Errorf("Expected %q, but got %q", prompt, string(actualValue))
-	} else {
-		// b.logger.Debugf("Read bytes: %q", actualValue)
-		b.programLogger.Plainf("%s", string(StripANSI(actualValue)))
+		return fmt.Errorf("Expected %q, got %q", prompt, string(actualValue))
+	}
+
+	extraOutput, extraOutputErr := b.ptyBuffer.ReadAvailableWithTimeout(10 * time.Millisecond)
+	fullOutput := append(actualValue, extraOutput...)
+
+	// Whether the value matches our expecations or not, we print it
+	b.programLogger.Plainf("%s", string(StripANSI(fullOutput)))
+
+	// We failed to read extra output
+	if extraOutputErr != nil {
+		return fmt.Errorf("Error reading output: %v", extraOutputErr)
+	}
+
+	if len(extraOutput) > 0 {
+		return fmt.Errorf("Found extra output after prompt: %q. (expected just %q)", string(extraOutput), prompt)
 	}
 
 	return nil
@@ -156,39 +169,3 @@ func (b *ShellExecutable) getInitialLogLine() string {
 
 	return log
 }
-
-// func (b *ShellExecutable) HasExited() bool {
-// 	return b.executable.HasExited()
-// }
-
-// func (b *ShellExecutable) Kill() error {
-// 	b.logger.Debugf("Terminating program")
-// 	if err := b.executable.Kill(); err != nil {
-// 		b.logger.Debugf("Error terminating program: '%v'", err)
-// 		return err
-// 	}
-
-// 	b.logger.Debugf("Program terminated successfully")
-// 	return nil // When does this happen?
-// }
-
-// func (b *ShellExecutable) feedStdin(command []byte) error {
-// 	n, err := b.executable.StdinPipe.Write(command)
-// 	b.logger.Debugf("Wrote %d bytes to stdin", n)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
-
-// func (b *ShellExecutable) GetStdErrBuffer() *bytes.Buffer {
-// 	return b.executable.StderrBuffer
-// }
-
-// func (b *ShellExecutable) GetStdOutBuffer() *bytes.Buffer {
-// 	return b.executable.StdoutBuffer
-// }
-
-// func (b *ShellExecutable) Wait() (executable.ExecutableResult, error) {
-// 	return b.executable.Wait()
-// }
