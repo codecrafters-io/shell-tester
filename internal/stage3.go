@@ -38,7 +38,10 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 		logger.Successf("✓ Received command not found message")
 	}
 
-	// At this stage the user might or might not have implemented a REPL to print the prompt again, so we won't test further
+	// There must be a prompt after the last command too
+	if err := shell.AssertPrompt("$ "); err != nil {
+		return err
+	}
 
 	return nil
 }
