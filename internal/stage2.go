@@ -4,22 +4,29 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"syscall"
 	"time"
+	"unsafe"
 
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 	"github.com/creack/pty"
 )
 
 func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
-	os.Setenv("PS1", "> ")
-	os.Setenv("BASH_SILENCE_DEPRECATION_WARNING", "1")
+	// os.Setenv("PS1", "$ ")
+	// os.Setenv("BASH_SILENCE_DEPRECATION_WARNING", "1")
+	// os.Setenv("ZDOTDIR", "/Users/rohitpaulk/experiments/codecrafters/testers/shell-tester/internal/test_helpers/zsh_config/")
 	// os.Setenv("TERM", "dumb")
 
 	// cmd := exec.Command("ruby", "/Users/rohitpaulk/experiments/codecrafters/testers/shell-tester/internal/test_helpers/simple_shell.rb")
 	// cmd := exec.Command("bash", "--norc", "-i")
+	// cmd := exec.Command("dash")
 
-	// WHy doesn't ZSH use $PS1
-	cmd := exec.Command("zsh", "--no-rcs")
+	cmd := exec.Command("zsh")
+	cmd.Env = []string{}
+	cmd.Env = append(cmd.Env, "ZDOTDIR=/Users/rohitpaulk/experiments/codecrafters/testers/shell-tester/internal/test_helpers/zsh_config/")
+	cmd.Env = append(cmd.Env, "PS1=$ ")
+	// cmd := exec.Command("sleep", "5")
 
 	ptmx, err := pty.Start(cmd)
 	if err != nil {
@@ -28,13 +35,23 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Read prompt: How do we filter out ANSI sequences **after** the prompt is printed?
 	//    Solution: Wait until condition, and then after condition is met - sleep 5ms and read extra. (ANSI filter the extra stuff, and then check it is empty)
+	time.Sleep(100 * time.Millisecond)
+	doRead(ptmx)
+
+	time.Sleep(100 * time.Millisecond)
 	doRead(ptmx)
 
 	// Why is \r\n not echo-ed back, but \n is?
 	sendAndReadInput(ptmx, "missing")
 
+	// TODO: Why does the first line contain % and spaces and \r \r
+	// TODO: Why does the reflection contain \r\r\n instead of \r\n like with bash
+
 	time.Sleep(100 * time.Millisecond)
 	doRead(ptmx)
+	doRead(ptmx)
+
+	sendAndReadInput(ptmx, "missing2")
 
 	return nil
 
@@ -78,7 +95,7 @@ func sendAndReadInput(ptmx *os.File, input string) {
 	// Make this deterministic
 	time.Sleep(100 * time.Millisecond)
 
-	expectedReflection := input + "\r\n"
+	expectedReflection := input + "\r\r\n"
 
 	receivedBuf := make([]byte, len(expectedReflection))
 
@@ -96,4 +113,21 @@ func sendAndReadInput(ptmx *os.File, input string) {
 		fmt.Printf("Expected to read %q, but read %q\n", expectedReflection, string(receivedBuf))
 		panic("Failed to read input we wrote")
 	}
+}
+
+func getTermios(file *os.File) (*syscall.Termios, error) {
+	var termios syscall.Termios
+	_, _, errno := syscall.Syscall(syscall.SYS_IOCTL, file.Fd(), uintptr(syscall.TIOCGETA), uintptr(unsafe.Pointer(&termios)))
+	if errno != 0 {
+		return nil, errno
+	}
+	return &termios, nil
+}
+
+func setTermios(file *os.File, termios *syscall.Termios) error {
+	_, _, errno := syscall.Syscall(syscall.SYS_IOCTL, file.Fd(), uintptr(syscall.TIOCSETA), uintptr(unsafe.Pointer(termios)))
+	if errno != 0 {
+		return errno
+	}
+	return nil
 }
