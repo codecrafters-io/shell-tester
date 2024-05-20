@@ -13,19 +13,13 @@ import (
 )
 
 func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
-	// os.Setenv("PS1", "$ ")
-	// os.Setenv("BASH_SILENCE_DEPRECATION_WARNING", "1")
-	// os.Setenv("ZDOTDIR", "/Users/rohitpaulk/experiments/codecrafters/testers/shell-tester/internal/test_helpers/zsh_config/")
-	// os.Setenv("TERM", "dumb")
-
-	// cmd := exec.Command("ruby", "/Users/rohitpaulk/experiments/codecrafters/testers/shell-tester/internal/test_helpers/simple_shell.rb")
-	// cmd := exec.Command("bash", "--norc", "-i")
-	// cmd := exec.Command("dash")
-
-	cmd := exec.Command("zsh")
+	cmd := exec.Command("bash")
 	cmd.Env = []string{}
+	// TODO: Find a way to take current environment bu sanitize ZSH-specific stuff
 	cmd.Env = append(cmd.Env, "ZDOTDIR=/Users/rohitpaulk/experiments/codecrafters/testers/shell-tester/internal/test_helpers/zsh_config/")
+	cmd.Env = append(cmd.Env, "BASH_SILENCE_DEPRECATION_WARNING=1")
 	cmd.Env = append(cmd.Env, "PS1=$ ")
+	cmd.Env = append(cmd.Env, "TERM=dumb")
 	// cmd := exec.Command("sleep", "5")
 
 	ptmx, err := pty.Start(cmd)
@@ -38,9 +32,6 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	time.Sleep(100 * time.Millisecond)
 	doRead(ptmx)
 
-	time.Sleep(100 * time.Millisecond)
-	doRead(ptmx)
-
 	// Why is \r\n not echo-ed back, but \n is?
 	sendAndReadInput(ptmx, "missing")
 
@@ -49,9 +40,9 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	time.Sleep(100 * time.Millisecond)
 	doRead(ptmx)
-	doRead(ptmx)
 
 	sendAndReadInput(ptmx, "missing2")
+	doRead(ptmx)
 
 	return nil
 
@@ -95,7 +86,7 @@ func sendAndReadInput(ptmx *os.File, input string) {
 	// Make this deterministic
 	time.Sleep(100 * time.Millisecond)
 
-	expectedReflection := input + "\r\r\n"
+	expectedReflection := input + "\r\n"
 
 	receivedBuf := make([]byte, len(expectedReflection))
 
