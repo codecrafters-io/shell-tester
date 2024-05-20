@@ -23,11 +23,13 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	if err := shell.AssertOutputMatchesRegex(regexp.MustCompile(`inexistent: (command )?not found`)); err != nil {
+	if err := shell.AssertOutputMatchesRegex(regexp.MustCompile(`inexistent: (command )?not found\r\n`)); err != nil {
 		return err
 	}
 
 	logger.Successf("✓ Received command not found message")
+
+	// At this stage the user might or might not have implemented a REPL to print the prompt again, so we won't test further
 
 	return nil
 }

@@ -19,11 +19,11 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testMissingCommand,
 			Timeout:  15 * time.Second,
 		},
-		// {
-		// 	Slug:     "repl",
-		// 	TestFunc: testREPL,
-		// 	Timeout:  15 * time.Second,
-		// },
+		{
+			Slug:     "repl",
+			TestFunc: testREPL,
+			Timeout:  15 * time.Second,
+		},
 		// {
 		// 	Slug:     "exit",
 		// 	TestFunc: testExit,

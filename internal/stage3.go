@@ -1,23 +1,47 @@
 package internal
 
-// import "github.com/codecrafters-io/tester-utils/test_case_harness"
+import (
+	"fmt"
+	"regexp"
+	"strconv"
 
-// // import (
-// // 	"fmt"
-// // 	"strconv"
-// // 	"strings"
+	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	"github.com/codecrafters-io/tester-utils/random"
+	"github.com/codecrafters-io/tester-utils/test_case_harness"
+)
 
-// // 	"github.com/codecrafters-io/shell-tester/internal/assertions"
-// // 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
-// // 	"github.com/codecrafters-io/tester-utils/random"
-// // 	"github.com/codecrafters-io/tester-utils/test_case_harness"
-// // )
+func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
+	logger := stageHarness.Logger
+	shell := shell_executable.NewShellExecutable(stageHarness)
 
-// // func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
-// // 	b := shell_executable.NewShellExecutable(stageHarness)
-// // 	if err := b.Run(); err != nil {
-// // 		return err
-// // 	}
+	numberOfCommands := random.RandomInt(3, 6)
+
+	if err := shell.Start(); err != nil {
+		return err
+	}
+
+	for i := 0; i < numberOfCommands; i++ {
+		command := "invalid_command_" + strconv.Itoa(i+1)
+
+		if err := shell.AssertPrompt("$ "); err != nil {
+			return err
+		}
+
+		if err := shell.SendCommand(command); err != nil {
+			return err
+		}
+
+		if err := shell.AssertOutputMatchesRegex(regexp.MustCompile(fmt.Sprintf(`%s: (command )?not found\r\n`, command))); err != nil {
+			return err
+		}
+
+		logger.Successf("✓ Received command not found message")
+	}
+
+	// At this stage the user might or might not have implemented a REPL to print the prompt again, so we won't test further
+
+	return nil
+}
 
 // // 	logger := stageHarness.Logger
 // // 	tries := random.RandomInt(3, 5)
