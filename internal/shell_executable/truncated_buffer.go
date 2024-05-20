@@ -8,7 +8,6 @@ import (
 
 type TruncatedBuffer struct {
 	buffer *bytes.Buffer
-	// XXX
 	// For updating offset we need the lastReadValueLength,
 	// We can't rely on current buffer length, it will increase in an async manner
 	// We also don't want to pass the lastReadValue's length as a param, so tracking it here makes sense
