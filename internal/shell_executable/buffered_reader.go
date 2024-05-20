@@ -5,6 +5,8 @@ import (
 	"io"
 	"os"
 	"regexp"
+	"strings"
+	"syscall"
 	"time"
 )
 
@@ -34,12 +36,12 @@ func (b FileBuffer) FeedStdin(command []byte) error {
 	return b.feedStdin(commandWithEnter)
 }
 
-func (t *FileBuffer) ReadBuffer(shouldStopReadingBuffer func(string, []byte) error, expectedValue string) ([]byte, error) {
-	return t.ReadBufferWithTimeout(10*time.Millisecond, shouldStopReadingBuffer, expectedValue)
+func (t *FileBuffer) ReadBuffer(shouldStopReadingBuffer func([]byte) error) ([]byte, error) {
+	return t.ReadBufferWithTimeout(10*time.Millisecond, shouldStopReadingBuffer)
 }
 
-func (t *FileBuffer) ReadBufferWithTimeout(timeout time.Duration, shouldStopReadingBuffer func(string, []byte) error, expectedValue string) ([]byte, error) {
-	data, err := t.readUntil(shouldStopReadingBuffer, timeout, expectedValue)
+func (t *FileBuffer) ReadBufferWithTimeout(timeout time.Duration, shouldStopReadingBuffer func([]byte) error) ([]byte, error) {
+	data, err := t.readUntil(shouldStopReadingBuffer, timeout)
 	if err != nil {
 		return nil, err
 	}
@@ -47,30 +49,51 @@ func (t *FileBuffer) ReadBufferWithTimeout(timeout time.Duration, shouldStopRead
 	return data, nil
 }
 
-func (t *FileBuffer) readUntil(condition func(string, []byte) error, timeout time.Duration, expectedValue string) ([]byte, error) {
+func (t *FileBuffer) readUntil(condition func([]byte) error, timeout time.Duration) ([]byte, error) {
+	if err := syscall.SetNonblock(int(t.descriptor.Fd()), true); err != nil {
+		fmt.Println("Error setting non-blocking mode")
+		os.Exit(1)
+	}
+
 	deadline := time.Now().Add(timeout)
 
+	time.Sleep(5 * time.Millisecond) // Let's give some time for the buffer to fill up
+
 	for !time.Now().After(deadline) {
-		time.Sleep(5 * time.Millisecond) // Let's give some time for the buffer to fill up
+		t.descriptor.SetDeadline(time.Now().Add(timeout))
+
+		// if time.Now().After(deadline) {
+		// 	fmt.Println("timeout")
+		// } else {
+		// 	fmt.Println("not timeout")
+		// }
 
 		fullBuf := []byte{}
 		buf := make([]byte, 1024)
+		// fmt.Println("before read")
 		n, err := t.descriptor.Read(buf)
-		// fmt.Println("n: ", n, "err: ", err, "buf: ", buf[:n], string(buf[:n]))
+		// fmt.Println("after read")
+		fmt.Println("n: ", n, "err: ", err, "buf: ", buf[:n], string(buf[:n]))
 		if err != nil {
 			if err == io.EOF {
 				break
 			}
-			panic(err)
-		}
-		fmt.Printf("Read %d bytes: %q\n", n, string(buf[:n]))
-		fullBuf = append(fullBuf, buf[:n]...)
-		// cleanedFullBuf := StripANSI(fullBuf)
-		cleanedFullBuf := fullBuf
 
-		if errToBool(condition(expectedValue, cleanedFullBuf)) {
-			t.completeData = append(t.completeData, cleanedFullBuf...)
-			return cleanedFullBuf, nil
+			fmt.Println("Error: ", err)
+
+			if strings.Contains(err.Error(), "resource temporarily unavailable") {
+				time.Sleep(2 * time.Millisecond) // Let's wait a bit before trying again
+				continue
+			}
+
+			return nil, err
+		}
+		// fmt.Printf("Read %d bytes: %q\n", n, string(buf[:n]))
+		fullBuf = append(fullBuf, buf[:n]...)
+
+		if errToBool(condition(fullBuf)) {
+			t.completeData = append(t.completeData, fullBuf...)
+			return fullBuf, nil
 		} else {
 			time.Sleep(2 * time.Millisecond) // Let's wait a bit before trying again
 		}
