@@ -10,10 +10,10 @@ import (
 	"strings"
 )
 
-func main() {
+func main1() {
 	reader := bufio.NewReader(os.Stdin)
 	for {
-		fmt.Fprintln(os.Stdout, "$ ")
+		fmt.Fprint(os.Stdout, "$ ")
 		// Read the keyboad input.
 		input, err := reader.ReadString('\n')
 		if err != nil {
@@ -22,6 +22,16 @@ func main() {
 
 		// Handle the execution of the input.
 		if err = execInput(input); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		}
+	}
+}
+
+func main() {
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		_, err := reader.ReadString('\n')
+		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}
 	}
@@ -41,6 +51,10 @@ var ErrNoPath = errors.New("path required")
 func execInput(input string) error {
 	// Remove the newline character.
 	input = strings.TrimSuffix(input, "\n")
+
+	if input == "" {
+		return nil
+	}
 
 	// Split the input separate the command and the arguments.
 	args := strings.Split(input, " ")

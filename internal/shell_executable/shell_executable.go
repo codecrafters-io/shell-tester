@@ -26,12 +26,12 @@ func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellE
 	return b
 }
 
-func (b *ShellExecutable) Run(args ...string) error {
-	b.args = args
+func (b *ShellExecutable) getInitialLogLine() string {
+	var log string
+
 	if b.args == nil || len(b.args) == 0 {
-		b.logger.Infof("$ ./spawn_shell.sh")
+		log = ("$ ./spawn_shell.sh")
 	} else {
-		var log string
 		log += "$ ./spawn_shell.sh"
 		for _, arg := range b.args {
 			if strings.Contains(arg, " ") {
@@ -40,8 +40,16 @@ func (b *ShellExecutable) Run(args ...string) error {
 				log += " " + arg
 			}
 		}
-		b.logger.Infof(log)
 	}
+
+	return log
+}
+
+func (b *ShellExecutable) Run(args ...string) error {
+	b.args = args
+
+	log := b.getInitialLogLine()
+	b.logger.Infof(log)
 
 	if err := b.executable.Start(b.args...); err != nil {
 		return err
@@ -65,19 +73,19 @@ func (b *ShellExecutable) Kill() error {
 	return nil // When does this happen?
 }
 
-func (b *ShellExecutable) feedStdin(command []byte) error {
-	n, err := b.executable.StdinPipe.Write(command)
-	b.logger.Debugf("Wrote %d bytes to stdin", n)
-	if err != nil {
-		return err
-	}
-	return nil
-}
+// func (b *ShellExecutable) feedStdin(command []byte) error {
+// 	n, err := b.executable.StdinPipe.Write(command)
+// 	b.logger.Debugf("Wrote %d bytes to stdin", n)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
 
-func (b *ShellExecutable) FeedStdin(command []byte) error {
-	commandWithEnter := append(command, []byte("\n")...)
-	return b.feedStdin(commandWithEnter)
-}
+// func (b *ShellExecutable) FeedStdin(command []byte) error {
+// 	commandWithEnter := append(command, []byte("\n")...)
+// 	return b.feedStdin(commandWithEnter)
+// }
 
 func (b *ShellExecutable) GetStdErrBuffer() *bytes.Buffer {
 	return b.executable.StderrBuffer

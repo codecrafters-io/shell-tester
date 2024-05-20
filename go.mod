@@ -2,7 +2,10 @@ module github.com/codecrafters-io/shell-tester
 
 go 1.22.1
 
-require github.com/codecrafters-io/tester-utils v0.2.21
+require (
+	github.com/codecrafters-io/tester-utils v0.2.21
+	github.com/creack/pty v1.1.21
+)
 
 require (
 	github.com/fatih/color v1.16.0 // indirect

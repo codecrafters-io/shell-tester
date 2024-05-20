@@ -12,13 +12,13 @@ type BufferAssertion struct {
 	ActualValue   string
 }
 
-func (a *BufferAssertion) Run(buffer *shell_executable.TruncatedBuffer, coreTest func(string, []byte) error) error {
+func (a *BufferAssertion) Run(buffer *shell_executable.FileBuffer, coreTest func(string, []byte) error) error {
 	bytesValue, err := buffer.ReadBuffer(coreTest, a.ExpectedValue)
 	if err != nil {
 		return err
 	}
 
-	value := string(shell_executable.RemoveControlSequence(bytesValue))
+	value := string((bytesValue))
 	value = strings.TrimSpace(value)
 	a.ActualValue = value
 
@@ -26,7 +26,7 @@ func (a *BufferAssertion) Run(buffer *shell_executable.TruncatedBuffer, coreTest
 }
 
 func CoreTestInexact(expectedData string, actualData []byte) error {
-	value := string(shell_executable.RemoveControlSequence(actualData))
+	value := string((actualData))
 	value = strings.TrimSpace(value)
 
 	if len(value) == 0 {
@@ -42,7 +42,7 @@ func CoreTestInexact(expectedData string, actualData []byte) error {
 }
 
 func CoreTestExact(expectedData string, actualData []byte) error {
-	value := string(shell_executable.RemoveControlSequence(actualData))
+	value := string((actualData))
 	value = strings.TrimSpace(value)
 
 	if len(value) == 0 {
