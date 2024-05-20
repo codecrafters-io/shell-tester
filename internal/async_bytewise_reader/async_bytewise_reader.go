@@ -10,15 +10,15 @@ var ErrNoData = errors.New("no data available")
 
 // Inspired by https://benjamincongdon.me/blog/2020/04/23/Cancelable-Reads-in-Go/
 type AsyncBytewiseReader struct {
-	data chan byte
-	err  error
-	r    io.Reader
+	data   chan byte
+	err    error
+	reader io.Reader
 }
 
 func New(r io.Reader) *AsyncBytewiseReader {
 	c := &AsyncBytewiseReader{
-		r:    r,
-		data: make(chan byte),
+		reader: r,
+		data:   make(chan byte),
 	}
 
 	// This goroutine will keep reading until an error or EOF
@@ -44,7 +44,7 @@ func (c *AsyncBytewiseReader) ReadByteWithTimeout(timeout time.Duration) (byte, 
 func (c *AsyncBytewiseReader) start() {
 	for {
 		buf := make([]byte, 1024)
-		n, err := c.r.Read(buf)
+		n, err := c.reader.Read(buf)
 
 		if n > 0 {
 			for _, b := range buf[:n] {
