@@ -1,7 +1,6 @@
 package shell_executable
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"os/exec"

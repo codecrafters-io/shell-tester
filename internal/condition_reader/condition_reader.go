@@ -45,11 +45,13 @@ func (t *ConditionReader) ReadUntilConditionWithTimeout(condition func([]byte) b
 	readBytes := []byte{}
 
 	for !time.Now().After(deadline) {
-		readByte, err := t.bytewiseReader.ReadByteWithTimeout(2 * time.Millisecond)
+		readByte, err := t.bytewiseReader.ReadByte()
 		if err != nil {
 			if err == async_bytewise_reader.ErrNoData {
 				// fmt.Println("No data available")
-				time.Sleep(2 * time.Millisecond) // Let's wait a bit before trying again
+
+				// If the error was no data available, let's wait a bit before trying again
+				time.Sleep(2 * time.Millisecond)
 				continue
 			} else {
 				// fmt.Printf("Error while reading: %v\n", err)

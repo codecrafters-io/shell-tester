@@ -10,8 +10,14 @@ var ErrNoData = errors.New("no data available")
 
 // Inspired by https://benjamincongdon.me/blog/2020/04/23/Cancelable-Reads-in-Go/
 type AsyncBytewiseReader struct {
-	data   chan byte
-	err    error
+	// data is used to send data between the reader goroutine and ReadByteWithTimeout calls
+	data chan byte
+
+	// err is used to store errors occurred during reading.
+	// They're returned on the next ReadByteWithTimeout call
+	err error
+
+	// reader is the underlying reader that this wrapper will read from
 	reader io.Reader
 }
 
@@ -27,9 +33,11 @@ func New(r io.Reader) *AsyncBytewiseReader {
 	return c
 }
 
-func (c *AsyncBytewiseReader) ReadByteWithTimeout(timeout time.Duration) (byte, error) {
+// ReadByte is the only function that this package exposes. It either reads a byte or returns ErrNoData.
+func (c *AsyncBytewiseReader) ReadByte() (byte, error) {
 	select {
-	case <-time.After(timeout):
+	// The timeout is super low here, we're just trying to check if a byte is immediately available
+	case <-time.After(1 * time.Millisecond):
 		return 0, ErrNoData
 	case readByte, ok := <-c.data:
 		if !ok {
