@@ -18,9 +18,6 @@ import (
 // ErrConditionNotMet is re-exported from condition_reader for convenience
 var ErrConditionNotMet = condition_reader.ErrConditionNotMet
 
-// ErrExecutableDidNotExit is returned when the executable did not exit (i.e. it's still running, or it was terminated by a signal)
-var ErrExecutableDidNotExit = fmt.Errorf("Executable did not exit")
-
 type ShellExecutable struct {
 	executable    *executable.Executable
 	logger        *logger.Logger
