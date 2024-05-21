@@ -20,6 +20,7 @@ test:
 test_bash: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/bash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
+		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
 		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
 		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}\
 	]" \
