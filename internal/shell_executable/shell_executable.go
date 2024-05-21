@@ -71,19 +71,7 @@ func (b *ShellExecutable) ReadBytesUntil(condition func([]byte) bool) ([]byte, e
 	return b.ptyReader.ReadUntilCondition(condition)
 }
 
-// func (b *ShellExecutable) AssertOutputMatchesRegex(regexp *regexp.Regexp) error {
-// 	regexMatchCondition := func(buf []byte) bool {
-// 		return regexp.Match(StripANSI(buf))
-// 	}
-
-// 	actualValue, err := b.ptyReader.ReadUntilCondition(regexMatchCondition)
-// 	if len(actualValue) > 0 {
-// 		b.programLogger.Plainf("%s", string(StripANSI(actualValue)))
-// 	}
-
-// 	return nil
-// }
-
+// TODO: See if we can move this to a separate test case?
 func (b *ShellExecutable) AssertPrompt(prompt string) error {
 	matchesPromptCondition := func(buf []byte) bool {
 		return string(StripANSI(buf)) == prompt
@@ -140,7 +128,7 @@ func (b *ShellExecutable) writeAndReadReflection(command string) error {
 
 	readBytes, err := b.ptyReader.ReadUntilCondition(reflectionCondition)
 	if err != nil {
-		return fmt.Errorf("Expected %q, but got %q", expectedReflection, string(readBytes))
+		return fmt.Errorf("CodeCrafters internal error. Expected %q when writing to pty, but got %q", expectedReflection, string(readBytes))
 	}
 
 	return nil
