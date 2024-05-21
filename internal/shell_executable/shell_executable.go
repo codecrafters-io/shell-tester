@@ -18,12 +18,16 @@ import (
 // ErrConditionNotMet is re-exported from condition_reader for convenience
 var ErrConditionNotMet = condition_reader.ErrConditionNotMet
 
+// ErrExecutableDidNotExit is returned when the executable did not exit (i.e. it's still running, or it was terminated by a signal)
+var ErrExecutableDidNotExit = fmt.Errorf("Executable did not exit")
+
 type ShellExecutable struct {
 	executable    *executable.Executable
 	logger        *logger.Logger
 	programLogger *logger.Logger
 
 	// Set after starting
+	cmd       *exec.Cmd
 	pty       *os.File
 	ptyReader condition_reader.ConditionReader
 }
@@ -55,6 +59,7 @@ func (b *ShellExecutable) Start(args ...string) error {
 		return fmt.Errorf("Failed to execute %s: %v", b.executable.Path, err)
 	}
 
+	b.cmd = cmd
 	b.pty = pty
 	b.ptyReader = condition_reader.NewConditionReader(b.pty)
 
@@ -82,6 +87,33 @@ func (b *ShellExecutable) SendCommand(command string) error {
 	}
 
 	return nil
+}
+
+func (b *ShellExecutable) WaitForTermination() (hasTerminated bool, exitCode int) {
+	if b.cmd == nil {
+		panic("CodeCrafters internal error: ShellExecutable.ExitCode called before command was run")
+	}
+
+	waitCompleted := make(chan bool)
+
+	go func() {
+		b.cmd.Wait()
+		waitCompleted <- true
+	}()
+
+	select {
+	case <-waitCompleted:
+		rawExitCode := b.cmd.ProcessState.ExitCode()
+
+		if rawExitCode == -1 {
+			// Terminated via signal (e.g. SIGKILL) or still running
+			return false, 0
+		} else {
+			return true, rawExitCode
+		}
+	case <-time.After(2 * time.Second):
+		return false, 0
+	}
 }
 
 func (b *ShellExecutable) writeAndReadReflection(command string) error {

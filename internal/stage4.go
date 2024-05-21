@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -21,9 +22,9 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// We test an inexistent command first, just to make sure the logic works in a "loop"
 	testCase := test_cases.RegexTestCase{
-		Command:                    "inexistent",
-		ExpectedPattern:            regexp.MustCompile(`inexistent: (command )?not found\r\n`),
-		ExpectedPatternExplanation: fmt.Sprintf("contain %q", "inexistent: command not found"),
+		Command:                    "invalid_command_1",
+		ExpectedPattern:            regexp.MustCompile(`invalid_command_1: (command )?not found\r\n`),
+		ExpectedPatternExplanation: fmt.Sprintf("contain %q", "invalid_command_1: command not found"),
 		SuccessMessage:             "Received command not found message",
 	}
 
@@ -43,22 +44,44 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	output, readErr := shell.ReadBytesUntilTimeout(1000 * time.Millisecond)
+	sanitizedOutput := shell_executable.StripANSI(output)
 
 	// If anything was printed, log it out before we emit error / success logs
-	if len(output) > 0 {
-		shell.LogOutput(shell_executable.StripANSI(output))
+	if len(sanitizedOutput) > 0 {
+		shell.LogOutput(sanitizedOutput)
 	}
 
-	// Either the err is "nil", so we didn't reach EOF
-	if readErr == nil {
-		return fmt.Errorf("Expected program to terminate, program is still running.")
-	} else if readErr != io.EOF {
-		// TODO: Other than EOF, what other errors could we get? Are they user errors or internal errors?
-		return fmt.Errorf("Error reading output: %v", readErr)
+	// We're expecting EOF, since the program should've terminated
+	if readErr != io.EOF {
+		if readErr == nil {
+			// If the err is "nil", we didn't reach EOF
+			return fmt.Errorf("Expected program to terminate, program is still running.")
+		} else {
+			// TODO: Other than EOF, what other errors could we get? Are they user errors or internal errors?
+			return fmt.Errorf("Error reading output: %v", readErr)
+		}
 	}
 
-	// If the err IS io.EOF, the program exited successfully
+	time.Sleep(1 * time.Second)
+
+	isTerminated, exitCode := shell.WaitForTermination()
+	if !isTerminated {
+		// We can get isTerminated as false if the program is terminated by SIGKILL too, but that seems unlikely here
+		return fmt.Errorf("Expected program to exit with 0 exit code, program is still running.")
+	}
+
 	logger.Successf("✓ Program exited successfully")
+
+	if exitCode != 0 {
+		return fmt.Errorf("Expected 0 as exit code, got %d", exitCode)
+	}
+
+	// Most shells return nothing but bash returns the string "exit" when it exits, we allow both styles
+	if len(sanitizedOutput) > 0 && strings.TrimSpace(string(sanitizedOutput)) != "exit" {
+		return fmt.Errorf("Expected no output after exit command, got %q", string(sanitizedOutput))
+	}
+
+	logger.Successf("✓ No output after exit command")
 
 	return nil
 }

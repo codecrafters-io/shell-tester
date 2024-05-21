@@ -20,3 +20,5 @@ loop do
     puts "#{command}: command not found"
   end
 end
+
+puts "Goodbye!"
