@@ -21,27 +21,27 @@ type AsyncBytewiseReader struct {
 	reader io.Reader
 }
 
-func New(r io.Reader) *AsyncBytewiseReader {
-	c := &AsyncBytewiseReader{
-		reader: r,
+func New(reader io.Reader) *AsyncBytewiseReader {
+	bytewiseReader := &AsyncBytewiseReader{
+		reader: reader,
 		data:   make(chan byte),
 	}
 
 	// This goroutine will keep reading until an error or EOF
-	go c.start()
+	go bytewiseReader.start()
 
-	return c
+	return bytewiseReader
 }
 
 // ReadByte is the only function that this package exposes. It either reads a byte or returns ErrNoData.
-func (c *AsyncBytewiseReader) ReadByte() (byte, error) {
+func (r *AsyncBytewiseReader) ReadByte() (byte, error) {
 	select {
 	// The timeout is super low here, we're just trying to check if a byte is immediately available
 	case <-time.After(1 * time.Millisecond):
 		return 0, ErrNoData
-	case readByte, ok := <-c.data:
+	case readByte, ok := <-r.data:
 		if !ok {
-			return 0, c.err
+			return 0, r.err
 		}
 
 		return readByte, nil
@@ -49,20 +49,20 @@ func (c *AsyncBytewiseReader) ReadByte() (byte, error) {
 }
 
 // Keeps reading forever until an error or EOF
-func (c *AsyncBytewiseReader) start() {
+func (r *AsyncBytewiseReader) start() {
 	for {
 		buf := make([]byte, 1024)
-		n, err := c.reader.Read(buf)
+		n, err := r.reader.Read(buf)
 
 		if n > 0 {
 			for _, b := range buf[:n] {
-				c.data <- b
+				r.data <- b
 			}
 		}
 
 		if err != nil {
-			c.err = err
-			close(c.data)
+			r.err = err
+			close(r.data)
 			return
 		}
 	}
