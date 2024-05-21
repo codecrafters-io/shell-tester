@@ -15,7 +15,7 @@ import (
 	ptylib "github.com/creack/pty"
 )
 
-// Re-export for convenience
+// ErrConditionNotMet is re-exported from condition_reader for convenience
 var ErrConditionNotMet = condition_reader.ErrConditionNotMet
 
 type ShellExecutable struct {
