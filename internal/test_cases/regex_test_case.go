@@ -8,10 +8,18 @@ import (
 )
 
 type RegexTestCase struct {
-	Command                    string
-	ExpectedPattern            *regexp.Regexp
+	// The command to execute (the command's output will be matched against ExpectedPattern)
+	Command string
+
+	// ExpectedPattern is the regex that is evaluated against the command's output.
+	// Add \r\n at the end of the pattern if you're expecting a newline.
+	ExpectedPattern *regexp.Regexp
+
+	// ExpectedPatternExplanation is used in the error message if the ExpectedPattern doesn't match the command's output
 	ExpectedPatternExplanation string
-	SuccessMessage             string
+
+	// SuccessMessage is logged if the ExpectedPattern matches the command's output
+	SuccessMessage string
 }
 
 func (t RegexTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
@@ -31,7 +39,7 @@ func (t RegexTestCase) Run(shell *shell_executable.ShellExecutable, logger *logg
 
 	// Whether the condition fails on not, we want to log the output
 	if len(output) > 0 {
-		shell.LogOutput(output)
+		shell.LogOutput(shell_executable.StripANSI(output))
 	}
 
 	if err != nil {
