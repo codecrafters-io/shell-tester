@@ -88,7 +88,7 @@ func (b *ShellExecutable) SendCommand(command string) error {
 
 func (b *ShellExecutable) WaitForTermination() (hasTerminated bool, exitCode int) {
 	if b.cmd == nil {
-		panic("CodeCrafters internal error: ShellExecutable.ExitCode called before command was run")
+		panic("CodeCrafters internal error: WaitForTermination called before command was run")
 	}
 
 	waitCompleted := make(chan bool)
