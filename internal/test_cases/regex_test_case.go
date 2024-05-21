@@ -39,7 +39,12 @@ func (t RegexTestCase) Run(shell *shell_executable.ShellExecutable, logger *logg
 
 	// Whether the condition fails on not, we want to log the output
 	if len(output) > 0 {
-		shell.LogOutput(shell_executable.StripANSI(output))
+		// TODO: Avoid this clunkiness + avoid "\r\n" in error message
+		if string(output[len(output)-2:]) == "\r\n" {
+			shell.LogOutput(shell_executable.StripANSI(output[:len(output)-2]))
+		} else {
+			shell.LogOutput(shell_executable.StripANSI(output))
+		}
 	}
 
 	if err != nil {
