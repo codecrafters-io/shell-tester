@@ -11,7 +11,7 @@ import (
 )
 
 var debug = false
-var conditionFailedError = errors.New("condition failed")
+var ErrConditionNotMet = errors.New("condition not met")
 
 // ConditionReader wraps an io.Reader and provides methods to read until a condition is met
 type ConditionReader struct {
@@ -65,7 +65,7 @@ func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) boo
 		}
 	}
 
-	return readBytes, conditionFailedError
+	return readBytes, ErrConditionNotMet
 }
 
 func (t *ConditionReader) ReadUntilTimeout(timeout time.Duration) ([]byte, error) {
@@ -76,7 +76,7 @@ func (t *ConditionReader) ReadUntilTimeout(timeout time.Duration) ([]byte, error
 	data, err := t.ReadUntilConditionOrTimeout(alwaysFalseCondition, timeout)
 
 	// We expect that the condition is never met, so let's return nil as the error
-	if err == conditionFailedError {
+	if err == ErrConditionNotMet {
 		return data, nil
 	}
 

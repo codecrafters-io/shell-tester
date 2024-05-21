@@ -15,6 +15,9 @@ import (
 	ptylib "github.com/creack/pty"
 )
 
+// Re-export for convenience
+var ErrConditionNotMet = condition_reader.ErrConditionNotMet
+
 type ShellExecutable struct {
 	executable    *executable.Executable
 	logger        *logger.Logger
@@ -30,7 +33,7 @@ func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellE
 	b := &ShellExecutable{
 		executable:    stageHarness.NewExecutable(),
 		logger:        stageHarness.Logger,
-		programLogger: logger.GetLogger(stageHarness.Logger.IsDebug, "[your_program] "),
+		programLogger: logger.GetLogger(stageHarness.Logger.IsDebug, "[your-program] "),
 	}
 
 	// TODO: Kill pty process?
@@ -47,11 +50,11 @@ func (b *ShellExecutable) Start(args ...string) error {
 
 	cmd.Env = os.Environ()
 	cmd.Env = append(cmd.Env, "PS1=$ ")
-	cmd.Env = append(cmd.Env, "TERM=dumb")
+	cmd.Env = append(cmd.Env, "TERM=dumb") // test_all_success works without this too, do we need it?
 
 	pty, err := ptylib.Start(cmd)
 	if err != nil {
-		panic(err)
+		return fmt.Errorf("Failed to execute %s: %v", b.executable.Path, err)
 	}
 
 	b.pty = pty
@@ -60,29 +63,27 @@ func (b *ShellExecutable) Start(args ...string) error {
 	return nil
 }
 
+func (b *ShellExecutable) LogOutput(output []byte) {
+	b.programLogger.Plainln(string(output))
+}
+
 func (b *ShellExecutable) ReadBytesUntil(condition func([]byte) bool) ([]byte, error) {
 	return b.ptyReader.ReadUntilCondition(condition)
 }
 
-func (b *ShellExecutable) AssertOutputMatchesRegex(regexp *regexp.Regexp) error {
-	regexMatchCondition := func(buf []byte) bool {
-		return regexp.Match(StripANSI(buf))
-	}
+// func (b *ShellExecutable) AssertOutputMatchesRegex(regexp *regexp.Regexp) error {
+// 	regexMatchCondition := func(buf []byte) bool {
+// 		return regexp.Match(StripANSI(buf))
+// 	}
 
-	actualValue, err := b.ptyReader.ReadUntilCondition(regexMatchCondition)
-	if len(actualValue) > 0 {
-		b.programLogger.Plainf("%s", string(StripANSI(actualValue)))
-	}
+// 	actualValue, err := b.ptyReader.ReadUntilCondition(regexMatchCondition)
+// 	if len(actualValue) > 0 {
+// 		b.programLogger.Plainf("%s", string(StripANSI(actualValue)))
+// 	}
 
-	if err != nil {
-		// TODO: Add regex to log message here
-		return fmt.Errorf("Expected output to match regex, but got %q", string(actualValue))
-	}
+// 	return nil
+// }
 
-	return nil
-}
-
-// TODO: Convert this to "AssertOutput", and "AssertNoMoreOutput"?
 func (b *ShellExecutable) AssertPrompt(prompt string) error {
 	matchesPromptCondition := func(buf []byte) bool {
 		return string(StripANSI(buf)) == prompt
@@ -93,7 +94,7 @@ func (b *ShellExecutable) AssertPrompt(prompt string) error {
 	if err != nil {
 		// If the user sent any output, let's print it before the error message.
 		if len(actualValue) > 0 {
-			b.programLogger.Plainf("%s", string(StripANSI(actualValue)))
+			b.LogOutput(StripANSI(actualValue))
 		}
 
 		return fmt.Errorf("Expected %q, got %q", prompt, string(actualValue))
@@ -103,7 +104,7 @@ func (b *ShellExecutable) AssertPrompt(prompt string) error {
 	fullOutput := append(actualValue, extraOutput...)
 
 	// Whether the value matches our expecations or not, we print it
-	b.programLogger.Plainf("%s", string(StripANSI(fullOutput)))
+	b.LogOutput(StripANSI(fullOutput))
 
 	// We failed to read extra output
 	if extraOutputErr != nil {

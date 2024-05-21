@@ -1,9 +1,11 @@
 package internal
 
 import (
+	"fmt"
 	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -15,19 +17,16 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	if err := shell.AssertPrompt("$ "); err != nil {
-		return err
+	testCase := test_cases.RegexTestCase{
+		Command:                    "inexistent",
+		ExpectedPattern:            regexp.MustCompile(`inexistent: (command )?not found\r\n`),
+		ExpectedPatternExplanation: fmt.Sprintf("contain %q", "inexistent: command not found"),
+		SuccessMessage:             "Received command not found message",
 	}
 
-	if err := shell.SendCommand("inexistent"); err != nil {
+	if err := testCase.Run(shell, logger); err != nil {
 		return err
 	}
-
-	if err := shell.AssertOutputMatchesRegex(regexp.MustCompile(`inexistent: (command )?not found\r\n`)); err != nil {
-		return err
-	}
-
-	logger.Successf("✓ Received command not found message")
 
 	// At this stage the user might or might not have implemented a REPL to print the prompt again, so we won't test further
 
