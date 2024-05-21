@@ -71,39 +71,8 @@ func (b *ShellExecutable) ReadBytesUntil(condition func([]byte) bool) ([]byte, e
 	return b.ptyReader.ReadUntilCondition(condition)
 }
 
-// TODO: See if we can move this to a separate test case?
-func (b *ShellExecutable) AssertPrompt(prompt string) error {
-	matchesPromptCondition := func(buf []byte) bool {
-		return string(StripANSI(buf)) == prompt
-	}
-
-	actualValue, err := b.ptyReader.ReadUntilCondition(matchesPromptCondition)
-
-	if err != nil {
-		// If the user sent any output, let's print it before the error message.
-		if len(actualValue) > 0 {
-			b.LogOutput(StripANSI(actualValue))
-		}
-
-		return fmt.Errorf("Expected %q, got %q", prompt, string(actualValue))
-	}
-
-	extraOutput, extraOutputErr := b.ptyReader.ReadUntilTimeout(10 * time.Millisecond)
-	fullOutput := append(actualValue, extraOutput...)
-
-	// Whether the value matches our expecations or not, we print it
-	b.LogOutput(StripANSI(fullOutput))
-
-	// We failed to read extra output
-	if extraOutputErr != nil {
-		return fmt.Errorf("Error reading output: %v", extraOutputErr)
-	}
-
-	if len(extraOutput) > 0 {
-		return fmt.Errorf("Found extra output after prompt: %q. (expected just %q)", string(extraOutput), prompt)
-	}
-
-	return nil
+func (b *ShellExecutable) ReadBytesUntilTimeout(timeout time.Duration) ([]byte, error) {
+	return b.ptyReader.ReadUntilTimeout(timeout)
 }
 
 func (b *ShellExecutable) SendCommand(command string) error {

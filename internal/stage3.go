@@ -37,7 +37,9 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// There must be a prompt after the last command too
-	if err := shell.AssertPrompt("$ "); err != nil {
+	testCase := test_cases.NewPromptTestCase("$ ")
+
+	if err := testCase.Run(shell, logger); err != nil {
 		return err
 	}
 

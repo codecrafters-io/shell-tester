@@ -7,6 +7,7 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
+// RegexTestCase verifies a prompt exists, sends a command and matches the output against a regex pattern.
 type RegexTestCase struct {
 	// The command to execute (the command's output will be matched against ExpectedPattern)
 	Command string
@@ -23,7 +24,9 @@ type RegexTestCase struct {
 }
 
 func (t RegexTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	if err := shell.AssertPrompt("$ "); err != nil {
+	promptTestCase := NewSilentPromptTestCase("$ ")
+
+	if err := promptTestCase.Run(shell, logger); err != nil {
 		return err
 	}
 
