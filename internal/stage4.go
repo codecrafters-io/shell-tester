@@ -54,7 +54,6 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	// We're expecting EOF, since the program should've terminated
 	if readErr != io.EOF {
 		if readErr == nil {
-			// If the err is "nil", we didn't reach EOF
 			return fmt.Errorf("Expected program to exit with 0 exit code, program is still running.")
 		} else {
 			// TODO: Other than EOF, what other errors could we get? Are they user errors or internal errors?
