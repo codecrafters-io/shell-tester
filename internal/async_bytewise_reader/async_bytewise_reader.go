@@ -36,7 +36,7 @@ func New(reader io.Reader) *AsyncBytewiseReader {
 // ReadByte is the only function that this package exposes. It either reads a byte or returns ErrNoData.
 func (r *AsyncBytewiseReader) ReadByte() (byte, error) {
 	select {
-	// The timeout is super low here, we're just trying to check if a byte is immediately available
+	// We're checking whether a byte is immediately available, so the timeout can be super low
 	case <-time.After(1 * time.Millisecond):
 		return 0, ErrNoData
 	case readByte, ok := <-r.data:
