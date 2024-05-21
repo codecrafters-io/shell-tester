@@ -1,1 +1,4 @@
 dist/
+.history/
+
+**/.zsh_history

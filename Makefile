@@ -55,6 +55,16 @@ test_failure: build
 	]" \
 	dist/main.out
 
+# Removes ALL zsh related config files across the system
+test_zsh_dangerously: build
+	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/zsh \
+	CODECRAFTERS_TEST_CASES_JSON="[ \
+		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}\
+	]" \
+	dist/main.out
+
 
 record_fixtures:
 	CODECRAFTERS_RECORD_FIXTURES=true make test
