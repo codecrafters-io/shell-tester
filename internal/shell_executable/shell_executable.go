@@ -121,7 +121,6 @@ func (b *ShellExecutable) getInitialLogLine(args ...string) string {
 	return log
 }
 
-// TODO: Use a library for this
 func StripANSI(data []byte) []byte {
 	// https://github.com/acarl005/stripansi/blob/master/stripansi.go
 	const ansi = "[\u001B\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[a-zA-Z\\d]*)*)?\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PRZcf-ntqry=><~]))"
