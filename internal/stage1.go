@@ -14,7 +14,7 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	testCase := test_cases.NewPromptTestCase("$ ")
+	testCase := test_cases.NewSilentPromptTestCase("$ ")
 
 	if err := testCase.Run(shell, logger); err != nil {
 		return err
