@@ -10,8 +10,15 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/async_bytewise_reader"
 )
 
-var debug = false
+var debugLogsAreEnabled = false
+
 var ErrConditionNotMet = errors.New("condition not met")
+
+func debugLog(format string, args ...interface{}) {
+	if debugLogsAreEnabled {
+		fmt.Printf(format+"\n", args...)
+	}
+}
 
 // ConditionReader wraps an io.Reader and provides methods to read until a condition is met
 type ConditionReader struct {
@@ -36,27 +43,19 @@ func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) boo
 		readByte, err := t.bytewiseReader.ReadByte()
 		if err != nil {
 			if err == async_bytewise_reader.ErrNoData {
-				if debug {
-					fmt.Println("condition_reader: No data available")
-				}
+				debugLog("condition_reader: No data available")
 
 				// Since no data was available, let's avoid a busy loop
 				time.Sleep(2 * time.Millisecond)
 
 				continue
 			} else {
-				if debug {
-					fmt.Printf("condition_reader: Error while reading: %v\n", err)
-				}
-
+				debugLog("condition_reader: Error while reading: %v", err)
 				return readBytes, err
 			}
 		}
 
-		if debug {
-			fmt.Printf("condition_reader: readByte: %q\n", string(readByte))
-		}
-
+		debugLog("condition_reader: readByte: %q", string(readByte))
 		readBytes = append(readBytes, readByte)
 
 		// If the condition is met, we can return early. Else the loop runs again
