@@ -10,9 +10,9 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/async_bytewise_reader"
 )
 
-var debugLogsAreEnabled = false
-
 var ErrConditionNotMet = errors.New("condition not met")
+
+var debugLogsAreEnabled = false
 
 func debugLog(format string, args ...interface{}) {
 	if debugLogsAreEnabled {
