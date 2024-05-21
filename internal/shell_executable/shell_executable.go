@@ -24,7 +24,6 @@ type ShellExecutable struct {
 	programLogger *logger.Logger
 
 	// Set after starting
-	args      []string
 	pty       *os.File
 	ptyReader condition_reader.ConditionReader
 }
@@ -43,10 +42,9 @@ func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellE
 }
 
 func (b *ShellExecutable) Start(args ...string) error {
-	b.args = args
-	b.logger.Infof(b.getInitialLogLine())
+	b.logger.Infof(b.getInitialLogLine(args...))
 
-	cmd := exec.Command(b.executable.Path)
+	cmd := exec.Command(b.executable.Path, args...)
 
 	cmd.Env = os.Environ()
 	cmd.Env = append(cmd.Env, "PS1=$ ")
@@ -104,14 +102,14 @@ func (b *ShellExecutable) writeAndReadReflection(command string) error {
 	return nil
 }
 
-func (b *ShellExecutable) getInitialLogLine() string {
+func (b *ShellExecutable) getInitialLogLine(args ...string) string {
 	var log string
 
-	if b.args == nil || len(b.args) == 0 {
+	if len(args) == 0 {
 		log = ("Running ./spawn_shell.sh")
 	} else {
 		log += "Running ./spawn_shell.sh"
-		for _, arg := range b.args {
+		for _, arg := range args {
 			if strings.Contains(arg, " ") {
 				log += " \"" + arg + "\""
 			} else {
