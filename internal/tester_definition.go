@@ -24,15 +24,15 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testREPL,
 			Timeout:  15 * time.Second,
 		},
-		{
-			Slug:     "exit",
-			TestFunc: testExit,
-			Timeout:  15 * time.Second,
-		},
-		{
-			Slug:     "echo",
-			TestFunc: testEcho,
-			Timeout:  15 * time.Second,
-		},
+		// {
+		// 	Slug:     "exit",
+		// 	TestFunc: testExit,
+		// 	Timeout:  15 * time.Second,
+		// },
+		// {
+		// 	Slug:     "echo",
+		// 	TestFunc: testEcho,
+		// 	Timeout:  15 * time.Second,
+		// },
 	},
 }

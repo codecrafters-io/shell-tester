@@ -1,4 +1,4 @@
-.PHONY: release build 
+.PHONY: release build
 
 current_version_number := $(shell git tag --list "v*" | sort -V | tail -n 1 | cut -c 2-)
 next_version_number := $(shell echo $$(($(current_version_number)+1)))
@@ -17,30 +17,54 @@ build:
 test:
 	go test -count=1 -p 1 -v ./internal/...
 
-test_with_bash: build
+test_bash: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/bash \
-	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"init\",\"tester_log_prefix\":\"stage-1\",\"title\":\"Stage #1: Shell Prompt\"}, {\"slug\":\"missing-command\",\"tester_log_prefix\":\"stage-2\",\"title\":\"Stage #2: Missing Command\"}, {\"slug\":\"repl\",\"tester_log_prefix\":\"stage-3\",\"title\":\"Stage #3: REPL\"}, {\"slug\":\"exit\",\"tester_log_prefix\":\"stage-4\",\"title\":\"Stage #4: Exit\"}, {\"slug\":\"echo\",\"tester_log_prefix\":\"stage-5\",\"title\":\"Stage #5: Echo\"}]" \
+	CODECRAFTERS_TEST_CASES_JSON="[ \
+		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}\
+	]" \
 	dist/main.out
 
-test_with_dash: build
+test_dash: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/dash \
-	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"missing-command\",\"tester_log_prefix\":\"stage-2\",\"title\":\"Stage #2: Missing Command\"}, {\"slug\":\"repl\",\"tester_log_prefix\":\"stage-3\",\"title\":\"Stage #3: REPL\"}, {\"slug\":\"exit\",\"tester_log_prefix\":\"stage-4\",\"title\":\"Stage #4: Exit\"}, {\"slug\":\"echo\",\"tester_log_prefix\":\"stage-5\",\"title\":\"Stage #5: Echo\"}]" \
-	dist/main.out
-
-test_with_zsh: build
-	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/zsh \
-	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"missing-command\",\"tester_log_prefix\":\"stage-2\",\"title\":\"Stage #2: Missing Command\"}, {\"slug\":\"repl\",\"tester_log_prefix\":\"stage-3\",\"title\":\"Stage #3: REPL\"}, {\"slug\":\"exit\",\"tester_log_prefix\":\"stage-4\",\"title\":\"Stage #4: Exit\"}, {\"slug\":\"echo\",\"tester_log_prefix\":\"stage-5\",\"title\":\"Stage #5: Echo\"}]" \
-	dist/main.out
-
-test_paul: build
-	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/paul_shell \
-	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"init\",\"tester_log_prefix\":\"stage-1\",\"title\":\"Stage #1: Shell Prompt\"}, {\"slug\":\"missing-command\",\"tester_log_prefix\":\"stage-2\",\"title\":\"Stage #2: Missing Command\"}, {\"slug\":\"repl\",\"tester_log_prefix\":\"stage-3\",\"title\":\"Stage #3: REPL\"}, {\"slug\":\"exit\",\"tester_log_prefix\":\"stage-4\",\"title\":\"Stage #4: Exit\"}, {\"slug\":\"echo\",\"tester_log_prefix\":\"stage-5\",\"title\":\"Stage #5: Echo\"}]" \
+	CODECRAFTERS_TEST_CASES_JSON="[ \
+		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AX2\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"} \
+	]" \
 	dist/main.out
 
 test_ryan: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/ryan_shell \
-	CODECRAFTERS_TEST_CASES_JSON="[{\"slug\":\"init\",\"tester_log_prefix\":\"stage-1\",\"title\":\"Stage #1: Shell Prompt\"}, {\"slug\":\"missing-command\",\"tester_log_prefix\":\"stage-2\",\"title\":\"Stage #2: Missing Command\"}, {\"slug\":\"repl\",\"tester_log_prefix\":\"stage-3\",\"title\":\"Stage #3: REPL\"}, {\"slug\":\"exit\",\"tester_log_prefix\":\"stage-4\",\"title\":\"Stage #4: Exit\"}, {\"slug\":\"echo\",\"tester_log_prefix\":\"stage-5\",\"title\":\"Stage #5: Echo\"}]" \
+	CODECRAFTERS_TEST_CASES_JSON="[ \
+		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AX2\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"} \
+	]" \
 	dist/main.out
+
+test_all_success: test_bash test_ryan test_dash
+
+test_failure: build
+	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/failure \
+	CODECRAFTERS_TEST_CASES_JSON="[ \
+		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AX2\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"} \
+	]" \
+	dist/main.out
+
+# Removes ALL zsh related config files across the system
+test_zsh_dangerously: build
+	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/zsh \
+	CODECRAFTERS_TEST_CASES_JSON="[ \
+		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}\
+	]" \
+	dist/main.out
+
 
 record_fixtures:
 	CODECRAFTERS_RECORD_FIXTURES=true make test
