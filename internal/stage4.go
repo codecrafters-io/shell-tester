@@ -62,8 +62,6 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 	}
 
-	time.Sleep(1 * time.Second)
-
 	isTerminated, exitCode := shell.WaitForTermination()
 	if !isTerminated {
 		// We can get isTerminated as false if the program is terminated by SIGKILL too, but that seems unlikely here
