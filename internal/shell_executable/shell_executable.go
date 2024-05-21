@@ -103,7 +103,7 @@ func (b *ShellExecutable) WaitForTermination() (hasTerminated bool, exitCode int
 		rawExitCode := b.cmd.ProcessState.ExitCode()
 
 		if rawExitCode == -1 {
-			// Terminated via signal (e.g. SIGKILL) or still running
+			// We can get isTerminated as false if the program is terminated by SIGKILL too, but that seems unlikely here
 			return false, 0
 		} else {
 			return true, rawExitCode

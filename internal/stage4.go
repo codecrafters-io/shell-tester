@@ -55,7 +55,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	if readErr != io.EOF {
 		if readErr == nil {
 			// If the err is "nil", we didn't reach EOF
-			return fmt.Errorf("Expected program to terminate, program is still running.")
+			return fmt.Errorf("Expected program to exit with 0 exit code, program is still running.")
 		} else {
 			// TODO: Other than EOF, what other errors could we get? Are they user errors or internal errors?
 			return fmt.Errorf("Error reading output: %v", readErr)
@@ -64,7 +64,6 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	isTerminated, exitCode := shell.WaitForTermination()
 	if !isTerminated {
-		// We can get isTerminated as false if the program is terminated by SIGKILL too, but that seems unlikely here
 		return fmt.Errorf("Expected program to exit with 0 exit code, program is still running.")
 	}
 
