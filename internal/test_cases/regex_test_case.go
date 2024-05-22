@@ -1,6 +1,7 @@
 package test_cases
 
 import (
+	"errors"
 	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -51,7 +52,7 @@ func (t RegexTestCase) Run(shell *shell_executable.ShellExecutable, logger *logg
 	}
 
 	if err != nil {
-		if err == shell_executable.ErrConditionNotMet {
+		if errors.Is(err, shell_executable.ErrConditionNotMet) {
 			logger.Errorf("Expected output to %s, got %q", t.ExpectedPatternExplanation, string(shell_executable.StripANSI(output)))
 		}
 

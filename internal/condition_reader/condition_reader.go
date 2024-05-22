@@ -42,7 +42,7 @@ func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) boo
 	for !time.Now().After(deadline) {
 		readByte, err := t.bytewiseReader.ReadByte()
 		if err != nil {
-			if err == async_bytewise_reader.ErrNoData {
+			if errors.Is(err, async_bytewise_reader.ErrNoData) {
 				debugLog("condition_reader: No data available")
 
 				// Since no data was available, let's avoid a busy loop
@@ -75,7 +75,7 @@ func (t *ConditionReader) ReadUntilTimeout(timeout time.Duration) ([]byte, error
 	data, err := t.ReadUntilConditionOrTimeout(alwaysFalseCondition, timeout)
 
 	// We expect that the condition is never met, so let's return nil as the error
-	if err == ErrConditionNotMet {
+	if errors.Is(err, ErrConditionNotMet) {
 		return data, nil
 	}
 

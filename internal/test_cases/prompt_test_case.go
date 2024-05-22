@@ -47,7 +47,7 @@ func (t PromptTestCase) Run(shell *shell_executable.ShellExecutable, logger *log
 	extraOutput, extraOutputErr := shell.ReadBytesUntilTimeout(10 * time.Millisecond)
 	fullOutput := append(actualValue, extraOutput...)
 
-	// Whether the value matches our expecations or not, we print it
+	// Whether the value matches our expectations or not, we print it
 	shell.LogOutput(shell_executable.StripANSI(fullOutput))
 
 	// We failed to read extra output
