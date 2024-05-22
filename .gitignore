@@ -1,4 +1,8 @@
-dist/
 .history/
+.idea/
+
+dist/
+
+paul_shell/
 
 **/.zsh_history

@@ -29,10 +29,25 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testExit,
 			Timeout:  15 * time.Second,
 		},
-		// {
-		// 	Slug:     "echo",
-		// 	TestFunc: testEcho,
-		// 	Timeout:  15 * time.Second,
-		// },
+		{
+			Slug:     "echo",
+			TestFunc: testEcho,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "type1",
+			TestFunc: testType1,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "type2",
+			TestFunc: testType2,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "run",
+			TestFunc: testRun,
+			Timeout:  15 * time.Second,
+		},
 	},
 }

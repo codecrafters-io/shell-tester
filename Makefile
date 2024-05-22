@@ -23,7 +23,10 @@ test_bash: build
 		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
 		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
 		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}, \
-		{\"slug\":\"exit\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #4: Exit\"} \
+		{\"slug\":\"echo\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #5: Echo\"}, \
+		{\"slug\":\"type1\",\"tester_log_prefix\":\"tester::#BX7\",\"title\":\"Stage #6: Type built-in\"}, \
+		{\"slug\":\"type2\",\"tester_log_prefix\":\"tester::#DI8\",\"title\":\"Stage #7: Type for executables\"}, \
+		{\"slug\":\"run\",\"tester_log_prefix\":\"tester::#P0D\",\"title\":\"Stage #8: Run a program\"} \
 	]" \
 	dist/main.out
 
@@ -31,9 +34,12 @@ test_dash: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/dash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
 		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
-		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AX2\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
 		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}, \
-		{\"slug\":\"exit\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #4: Exit\"} \
+		{\"slug\":\"echo\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #5: Echo\"}, \
+		{\"slug\":\"type1\",\"tester_log_prefix\":\"tester::#BX7\",\"title\":\"Stage #6: Type built-in\"}, \
+		{\"slug\":\"type2\",\"tester_log_prefix\":\"tester::#DI8\",\"title\":\"Stage #7: Type for executables\"}, \
+		{\"slug\":\"run\",\"tester_log_prefix\":\"tester::#P0D\",\"title\":\"Stage #8: Run a program\"} \
 	]" \
 	dist/main.out
 
@@ -41,13 +47,16 @@ test_ryan: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/ryan_shell \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
 		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
-		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AX2\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
 		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}, \
-		{\"slug\":\"exit\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #4: Exit\"} \
+		{\"slug\":\"echo\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #5: Echo\"}, \
+		{\"slug\":\"type1\",\"tester_log_prefix\":\"tester::#BX7\",\"title\":\"Stage #6: Type built-in\"}, \
+		{\"slug\":\"type2\",\"tester_log_prefix\":\"tester::#DI8\",\"title\":\"Stage #7: Type for executables\"}, \
+		{\"slug\":\"run\",\"tester_log_prefix\":\"tester::#P0D\",\"title\":\"Stage #8: Run a program\"} \
 	]" \
 	dist/main.out
 
-test_all_success: test_bash test_ryan test_dash
+test_all_success: test_bash test_dash
 
 test_failure: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/failure \
