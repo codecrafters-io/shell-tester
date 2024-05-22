@@ -1,63 +1,83 @@
 package internal
 
-// import "github.com/codecrafters-io/tester-utils/test_case_harness"
+import (
+	"fmt"
+	"io"
+	"regexp"
+	"strings"
+	"time"
 
-// // import (
-// // 	"fmt"
-// // 	"strings"
+	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/test_case_harness"
+)
 
-// // 	"github.com/codecrafters-io/shell-tester/internal/assertions"
-// // 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
-// // 	"github.com/codecrafters-io/tester-utils/test_case_harness"
-// // )
+func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
+	logger := stageHarness.Logger
+	shell := shell_executable.NewShellExecutable(stageHarness)
 
-// // func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
-// // 	b := shell_executable.NewShellExecutable(stageHarness)
-// // 	if err := b.Run(); err != nil {
-// // 		return err
-// // 	}
+	if err := shell.Start(); err != nil {
+		return err
+	}
 
-// // 	logger := stageHarness.Logger
-// // 	command := "nonexistent"
-// // 	expectedErrorMessage := fmt.Sprintf("%s: command not found", command)
-// // 	b.FeedStdin([]byte(command))
+	// We test an inexistent command first, just to make sure the logic works in a "loop"
+	testCase := test_cases.RegexTestCase{
+		Command:                    "invalid_command_1",
+		ExpectedPattern:            regexp.MustCompile(`invalid_command_1: (command )?not found\r\n`),
+		ExpectedPatternExplanation: fmt.Sprintf("contain %q", "invalid_command_1: command not found"),
+		SuccessMessage:             "Received command not found message",
+	}
 
-// // 	a := assertions.BufferAssertion{ExpectedValue: expectedErrorMessage}
-// // 	truncatedStdErrBuf := shell_executable.NewTruncatedBuffer(b.GetStdErrBuffer())
-// // 	if err := a.Run(&truncatedStdErrBuf, assertions.CoreTestInexact); err != nil {
-// // 		return err
-// // 	}
-// // 	logger.Debugf("Received message: %q", a.ActualValue)
+	if err := testCase.Run(shell, logger); err != nil {
+		return err
+	}
 
-// // 	if strings.Contains(a.ActualValue, "\n") {
-// // 		lines := strings.Split(a.ActualValue, "\n")
-// // 		if len(lines) > 2 {
-// // 			a.ActualValue = lines[len(lines)-2]
-// // 		}
-// // 	}
+	// We can't use RegexTestCase for the exit command (no output to match on), so we use lower-level methods instead
+	promptTestCase := test_cases.NewSilentPromptTestCase("$ ")
 
-// // 	logger.Successf("Received error message: %q", a.ActualValue)
+	if err := promptTestCase.Run(shell, logger); err != nil {
+		return err
+	}
 
-// // 	if b.HasExited() {
-// // 		return fmt.Errorf("Program exited before all commands were sent")
-// // 	}
+	if err := shell.SendCommand("exit 0"); err != nil {
+		return err
+	}
 
-// // 	b.FeedStdin([]byte("exit 0"))
-// // 	result, err := b.Wait()
-// // 	if err != nil {
-// // 		return err
-// // 	}
+	output, readErr := shell.ReadBytesUntilTimeout(1000 * time.Millisecond)
+	sanitizedOutput := shell_executable.StripANSI(output)
 
-// // 	if result.ExitCode == -1 {
-// // 		return fmt.Errorf("Program did not exit after sending 'exit'")
-// // 	}
-// // 	if result.ExitCode != 0 {
-// // 		return fmt.Errorf("Expected exit code 0, but got %d", result.ExitCode)
-// // 	}
+	// If anything was printed, log it out before we emit error / success logs
+	if len(sanitizedOutput) > 0 {
+		shell.LogOutput(sanitizedOutput)
+	}
 
-// // 	return nil
-// // }
+	// We're expecting EOF, since the program should've terminated
+	if readErr != io.EOF {
+		if readErr == nil {
+			return fmt.Errorf("Expected program to exit with 0 exit code, program is still running.")
+		} else {
+			// TODO: Other than EOF, what other errors could we get? Are they user errors or internal errors?
+			return fmt.Errorf("Error reading output: %v", readErr)
+		}
+	}
 
-// func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
-// 	return nil
-// }
+	isTerminated, exitCode := shell.WaitForTermination()
+	if !isTerminated {
+		return fmt.Errorf("Expected program to exit with 0 exit code, program is still running.")
+	}
+
+	logger.Successf("✓ Program exited successfully")
+
+	if exitCode != 0 {
+		return fmt.Errorf("Expected 0 as exit code, got %d", exitCode)
+	}
+
+	// Most shells return nothing but bash returns the string "exit" when it exits, we allow both styles
+	if len(sanitizedOutput) > 0 && strings.TrimSpace(string(sanitizedOutput)) != "exit" {
+		return fmt.Errorf("Expected no output after exit command, got %q", string(sanitizedOutput))
+	}
+
+	logger.Successf("✓ No output after exit command")
+
+	return nil
+}

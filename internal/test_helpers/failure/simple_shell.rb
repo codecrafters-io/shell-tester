@@ -11,6 +11,14 @@
 
 loop do
   $stdout.write("$ ")
-  a = gets
-  puts a.chomp
+  command, *_args = gets.chomp.split(" ")
+
+  case command
+  when "exit"
+    break
+  else
+    puts "#{command}: command not found"
+  end
 end
+
+puts "Goodbye!"

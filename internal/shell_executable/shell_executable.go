@@ -24,6 +24,7 @@ type ShellExecutable struct {
 	programLogger *logger.Logger
 
 	// Set after starting
+	cmd       *exec.Cmd
 	pty       *os.File
 	ptyReader condition_reader.ConditionReader
 }
@@ -55,6 +56,7 @@ func (b *ShellExecutable) Start(args ...string) error {
 		return fmt.Errorf("Failed to execute %s: %v", b.executable.Path, err)
 	}
 
+	b.cmd = cmd
 	b.pty = pty
 	b.ptyReader = condition_reader.NewConditionReader(b.pty)
 
@@ -82,6 +84,33 @@ func (b *ShellExecutable) SendCommand(command string) error {
 	}
 
 	return nil
+}
+
+func (b *ShellExecutable) WaitForTermination() (hasTerminated bool, exitCode int) {
+	if b.cmd == nil {
+		panic("CodeCrafters internal error: WaitForTermination called before command was run")
+	}
+
+	waitCompleted := make(chan bool)
+
+	go func() {
+		b.cmd.Wait()
+		waitCompleted <- true
+	}()
+
+	select {
+	case <-waitCompleted:
+		rawExitCode := b.cmd.ProcessState.ExitCode()
+
+		if rawExitCode == -1 {
+			// We can get isTerminated as false if the program is terminated by SIGKILL too, but that seems unlikely here
+			return false, 0
+		} else {
+			return true, rawExitCode
+		}
+	case <-time.After(2 * time.Second):
+		return false, 0
+	}
 }
 
 func (b *ShellExecutable) writeAndReadReflection(command string) error {
