@@ -1,40 +1,42 @@
 package internal
 
-// import "github.com/codecrafters-io/tester-utils/test_case_harness"
+import (
+	"fmt"
+	"regexp"
+	"strings"
 
-// // import (
-// // 	"fmt"
+	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/random"
+	"github.com/codecrafters-io/tester-utils/test_case_harness"
+)
 
-// // 	"github.com/codecrafters-io/shell-tester/internal/assertions"
-// // 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
-// // 	"github.com/codecrafters-io/tester-utils/test_case_harness"
-// // )
+func testEcho(stageHarness *test_case_harness.TestCaseHarness) error {
+	logger := stageHarness.Logger
+	shell := shell_executable.NewShellExecutable(stageHarness)
 
-// // func testEcho(stageHarness *test_case_harness.TestCaseHarness) error {
-// // 	b := shell_executable.NewShellExecutable(stageHarness)
-// // 	if err := b.Run(); err != nil {
-// // 		return err
-// // 	}
+	numberOfCommands := random.RandomInt(2, 4)
 
-// // 	logger := stageHarness.Logger
-// // 	message := "Hello World!"
-// // 	command := fmt.Sprintf("echo %s", message)
-// // 	b.FeedStdin([]byte(command))
+	if err := shell.Start(); err != nil {
+		return err
+	}
 
-// // 	a := assertions.BufferAssertion{ExpectedValue: message}
-// // 	truncatedStdErrBuf := shell_executable.NewTruncatedBuffer(b.GetStdOutBuffer())
-// // 	if err := a.Run(&truncatedStdErrBuf, assertions.CoreTestExact); err != nil {
-// // 		return err
-// // 	}
-// // 	logger.Successf("Received message: %q", a.ActualValue)
+	for i := 0; i < numberOfCommands; i++ {
+		words := strings.Join(random.RandomWords(random.RandomInt(1, 5)), ", ")
+		command := fmt.Sprintf("echo %s", words)
 
-// // 	if b.HasExited() {
-// // 		return fmt.Errorf("Program exited before all commands were sent")
-// // 	}
+		testCase := test_cases.RegexTestCase{
+			Command:                    command,
+			ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`%s\r\n`, words)),
+			ExpectedPatternExplanation: fmt.Sprintf("match %q", words),
+			SuccessMessage:             "Received expected response",
+		}
+		if err := testCase.Run(shell, logger); err != nil {
+			return err
+		}
+	}
 
-// // 	return nil
-// // }
+	// ToDo: Add check for shell still running
 
-// func testEcho(stageHarness *test_case_harness.TestCaseHarness) error {
-// 	return nil
-// }
+	return nil
+}
