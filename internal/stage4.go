@@ -79,5 +79,5 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	logger.Successf("✓ No output after exit command")
 
-	return nil
+	return assertShellIsRunning(shell, logger)
 }

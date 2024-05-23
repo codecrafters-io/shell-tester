@@ -35,5 +35,5 @@ func testCd1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	return promptCheck(shell, logger)
+	return assertShellIsRunning(shell, logger)
 }

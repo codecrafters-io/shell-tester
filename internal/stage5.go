@@ -36,7 +36,5 @@ func testEcho(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 	}
 
-	// ToDo: Add check for shell still running
-
-	return nil
+	return assertShellIsRunning(shell, logger)
 }

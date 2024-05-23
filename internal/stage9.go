@@ -34,7 +34,5 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// ToDo: Add check for shell still running
-
-	return nil
+	return assertShellIsRunning(shell, logger)
 }

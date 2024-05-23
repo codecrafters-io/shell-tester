@@ -23,5 +23,5 @@ func testCd2(stageHarness *test_case_harness.TestCaseHarness) error {
 	testCase3 := test_cases.CDAndPWDTestCase{Directory: "../../", Response: "/usr"}
 	testCase3.Run(shell, logger)
 
-	return promptCheck(shell, logger)
+	return assertShellIsRunning(shell, logger)
 }
