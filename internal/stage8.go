@@ -19,7 +19,10 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	randomString := elf_executable.GetRandomString()
-	elf_executable.CreateELFexecutable(randomString+"\n", "my_exe")
+	err := elf_executable.CreateELFexecutable(randomString+"\n", "my_exe")
+	if err != nil {
+		return err
+	}
 
 	commandsWithResponse := []string{
 		"./my_exe",

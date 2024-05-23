@@ -10,6 +10,8 @@ import (
 	"github.com/codecrafters-io/tester-utils/random"
 )
 
+// BUG: PATHS ARE NOT DIRECTORY AGNOSTIC
+// make test will fail
 var inputFiles = []string{
 	"./internal/elf_executable/0_elf_header.hex",
 	"./internal/elf_executable/1_program_header.hex",

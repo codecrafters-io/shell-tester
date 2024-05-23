@@ -25,7 +25,10 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 
-	elf_executable.CreateELFexecutable(elf_executable.GetRandomString(), "my_exe")
+	err := elf_executable.CreateELFexecutable(elf_executable.GetRandomString(), "my_exe")
+	if err != nil {
+		return err
+	}
 	executables := []string{"cat", "cp", "mkdir", "my_exe", "nonexistent"}
 
 	// Add the current directory to PATH
