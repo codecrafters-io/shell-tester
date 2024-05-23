@@ -18,7 +18,7 @@ func testCd1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	directory := "/usr/local/bin"
-	testCase := test_cases.CDAndPWDTestCase{Directory: directory}
+	testCase := test_cases.CDAndPWDTestCase{Directory: directory, Response: directory}
 	testCase.Run(shell, logger)
 
 	directory = "/non-existing-directory"
