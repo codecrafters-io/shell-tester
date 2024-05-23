@@ -95,3 +95,9 @@ record_fixtures:
 
 update_tester_utils:
 	go get -u github.com/codecrafters-io/tester-utils
+
+copy_course_file:
+	gh api repos/codecrafters-io/build-your-own-shell/contents/course-definition.yml \
+		| jq -r .content \
+		| base64 -d \
+		> internal/test_helpers/course_definition.yml
