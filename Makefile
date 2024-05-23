@@ -17,7 +17,6 @@ build:
 test:
 	go test -count=1 -p 1 -v ./internal/...
 
-# ToDo: Update stage slugs
 test_bash: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/bash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
