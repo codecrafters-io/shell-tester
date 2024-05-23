@@ -21,47 +21,48 @@ test:
 test_bash: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/bash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
-		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
-		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}, \
-		{\"slug\":\"echo\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #5: Echo\"}, \
-		{\"slug\":\"type1\",\"tester_log_prefix\":\"tester::#BX7\",\"title\":\"Stage #6: Type built-in\"}, \
-		{\"slug\":\"type2\",\"tester_log_prefix\":\"tester::#DI8\",\"title\":\"Stage #7: Type for executables\"}, \
-		{\"slug\":\"run\",\"tester_log_prefix\":\"tester::#P0D\",\"title\":\"Stage #8: Run a program\"}, \
-		{\"slug\":\"pwd\",\"tester_log_prefix\":\"tester::#EXT1\",\"title\":\"Stage #9: PWD\"}, \
-		{\"slug\":\"cd1\",\"tester_log_prefix\":\"tester::#EXT2\",\"title\":\"Stage #10: CD-1\"}, \
-		{\"slug\":\"cd2\",\"tester_log_prefix\":\"tester::#EXT3\",\"title\":\"Stage #10: CD-2\"}, \
-		{\"slug\":\"cd3\",\"tester_log_prefix\":\"tester::#EXT4\",\"title\":\"Stage #10: CD-3\"} \
+		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"ff0\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}, \
+		{\"slug\":\"pn5\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #4: Exit\"}, \
+		{\"slug\":\"iz3\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #5: Echo\"}, \
+		{\"slug\":\"ez5\",\"tester_log_prefix\":\"tester::#BX7\",\"title\":\"Stage #6: Type built-in\"}, \
+		{\"slug\":\"mg5\",\"tester_log_prefix\":\"tester::#DI8\",\"title\":\"Stage #7: Type for executables\"}, \
+		{\"slug\":\"ip1\",\"tester_log_prefix\":\"tester::#P0D\",\"title\":\"Stage #8: Run a program\"}, \
+		{\"slug\":\"ei0\",\"tester_log_prefix\":\"tester::#EXT1\",\"title\":\"Stage #9: PWD\"}, \
+		{\"slug\":\"ra6\",\"tester_log_prefix\":\"tester::#EXT2\",\"title\":\"Stage #10: CD-1\"}, \
+		{\"slug\":\"gq9\",\"tester_log_prefix\":\"tester::#EXT3\",\"title\":\"Stage #10: CD-2\"}, \
+		{\"slug\":\"gp4\",\"tester_log_prefix\":\"tester::#EXT4\",\"title\":\"Stage #10: CD-3\"} \
 	]" \
 	dist/main.out
 
 test_dash: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/dash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
-		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
-		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}, \
-		{\"slug\":\"echo\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #5: Echo\"}, \
-		{\"slug\":\"type1\",\"tester_log_prefix\":\"tester::#BX7\",\"title\":\"Stage #6: Type built-in\"}, \
-		{\"slug\":\"type2\",\"tester_log_prefix\":\"tester::#DI8\",\"title\":\"Stage #7: Type for executables\"}, \
-		{\"slug\":\"run\",\"tester_log_prefix\":\"tester::#P0D\",\"title\":\"Stage #8: Run a program\"}, \
-		{\"slug\":\"pwd\",\"tester_log_prefix\":\"tester::#EXT1\",\"title\":\"Stage #9: PWD\"}, \
-		{\"slug\":\"cd1\",\"tester_log_prefix\":\"tester::#EXT2\",\"title\":\"Stage #10: CD-1\"}, \
-		{\"slug\":\"cd2\",\"tester_log_prefix\":\"tester::#EXT3\",\"title\":\"Stage #10: CD-2\"}, \
-		{\"slug\":\"cd3\",\"tester_log_prefix\":\"tester::#EXT4\",\"title\":\"Stage #10: CD-3\"} \
+		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"ff0\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}, \
+		{\"slug\":\"iz3\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #5: Echo\"}, \
+		{\"slug\":\"ez5\",\"tester_log_prefix\":\"tester::#BX7\",\"title\":\"Stage #6: Type built-in\"}, \
+		{\"slug\":\"mg5\",\"tester_log_prefix\":\"tester::#DI8\",\"title\":\"Stage #7: Type for executables\"}, \
+		{\"slug\":\"ip1\",\"tester_log_prefix\":\"tester::#P0D\",\"title\":\"Stage #8: Run a program\"}, \
+		{\"slug\":\"ei0\",\"tester_log_prefix\":\"tester::#EXT1\",\"title\":\"Stage #9: PWD\"}, \
+		{\"slug\":\"ra6\",\"tester_log_prefix\":\"tester::#EXT2\",\"title\":\"Stage #10: CD-1\"}, \
+		{\"slug\":\"gq9\",\"tester_log_prefix\":\"tester::#EXT3\",\"title\":\"Stage #10: CD-2\"}, \
+		{\"slug\":\"gp4\",\"tester_log_prefix\":\"tester::#EXT4\",\"title\":\"Stage #10: CD-3\"} \
 	]" \
 	dist/main.out
 
 test_ryan: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/ryan_shell \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
-		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
-		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}, \
-		{\"slug\":\"echo\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #5: Echo\"}, \
-		{\"slug\":\"type1\",\"tester_log_prefix\":\"tester::#BX7\",\"title\":\"Stage #6: Type built-in\"}, \
-		{\"slug\":\"type2\",\"tester_log_prefix\":\"tester::#DI8\",\"title\":\"Stage #7: Type for executables\"}, \
-		{\"slug\":\"run\",\"tester_log_prefix\":\"tester::#P0D\",\"title\":\"Stage #8: Run a program\"} \
+		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"ff0\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}, \
+		{\"slug\":\"iz3\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #5: Echo\"}, \
+		{\"slug\":\"ez5\",\"tester_log_prefix\":\"tester::#BX7\",\"title\":\"Stage #6: Type built-in\"}, \
+		{\"slug\":\"mg5\",\"tester_log_prefix\":\"tester::#DI8\",\"title\":\"Stage #7: Type for executables\"}, \
+		{\"slug\":\"ip1\",\"tester_log_prefix\":\"tester::#P0D\",\"title\":\"Stage #8: Run a program\"} \
 	]" \
 	dist/main.out
 
@@ -70,10 +71,10 @@ test_all_success: test_bash test_dash
 test_failure: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/failure \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
-		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AX2\",\"title\":\"Stage #2: Missing Command\"}, \
-		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}, \
-		{\"slug\":\"exit\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #4: Exit\"} \
+		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#AX2\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"ff0\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}, \
+		{\"slug\":\"pn5\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #4: Exit\"} \
 	]" \
 	dist/main.out
 
@@ -81,10 +82,10 @@ test_failure: build
 test_zsh_dangerously: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/zsh \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"init\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
-		{\"slug\":\"missing-command\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
-		{\"slug\":\"repl\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}, \
-		{\"slug\":\"exit\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #4: Exit\"} \
+		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#DX1\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#AXY\",\"title\":\"Stage #2: Missing Command\"}, \
+		{\"slug\":\"ff0\",\"tester_log_prefix\":\"tester::#CX3\",\"title\":\"Stage #3: REPL\"}, \
+		{\"slug\":\"pn5\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #4: Exit\"} \
 	]" \
 	dist/main.out
 
