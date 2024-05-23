@@ -75,19 +75,18 @@ func readFile(inputFile string) ([]byte, error) {
 }
 
 func getBinaryDataFromHexFile(inputFile string, randomString string) ([]byte, error) {
-	hexData, err := readFile(inputFile)
+	binaryData, err := readFile(inputFile)
 	if err != nil {
 		return nil, err
 	}
 
 	// Here, we add our random output to the ELF file's program code section
 	if strings.Contains(inputFile, "program_code") {
-		randomString += "\n"
-		hexRandomString := hex.EncodeToString([]byte(randomString))
-		hexData = append(hexData, []byte(hexRandomString)...)
+		randomString := ([]byte(randomString))
+		binaryData = append(binaryData, []byte(randomString)...)
 	}
 
-	return hexData, nil
+	return binaryData, nil
 }
 
 func removeWhitespace(str string) string {
