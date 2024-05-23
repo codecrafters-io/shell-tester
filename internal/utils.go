@@ -1,37 +1,18 @@
 package internal
 
 import (
-	"bytes"
 	"fmt"
-	"unicode"
-	"unicode/utf8"
+
+	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-// removeNonPrintable removes all non-printable characters from a byte slice.
-func removeNonPrintable(data []byte) []byte {
-	var buffer bytes.Buffer
+func assertShellIsRunning(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
+	testCase := test_cases.NewSilentPromptTestCase("$ ")
 
-	for len(data) > 0 {
-		r, size := utf8.DecodeRune(data)
-		if r == utf8.RuneError && size == 1 {
-			// Invalid UTF-8 encoding, skip this byte
-			data = data[size:]
-			continue
-		}
-
-		if unicode.IsPrint(r) {
-			buffer.WriteRune(r)
-		}
-
-		data = data[size:]
+	if err := testCase.Run(shell, logger); err != nil {
+		return fmt.Errorf("Expected shell to print prompt after last command, but it didn't: %v", err)
 	}
-
-	return buffer.Bytes()
-}
-
-func printAllChars(data []byte) {
-	for _, r := range string(data) {
-		fmt.Printf("%q ", r)
-	}
-	fmt.Println()
+	return nil
 }

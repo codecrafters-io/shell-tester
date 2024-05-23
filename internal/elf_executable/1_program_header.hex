@@ -1,0 +1,26 @@
+# Program header -- always 56 bytes
+
+# 1 = type of entry: loadable segment
+01 00 00 00 
+
+# 0x05 = segment-dependent flags: executable | readable
+05 00 00 00 
+
+# 0x0 = Offset within file
+00 00 00 00 00 00 00 00 
+
+# 0x400000 = load position in virtual memory
+00 00 40 00 00 00 00 00 
+
+# 0x400000 = load position in physical memory
+00 00 40 00 00 00 00 00
+
+# 0xB0 = size of the loaded section the file
+B0 00 00 00 00 00 00 00
+
+# 0xB0 = size of the loaded section in memory 
+B0 00 00 00 00 00 00 00
+
+# 0x200000 = alignment boundary for sections
+00 00 20 00 00 00 00 00
+

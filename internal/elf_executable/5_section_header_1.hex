@@ -1,0 +1,30 @@
+# Section header table, section 1 -- program text -- 64 bytes
+
+# 0x0A = offset to the name of the section in the stringtable
+0a 00 00 00 
+
+# 1 = type: program data
+01 00 00 00
+
+# 0x06 flags = executable | occupies memory
+06 00 00 00 00 00 00 00 
+
+# 0x400078 address in virtual memory of this section
+78 00 40 00 00 00 00 00
+
+# 0x78 = offset in the file of this section (start of program code)
+78 00 00 00 00 00 00 00
+
+# 0x38 = size of this section in the file: 56 bytes
+38 00 00 00 00 00 00 00 
+
+# sh_link -- not used for this section
+00 00 00 00 00 00 00 00
+
+# 0x01 = alignment code: default??
+01 00 00 00 00 00 00 00
+
+# sh_entsize: not used
+00 00 00 00 00 00 00 00
+
+

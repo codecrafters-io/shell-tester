@@ -37,11 +37,5 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// There must be a prompt after the last command too
-	testCase := test_cases.NewPromptTestCase("$ ")
-
-	if err := testCase.Run(shell, logger); err != nil {
-		return err
-	}
-
-	return nil
+	return assertShellIsRunning(shell, logger)
 }
