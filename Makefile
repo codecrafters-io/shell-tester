@@ -31,8 +31,8 @@ test_bash: build
 		{\"slug\":\"ip1\",\"tester_log_prefix\":\"tester::#P0D\",\"title\":\"Stage #8: Run a program\"}, \
 		{\"slug\":\"ei0\",\"tester_log_prefix\":\"tester::#EXT1\",\"title\":\"Stage #9: PWD\"}, \
 		{\"slug\":\"ra6\",\"tester_log_prefix\":\"tester::#EXT2\",\"title\":\"Stage #10: CD-1\"}, \
-		{\"slug\":\"gq9\",\"tester_log_prefix\":\"tester::#EXT3\",\"title\":\"Stage #10: CD-2\"}, \
-		{\"slug\":\"gp4\",\"tester_log_prefix\":\"tester::#EXT4\",\"title\":\"Stage #10: CD-3\"} \
+		{\"slug\":\"gq9\",\"tester_log_prefix\":\"tester::#EXT3\",\"title\":\"Stage #11: CD-2\"}, \
+		{\"slug\":\"gp4\",\"tester_log_prefix\":\"tester::#EXT4\",\"title\":\"Stage #12: CD-3\"} \
 	]" \
 	dist/main.out
 
@@ -48,8 +48,8 @@ test_dash: build
 		{\"slug\":\"ip1\",\"tester_log_prefix\":\"tester::#P0D\",\"title\":\"Stage #8: Run a program\"}, \
 		{\"slug\":\"ei0\",\"tester_log_prefix\":\"tester::#EXT1\",\"title\":\"Stage #9: PWD\"}, \
 		{\"slug\":\"ra6\",\"tester_log_prefix\":\"tester::#EXT2\",\"title\":\"Stage #10: CD-1\"}, \
-		{\"slug\":\"gq9\",\"tester_log_prefix\":\"tester::#EXT3\",\"title\":\"Stage #10: CD-2\"}, \
-		{\"slug\":\"gp4\",\"tester_log_prefix\":\"tester::#EXT4\",\"title\":\"Stage #10: CD-3\"} \
+		{\"slug\":\"gq9\",\"tester_log_prefix\":\"tester::#EXT3\",\"title\":\"Stage #11: CD-2\"}, \
+		{\"slug\":\"gp4\",\"tester_log_prefix\":\"tester::#EXT4\",\"title\":\"Stage #12: CD-3\"} \
 	]" \
 	dist/main.out
 
