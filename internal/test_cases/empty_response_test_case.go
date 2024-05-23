@@ -14,8 +14,6 @@ type EmptyResponseTestCase struct {
 	SuccessMessage string
 }
 
-// ToDo: Confirm if this is the right way to implement this
-// If this command Run fails, we will show error in the next command run.
 func (t EmptyResponseTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger, skipReadingPrompt bool) error {
 	promptTestCase := NewSilentPromptTestCase("$ ")
 

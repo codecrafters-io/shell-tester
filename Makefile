@@ -17,6 +17,7 @@ build:
 test:
 	go test -count=1 -p 1 -v ./internal/...
 
+# ToDo: Update stage slugs
 test_bash: build
 	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/bash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
@@ -26,7 +27,11 @@ test_bash: build
 		{\"slug\":\"echo\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #5: Echo\"}, \
 		{\"slug\":\"type1\",\"tester_log_prefix\":\"tester::#BX7\",\"title\":\"Stage #6: Type built-in\"}, \
 		{\"slug\":\"type2\",\"tester_log_prefix\":\"tester::#DI8\",\"title\":\"Stage #7: Type for executables\"}, \
-		{\"slug\":\"run\",\"tester_log_prefix\":\"tester::#P0D\",\"title\":\"Stage #8: Run a program\"} \
+		{\"slug\":\"run\",\"tester_log_prefix\":\"tester::#P0D\",\"title\":\"Stage #8: Run a program\"}, \
+		{\"slug\":\"pwd\",\"tester_log_prefix\":\"tester::#EXT1\",\"title\":\"Stage #9: PWD\"}, \
+		{\"slug\":\"cd1\",\"tester_log_prefix\":\"tester::#EXT2\",\"title\":\"Stage #10: CD-1\"}, \
+		{\"slug\":\"cd2\",\"tester_log_prefix\":\"tester::#EXT3\",\"title\":\"Stage #10: CD-2\"}, \
+		{\"slug\":\"cd3\",\"tester_log_prefix\":\"tester::#EXT4\",\"title\":\"Stage #10: CD-3\"} \
 	]" \
 	dist/main.out
 
@@ -39,7 +44,11 @@ test_dash: build
 		{\"slug\":\"echo\",\"tester_log_prefix\":\"tester::#FG3\",\"title\":\"Stage #5: Echo\"}, \
 		{\"slug\":\"type1\",\"tester_log_prefix\":\"tester::#BX7\",\"title\":\"Stage #6: Type built-in\"}, \
 		{\"slug\":\"type2\",\"tester_log_prefix\":\"tester::#DI8\",\"title\":\"Stage #7: Type for executables\"}, \
-		{\"slug\":\"run\",\"tester_log_prefix\":\"tester::#P0D\",\"title\":\"Stage #8: Run a program\"} \
+		{\"slug\":\"run\",\"tester_log_prefix\":\"tester::#P0D\",\"title\":\"Stage #8: Run a program\"}, \
+		{\"slug\":\"pwd\",\"tester_log_prefix\":\"tester::#EXT1\",\"title\":\"Stage #9: PWD\"}, \
+		{\"slug\":\"cd1\",\"tester_log_prefix\":\"tester::#EXT2\",\"title\":\"Stage #10: CD-1\"}, \
+		{\"slug\":\"cd2\",\"tester_log_prefix\":\"tester::#EXT3\",\"title\":\"Stage #10: CD-2\"}, \
+		{\"slug\":\"cd3\",\"tester_log_prefix\":\"tester::#EXT4\",\"title\":\"Stage #10: CD-3\"} \
 	]" \
 	dist/main.out
 

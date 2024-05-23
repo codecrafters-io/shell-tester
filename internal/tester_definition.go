@@ -49,5 +49,25 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testRun,
 			Timeout:  15 * time.Second,
 		},
+		{
+			Slug:     "pwd",
+			TestFunc: testpwd,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "cd1",
+			TestFunc: testCd1,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "cd2",
+			TestFunc: testCd2,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "cd3",
+			TestFunc: testCd3,
+			Timeout:  15 * time.Second,
+		},
 	},
 }
