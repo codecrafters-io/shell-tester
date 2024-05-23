@@ -1,0 +1,29 @@
+# Section header table, section 2 -- stringtable
+
+# 0x0 = offset to the name of the section in the stringtable
+00 00 00 00
+
+# 3 = type: string table 
+03 00 00 00 
+
+# 0x0 = flags
+00 00 00 00 00 00 00 00 
+
+# 0x0 = address in virtual memory (not used)
+00 00 00 00 00 00 00 00 
+
+# 0xB0 = offset in the file of this section (start of string table)
+b0 00 00 00 00 00 00 00
+
+# 0x10 = size of this section in the file: 16 bytes
+10 00 00 00 00 00 00 00
+
+# sh_link -- not used for this section
+00 00 00 00 00 00 00 00
+
+# 0x01 = alignment code: default??
+01 00 00 00 00 00 00 00
+
+# sh_entsize: not used
+00 00 00 00 00 00 00 00
+

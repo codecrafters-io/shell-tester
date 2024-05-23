@@ -1,0 +1,66 @@
+# ELF header -- always 64 bytes
+
+# Magic number
+7f 45 4c 46 
+
+# 02 = 64 bit
+02
+
+# 01 = little-endian
+01
+
+# 01 = ELF version
+01
+
+# 00 = Target ABI -- usually left at zero for static executables
+00
+
+# 00 = Target ABI version -- usually left at zero for static executables
+00
+
+# 7 bytes undefined
+00 00 00 00 00 00 00 
+
+# 02 = executable binary
+02 00 
+
+# 3E = amd64 architecture
+3e 00
+
+# 1 = ELF version
+01 00 00 00 
+
+# 0x400078 = start address: right after this header and the program
+#  header, which take 0x78 bytes, if the binary is mapped into 
+#  memory at address 0x400000)
+78 00 40 00 00 00 00 00
+
+# 0x40 = offset to program header, right after this header which is 0x40 bytes long 
+40 00 00 00 00 00 00 00
+
+# 0xC0 = offset to section header, which is after the program text and the 
+#  string table
+c0 00 00 00 00 00 00 00 
+
+# 0x00000000 = architecture specific flags
+00 00 00 00
+
+# 0x40 = size of this header, always 64 bytes
+40 00
+
+# 0x38 = size of a program header, always 56 bytes
+38 00
+
+# 1 = number of program header
+01 00
+
+# 0x40 = size of a section header, always 64 bytes
+40 00
+
+# 3 = number of sections headers 
+03 00
+
+# 2 = index of the section header that references the stringtable
+02 00 
+
+

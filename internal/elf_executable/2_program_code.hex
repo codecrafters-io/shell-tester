@@ -1,0 +1,29 @@
+# Program code -- 42 bytes
+
+# mov 0x01,%rax -- sys_write
+48 c7 c0 01 00 00 00 
+
+# mov 0x01,%rdi -- file descriptor, stdout
+48 c7 c7 01 00 00 00
+
+# mov 0x4000a2,%rsi -- location of string
+48 c7 c6 a2 00 40 00
+
+# mov 0x0d,%rdx -- size of string, 13 bytes
+48 c7 c2 0d 00 00 00
+
+# syscall
+0f 05
+
+# mov 0x3c,$rax -- exit program
+48 c7 c0 3c 00 00 00 
+
+# xor %rdi,%rdi -- exit code, 0
+48 31 ff 
+
+# syscall
+0f 05 
+
+# Text "Hello, world\n\0" -- total 14 bytes including the null
+48 65 6c 6c 6f 2c 20 77 6f 72 6c 64 0a 00 
+
