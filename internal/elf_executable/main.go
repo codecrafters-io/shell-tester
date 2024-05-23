@@ -24,7 +24,21 @@ var inputFiles = []string{
 
 func CreateELFexecutable(randomString string, outputFile string) error {
 	var concatenatedData []byte
+	// HACK: This is a workaround to make the paths work for CI
+	var useParentDirFlag bool
+
+	file := inputFiles[0]
+	stat, err := os.Stat(file)
+	if err != nil || stat == nil {
+		useParentDirFlag = true
+	}
+
 	for _, inputFile := range inputFiles {
+		// FIXME
+		if useParentDirFlag {
+			inputFile = strings.Join(strings.Split(inputFile, "/")[2:], "/")
+		}
+
 		binaryData, err := getBinaryDataFromHexFile(inputFile, randomString)
 		if err != nil {
 			return fmt.Errorf("CodeCrafters internal error. Unable to read from ELF constituent files: %v", err)
@@ -32,7 +46,7 @@ func CreateELFexecutable(randomString string, outputFile string) error {
 		concatenatedData = append(concatenatedData, binaryData...)
 	}
 
-	err := os.WriteFile(outputFile, concatenatedData, 0755)
+	err = os.WriteFile(outputFile, concatenatedData, 0755)
 	if err != nil {
 		return fmt.Errorf("CodeCrafters internal error. Failed to write output ELF file: %v", err)
 	}
