@@ -20,7 +20,7 @@ func assertShellIsRunning(shell *shell_executable.ShellExecutable, logger *logge
 	return nil
 }
 
-// getRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
+// GetRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
 // directory is of the form `/tmp/<random-word>/<random-word>/<random-word>`
 func GetRandomDirectory() (string, error) {
 	randomDir := path.Join("/tmp", random.RandomWord(), random.RandomWord(), random.RandomWord())
