@@ -1,11 +1,14 @@
 package shell_executable
 
 import (
+	"errors"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"regexp"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/condition_reader"
@@ -17,6 +20,9 @@ import (
 
 // ErrConditionNotMet is re-exported from condition_reader for convenience
 var ErrConditionNotMet = condition_reader.ErrConditionNotMet
+
+// ErrProgramExited is returned when the program exits
+var ErrProgramExited = errors.New("Program exited")
 
 type ShellExecutable struct {
 	executable    *executable.Executable
@@ -70,11 +76,21 @@ func (b *ShellExecutable) LogOutput(output []byte) {
 }
 
 func (b *ShellExecutable) ReadBytesUntil(condition func([]byte) bool) ([]byte, error) {
-	return b.ptyReader.ReadUntilCondition(condition)
+	readBytes, err := b.ptyReader.ReadUntilCondition(condition)
+	if err != nil {
+		return readBytes, wrapReaderError(err)
+	}
+
+	return readBytes, nil
 }
 
 func (b *ShellExecutable) ReadBytesUntilTimeout(timeout time.Duration) ([]byte, error) {
-	return b.ptyReader.ReadUntilTimeout(timeout)
+	readBytes, err := b.ptyReader.ReadUntilTimeout(timeout)
+	if err != nil {
+		return readBytes, wrapReaderError(err)
+	}
+
+	return readBytes, nil
 }
 
 func (b *ShellExecutable) SendCommand(command string) error {
@@ -158,4 +174,13 @@ func StripANSI(data []byte) []byte {
 	var re = regexp.MustCompile(ansi)
 
 	return re.ReplaceAll(data, []byte(""))
+}
+
+func wrapReaderError(readerErr error) error {
+	// Linux returns syscall.EIO when the process is killed, MacOS returns io.EOF
+	if errors.Is(readerErr, io.EOF) || errors.Is(readerErr, syscall.EIO) {
+		return ErrProgramExited
+	}
+
+	return readerErr
 }

@@ -1,12 +1,9 @@
 package internal
 
 import (
-	"errors"
 	"fmt"
-	"io"
 	"regexp"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -54,13 +51,11 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// We're expecting EOF since the program should've terminated
-	// HACK: We also allow syscall.EIO since that's what we get on Linux when the process is killed
-	// read /dev/ptmx: input/output error *fs.PathError
-	if !errors.Is(readErr, io.EOF) && !errors.Is(readErr, syscall.EIO) {
+	if readErr != shell_executable.ErrProgramExited {
 		if readErr == nil {
 			return fmt.Errorf("Expected program to exit with 0 exit code, program is still running.")
 		} else {
-			// TODO: Other than EOF, what other errors could we get? Are they user errors or internal errors?
+			// TODO: Other than ErrProgramExited, what other errors could we get? Are they user errors or internal errors?
 			return fmt.Errorf("Error reading output: %v", readErr)
 		}
 	}
