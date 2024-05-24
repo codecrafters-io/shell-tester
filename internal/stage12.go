@@ -11,7 +11,7 @@ import (
 func testCd3(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	tmpHomeDir, err := getRandomDirectory()
+	tmpHomeDir, err := GetRandomDirectory()
 	if err != nil {
 		return err
 	}
@@ -21,7 +21,7 @@ func testCd3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	directory, err := getRandomDirectory()
+	directory, err := GetRandomDirectory()
 	if err != nil {
 		return err
 	}

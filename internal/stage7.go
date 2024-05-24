@@ -6,7 +6,7 @@ import (
 	"os/exec"
 	"regexp"
 
-	"github.com/codecrafters-io/shell-tester/internal/elf_executable"
+	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
@@ -25,7 +25,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 
-	err := elf_executable.CreateELFexecutable(elf_executable.GetRandomString(), "my_exe")
+	err := custom_executable.CreateExecutable(GetRandomString(), "my_exe")
 	if err != nil {
 		return err
 	}

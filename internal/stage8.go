@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
-	"github.com/codecrafters-io/shell-tester/internal/elf_executable"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
@@ -22,9 +21,9 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	randomCode := elf_executable.GetRandomString()
-	randomName := elf_executable.GetRandomName()
-	randomDir, err := getRandomDirectory()
+	randomCode := GetRandomString()
+	randomName := GetRandomName()
+	randomDir, err := GetRandomDirectory()
 	if err != nil {
 		return err
 	}
