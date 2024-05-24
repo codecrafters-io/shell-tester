@@ -5,13 +5,13 @@ import (
 	"regexp"
 	"testing"
 
-	tester_utils_testing "github.com/codecrafters-io/tester-utils/testing"
+	testerUtilsTesting "github.com/codecrafters-io/tester-utils/testing"
 )
 
 func TestStages(t *testing.T) {
 	os.Setenv("CODECRAFTERS_RANDOM_SEED", "1234567890")
 
-	testCases := map[string]tester_utils_testing.TesterOutputTestCase{
+	testCases := map[string]testerUtilsTesting.TesterOutputTestCase{
 		"base_stages_pass": {
 			UntilStageSlug:      "ip1",
 			CodePath:            "./test_helpers/bash",
@@ -28,7 +28,7 @@ func TestStages(t *testing.T) {
 		},
 	}
 
-	tester_utils_testing.TestTesterOutput(t, testerDefinition, testCases)
+	testerUtilsTesting.TestTesterOutput(t, testerDefinition, testCases)
 }
 
 func normalizeTesterOutput(testerOutput []byte) []byte {
