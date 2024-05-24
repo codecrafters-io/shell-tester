@@ -1,7 +1,6 @@
 package elf_executable
 
 import (
-	"bufio"
 	"encoding/hex"
 	"fmt"
 	"os"
@@ -10,41 +9,24 @@ import (
 	"github.com/codecrafters-io/tester-utils/random"
 )
 
-// BUG: PATHS ARE NOT DIRECTORY AGNOSTIC
-// make test will fail
-var inputFiles = []string{
-	"./internal/elf_executable/0_elf_header.hex",
-	"./internal/elf_executable/1_program_header.hex",
-	"./internal/elf_executable/2_program_code.hex",
-	"./internal/elf_executable/3_string_table.hex",
-	"./internal/elf_executable/4_section_header_0.hex",
-	"./internal/elf_executable/5_section_header_1.hex",
-	"./internal/elf_executable/6_section_header_2.hex",
-}
-
 func CreateELFexecutable(randomString string, outputFile string) error {
 	var concatenatedData []byte
-	// HACK: This is a workaround to make the paths work for CI
-	var useParentDirFlag bool
 
-	file := inputFiles[0]
-	stat, err := os.Stat(file)
-	if err != nil || stat == nil {
-		useParentDirFlag = true
+	// part1 contains the elf_header, program_header and program_code
+	// part2 contains the string_table and section_headers
+	part1, part2 := getELFHexData()
+	part1Bytes, err := parseData(part1)
+	if err != nil {
+		return fmt.Errorf("CodeCrafters internal error. Failed to parse ELF data: %v", err)
+	}
+	part2Bytes, err := parseData(part2)
+	if err != nil {
+		return fmt.Errorf("CodeCrafters internal error. Failed to parse ELF data: %v", err)
 	}
 
-	for _, inputFile := range inputFiles {
-		// FIXME
-		if useParentDirFlag {
-			inputFile = strings.Join(strings.Split(inputFile, "/")[2:], "/")
-		}
-
-		binaryData, err := getBinaryDataFromHexFile(inputFile, randomString)
-		if err != nil {
-			return fmt.Errorf("CodeCrafters internal error. Unable to read from ELF constituent files: %v", err)
-		}
-		concatenatedData = append(concatenatedData, binaryData...)
-	}
+	concatenatedData = append(concatenatedData, part1Bytes...)
+	concatenatedData = append(concatenatedData, []byte(randomString)...)
+	concatenatedData = append(concatenatedData, part2Bytes...)
 
 	err = os.WriteFile(outputFile, concatenatedData, 0755)
 	if err != nil {
@@ -64,44 +46,22 @@ func GetRandomString() string {
 	return result
 }
 
-func readFile(inputFile string) ([]byte, error) {
-	hexFile, err := os.Open(inputFile)
-	if err != nil {
-		return nil, err
-	}
-
-	// Remove any whitespace characters (e.g., newlines) from the hex data
+func parseData(inputData string) ([]byte, error) {
+	lines := strings.Split(inputData, "\n")
 	hexStr := ""
-	scanner := bufio.NewScanner(hexFile)
-	for scanner.Scan() {
-		line := scanner.Text()
-		if strings.HasPrefix(line, "#") {
-			continue
-		}
+
+	for _, line := range lines {
 		line = removeWhitespace(line)
-		hexStr += line
+		if !strings.HasPrefix(line, "#") {
+			hexStr += line
+		}
 	}
 
-	// Decode the hex string to binary data
+	// Decode the hex string to binary
 	binaryData, err := hex.DecodeString(hexStr)
 	if err != nil {
 		return nil, err
 	}
-	return binaryData, nil
-}
-
-func getBinaryDataFromHexFile(inputFile string, randomString string) ([]byte, error) {
-	binaryData, err := readFile(inputFile)
-	if err != nil {
-		return nil, err
-	}
-
-	// Here, we add our random output to the ELF file's program code section
-	if strings.Contains(inputFile, "program_code") {
-		randomString := []byte(randomString)
-		binaryData = append(binaryData, randomString...)
-	}
-
 	return binaryData, nil
 }
 
