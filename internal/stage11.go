@@ -15,13 +15,21 @@ func testCd2(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	testCase1 := test_cases.CDAndPWDTestCase{Directory: "/usr/", Response: "/usr"}
-	testCase1.Run(shell, logger)
+	err := testCase1.Run(shell, logger)
+	if err != nil {
+		return err
+	}
 
 	testCase2 := test_cases.CDAndPWDTestCase{Directory: "./local/bin", Response: "/usr/local/bin"}
-	testCase2.Run(shell, logger)
+	err = testCase2.Run(shell, logger)
+	if err != nil {
+		return err
+	}
 
 	testCase3 := test_cases.CDAndPWDTestCase{Directory: "../../", Response: "/usr"}
-	testCase3.Run(shell, logger)
-
+	err = testCase3.Run(shell, logger)
+	if err != nil {
+		return err
+	}
 	return assertShellIsRunning(shell, logger)
 }
