@@ -136,9 +136,9 @@ func (b *ShellExecutable) getInitialLogLine(args ...string) string {
 	var log string
 
 	if len(args) == 0 {
-		log = "Running ./spawn_shell.sh"
+		log = "Running ./your_shell.sh"
 	} else {
-		log += "Running ./spawn_shell.sh"
+		log += "Running ./your_shell.sh"
 		for _, arg := range args {
 			if strings.Contains(arg, " ") {
 				log += " \"" + arg + "\""

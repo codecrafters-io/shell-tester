@@ -7,7 +7,7 @@ import (
 )
 
 var testerDefinition = tester_definition.TesterDefinition{
-	ExecutableFileName: "spawn_shell.sh",
+	ExecutableFileName: "your_shell.sh",
 	TestCases: []tester_definition.TestCase{
 		{
 			Slug:     "oo8",

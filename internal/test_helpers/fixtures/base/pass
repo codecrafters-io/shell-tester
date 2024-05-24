@@ -1,84 +1,84 @@
 Debug = true
 
 [33m[stage-8] [0m[94mRunning tests for Stage #8: ip1[0m
-[33m[stage-8] [0m[94mRunning ./spawn_shell.sh[0m
-[33m[your-program] [0m$ 
+[33m[stage-8] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$
 [33m[stage-8] [0m[94m> ./my_exe[0m
 [33m[your-program] [0m384215599859
 [33m[stage-8] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-8] [0m[92mTest passed.[0m
 
 [33m[stage-7] [0m[94mRunning tests for Stage #7: mg5[0m
-[33m[stage-7] [0m[94mRunning ./spawn_shell.sh[0m
-[33m[your-program] [0m$ 
+[33m[stage-7] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$
 [33m[stage-7] [0m[94m> type cat[0m
 [33m[your-program] [0mcat is /usr/bin/cat
 [33m[stage-7] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-7] [0m[94m> type cp[0m
 [33m[your-program] [0mcp is /usr/bin/cp
 [33m[stage-7] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-7] [0m[94m> type mkdir[0m
 [33m[your-program] [0mmkdir is /usr/bin/mkdir
 [33m[stage-7] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-7] [0m[94m> type my_exe[0m
 [33m[your-program] [0mmy_exe is /workspaces/shell-tester/internal/my_exe
 [33m[stage-7] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-7] [0m[94m> type nonexistent[0m
 [33m[your-program] [0mbash: type: nonexistent: not found
 [33m[stage-7] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-7] [0m[92mTest passed.[0m
 
 [33m[stage-6] [0m[94mRunning tests for Stage #6: ez5[0m
-[33m[stage-6] [0m[94mRunning ./spawn_shell.sh[0m
-[33m[your-program] [0m$ 
+[33m[stage-6] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$
 [33m[stage-6] [0m[94m> type echo[0m
 [33m[your-program] [0mecho is a shell builtin
 [33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-6] [0m[94m> type exit[0m
 [33m[your-program] [0mexit is a shell builtin
 [33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-6] [0m[94m> type type[0m
 [33m[your-program] [0mtype is a shell builtin
 [33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-6] [0m[94m> type nonexistent[0m
 [33m[your-program] [0mbash: type: nonexistent: not found
 [33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-6] [0m[94m> type nonexistentcommand[0m
 [33m[your-program] [0mbash: type: nonexistentcommand: not found
 [33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-6] [0m[92mTest passed.[0m
 
 [33m[stage-5] [0m[94mRunning tests for Stage #5: iz3[0m
-[33m[stage-5] [0m[94mRunning ./spawn_shell.sh[0m
-[33m[your-program] [0m$ 
+[33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$
 [33m[stage-5] [0m[94m> echo pineapple grape[0m
 [33m[your-program] [0mpineapple grape
 [33m[stage-5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-5] [0m[94m> echo grape apple[0m
 [33m[your-program] [0mgrape apple
 [33m[stage-5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-5] [0m[92mTest passed.[0m
 
 [33m[stage-4] [0m[94mRunning tests for Stage #4: pn5[0m
-[33m[stage-4] [0m[94mRunning ./spawn_shell.sh[0m
-[33m[your-program] [0m$ 
+[33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$
 [33m[stage-4] [0m[94m> invalid_command_1[0m
 [33m[your-program] [0mbash: invalid_command_1: command not found
 [33m[stage-4] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-4] [0m[94m> exit 0[0m
 [33m[your-program] [0mexit
 [33m[your-program] [0m
@@ -87,32 +87,32 @@ Debug = true
 [33m[stage-4] [0m[92mTest passed.[0m
 
 [33m[stage-3] [0m[94mRunning tests for Stage #3: ff0[0m
-[33m[stage-3] [0m[94mRunning ./spawn_shell.sh[0m
-[33m[your-program] [0m$ 
+[33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$
 [33m[stage-3] [0m[94m> invalid_command_1[0m
 [33m[your-program] [0mbash: invalid_command_1: command not found
 [33m[stage-3] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-3] [0m[94m> invalid_command_2[0m
 [33m[your-program] [0mbash: invalid_command_2: command not found
 [33m[stage-3] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-3] [0m[94m> invalid_command_3[0m
 [33m[your-program] [0mbash: invalid_command_3: command not found
 [33m[stage-3] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-3] [0m[92mTest passed.[0m
 
 [33m[stage-2] [0m[94mRunning tests for Stage #2: cz2[0m
-[33m[stage-2] [0m[94mRunning ./spawn_shell.sh[0m
-[33m[your-program] [0m$ 
+[33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$
 [33m[stage-2] [0m[94m> nonexistent[0m
 [33m[your-program] [0mbash: nonexistent: command not found
 [33m[stage-2] [0m[92m✓ Received command not found message[0m
 [33m[stage-2] [0m[92mTest passed.[0m
 
 [33m[stage-1] [0m[94mRunning tests for Stage #1: oo8[0m
-[33m[stage-1] [0m[94mRunning ./spawn_shell.sh[0m
-[33m[your-program] [0m$ 
+[33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$
 [33m[stage-1] [0m[92m✓ Received prompt[0m
 [33m[stage-1] [0m[92mTest passed.[0m
