@@ -37,13 +37,18 @@ func CreateELFexecutable(randomString string, outputFile string) error {
 }
 
 func GetRandomString() string {
-	// We will use a random numeric string of length = 12
+	// We will use a random numeric string of length = 6
 	var result string
-	for i := 0; i < 6; i++ {
+	for i := 0; i < 3; i++ {
 		result += fmt.Sprintf("%d", random.RandomInt(10, 99))
 	}
 
 	return result
+}
+
+func GetRandomName() string {
+	names := []string{"Alice", "David", "Emily", "James", "Maria"}
+	return names[random.RandomInt(0, len(names))]
 }
 
 func parseData(inputData string) ([]byte, error) {

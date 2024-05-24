@@ -19,7 +19,9 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	randomString := elf_executable.GetRandomString()
+	randomCode := elf_executable.GetRandomString()
+	randomName := elf_executable.GetRandomName()
+	randomString := fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode)
 	err := elf_executable.CreateELFexecutable(randomString+"\n", "my_exe")
 	if err != nil {
 		return err

@@ -106,8 +106,8 @@ func getELFHexData() (string, string) {
 	# mov 0x4000a2,%rsi -- location of string
 	48 c7 c6 a2 00 40 00
 
-	# mov 0x0d,%rdx -- size of string, 13 bytes
-	48 c7 c2 0d 00 00 00
+	# mov 0x0d,%rdx -- size of string, 40 bytes
+	48 c7 c2 28 00 00 00
 
 	# syscall
 	0f 05
