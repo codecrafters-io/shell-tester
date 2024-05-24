@@ -6,11 +6,16 @@ import (
 )
 
 func main() {
-	// Retrieve the command line argument
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: ./out <param>")
+	if len(os.Args) < 1 {
+		fmt.Println("Expected exactly one command line argument, got 0")
 		return
 	}
+
+	if len(os.Args) > 2 {
+		fmt.Println("Expected exactly one command line argument, got %d (%q)", len(os.Args)-1, os.Args[1:])
+		return
+	}
+
 	param := os.Args[1]
 
 	// Random string placeholder
