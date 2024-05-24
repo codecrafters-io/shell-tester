@@ -17,8 +17,13 @@ func testCd3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	testCase1 := test_cases.CDAndPWDTestCase{Directory: "/usr/local/bin", Response: "/usr/local/bin"}
-	err := testCase1.Run(shell, logger)
+	directory, err := getRandomDirectory()
+	if err != nil {
+		return err
+	}
+
+	testCase1 := test_cases.CDAndPWDTestCase{Directory: directory, Response: directory}
+	err = testCase1.Run(shell, logger)
 	if err != nil {
 		return err
 	}
