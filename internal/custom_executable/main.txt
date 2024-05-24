@@ -11,7 +11,7 @@ func main() {
 		return
 	}
 
-	if len(os.Args) > 2 {
+	if len(os.Args) > 1 {
 		fmt.Println("Expected exactly one command line argument, got %d (%q)", len(os.Args)-1, os.Args[1:])
 		return
 	}
