@@ -5,5 +5,6 @@ Debug = true
 [33m[your-program] [0m$ 
 [33m[stage-2] [0m[94m> nonexistent[0m
 [33m[your-program] [0mCommand: nonexistent
+[33m[stage-2] [0m[91mExpected output to contain "nonexistent: command not found", got "Command: nonexistent\r\n"[0m
 [33m[stage-2] [0m[91mProgram exited[0m
 [33m[stage-2] [0m[91mTest failed[0m
