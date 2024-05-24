@@ -17,5 +17,5 @@ func main() {
 	secretCode := "PLACEHOLDER_RANDOM_STRING"
 
 	// Print the random string and the command line parameter
-	fmt.Printf("Hello %s! The secret code is %s.", param, secretCode)
+	fmt.Printf("Hello %s! The secret code is %s.\n", param, secretCode)
 }
