@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"os"
 	"path"
 	"strings"
@@ -26,8 +25,8 @@ func testCd2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	separator := os.PathSeparator
 	parentDirs := strings.Split(directory, string(separator))
-	fmt.Println(directory, separator, parentDirs, len(parentDirs))
 
+	// first 2 dirs, /tmp/foo -> /tmp/foo
 	dir := string(separator) + path.Join(parentDirs[:len(parentDirs)-2]...)
 	testCase1 := test_cases.CDAndPWDTestCase{Directory: dir, Response: dir}
 	err = testCase1.Run(shell, logger)
@@ -35,6 +34,7 @@ func testCd2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	// go deeper, ./bar/baz -> /tmp/foo/bar/baz
 	dir = "." + string(separator) + path.Join(parentDirs[len(parentDirs)-2:]...)
 	absoluteDir := string(separator) + path.Join(parentDirs...)
 	testCase2 := test_cases.CDAndPWDTestCase{Directory: dir, Response: absoluteDir}
@@ -43,6 +43,7 @@ func testCd2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	// go back, ../../../ -> /tmp
 	absoluteDir = string(separator) + path.Join(parentDirs[:len(parentDirs)-3]...)
 	testCase3 := test_cases.CDAndPWDTestCase{Directory: "../../../", Response: absoluteDir}
 	err = testCase3.Run(shell, logger)
