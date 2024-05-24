@@ -32,7 +32,10 @@ func TestStages(t *testing.T) {
 }
 
 func normalizeTesterOutput(testerOutput []byte) []byte {
-	replacements := map[string][]*regexp.Regexp{}
+	replacements := map[string][]*regexp.Regexp{
+		"custom_exe_path": {regexp.MustCompile(`\[your-program\] .*my_exe is .*`)},
+		"cwd":             {regexp.MustCompile(`\[your-program\] .*/(workspaces|home)/.*`)},
+	}
 
 	for replacement, regexes := range replacements {
 		for _, regex := range regexes {
