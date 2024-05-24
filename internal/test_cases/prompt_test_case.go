@@ -41,7 +41,7 @@ func (t PromptTestCase) Run(shell *shell_executable.ShellExecutable, logger *log
 			shell.LogOutput(shell_executable.StripANSI(actualValue))
 		}
 
-		return fmt.Errorf("Expected %q, got %q", t.expectedPrompt, string(actualValue))
+		return fmt.Errorf("Expected prompt (%q) to be printed, got %q", t.expectedPrompt, string(actualValue))
 	}
 
 	extraOutput, extraOutputErr := shell.ReadBytesUntilTimeout(10 * time.Millisecond)
