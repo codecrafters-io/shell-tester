@@ -62,12 +62,12 @@ Debug = true
 [33m[stage-5] [0m[94mRunning tests for Stage #5: iz3[0m
 [33m[stage-5] [0m[94mRunning ./spawn_shell.sh[0m
 [33m[your-program] [0m$ 
-[33m[stage-5] [0m[94m> echo pineapple, grape, raspberry[0m
-[33m[your-program] [0mpineapple, grape, raspberry
+[33m[stage-5] [0m[94m> echo pineapple grape[0m
+[33m[your-program] [0mpineapple grape
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
-[33m[stage-5] [0m[94m> echo grape[0m
-[33m[your-program] [0mgrape
+[33m[stage-5] [0m[94m> echo grape apple[0m
+[33m[your-program] [0mgrape apple
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-5] [0m[92mTest passed.[0m

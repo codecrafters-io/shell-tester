@@ -22,7 +22,7 @@ func testEcho(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	for i := 0; i < numberOfCommands; i++ {
-		words := strings.Join(random.RandomWords(random.RandomInt(1, 5)), ", ")
+		words := strings.Join(random.RandomWords(random.RandomInt(2, 4)), " ")
 		command := fmt.Sprintf("echo %s", words)
 
 		testCase := test_cases.RegexTestCase{
