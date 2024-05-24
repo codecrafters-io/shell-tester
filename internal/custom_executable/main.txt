@@ -6,12 +6,18 @@ import (
 )
 
 func main() {
-	// Retrieve the command line argument
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: ./out <param>")
+	args := os.Args[1:]
+	if len(args) < 1 {
+		fmt.Println("Expected exactly one command line argument, got 0")
 		return
 	}
-	param := os.Args[1]
+
+	if len(args) > 1 {
+		fmt.Println("Expected exactly one command line argument, got %d (%q)", len(args), args)
+		return
+	}
+
+	param := args[0]
 
 	// Random string placeholder
 	secretCode := "PLACEHOLDER_RANDOM_STRING"
