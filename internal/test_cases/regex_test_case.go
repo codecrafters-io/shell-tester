@@ -52,10 +52,11 @@ func (t RegexTestCase) Run(shell *shell_executable.ShellExecutable, logger *logg
 	}
 
 	if err != nil {
-		if errors.Is(err, shell_executable.ErrConditionNotMet) {
+		if errors.Is(err, shell_executable.ErrConditionNotMet) || errors.Is(err, shell_executable.ErrProgramExited) {
 			logger.Errorf("Expected output to %s, got %q", t.ExpectedPatternExplanation, string(shell_executable.StripANSI(output)))
 		}
 
+		// TODO: Think about this, what other errors could be there other than ErrConditionNotMet and ErrProgramExited?
 		return err
 	}
 
