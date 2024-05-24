@@ -3,7 +3,7 @@ Debug = true
 [33m[stage-8] [0m[94mRunning tests for Stage #8: ip1[0m
 [33m[stage-8] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
-[33m[stage-8] [0m[94m> ./my_exe[0m
+[33m[stage-8] [0m[94m> /tmp/pear/banana/blueberry/my_exe David[0m
 [33m[your-program] [0mHello David! The secret code is 384215.
 [33m[stage-8] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -62,12 +62,12 @@ Debug = true
 [33m[stage-5] [0m[94mRunning tests for Stage #5: iz3[0m
 [33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
-[33m[stage-5] [0m[94m> echo strawberry apple pear[0m
-[33m[your-program] [0mstrawberry apple pear
+[33m[stage-5] [0m[94m> echo strawberry apple[0m
+[33m[your-program] [0mstrawberry apple
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
-[33m[stage-5] [0m[94m> echo blueberry mango[0m
-[33m[your-program] [0mblueberry mango
+[33m[stage-5] [0m[94m> echo orange strawberry blueberry[0m
+[33m[your-program] [0morange strawberry blueberry
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-5] [0m[92mTest passed.[0m
@@ -99,6 +99,10 @@ Debug = true
 [33m[your-program] [0m$ 
 [33m[stage-3] [0m[94m> invalid_command_3[0m
 [33m[your-program] [0mbash: invalid_command_3: command not found
+[33m[stage-3] [0m[92m✓ Received command not found message[0m
+[33m[your-program] [0m$ 
+[33m[stage-3] [0m[94m> invalid_command_4[0m
+[33m[your-program] [0mbash: invalid_command_4: command not found
 [33m[stage-3] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ 
 [33m[stage-3] [0m[92mTest passed.[0m

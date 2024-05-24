@@ -73,7 +73,7 @@ Debug = true
 [33m[stage-8] [0m[94mRunning tests for Stage #8: ip1[0m
 [33m[stage-8] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
-[33m[stage-8] [0m[94m> ./my_exe[0m
+[33m[stage-8] [0m[94m> /tmp/grape/banana/mango/my_exe David[0m
 [33m[your-program] [0mHello David! The secret code is 498493.
 [33m[stage-8] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -132,12 +132,16 @@ Debug = true
 [33m[stage-5] [0m[94mRunning tests for Stage #5: iz3[0m
 [33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
-[33m[stage-5] [0m[94m> echo pineapple orange raspberry[0m
-[33m[your-program] [0mpineapple orange raspberry
+[33m[stage-5] [0m[94m> echo banana apple[0m
+[33m[your-program] [0mbanana apple
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
-[33m[stage-5] [0m[94m> echo raspberry orange[0m
-[33m[your-program] [0mraspberry orange
+[33m[stage-5] [0m[94m> echo pineapple raspberry apple[0m
+[33m[your-program] [0mpineapple raspberry apple
+[33m[stage-5] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m$ 
+[33m[stage-5] [0m[94m> echo grape pear strawberry[0m
+[33m[your-program] [0mgrape pear strawberry
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-5] [0m[92mTest passed.[0m
