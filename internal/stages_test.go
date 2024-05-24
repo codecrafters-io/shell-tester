@@ -26,6 +26,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/navigation/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"missing_command_fail": {
+			UntilStageSlug:      "cz2",
+			CodePath:            "./test_helpers/scenarios/missing_command/wrong_output",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/missing_command/wrong_output",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 	}
 
 	testerUtilsTesting.TestTesterOutput(t, testerDefinition, testCases)
