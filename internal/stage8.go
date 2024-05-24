@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"strings"
 
+	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
 	"github.com/codecrafters-io/shell-tester/internal/elf_executable"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -21,8 +23,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	randomCode := elf_executable.GetRandomString()
 	randomName := elf_executable.GetRandomName()
-	randomString := fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode)
-	err := elf_executable.CreateELFexecutable(randomString+"\n", "my_exe")
+	err := custom_executable.CreateExecutable(randomCode, "my_exe")
 	if err != nil {
 		return err
 	}
@@ -33,20 +34,20 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	path := os.Getenv("PATH")
 	os.Setenv("PATH", fmt.Sprintf("%s:%s", homeDir, path))
 
-	commandsWithResponse := []string{
-		"./my_exe",
+	command := []string{
+		"./my_exe", randomName,
 	}
 
-	for _, command := range commandsWithResponse {
-		testCase := test_cases.RegexTestCase{
-			Command:                    command,
-			ExpectedPattern:            regexp.MustCompile(randomString + "\r\n"),
-			ExpectedPatternExplanation: fmt.Sprintf("match %q", randomString),
-			SuccessMessage:             "Received expected response",
-		}
-		if err := testCase.Run(shell, logger); err != nil {
-			return err
-		}
+	expectedResponse := fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode)
+
+	testCase := test_cases.RegexTestCase{
+		Command:                    strings.Join(command, " "),
+		ExpectedPattern:            regexp.MustCompile(expectedResponse),
+		ExpectedPatternExplanation: fmt.Sprintf("match %q", expectedResponse),
+		SuccessMessage:             "Received expected response",
+	}
+	if err := testCase.Run(shell, logger); err != nil {
+		return err
 	}
 
 	return assertShellIsRunning(shell, logger)
