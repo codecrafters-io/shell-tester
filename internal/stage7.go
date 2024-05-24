@@ -48,7 +48,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		testCase := test_cases.RegexTestCase{
 			Command:                    command,
 			ExpectedPattern:            regexp.MustCompile(expectedPattern + "\r\n"),
-			ExpectedPatternExplanation: fmt.Sprintf("match %q", expectedPattern),
+			ExpectedPatternExplanation: fmt.Sprintf("match %q", expectedPattern + "\n"),
 			SuccessMessage:             "Received expected response",
 		}
 		if err := testCase.Run(shell, logger); err != nil {

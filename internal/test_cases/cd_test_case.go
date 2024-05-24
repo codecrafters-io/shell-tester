@@ -41,7 +41,7 @@ func (t *CDAndPWDTestCase) Run(shell *shell_executable.ShellExecutable, logger *
 	testCase := RegexTestCase{
 		Command:                    nextCommand,
 		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`%s\r\n`, t.Response)),
-		ExpectedPatternExplanation: fmt.Sprintf("match %q", t.Response),
+		ExpectedPatternExplanation: fmt.Sprintf("match %q", t.Response + "\n"),
 		SuccessMessage:             "Received current working directory response",
 	}
 	if err := testCase.Run(shell, logger); err != nil {

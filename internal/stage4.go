@@ -23,7 +23,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	testCase := test_cases.RegexTestCase{
 		Command:                    "invalid_command_1",
 		ExpectedPattern:            regexp.MustCompile(`invalid_command_1: (command )?not found\r\n`),
-		ExpectedPatternExplanation: fmt.Sprintf("contain %q", "invalid_command_1: command not found"),
+		ExpectedPatternExplanation: fmt.Sprintf("contain %q", "invalid_command_1: command not found\n"),
 		SuccessMessage:             "Received command not found message",
 	}
 
