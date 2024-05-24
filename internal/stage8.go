@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 	"os"
+	"path"
 	"regexp"
 	"strings"
 
@@ -23,19 +24,24 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	randomCode := elf_executable.GetRandomString()
 	randomName := elf_executable.GetRandomName()
-	err := custom_executable.CreateExecutable(randomCode, "my_exe")
+	randomDir, err := getRandomDirectory()
+	if err != nil {
+		return err
+	}
+	exePath := path.Join(randomDir, "my_exe")
+
+	err = custom_executable.CreateExecutable(randomCode, exePath)
 	if err != nil {
 		return err
 	}
 
 	// Add the current directory to PATH
 	// (That is where the my_exe file is created)
-	homeDir, _ := os.Getwd()
 	path := os.Getenv("PATH")
-	os.Setenv("PATH", fmt.Sprintf("%s:%s", homeDir, path))
+	os.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, path))
 
 	command := []string{
-		"./my_exe", randomName,
+		exePath, randomName,
 	}
 
 	expectedResponse := fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode)
