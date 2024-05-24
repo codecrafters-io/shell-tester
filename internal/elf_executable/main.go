@@ -98,8 +98,8 @@ func getBinaryDataFromHexFile(inputFile string, randomString string) ([]byte, er
 
 	// Here, we add our random output to the ELF file's program code section
 	if strings.Contains(inputFile, "program_code") {
-		randomString := ([]byte(randomString))
-		binaryData = append(binaryData, []byte(randomString)...)
+		randomString := []byte(randomString)
+		binaryData = append(binaryData, randomString...)
 	}
 
 	return binaryData, nil

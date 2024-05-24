@@ -22,7 +22,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// We test an inexistent command first, just to make sure the logic works in a "loop"
+	// We test a nonexistent command first, just to make sure the logic works in a "loop"
 	testCase := test_cases.RegexTestCase{
 		Command:                    "invalid_command_1",
 		ExpectedPattern:            regexp.MustCompile(`invalid_command_1: (command )?not found\r\n`),

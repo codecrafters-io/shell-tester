@@ -64,6 +64,7 @@ func (b *ShellExecutable) Start(args ...string) error {
 }
 
 // TODO: Do tests cases _need_ to decide when to log output and when to not? Can we just always log from within ReadBytes...?
+
 func (b *ShellExecutable) LogOutput(output []byte) {
 	b.programLogger.Plainln(string(output))
 }
@@ -117,7 +118,7 @@ func (b *ShellExecutable) writeAndReadReflection(command string) error {
 	b.pty.Write([]byte(command + "\n"))
 
 	expectedReflection := command + "\r\n"
-	readBytes := []byte{}
+	var readBytes []byte
 
 	reflectionCondition := func(buf []byte) bool {
 		return string(buf) == expectedReflection

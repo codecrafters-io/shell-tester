@@ -14,7 +14,6 @@ type CDAndPWDTestCase struct {
 	Response  string // Absolute Path
 }
 
-// ToDo: Break into RunCD and RunPWD ?
 func (t *CDAndPWDTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	// First we make sure the directory exists, if not we create it
 	command := fmt.Sprintf("cd %s", t.Directory)

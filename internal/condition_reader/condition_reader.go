@@ -37,7 +37,7 @@ func (t *ConditionReader) ReadUntilCondition(condition func([]byte) bool) ([]byt
 
 func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) bool, timeout time.Duration) ([]byte, error) {
 	deadline := time.Now().Add(timeout)
-	readBytes := []byte{}
+	var readBytes []byte
 
 	for !time.Now().After(deadline) {
 		readByte, err := t.bytewiseReader.ReadByte()
