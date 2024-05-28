@@ -3,7 +3,7 @@ module github.com/codecrafters-io/shell-tester
 go 1.21
 
 require (
-	github.com/codecrafters-io/tester-utils v0.2.22
+	github.com/codecrafters-io/tester-utils v0.2.23
 	github.com/creack/pty v1.1.21
 )
 
