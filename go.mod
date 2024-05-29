@@ -3,7 +3,7 @@ module github.com/codecrafters-io/shell-tester
 go 1.21
 
 require (
-	github.com/codecrafters-io/tester-utils v0.2.22
+	github.com/codecrafters-io/tester-utils v0.2.24
 	github.com/creack/pty v1.1.21
 )
 
@@ -12,7 +12,7 @@ require (
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/fatih/color v1.16.0 // indirect
+	github.com/fatih/color v1.17.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
