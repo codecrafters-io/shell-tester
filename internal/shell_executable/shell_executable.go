@@ -16,6 +16,7 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 	ptylib "github.com/creack/pty"
+	"go.chromium.org/luci/common/system/environ"
 )
 
 // ErrConditionNotMet is re-exported from condition_reader for convenience
@@ -51,11 +52,13 @@ func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellE
 func (b *ShellExecutable) Start(args ...string) error {
 	b.logger.Infof(b.getInitialLogLine(args...))
 
-	cmd := exec.Command(b.executable.Path, args...)
+	// We use a library to avoid duplicate values in os.Environ()
+	env := environ.New(os.Environ())
+	env.Set("PS1", "$ ")
+	env.Set("TERM", "dumb") // test_all_success works without this too, do we need it?
 
-	cmd.Env = os.Environ()
-	cmd.Env = append(cmd.Env, "PS1=$ ")
-	cmd.Env = append(cmd.Env, "TERM=dumb") // test_all_success works without this too, do we need it?
+	cmd := exec.Command(b.executable.Path, args...)
+	cmd.Env = env.Sorted()
 
 	pty, err := ptylib.Start(cmd)
 	if err != nil {
