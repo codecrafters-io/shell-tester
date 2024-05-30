@@ -26,8 +26,8 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	testCase := test_cases.RegexTestCase{
 		Command:                    command,
-		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`%s\r\n`, cwd)),
-		ExpectedPatternExplanation: fmt.Sprintf("match %q", cwd + "\n"),
+		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s\r\n`, cwd)),
+		ExpectedPatternExplanation: fmt.Sprintf("match %q", cwd+"\n"),
 		SuccessMessage:             "Received current working directory response",
 	}
 	if err := testCase.Run(shell, logger); err != nil {

@@ -24,7 +24,7 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 		testCase := test_cases.RegexTestCase{
 			Command:                    command,
-			ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`%s is a( special)? shell builtin\r\n`, builtIn)),
+			ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s is a( special)? shell builtin\r\n`, builtIn)),
 			ExpectedPatternExplanation: fmt.Sprintf("match %q\n", fmt.Sprintf(`%s is a shell builtin`, builtIn)),
 			SuccessMessage:             "Received expected response",
 		}
@@ -40,7 +40,7 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 		testCase := test_cases.RegexTestCase{
 			Command:                    command,
-			ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`%s[:]? not found\r\n`, invalidCommand)),
+			ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^(bash: type: )?%s[:]? not found\r\n`, invalidCommand)),
 			ExpectedPatternExplanation: fmt.Sprintf("contain %q", fmt.Sprintf(`%s not found\n`, invalidCommand)),
 			SuccessMessage:             "Received expected response",
 		}
