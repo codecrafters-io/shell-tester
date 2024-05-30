@@ -35,8 +35,6 @@ func (t RegexTestCase) Run(shell *shell_executable.ShellExecutable, logger *logg
 		return err
 	}
 
-	t.ExpectedPattern = regexp.MustCompile("^" + t.ExpectedPattern.String())
-
 	regexMatchCondition := func(buf []byte) bool {
 		return t.ExpectedPattern.Match(shell_executable.StripANSI(buf))
 	}
