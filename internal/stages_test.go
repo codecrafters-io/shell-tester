@@ -40,9 +40,9 @@ func TestStages(t *testing.T) {
 
 func normalizeTesterOutput(testerOutput []byte) []byte {
 	replacements := map[string][]*regexp.Regexp{
-		"/bin/$1":         {regexp.MustCompile(`\/usr/bin/(\w+)`)},
-		"custom_exe_path": {regexp.MustCompile(`(?=\[your-program\]) .{4}my_exe is .*`)},
-		"cwd":             {regexp.MustCompile(`(?=\[your-program\]) .{4}/(workspaces|home|Users)/.*`)},
+		"/bin/$1":                         {regexp.MustCompile(`\/usr/bin/(\w+)`)},
+		"[your-program] my_exe is <path>": {regexp.MustCompile(`\[your-program\] .{4}my_exe is .*`)},
+		"[your-program] <cwd>":            {regexp.MustCompile(`\[your-program\] .{4}/(workspaces|home|Users)/.*`)},
 	}
 
 	for replacement, regexes := range replacements {
