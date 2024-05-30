@@ -40,7 +40,7 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 		testCase := test_cases.RegexTestCase{
 			Command:                    command,
-			ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`%s[:]? not found\r\n`, invalidCommand)),
+			ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`(bash: type: )?%s[:]? not found\r\n`, invalidCommand)),
 			ExpectedPatternExplanation: fmt.Sprintf("contain %q", fmt.Sprintf(`%s not found\n`, invalidCommand)),
 			SuccessMessage:             "Received expected response",
 		}

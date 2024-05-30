@@ -29,7 +29,6 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
-	executables := []string{"cat", "cp", "mkdir", "my_exe", "nonexistent"}
 
 	// Add the current directory to PATH
 	// (That is where the my_exe file is created)
@@ -41,14 +40,33 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	for _, executable := range executables {
-		command := fmt.Sprintf("type %s", executable)
-		expectedPattern := getPath(executable)
+	availableExecutables := []string{"cat", "cp", "mkdir", "my_exe"}
 
+	for _, executable := range availableExecutables {
+		command := fmt.Sprintf("type %s", executable)
+		actualPath := getPath(executable)
+		expectedPattern := fmt.Sprintf(`(%s is )?%s\r\n`, executable, actualPath)
 		testCase := test_cases.RegexTestCase{
 			Command:                    command,
-			ExpectedPattern:            regexp.MustCompile(expectedPattern + "\r\n"),
-			ExpectedPatternExplanation: fmt.Sprintf("match %q", expectedPattern + "\n"),
+			ExpectedPattern:            regexp.MustCompile(expectedPattern),
+			ExpectedPatternExplanation: fmt.Sprintf("match %q", expectedPattern),
+			SuccessMessage:             "Received expected response",
+		}
+		if err := testCase.Run(shell, logger); err != nil {
+			return err
+		}
+	}
+
+	nonAvailableExecutables := []string{"nonexistent"}
+
+	for _, executable := range nonAvailableExecutables {
+		command := fmt.Sprintf("type %s", executable)
+		actualPath := getPath(executable)
+		expectedPattern := fmt.Sprintf(`(bash: type: )?%s\r\n`, actualPath)
+		testCase := test_cases.RegexTestCase{
+			Command:                    command,
+			ExpectedPattern:            regexp.MustCompile(expectedPattern),
+			ExpectedPatternExplanation: fmt.Sprintf("match %q", expectedPattern),
 			SuccessMessage:             "Received expected response",
 		}
 		if err := testCase.Run(shell, logger); err != nil {
