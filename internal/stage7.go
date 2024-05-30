@@ -22,6 +22,15 @@ func getPath(executable string) string {
 }
 
 func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
+	// Add the current directory to PATH (That is where the my_exe file is created)
+	//
+	// TODO: Remove this since it mutates path for ALL stages! Use shell.Setenv() instead.
+	//       We'll need to change the test to not use exec.LookPath for my_exe at least.
+	//       Also, always create my_exe in a RANDOM directory, not the current directory.
+	homeDir, _ := os.Getwd()
+	path := os.Getenv("PATH")
+	os.Setenv("PATH", fmt.Sprintf("%s:%s", homeDir, path))
+
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 
@@ -29,12 +38,6 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
-
-	// Add the current directory to PATH
-	// (That is where the my_exe file is created)
-	homeDir, _ := os.Getwd()
-	path := os.Getenv("PATH")
-	os.Setenv("PATH", fmt.Sprintf("%s:%s", homeDir, path))
 
 	if err := shell.Start(); err != nil {
 		return err
