@@ -30,6 +30,9 @@ type ShellExecutable struct {
 	logger        *logger.Logger
 	programLogger *logger.Logger
 
+	// env is set to os.Environ() by default, but individual values can be overridden with Setenv
+	env environ.Env
+
 	// Set after starting
 	cmd       *exec.Cmd
 	pty       *os.File
@@ -43,22 +46,26 @@ func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellE
 		programLogger: logger.GetLogger(stageHarness.Logger.IsDebug, "[your-program] "),
 	}
 
+	b.env = environ.New(os.Environ())
+
 	// TODO: Kill pty process?
 	// stageHarness.RegisterTeardownFunc(func() { b.Kill() })
 
 	return b
 }
 
+func (b *ShellExecutable) Setenv(key, value string) {
+	b.env.Set(key, value)
+}
+
 func (b *ShellExecutable) Start(args ...string) error {
 	b.logger.Infof(b.getInitialLogLine(args...))
 
-	// We use a library to avoid duplicate values in os.Environ()
-	env := environ.New(os.Environ())
-	env.Set("PS1", "$ ")
-	env.Set("TERM", "dumb") // test_all_success works without this too, do we need it?
+	b.Setenv("PS1", "$ ")
+	b.Setenv("TERM", "dumb") // test_all_success works without this too, do we need it?
 
 	cmd := exec.Command(b.executable.Path, args...)
-	cmd.Env = env.Sorted()
+	cmd.Env = b.env.Sorted()
 
 	pty, err := ptylib.Start(cmd)
 	if err != nil {

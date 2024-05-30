@@ -9,13 +9,14 @@ import (
 )
 
 func testCd3(stageHarness *test_case_harness.TestCaseHarness) error {
-	logger := stageHarness.Logger
-	shell := shell_executable.NewShellExecutable(stageHarness)
 	tmpHomeDir, err := GetRandomDirectory()
 	if err != nil {
 		return err
 	}
 	os.Setenv("HOME", tmpHomeDir)
+
+	logger := stageHarness.Logger
+	shell := shell_executable.NewShellExecutable(stageHarness)
 
 	if err := shell.Start(); err != nil {
 		return err
