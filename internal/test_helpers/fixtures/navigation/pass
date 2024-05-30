@@ -65,7 +65,7 @@ Debug = true
 [33m[stage-9] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
 [33m[stage-9] [0m[94m> pwd[0m
-[33m[your-program] [0m/workspaces/shell-tester/internal
+[33m[your-program] [0m/Users/ryang/Developer/work/course-testers/shell-tester/internal
 [33m[stage-9] [0m[92m✓ Received current working directory response[0m
 [33m[your-program] [0m$ 
 [33m[stage-9] [0m[92mTest passed.[0m
@@ -83,19 +83,19 @@ Debug = true
 [33m[stage-7] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
 [33m[stage-7] [0m[94m> type cat[0m
-[33m[your-program] [0mcat is /usr/bin/cat
+[33m[your-program] [0mcat is /bin/cat
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-7] [0m[94m> type cp[0m
-[33m[your-program] [0mcp is /usr/bin/cp
+[33m[your-program] [0mcp is /bin/cp
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-7] [0m[94m> type mkdir[0m
-[33m[your-program] [0mmkdir is /usr/bin/mkdir
+[33m[your-program] [0mmkdir is /bin/mkdir
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-7] [0m[94m> type my_exe[0m
-[33m[your-program] [0mmy_exe is /workspaces/shell-tester/internal/my_exe
+[33m[your-program] [0mmy_exe is /Users/ryang/Developer/work/course-testers/shell-tester/internal/my_exe
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-7] [0m[94m> type nonexistent[0m
