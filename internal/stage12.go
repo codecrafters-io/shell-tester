@@ -1,22 +1,20 @@
 package internal
 
 import (
-	"os"
-
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
 func testCd3(stageHarness *test_case_harness.TestCaseHarness) error {
+	logger := stageHarness.Logger
+	shell := shell_executable.NewShellExecutable(stageHarness)
+
 	tmpHomeDir, err := GetRandomDirectory()
 	if err != nil {
 		return err
 	}
-	os.Setenv("HOME", tmpHomeDir)
-
-	logger := stageHarness.Logger
-	shell := shell_executable.NewShellExecutable(stageHarness)
+	shell.Setenv("HOME", tmpHomeDir)
 
 	if err := shell.Start(); err != nil {
 		return err
