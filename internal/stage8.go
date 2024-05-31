@@ -40,7 +40,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	command := []string{
-		exePath, randomName,
+		"my_exe", randomName,
 	}
 
 	expectedResponse := fmt.Sprintf("^Hello %s! The secret code is %s.", randomName, randomCode)
