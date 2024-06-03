@@ -27,14 +27,17 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// TODO: Remove this since it mutates path for ALL stages! Use shell.Setenv() instead.
 	//       We'll need to change the test to not use exec.LookPath for my_exe at least.
 	//       Also, always create my_exe in a RANDOM directory, not the current directory.
-	homeDir, _ := os.Getwd()
-	path := os.Getenv("PATH")
-	os.Setenv("PATH", fmt.Sprintf("%s:%s", homeDir, path))
+	randomDir, err := GetRandomDirectory()
+	if err != nil {
+		return err
+	}
 
+	path := os.Getenv("PATH")
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
+	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, path))
 
-	err := custom_executable.CreateExecutable(GetRandomString(), "my_exe")
+	err = custom_executable.CreateExecutable(GetRandomString(), fmt.Sprintf("%s/%s", randomDir, "my_exe"))
 	if err != nil {
 		return err
 	}
@@ -43,7 +46,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	availableExecutables := []string{"cat", "cp", "mkdir", "my_exe"}
+	availableExecutables := []string{"cat", "cp", "mkdir"}
 
 	for _, executable := range availableExecutables {
 		command := fmt.Sprintf("type %s", executable)
