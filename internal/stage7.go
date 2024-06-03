@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
@@ -34,7 +35,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, path))
 
-	err = custom_executable.CreateExecutable(GetRandomString(), fmt.Sprintf("%s/%s", randomDir, "my_exe"))
+	err = custom_executable.CreateExecutable(GetRandomString(), filepath.Join(randomDir, "my_exe"))
 	if err != nil {
 		return err
 	}
