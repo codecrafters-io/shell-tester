@@ -22,11 +22,8 @@ func getPath(executable string) string {
 }
 
 func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
-	// Add the current directory to PATH (That is where the my_exe file is created)
-	//
-	// TODO: Remove this since it mutates path for ALL stages! Use shell.Setenv() instead.
-	//       We'll need to change the test to not use exec.LookPath for my_exe at least.
-	//       Also, always create my_exe in a RANDOM directory, not the current directory.
+	// Add the random directory to PATH (where the my_exe file is created)
+
 	randomDir, err := GetRandomDirectory()
 	if err != nil {
 		return err
@@ -46,7 +43,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	availableExecutables := []string{"cat", "cp", "mkdir"}
+	availableExecutables := []string{"cat", "cp", "mkdir", "my_exe"}
 
 	for _, executable := range availableExecutables {
 		command := fmt.Sprintf("type %s", executable)
