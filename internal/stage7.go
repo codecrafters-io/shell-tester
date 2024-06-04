@@ -13,13 +13,17 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-func getPath(executable string) string {
+func getPath(executable string, exePath string) string {
+	if executable == "my_exe" {
+		return exePath
+	}
+
 	path, err := exec.LookPath(executable)
 	if err != nil {
 		return fmt.Sprintf(`%s[:]? not found`, executable)
-	} else {
-		return path
 	}
+
+	return path
 }
 
 func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
@@ -35,7 +39,8 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, path))
 
-	err = custom_executable.CreateExecutable(GetRandomString(), filepath.Join(randomDir, "my_exe"))
+	exePath := filepath.Join(randomDir, "my_exe")
+	err = custom_executable.CreateExecutable(GetRandomString(), exePath)
 	if err != nil {
 		return err
 	}
@@ -48,7 +53,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	for _, executable := range availableExecutables {
 		command := fmt.Sprintf("type %s", executable)
-		actualPath := getPath(executable)
+		actualPath := getPath(executable, exePath)
 		expectedPattern := fmt.Sprintf(`^(%s is )?%s\r\n`, executable, actualPath)
 		testCase := test_cases.RegexTestCase{
 			Command:                    command,
@@ -65,7 +70,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	for _, executable := range nonAvailableExecutables {
 		command := fmt.Sprintf("type %s", executable)
-		actualPath := getPath(executable)
+		actualPath := getPath(executable, exePath)
 		expectedPattern := fmt.Sprintf(`^(bash: type: )?%s\r\n`, actualPath)
 		testCase := test_cases.RegexTestCase{
 			Command:                    command,

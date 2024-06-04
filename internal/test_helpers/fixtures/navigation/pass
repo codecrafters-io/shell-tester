@@ -94,6 +94,10 @@ Debug = true
 [33m[your-program] [0mmkdir is /bin/mkdir
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
+[33m[stage-7] [0m[94m> type my_exe[0m
+[33m[your-program] [0mmy_exe is /tmp/apple/pear/banana/my_exe
+[33m[stage-7] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m$ 
 [33m[stage-7] [0m[94m> type nonexistent[0m
 [33m[your-program] [0mbash: type: nonexistent: not found
 [33m[stage-7] [0m[92m✓ Received expected response[0m
