@@ -13,18 +13,6 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-func getPath(executable string, exePath string) string {
-	if executable == "my_exe" {
-		return exePath
-	}
-
-	path, err := exec.LookPath(executable)
-	if err != nil {
-		return fmt.Sprintf(`%s[:]? not found`, executable)
-	}
-
-	return path
-}
 
 func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Add the random directory to PATH (where the my_exe file is created)
@@ -39,8 +27,8 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, path))
 
-	exePath := filepath.Join(randomDir, "my_exe")
-	err = custom_executable.CreateExecutable(GetRandomString(), exePath)
+	customExecutablePath := filepath.Join(randomDir, "my_exe")
+	err = custom_executable.CreateExecutable(GetRandomString(), customExecutablePath)
 	if err != nil {
 		return err
 	}
@@ -53,8 +41,20 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	for _, executable := range availableExecutables {
 		command := fmt.Sprintf("type %s", executable)
-		actualPath := getPath(executable, exePath)
-		expectedPattern := fmt.Sprintf(`^(%s is )?%s\r\n`, executable, actualPath)
+
+		var commandOutput string
+		if executable == "my_exe" {
+			commandOutput = customExecutablePath
+		} else {
+			path, err := exec.LookPath(executable)
+			if err != nil {
+				commandOutput = fmt.Sprintf(`%s[:]? not found`, executable)
+			} else {
+				commandOutput = path
+			}
+		}
+
+		expectedPattern := fmt.Sprintf(`^(%s is )?%s\r\n`, executable, commandOutput)
 		testCase := test_cases.RegexTestCase{
 			Command:                    command,
 			ExpectedPattern:            regexp.MustCompile(expectedPattern),
@@ -70,8 +70,20 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	for _, executable := range nonAvailableExecutables {
 		command := fmt.Sprintf("type %s", executable)
-		actualPath := getPath(executable, exePath)
-		expectedPattern := fmt.Sprintf(`^(bash: type: )?%s\r\n`, actualPath)
+
+		var commandOutput string
+		if executable == "my_exe" {
+			commandOutput = customExecutablePath
+		} else {
+			path, err := exec.LookPath(executable)
+			if err != nil {
+				commandOutput = fmt.Sprintf(`%s[:]? not found`, executable)
+			} else {
+				commandOutput = path
+			}
+		}
+
+		expectedPattern := fmt.Sprintf(`^(bash: type: )?%s\r\n`, commandOutput)
 		testCase := test_cases.RegexTestCase{
 			Command:                    command,
 			ExpectedPattern:            regexp.MustCompile(expectedPattern),
