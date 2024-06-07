@@ -18,7 +18,7 @@ func ReplaceAndBuild(content, outputPath, placeholder, randomString string) erro
 	// write content to file
 	file, err := os.Create("tmp.go")
 	if err != nil {
-		return fmt.Errorf("failed to create file: %w", err)
+		return fmt.Errorf("CodeCrafters Internal Error: failed to create tmp.go: %w", err)
 	}
 	defer file.Close()
 	file.WriteString(content)
@@ -27,12 +27,12 @@ func ReplaceAndBuild(content, outputPath, placeholder, randomString string) erro
 	buildCmd := exec.Command("go", "build", "-o", outputPath, "tmp.go")
 	buildCmd.Stderr = os.Stderr
 	if err := buildCmd.Run(); err != nil {
-		return fmt.Errorf("failed to run go build: %w", err)
+		return fmt.Errorf("CodeCrafters Internal Error: go build failed: %w", err)
 	}
 
 	err = os.Remove("tmp.go")
 	if err != nil {
-		return fmt.Errorf("failed to remove file: %w", err)
+		return fmt.Errorf("CodeCrafters Internal Error: failed to remove tmp.go: %w", err)
 	}
 
 	return nil
