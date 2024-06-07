@@ -13,7 +13,6 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-
 func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Add the random directory to PATH (where the my_exe file is created)
 
@@ -42,19 +41,19 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	for _, executable := range availableExecutables {
 		command := fmt.Sprintf("type %s", executable)
 
-		var commandOutput string
+		var expectedPath string
 		if executable == "my_exe" {
-			commandOutput = customExecutablePath
+			expectedPath = customExecutablePath
 		} else {
 			path, err := exec.LookPath(executable)
 			if err != nil {
-				commandOutput = fmt.Sprintf(`%s[:]? not found`, executable)
-			} else {
-				commandOutput = path
+				return fmt.Errorf("CodeCrafters internal error. Error finding %s in PATH", executable)
 			}
+
+			expectedPath = path
 		}
 
-		expectedPattern := fmt.Sprintf(`^(%s is )?%s\r\n`, executable, commandOutput)
+		expectedPattern := fmt.Sprintf(`^(%s is )?%s\r\n`, executable, expectedPath)
 		testCase := test_cases.RegexTestCase{
 			Command:                    command,
 			ExpectedPattern:            regexp.MustCompile(expectedPattern),
@@ -70,20 +69,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	for _, executable := range nonAvailableExecutables {
 		command := fmt.Sprintf("type %s", executable)
-
-		var commandOutput string
-		if executable == "my_exe" {
-			commandOutput = customExecutablePath
-		} else {
-			path, err := exec.LookPath(executable)
-			if err != nil {
-				commandOutput = fmt.Sprintf(`%s[:]? not found`, executable)
-			} else {
-				commandOutput = path
-			}
-		}
-
-		expectedPattern := fmt.Sprintf(`^(bash: type: )?%s\r\n`, commandOutput)
+		expectedPattern := fmt.Sprintf(`^(bash: type: )?%s: not found\r\n`, executable)
 		testCase := test_cases.RegexTestCase{
 			Command:                    command,
 			ExpectedPattern:            regexp.MustCompile(expectedPattern),
