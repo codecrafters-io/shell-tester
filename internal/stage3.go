@@ -24,7 +24,7 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 	for i := 0; i < numberOfCommands; i++ {
 		command := "invalid_command_" + strconv.Itoa(i+1)
 
-		testCase := test_cases.RegexTestCase{
+		testCase := test_cases.SingleLineOutputTestCase{
 			Command:                    command,
 			ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^(bash: )?%s: (command )?not found\r\n`, command)),
 			ExpectedPatternExplanation: fmt.Sprintf("contain %q", fmt.Sprintf("%s: command not found\n", command)),

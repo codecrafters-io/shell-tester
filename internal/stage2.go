@@ -17,10 +17,10 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	testCase := test_cases.RegexTestCase{
+	testCase := test_cases.SingleLineOutputTestCase{
 		Command:                    "nonexistent",
 		ExpectedPattern:            regexp.MustCompile(`^(bash: )?nonexistent: (command )?not found\r\n`),
-		ExpectedPatternExplanation: fmt.Sprintf("contain %q", "nonexistent: command not found\n"),
+		ExpectedPatternExplanation: fmt.Sprintf("match %q", "nonexistent: command not found"),
 		SuccessMessage:             "Received command not found message",
 	}
 

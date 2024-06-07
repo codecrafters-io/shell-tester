@@ -8,6 +8,7 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
+// TODO: Deprecate regex_test_case.go in favor of single_line_output_test_case.go?
 // RegexTestCase verifies a prompt exists, sends a command and matches the output against a regex pattern.
 type RegexTestCase struct {
 	// The command to execute (the command's output will be matched against ExpectedPattern)
