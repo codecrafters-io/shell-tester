@@ -54,7 +54,7 @@ func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, l
 
 	if err != nil {
 		if errors.Is(err, shell_executable.ErrConditionNotMet) {
-			return fmt.Errorf("Expected first line of output to end with '\\n' (newline), got %q", string(shell_executable.StripANSI(output)))
+			return fmt.Errorf("Expected first line of output to end with '\\n' (newline), got %q", cleanOutput(output))
 		} else if errors.Is(err, shell_executable.ErrProgramExited) {
 			return fmt.Errorf("Expected shell to be a long-running process, but it exited")
 		}
@@ -69,7 +69,7 @@ func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, l
 	output = shell_executable.StripANSI(output)
 
 	if !t.ExpectedPattern.Match(output) {
-		return fmt.Errorf("Expected first line of output to %s, got %q", t.ExpectedPatternExplanation, string(TrimRightSpace(reversePTYTransformation(output))))
+		return fmt.Errorf("Expected first line of output to %s, got %q", t.ExpectedPatternExplanation, cleanOutput(output))
 	}
 
 	logger.Successf("✓ %s", t.SuccessMessage)
@@ -77,7 +77,7 @@ func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, l
 	return nil
 }
 
-func TrimRightSpace(buf []byte) []byte {
+func trimRightSpace(buf []byte) []byte {
 	return bytes.TrimRightFunc(buf, func(r rune) bool {
 		return r == '\r' || r == '\n'
 	})
@@ -88,4 +88,11 @@ func reversePTYTransformation(buf []byte) []byte {
 	// Bare CRs are left as is
 	buf = bytes.ReplaceAll(buf, []byte{'\r', '\n'}, []byte{'\n'})
 	return buf
+}
+
+func cleanOutput(buf []byte) string {
+	buf = shell_executable.StripANSI(buf)
+	buf = reversePTYTransformation(buf)
+	buf = trimRightSpace(buf)
+	return string(buf)
 }
