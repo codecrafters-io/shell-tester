@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
@@ -42,19 +43,16 @@ func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, l
 	}
 
 	output, err := shell.ReadBytesUntil(CRLFCondition)
-	// fmt.Printf("output: %q\n", output)
 
 	// Whether the condition fails on not, we want to log the output
 	if len(output) > 0 {
-		trimmedOutput := bytes.TrimRightFunc(output, func(r rune) bool {
-			return r == '\r' || r == '\n'
-		})
-		shell.LogOutput(shell_executable.StripANSI(trimmedOutput))
+		shell.LogOutput(cleanOutput(output))
 	}
 
 	if err != nil {
+		// Here, we are sure we have read the entire output, so we don't read any more
 		if errors.Is(err, shell_executable.ErrConditionNotMet) {
-			return fmt.Errorf("Expected first line of output to end with '\\n' (newline), got %q", cleanOutput(output))
+			return fmt.Errorf("Expected first line of output to end with '\\n' (newline), got %q", string(cleanOutput(output)))
 		} else if errors.Is(err, shell_executable.ErrProgramExited) {
 			return fmt.Errorf("Expected shell to be a long-running process, but it exited")
 		}
@@ -69,7 +67,12 @@ func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, l
 	output = shell_executable.StripANSI(output)
 
 	if !t.ExpectedPattern.Match(output) {
-		return fmt.Errorf("Expected first line of output to %s, got %q", t.ExpectedPatternExplanation, cleanOutput(output))
+		// If test fails, we still want to log the rest of the output
+		restOfOutput, err := shell.ReadBytesUntilTimeout(100 * time.Millisecond)
+		if err == nil {
+			shell.LogOutput(cleanOutput(restOfOutput))
+		}
+		return fmt.Errorf("Expected first line of output to %s, got %q", t.ExpectedPatternExplanation, string(cleanOutput(output)))
 	}
 
 	logger.Successf("✓ %s", t.SuccessMessage)
@@ -77,7 +80,7 @@ func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, l
 	return nil
 }
 
-func trimRightSpace(buf []byte) []byte {
+func stripSpaceRight(buf []byte) []byte {
 	return bytes.TrimRightFunc(buf, func(r rune) bool {
 		return r == '\r' || r == '\n'
 	})
@@ -90,9 +93,9 @@ func reversePTYTransformation(buf []byte) []byte {
 	return buf
 }
 
-func cleanOutput(buf []byte) string {
+func cleanOutput(buf []byte) []byte {
 	buf = shell_executable.StripANSI(buf)
 	buf = reversePTYTransformation(buf)
-	buf = trimRightSpace(buf)
-	return string(buf)
+	buf = stripSpaceRight(buf)
+	return buf
 }
