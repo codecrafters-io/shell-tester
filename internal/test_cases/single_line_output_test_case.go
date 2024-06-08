@@ -15,7 +15,6 @@ type SingleLineOutputTestCase struct {
 	// The command to execute (the command's output will be matched against ExpectedPattern)
 	Command string
 
-	// TODO: Do we still need a regex here?
 	// ExpectedPattern is the regex that is evaluated against the command's output.
 	// Add \r\n at the end of the pattern if you're expecting a newline.
 	ExpectedPattern *regexp.Regexp
@@ -55,9 +54,9 @@ func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, l
 
 	if err != nil {
 		if errors.Is(err, shell_executable.ErrConditionNotMet) {
-			logger.Errorf("Expected first line of output to end with '\\n' (newline), got %q", string(shell_executable.StripANSI(output)))
+			return fmt.Errorf("Expected first line of output to end with '\\n' (newline), got %q", string(shell_executable.StripANSI(output)))
 		} else if errors.Is(err, shell_executable.ErrProgramExited) {
-			logger.Errorf("Expected shell to be a long-running process, but it exited")
+			return fmt.Errorf("Expected shell to be a long-running process, but it exited")
 		}
 		return err
 	}
@@ -70,8 +69,7 @@ func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, l
 	output = shell_executable.StripANSI(output)
 
 	if !t.ExpectedPattern.Match(output) {
-		logger.Errorf("Expected first line of output to %s, got %q", t.ExpectedPatternExplanation, string(TrimRightSpace(output)))
-		return fmt.Errorf("Output did not match expected pattern")
+		return fmt.Errorf("Expected first line of output to %s, got %q", t.ExpectedPatternExplanation, string(TrimRightSpace(reversePTYTransformation(output))))
 	}
 
 	logger.Successf("✓ %s", t.SuccessMessage)
@@ -83,4 +81,11 @@ func TrimRightSpace(buf []byte) []byte {
 	return bytes.TrimRightFunc(buf, func(r rune) bool {
 		return r == '\r' || r == '\n'
 	})
+}
+
+func reversePTYTransformation(buf []byte) []byte {
+	// PTY converts all bare LFs to CRLFs, so we just reverse that here
+	// Bare CRs are left as is
+	buf = bytes.ReplaceAll(buf, []byte{'\r', '\n'}, []byte{'\n'})
+	return buf
 }
