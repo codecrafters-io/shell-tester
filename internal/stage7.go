@@ -49,7 +49,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		command := fmt.Sprintf("type %s", executable)
 		actualPath := getPath(executable)
 		expectedPattern := fmt.Sprintf(`^(%s is )?%s\r\n`, executable, actualPath)
-		testCase := test_cases.RegexTestCase{
+		testCase := test_cases.SingleLineOutputTestCase{
 			Command:                    command,
 			ExpectedPattern:            regexp.MustCompile(expectedPattern),
 			ExpectedPatternExplanation: fmt.Sprintf("match %q", fmt.Sprintf(`%s is %s`, executable, actualPath)),
@@ -66,7 +66,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		command := fmt.Sprintf("type %s", executable)
 		actualPath := getPath(executable)
 		expectedPattern := fmt.Sprintf(`^(bash: type: )?%s\r\n`, actualPath)
-		testCase := test_cases.RegexTestCase{
+		testCase := test_cases.SingleLineOutputTestCase{
 			Command:                    command,
 			ExpectedPattern:            regexp.MustCompile(expectedPattern),
 			ExpectedPatternExplanation: fmt.Sprintf("match %q", fmt.Sprintf(`%s: not found`, executable)),

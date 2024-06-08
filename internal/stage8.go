@@ -45,7 +45,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	expectedResponseRegex := fmt.Sprintf("^Hello %s! The secret code is %s.", randomName, randomCode)
 	expectedResponse := fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode)
-	testCase := test_cases.RegexTestCase{
+	testCase := test_cases.SingleLineOutputTestCase{
 		Command:                    strings.Join(command, " "),
 		ExpectedPattern:            regexp.MustCompile(expectedResponseRegex + "\r\n"),
 		ExpectedPatternExplanation: fmt.Sprintf("match %q", expectedResponse+"\n"),
