@@ -38,9 +38,9 @@ func (t *CDAndPWDTestCase) Run(shell *shell_executable.ShellExecutable, logger *
 	nextCommand := "pwd"
 
 	// Next we send pwd and check that the directory we cd'ed into is the response
-	testCase := RegexTestCase{
+	testCase := SingleLineOutputTestCase{
 		Command:                    nextCommand,
-		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s\r\n`, t.Response)),
+		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s$`, t.Response)),
 		ExpectedPatternExplanation: fmt.Sprintf("match %q", t.Response+"\n"),
 		SuccessMessage:             "Received current working directory response",
 	}

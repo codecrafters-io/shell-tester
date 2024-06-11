@@ -24,9 +24,9 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		return fmt.Errorf("CodeCrafters internal error. Error getting cwd: %v", err)
 	}
 
-	testCase := test_cases.RegexTestCase{
+	testCase := test_cases.SingleLineOutputTestCase{
 		Command:                    command,
-		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s\r\n`, cwd)),
+		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s$`, cwd)),
 		ExpectedPatternExplanation: fmt.Sprintf("match %q", cwd+"\n"),
 		SuccessMessage:             "Received current working directory response",
 	}
