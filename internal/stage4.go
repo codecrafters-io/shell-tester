@@ -22,7 +22,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	// We test a nonexistent command first, just to make sure the logic works in a "loop"
 	testCase := test_cases.SingleLineOutputTestCase{
 		Command:                    "invalid_command_1",
-		ExpectedPattern:            regexp.MustCompile(`^(bash: )?invalid_command_1: (command )?not found\r\n`),
+		ExpectedPattern:            regexp.MustCompile(`^(bash: )?invalid_command_1: (command )?not found`),
 		ExpectedPatternExplanation: fmt.Sprintf("contain %q", "invalid_command_1: command not found\n"),
 		SuccessMessage:             "Received command not found message",
 	}

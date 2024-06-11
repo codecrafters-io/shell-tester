@@ -17,7 +17,6 @@ type SingleLineOutputTestCase struct {
 	Command string
 
 	// ExpectedPattern is the regex that is evaluated against the command's output.
-	// Add \r\n at the end of the pattern if you're expecting a newline.
 	ExpectedPattern *regexp.Regexp
 
 	// ExpectedPatternExplanation is used in the error message if the ExpectedPattern doesn't match the command's output
