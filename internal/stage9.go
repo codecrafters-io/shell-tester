@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -18,19 +19,51 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	command := "pwd"
 	cwd, err := os.Getwd()
 	if err != nil {
 		return fmt.Errorf("CodeCrafters internal error. Error getting cwd: %v", err)
 	}
 
 	testCase := test_cases.SingleLineOutputTestCase{
-		Command:                    command,
-		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s$`, cwd)),
-		ExpectedPatternExplanation: fmt.Sprintf("match %q", cwd+"\n"),
+		Command:                    "type pwd",
+		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s is a( special)? shell builtin\r\n`, "pwd")),
+		ExpectedPatternExplanation: fmt.Sprintf("match %q", (`pwd is a shell builtin`)),
 		SuccessMessage:             "Received current working directory response",
 	}
 	if err := testCase.Run(shell, logger); err != nil {
+		return err
+	}
+
+	var revertRenameOfPWD bool
+	path, err := exec.LookPath("pwd")
+	newPath := path + "Backup"
+	if err == nil {
+		revertRenameOfPWD = true
+		// os.Rename is unable to complete this operation on some systems due to permission issues
+		err = exec.Command("sudo", "mv", path, newPath).Run()
+		logger.Debugf("Renamed %q to %q", path, newPath)
+		if err != nil {
+			return fmt.Errorf("CodeCrafters internal error. Error renaming %q to %q: %v", path, newPath, err)
+		}
+	}
+
+	testCase = test_cases.SingleLineOutputTestCase{
+		Command:                    "pwd",
+		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s\r\n`, cwd)),
+		ExpectedPatternExplanation: fmt.Sprintf("match %q", cwd+"\n"),
+		SuccessMessage:             "Received current working directory response",
+	}
+	err = testCase.Run(shell, logger)
+
+	if revertRenameOfPWD {
+		err = exec.Command("sudo", "mv", newPath, path).Run()
+		logger.Debugf("Renamed %q to %q", newPath, path)
+		if err != nil {
+			return fmt.Errorf("CodeCrafters internal error. Error renaming %q to %q: %v", newPath, path, err)
+		}
+	}
+
+	if err != nil {
 		return err
 	}
 
