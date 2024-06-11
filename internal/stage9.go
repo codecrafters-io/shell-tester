@@ -43,7 +43,6 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		revertRenameOfPWD = true
 		// os.Rename is unable to complete this operation on some systems due to permission issues
 		err = exec.Command("sudo", "mv", path, newPath).Run()
-		logger.Debugf("Renamed %q to %q", path, newPath)
 		if err != nil {
 			return fmt.Errorf("CodeCrafters internal error. Error renaming %q to %q: %v", path, newPath, err)
 		}
@@ -59,7 +58,6 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	if revertRenameOfPWD {
 		err = exec.Command("sudo", "mv", newPath, path).Run()
-		logger.Debugf("Renamed %q to %q", newPath, path)
 		if err != nil {
 			return fmt.Errorf("CodeCrafters internal error. Error renaming %q to %q: %v", newPath, path, err)
 		}
