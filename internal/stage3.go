@@ -26,7 +26,7 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 
 		testCase := test_cases.SingleLineOutputTestCase{
 			Command:                    command,
-			ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^(bash: )?%s: (command )?not found`, command)),
+			ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^(bash: )?%s: (command )?not found$`, command)),
 			ExpectedPatternExplanation: fmt.Sprintf("contain %q", fmt.Sprintf("%s: command not found\n", command)),
 			SuccessMessage:             "Received command not found message",
 		}

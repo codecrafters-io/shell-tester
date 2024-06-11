@@ -43,7 +43,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 		"my_exe", randomName,
 	}
 
-	expectedResponseRegex := fmt.Sprintf("^Hello %s! The secret code is %s.", randomName, randomCode)
+	expectedResponseRegex := fmt.Sprintf("^Hello %s! The secret code is %s.$", randomName, randomCode)
 	expectedResponse := fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode)
 	testCase := test_cases.SingleLineOutputTestCase{
 		Command:                    strings.Join(command, " "),

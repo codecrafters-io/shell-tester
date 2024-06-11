@@ -27,8 +27,6 @@ type SingleLineOutputTestCase struct {
 }
 
 func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	t.ExpectedPattern = regexp.MustCompile(t.ExpectedPattern.String() + "$")
-
 	promptTestCase := NewSilentPromptTestCase("$ ")
 
 	if err := promptTestCase.Run(shell, logger); err != nil {
