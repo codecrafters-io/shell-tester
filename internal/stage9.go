@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"regexp"
+	"runtime"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -26,7 +27,7 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	testCase := test_cases.SingleLineOutputTestCase{
 		Command:                    "type pwd",
-		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s is a( special)? shell builtin\r\n`, "pwd")),
+		ExpectedPattern:            regexp.MustCompile(`^pwd is a( special)? shell builtin$`),
 		ExpectedPatternExplanation: fmt.Sprintf("match %q", (`pwd is a shell builtin`)),
 		SuccessMessage:             "Received current working directory response",
 	}
@@ -37,7 +38,8 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 	var revertRenameOfPWD bool
 	path, err := exec.LookPath("pwd")
 	newPath := path + "Backup"
-	if err == nil {
+	// On MacOS, the OS doesn't allow renaming the `pwd` binary
+	if err == nil && runtime.GOOS != "darwin" {
 		revertRenameOfPWD = true
 		// os.Rename is unable to complete this operation on some systems due to permission issues
 		err = exec.Command("sudo", "mv", path, newPath).Run()
@@ -49,7 +51,7 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	testCase = test_cases.SingleLineOutputTestCase{
 		Command:                    "pwd",
-		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s\r\n`, cwd)),
+		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s$`, cwd)),
 		ExpectedPatternExplanation: fmt.Sprintf("match %q", cwd+"\n"),
 		SuccessMessage:             "Received current working directory response",
 	}
