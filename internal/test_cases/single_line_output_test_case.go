@@ -45,33 +45,27 @@ func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, l
 
 	// Whether the condition fails on not, we want to log the output
 	if len(output) > 0 {
-		shell.LogOutput(formatOutputForLogging(output))
+		shell.LogOutput(sanitizeLogOutput(output))
 	}
 
+	cleanedOutput := sanitizeLogOutput(output)
 	if err != nil {
 		// Here, we are sure we have read the entire output, so we don't read any more
 		if errors.Is(err, shell_executable.ErrConditionNotMet) {
-			return fmt.Errorf("Expected first line of output to end with '\\n' (newline), got %q", string(formatOutputForLogging(output)))
+			return fmt.Errorf("Expected first line of output to end with '\\n' (newline), got %q", string(cleanedOutput))
 		} else if errors.Is(err, shell_executable.ErrProgramExited) {
 			return fmt.Errorf("Expected shell to be a long-running process, but it exited")
 		}
 		return err
 	}
 
-	// We will explicitly support the case where user uses CR/LF at the end
-	// and we receive CR/CR/LF
-	if len(output) > 2 && bytes.Equal(output[len(output)-3:], []byte{'\r', '\r', '\n'}) {
-		output = append(output[:len(output)-3], []byte{'\r', '\n'}...)
-	}
-	output = shell_executable.StripANSI(output)
-
-	if !t.ExpectedPattern.Match(output) {
+	if !t.ExpectedPattern.Match(cleanedOutput) {
 		// If test fails, we still want to log the rest of the output
 		restOfOutput, err := shell.ReadBytesUntilTimeout(100 * time.Millisecond)
 		if err == nil {
-			shell.LogOutput(formatOutputForLogging(restOfOutput))
+			shell.LogOutput(sanitizeLogOutput(restOfOutput))
 		}
-		return fmt.Errorf("Expected first line of output to %s, got %q", t.ExpectedPatternExplanation, string(formatOutputForLogging(output)))
+		return fmt.Errorf("Expected first line of output to %s, got %q", t.ExpectedPatternExplanation, string(cleanedOutput))
 	}
 
 	logger.Successf("✓ %s", t.SuccessMessage)
@@ -92,9 +86,16 @@ func reversePTYTransformation(buf []byte) []byte {
 	return buf
 }
 
-func formatOutputForLogging(buf []byte) []byte {
+func squashMultipleCR(buf []byte) []byte {
+	// Squash multiple CRs into one
+	re := regexp.MustCompile(`\r+`)
+	return re.ReplaceAll(buf, []byte{'\r'})
+}
+
+func sanitizeLogOutput(buf []byte) []byte {
 	buf = shell_executable.StripANSI(buf)
 	buf = reversePTYTransformation(buf)
+	buf = squashMultipleCR(buf)
 	buf = stripLineEnding(buf)
 	return buf
 }
