@@ -28,7 +28,7 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 	testCase := test_cases.SingleLineOutputTestCase{
 		Command:                    "type pwd",
 		ExpectedPattern:            regexp.MustCompile(`^pwd is a( special)? shell builtin$`),
-		ExpectedPatternExplanation: fmt.Sprintf("match %q", (`pwd is a shell builtin`)),
+		ExpectedPatternExplanation: fmt.Sprintf("match %q", `pwd is a shell builtin`),
 		SuccessMessage:             "Received 'pwd is a shell builtin'",
 	}
 	if err := testCase.Run(shell, logger); err != nil {
@@ -45,7 +45,12 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 			return fmt.Errorf("CodeCrafters internal error. Error renaming %q to %q: %v", path, newPath, err)
 		}
 
-		defer exec.Command("sudo", "mv", newPath, path).Run()
+		defer func(command *exec.Cmd) {
+			err := command.Run()
+			if err != nil {
+				logger.Errorf("CodeCrafters internal error. Error renaming %q to %q: %v", newPath, path, err)
+			}
+		}(exec.Command("sudo", "mv", newPath, path))
 	}
 
 	testCase = test_cases.SingleLineOutputTestCase{
