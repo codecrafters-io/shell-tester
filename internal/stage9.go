@@ -29,7 +29,7 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		Command:                    "type pwd",
 		ExpectedPattern:            regexp.MustCompile(`^pwd is a( special)? shell builtin$`),
 		ExpectedPatternExplanation: fmt.Sprintf("match %q", (`pwd is a shell builtin`)),
-		SuccessMessage:             "Received current working directory response",
+		SuccessMessage:             "Received 'pwd is a shell builtin'",
 	}
 	if err := testCase.Run(shell, logger); err != nil {
 		return err
