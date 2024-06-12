@@ -64,8 +64,12 @@ Debug = true
 [33m[stage-9] [0m[94mRunning tests for Stage #9: ei0[0m
 [33m[stage-9] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
+[33m[stage-9] [0m[94m> type pwd[0m
+[33m[your-program] [0mpwd is a shell builtin
+[33m[stage-9] [0m[92m✓ Received 'pwd is a shell builtin'[0m
+[33m[your-program] [0m$ 
 [33m[stage-9] [0m[94m> pwd[0m
-[33m[your-program] [0m/Users/rohitpaulk/experiments/codecrafters/testers/shell-tester/internal
+[33m[your-program] [0m/Users/ryang/Developer/work/course-testers/shell-tester/internal
 [33m[stage-9] [0m[92m✓ Received current working directory response[0m
 [33m[your-program] [0m$ 
 [33m[stage-9] [0m[92mTest passed.[0m
@@ -73,7 +77,7 @@ Debug = true
 [33m[stage-8] [0m[94mRunning tests for Stage #8: ip1[0m
 [33m[stage-8] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
-[33m[stage-8] [0m[94m> /tmp/apple/apple/banana/my_exe David[0m
+[33m[stage-8] [0m[94m> my_exe David[0m
 [33m[your-program] [0mHello David! The secret code is 123349.
 [33m[stage-8] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -95,7 +99,7 @@ Debug = true
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-7] [0m[94m> type my_exe[0m
-[33m[your-program] [0mmy_exe is /Users/rohitpaulk/experiments/codecrafters/testers/shell-tester/internal/my_exe
+[33m[your-program] [0mmy_exe is /tmp/apple/pear/banana/my_exe
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-7] [0m[94m> type nonexistent[0m
@@ -132,16 +136,12 @@ Debug = true
 [33m[stage-5] [0m[94mRunning tests for Stage #5: iz3[0m
 [33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
-[33m[stage-5] [0m[94m> echo banana apple[0m
-[33m[your-program] [0mbanana apple
+[33m[stage-5] [0m[94m> echo apple grape[0m
+[33m[your-program] [0mapple grape
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
-[33m[stage-5] [0m[94m> echo pineapple raspberry apple[0m
-[33m[your-program] [0mpineapple raspberry apple
-[33m[stage-5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-5] [0m[94m> echo grape pear strawberry[0m
-[33m[your-program] [0mgrape pear strawberry
+[33m[stage-5] [0m[94m> echo raspberry orange[0m
+[33m[your-program] [0mraspberry orange
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-5] [0m[92mTest passed.[0m
@@ -173,6 +173,10 @@ Debug = true
 [33m[your-program] [0m$ 
 [33m[stage-3] [0m[94m> invalid_command_3[0m
 [33m[your-program] [0mbash: invalid_command_3: command not found
+[33m[stage-3] [0m[92m✓ Received command not found message[0m
+[33m[your-program] [0m$ 
+[33m[stage-3] [0m[94m> invalid_command_4[0m
+[33m[your-program] [0mbash: invalid_command_4: command not found
 [33m[stage-3] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ 
 [33m[stage-3] [0m[92mTest passed.[0m

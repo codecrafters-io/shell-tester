@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 	"strings"
@@ -20,9 +21,9 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// We test a nonexistent command first, just to make sure the logic works in a "loop"
-	testCase := test_cases.RegexTestCase{
+	testCase := test_cases.SingleLineOutputTestCase{
 		Command:                    "invalid_command_1",
-		ExpectedPattern:            regexp.MustCompile(`^(bash: )?invalid_command_1: (command )?not found\r\n`),
+		ExpectedPattern:            regexp.MustCompile(`^(bash: )?invalid_command_1: (command )?not found$`),
 		ExpectedPatternExplanation: fmt.Sprintf("contain %q", "invalid_command_1: command not found\n"),
 		SuccessMessage:             "Received command not found message",
 	}
@@ -31,7 +32,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// We can't use RegexTestCase for the exit command (no output to match on), so we use lower-level methods instead
+	// We can't use SingleLineOutputTestCase for the exit command (no output to match on), so we use lower-level methods instead
 	promptTestCase := test_cases.NewSilentPromptTestCase("$ ")
 
 	if err := promptTestCase.Run(shell, logger); err != nil {
@@ -51,7 +52,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// We're expecting EOF since the program should've terminated
-	if readErr != shell_executable.ErrProgramExited {
+	if !errors.Is(readErr, shell_executable.ErrProgramExited) {
 		if readErr == nil {
 			return fmt.Errorf("Expected program to exit with 0 exit code, program is still running.")
 		} else {

@@ -31,9 +31,9 @@ func testCd1(stageHarness *test_case_harness.TestCaseHarness) error {
 	directory = "/non-existing-directory"
 	command := fmt.Sprintf("cd %s", directory)
 
-	failureTestCase := test_cases.RegexTestCase{
+	failureTestCase := test_cases.SingleLineOutputTestCase{
 		Command:                    command,
-		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^(can't cd to %s|(bash: cd: )?%s: No such file or directory)\r\n`, directory, directory)),
+		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^(can't cd to %s|((bash: )?cd: )?%s: No such file or directory)$`, directory, directory)),
 		ExpectedPatternExplanation: fmt.Sprintf("match %q", fmt.Sprintf(`cd: %s: No such file or directory\n`, directory)),
 		SuccessMessage:             "Received error message",
 	}
