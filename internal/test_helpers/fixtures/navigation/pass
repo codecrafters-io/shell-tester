@@ -64,8 +64,12 @@ Debug = true
 [33m[stage-9] [0m[94mRunning tests for Stage #9: ei0[0m
 [33m[stage-9] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
+[33m[stage-9] [0m[94m> type pwd[0m
+[33m[your-program] [0mpwd is a shell builtin
+[33m[stage-9] [0m[92m✓ Received 'pwd is a shell builtin'[0m
+[33m[your-program] [0m$ 
 [33m[stage-9] [0m[94m> pwd[0m
-[33m[your-program] [0m/Users/rafeyahmad/work/shell-tester/internal
+[33m[your-program] [0m/Users/ryang/Developer/work/course-testers/shell-tester/internal
 [33m[stage-9] [0m[92m✓ Received current working directory response[0m
 [33m[your-program] [0m$ 
 [33m[stage-9] [0m[92mTest passed.[0m

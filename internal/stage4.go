@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 	"strings"
@@ -51,7 +52,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// We're expecting EOF since the program should've terminated
-	if readErr != shell_executable.ErrProgramExited {
+	if !errors.Is(readErr, shell_executable.ErrProgramExited) {
 		if readErr == nil {
 			return fmt.Errorf("Expected program to exit with 0 exit code, program is still running.")
 		} else {
