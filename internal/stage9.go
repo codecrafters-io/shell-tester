@@ -35,22 +35,31 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	path, err := exec.LookPath("pwd")
+	path, pwdNotFoundErr := exec.LookPath("pwd")
 	newPath := path + "Backup"
+
+	moveCommand := "mv"
+	_, sudoNotFoundErr := exec.LookPath("sudo")
+	if sudoNotFoundErr == nil {
+		moveCommand = "sudo" + " " + moveCommand
+	}
 	// On MacOS, the OS doesn't allow renaming the `pwd` binary
-	if err == nil && runtime.GOOS != "darwin" {
+	if pwdNotFoundErr == nil && runtime.GOOS != "darwin" {
 		// os.Rename is unable to complete this operation on some systems due to permission issues
-		err = exec.Command("sudo", "mv", path, newPath).Run()
+		command := fmt.Sprintf("%s %s %s", moveCommand, path, newPath)
+		err = exec.Command("sh", "-c", command).Run()
 		if err != nil {
 			return fmt.Errorf("CodeCrafters internal error. Error renaming %q to %q: %v", path, newPath, err)
 		}
+
+		revertCommand := fmt.Sprintf("%s %s %s", moveCommand, newPath, path)
 
 		defer func(command *exec.Cmd) {
 			err := command.Run()
 			if err != nil {
 				logger.Errorf("CodeCrafters internal error. Error renaming %q to %q: %v", newPath, path, err)
 			}
-		}(exec.Command("sudo", "mv", newPath, path))
+		}(exec.Command("sh", "-c", revertCommand))
 	}
 
 	testCase = test_cases.SingleLineOutputTestCase{
