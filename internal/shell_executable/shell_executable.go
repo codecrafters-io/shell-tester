@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path"
 	"regexp"
 	"strings"
 	"syscall"
@@ -162,9 +163,9 @@ func (b *ShellExecutable) getInitialLogLine(args ...string) string {
 	var log string
 
 	if len(args) == 0 {
-		log = "Running ./your_shell.sh"
+		log = fmt.Sprintf("Running ./%s", path.Base(b.executable.Path))
 	} else {
-		log += "Running ./your_shell.sh"
+		log += fmt.Sprintf("Running ./%s", path.Base(b.executable.Path))
 		for _, arg := range args {
 			if strings.Contains(arg, " ") {
 				log += " \"" + arg + "\""
