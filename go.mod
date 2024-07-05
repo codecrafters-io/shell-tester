@@ -5,7 +5,7 @@ go 1.22
 toolchain go1.22.3
 
 require (
-	github.com/codecrafters-io/tester-utils v0.2.26
+	github.com/codecrafters-io/tester-utils v0.2.30
 	github.com/creack/pty v1.1.21
 	go.chromium.org/luci v0.0.0-20240530183920-783ca64715fa
 )
