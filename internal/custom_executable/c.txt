@@ -1,0 +1,23 @@
+#include <stdio.h>
+
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        printf("Expected exactly one command line argument, got 0\n");
+        return 1;
+    }
+
+    if (argc > 2) {
+        printf("Expected exactly one command line argument, got %d (\"%s\")\n", argc - 1, argv[1]);
+        return 1;
+    }
+
+    char *param = argv[1];
+
+    // Random string placeholder
+    const char *secretCode = "PLACEHOLDER_RANDOM_STRING";
+
+    // Print the random string and the command line parameter
+    printf("Hello %s! The secret code is %s.\n", param, secretCode);
+
+    return 0;
+}
