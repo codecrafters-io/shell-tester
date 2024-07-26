@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path"
 	"strings"
 )
 
@@ -25,7 +26,11 @@ func ReplaceAndBuild(content, outputPath, placeholder, randomString string) erro
 	file.WriteString(content)
 
 	// Run go build command
-	buildCmd := exec.Command("go", "build", "-o", outputPath, "tmp.go")
+	goCmdFullPath := path.Join(os.Getenv("TESTER_DIR"), "go")
+	if goCmdFullPath == "" {
+		return fmt.Errorf("CodeCrafters Internal Error: Couldn't find tcc command")
+	}
+	buildCmd := exec.Command(goCmdFullPath, "build", "-o", outputPath, "tmp.go")
 	buildCmd.Stdout = io.Discard
 	buildCmd.Stderr = io.Discard
 	if err := buildCmd.Run(); err != nil {
