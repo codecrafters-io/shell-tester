@@ -11,3 +11,5 @@ archives:
     format: tar.gz
     files:
       - test.sh
+      # Include the tcc binary in the archive, we use this for building custom_executables 
+      - tcc 
