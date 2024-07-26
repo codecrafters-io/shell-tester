@@ -3,7 +3,6 @@ package custom_executable
 import (
 	_ "embed"
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"path"
@@ -38,8 +37,8 @@ func ReplaceAndBuild(content, outputPath, placeholder, randomString string) erro
 		return fmt.Errorf("CodeCrafters Internal Error: Couldn't find tcc command")
 	}
 	buildCmd := exec.Command(tccCmdFullPath, "tmp.c", "-o", outputPath)
-	buildCmd.Stdout = io.Discard
-	buildCmd.Stderr = io.Discard
+	// buildCmd.Stdout = io.Discard
+	// buildCmd.Stderr = io.Discard
 	if err := buildCmd.Run(); err != nil {
 		return fmt.Errorf("CodeCrafters Internal Error: tcc build failed: %w", err)
 	}
