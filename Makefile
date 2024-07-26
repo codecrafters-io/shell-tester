@@ -15,7 +15,7 @@ build:
 	go build -o dist/main.out ./cmd/tester
 
 test:
-	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/...
+	uname -a && TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/...
 
 test_bash: build
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
