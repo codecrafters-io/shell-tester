@@ -6,10 +6,11 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path"
 	"strings"
 )
 
-//go:embed main.txt
+//go:embed c.txt
 var content string
 
 func ReplaceAndBuild(content, outputPath, placeholder, randomString string) error {
@@ -17,24 +18,30 @@ func ReplaceAndBuild(content, outputPath, placeholder, randomString string) erro
 	content = strings.ReplaceAll(content, placeholder, randomString)
 
 	// write content to file
-	file, err := os.Create("tmp.go")
+	file, err := os.Create("tmp.c")
 	if err != nil {
-		return fmt.Errorf("CodeCrafters Internal Error: failed to create tmp.go: %w", err)
+		return fmt.Errorf("CodeCrafters Internal Error: failed to create tmp.c: %w", err)
 	}
 	defer file.Close()
 	file.WriteString(content)
+	defer func() {
+		// Remove the file even if the build fails
+		if err := os.Remove("tmp.c"); err != nil {
+			fmt.Printf("CodeCrafters Internal Error: failed to remove tmp.c: %v\n", err)
+		}
+	}()
 
-	// Run go build command
-	buildCmd := exec.Command("go", "build", "-o", outputPath, "tmp.go")
+	// Run tcc build command
+	// tcc is included in the tester directory
+	tccCmdFullPath := path.Join(os.Getenv("TESTER_DIR"), "tcc")
+	if tccCmdFullPath == "" {
+		return fmt.Errorf("CodeCrafters Internal Error: Couldn't find tcc command")
+	}
+	buildCmd := exec.Command(tccCmdFullPath, "tmp.c", "-o", outputPath)
 	buildCmd.Stdout = io.Discard
 	buildCmd.Stderr = io.Discard
 	if err := buildCmd.Run(); err != nil {
-		return fmt.Errorf("CodeCrafters Internal Error: go build failed: %w", err)
-	}
-
-	err = os.Remove("tmp.go")
-	if err != nil {
-		return fmt.Errorf("CodeCrafters Internal Error: failed to remove tmp.go: %w", err)
+		return fmt.Errorf("CodeCrafters Internal Error: tcc build failed: %w", err)
 	}
 
 	return nil
