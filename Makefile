@@ -15,10 +15,10 @@ build:
 	go build -o dist/main.out ./cmd/tester
 
 test:
-	go test -count=1 -p 1 -v ./internal/...
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/...
 
 test_bash: build
-	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/bash \
+	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
 		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#oo8\",\"title\":\"Stage #1: Init\"}, \
 		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#cz2\",\"title\":\"Stage #2: Missing Command\"}, \
@@ -36,7 +36,7 @@ test_bash: build
 	dist/main.out
 
 test_dash: build
-	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/dash \
+	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/dash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
 		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#oo8\",\"title\":\"Stage #1: Init\"}, \
 		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#cz2\",\"title\":\"Stage #2: Missing Command\"}, \
@@ -54,7 +54,7 @@ test_dash: build
 	dist/main.out
 
 test_ryan: build
-	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/ryan_shell \
+	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/ryan_shell \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
 		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#oo8\",\"title\":\"Stage #1: Init\"}, \
 		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#cz2\",\"title\":\"Stage #2: Missing Command\"}, \
@@ -69,7 +69,7 @@ test_ryan: build
 test_all_success: test_bash test_dash
 
 test_failure: build
-	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/failure \
+	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/failure \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
 		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#oo8\",\"title\":\"Stage #1: Init\"}, \
 		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#cz2\",\"title\":\"Stage #2: Missing Command\"}, \
@@ -80,7 +80,7 @@ test_failure: build
 
 # Removes ALL zsh related config files across the system
 test_zsh_dangerously: build
-	CODECRAFTERS_SUBMISSION_DIR=./internal/test_helpers/zsh \
+	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/zsh \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
 		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#oo8\",\"title\":\"Stage #1: Init\"}, \
 		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#cz2\",\"title\":\"Stage #2: Missing Command\"}, \
