@@ -26,9 +26,10 @@ func ReplaceAndBuild(content, outputPath, placeholder, randomString string) erro
 	file.WriteString(content)
 
 	// Run go build command
+	// ToDo: Remove log
 	goCmdFullPath := path.Join(os.Getenv("TESTER_DIR"), "go")
-	if goCmdFullPath == "" {
-		return fmt.Errorf("CodeCrafters Internal Error: Couldn't find packaged go command")
+	if goCmdFullPath == "go" {
+		return fmt.Errorf("CodeCrafters Internal Error: Couldn't find packaged go command.\nTESTER_DIR: %s", os.Getenv("TESTER_DIR"))
 	}
 	buildCmd := exec.Command(goCmdFullPath, "build", "-o", outputPath, "tmp.go")
 	buildCmd.Stdout = io.Discard
