@@ -3,7 +3,6 @@ package custom_executable
 import (
 	_ "embed"
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"path"
@@ -32,8 +31,8 @@ func ReplaceAndBuild(content, outputPath, placeholder, randomString string) erro
 		return fmt.Errorf("CodeCrafters Internal Error: Couldn't find packaged go command.\nTESTER_DIR: %s", os.Getenv("TESTER_DIR"))
 	}
 	buildCmd := exec.Command(goCmdFullPath, "build", "-o", outputPath, "tmp.go")
-	buildCmd.Stdout = io.Discard
-	buildCmd.Stderr = io.Discard
+	// buildCmd.Stdout = io.Discard
+	// buildCmd.Stderr = io.Discard
 	if err := buildCmd.Run(); err != nil {
 		return fmt.Errorf("CodeCrafters Internal Error: go build failed: %w", err)
 	}
