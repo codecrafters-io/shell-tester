@@ -28,7 +28,7 @@ func ReplaceAndBuild(content, outputPath, placeholder, randomString string) erro
 	// Run go build command
 	goCmdFullPath := path.Join(os.Getenv("TESTER_DIR"), "go")
 	if goCmdFullPath == "" {
-		return fmt.Errorf("CodeCrafters Internal Error: Couldn't find tcc command")
+		return fmt.Errorf("CodeCrafters Internal Error: Couldn't find packaged go command")
 	}
 	buildCmd := exec.Command(goCmdFullPath, "build", "-o", outputPath, "tmp.go")
 	buildCmd.Stdout = io.Discard
