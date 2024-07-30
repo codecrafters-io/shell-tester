@@ -20,7 +20,7 @@ func ReplaceAndBuild(outputPath, randomString string) error {
 
 	// Copy the custom_executable to the output path
 	command := fmt.Sprintf("cp %s %s", path.Join(os.Getenv("TESTER_DIR"), "custom_executable"), outputPath)
-	copyCmd := exec.Command("bash", "-c", command)
+	copyCmd := exec.Command("sh", "-c", command)
 	copyCmd.Stdout = io.Discard
 	copyCmd.Stderr = io.Discard
 	if err := copyCmd.Run(); err != nil {
@@ -30,7 +30,7 @@ func ReplaceAndBuild(outputPath, randomString string) error {
 	// Replace the placeholder with the random string
 	// We can run the executable now, it will work as expected
 	command = fmt.Sprintf("echo -n \"%s\" | dd of=%s bs=1 seek=$((0x2070 + 4)) conv=notrunc", randomString, outputPath)
-	buildCmd := exec.Command("bash", "-c", command)
+	buildCmd := exec.Command("sh", "-c", command)
 	buildCmd.Stdout = io.Discard
 	buildCmd.Stderr = io.Discard
 	if err := buildCmd.Run(); err != nil {
