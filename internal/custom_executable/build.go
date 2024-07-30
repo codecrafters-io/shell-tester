@@ -3,6 +3,7 @@ package custom_executable
 import (
 	_ "embed"
 	"fmt"
+	"io"
 	"os/exec"
 )
 
@@ -17,10 +18,21 @@ func ReplaceAndBuild(outputPath, randomString string) error {
 		return fmt.Errorf("CodeCrafters Internal Error: randomString length must be 10")
 	}
 
-	command := fmt.Sprintf("echo -n \"%s\" | dd of=%s bs=1 seek=$((0x2070 + 4)) conv=notrunc", randomString, outputPath)
+	// Copy the custom_executable to the output path
+	command := fmt.Sprintf("cp %s %s", "custom_executable", outputPath)
+	copyCmd := exec.Command("bash", "-c", command)
+	copyCmd.Stdout = io.Discard
+	copyCmd.Stderr = io.Discard
+	if err := copyCmd.Run(); err != nil {
+		return fmt.Errorf("CodeCrafters Internal Error: cp failed: %w", err)
+	}
+
+	// Replace the placeholder with the random string
+	// We can run the executable now, it will work as expected
+	command = fmt.Sprintf("echo -n \"%s\" | dd of=%s bs=1 seek=$((0x2070 + 4)) conv=notrunc", randomString, outputPath)
 	buildCmd := exec.Command("bash", "-c", command)
-	// buildCmd.Stdout = io.Discard
-	// buildCmd.Stderr = io.Discard
+	buildCmd.Stdout = io.Discard
+	buildCmd.Stderr = io.Discard
 	if err := buildCmd.Run(); err != nil {
 		return fmt.Errorf("CodeCrafters Internal Error: dd replace failed: %w", err)
 	}
