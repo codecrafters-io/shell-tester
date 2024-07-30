@@ -4,7 +4,9 @@ import (
 	_ "embed"
 	"fmt"
 	"io"
+	"os"
 	"os/exec"
+	"path"
 )
 
 var content string
@@ -19,7 +21,7 @@ func ReplaceAndBuild(outputPath, randomString string) error {
 	}
 
 	// Copy the custom_executable to the output path
-	command := fmt.Sprintf("cp %s %s", "custom_executable", outputPath)
+	command := fmt.Sprintf("cp %s %s", path.Join(os.Getenv("TESTER_DIR"), "custom_executable"), outputPath)
 	copyCmd := exec.Command("bash", "-c", command)
 	copyCmd.Stdout = io.Discard
 	copyCmd.Stderr = io.Discard
