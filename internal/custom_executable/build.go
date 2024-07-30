@@ -9,8 +9,6 @@ import (
 	"path"
 )
 
-var content string
-
 func ReplaceAndBuild(outputPath, randomString string) error {
 	// Our executable contains a placeholder for the random string
 	// The placeholder is <<<RANDOM>>>
