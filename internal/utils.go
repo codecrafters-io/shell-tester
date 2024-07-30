@@ -33,7 +33,7 @@ func GetRandomDirectory() (string, error) {
 func GetRandomString() string {
 	// We will use a random numeric string of length = 6
 	var result string
-	for i := 0; i < 3; i++ {
+	for i := 0; i < 5; i++ {
 		result += fmt.Sprintf("%d", random.RandomInt(10, 99))
 	}
 

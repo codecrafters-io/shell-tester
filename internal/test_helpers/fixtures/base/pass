@@ -3,8 +3,8 @@ Debug = true
 [33m[stage-8] [0m[94mRunning tests for Stage #8: ip1[0m
 [33m[stage-8] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
-[33m[stage-8] [0m[94m> my_exe Maria[0m
-[33m[your-program] [0mHello Maria! The secret code is 599859.
+[33m[stage-8] [0m[94m> my_exe James[0m
+[33m[your-program] [0mHello James! The secret code is 5998595441.
 [33m[stage-8] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-8] [0m[92mTest passed.[0m
@@ -13,19 +13,19 @@ Debug = true
 [33m[stage-7] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
 [33m[stage-7] [0m[94m> type cat[0m
-[33m[your-program] [0mcat is /bin/cat
+[33m[your-program] [0mcat is /usr/bin/cat
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-7] [0m[94m> type cp[0m
-[33m[your-program] [0mcp is /bin/cp
+[33m[your-program] [0mcp is /usr/bin/cp
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-7] [0m[94m> type mkdir[0m
-[33m[your-program] [0mmkdir is /bin/mkdir
+[33m[your-program] [0mmkdir is /usr/bin/mkdir
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-7] [0m[94m> type my_exe[0m
-[33m[your-program] [0mmy_exe is /tmp/banana/pear/orange/my_exe
+[33m[your-program] [0mmy_exe is /tmp/orange/grape/grape/my_exe
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-7] [0m[94m> type nonexistent[0m
@@ -62,12 +62,12 @@ Debug = true
 [33m[stage-5] [0m[94mRunning tests for Stage #5: iz3[0m
 [33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
-[33m[stage-5] [0m[94m> echo blueberry banana[0m
-[33m[your-program] [0mblueberry banana
+[33m[stage-5] [0m[94m> echo apple banana[0m
+[33m[your-program] [0mapple banana
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
-[33m[stage-5] [0m[94m> echo pear banana[0m
-[33m[your-program] [0mpear banana
+[33m[stage-5] [0m[94m> echo orange blueberry[0m
+[33m[your-program] [0morange blueberry
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-5] [0m[92mTest passed.[0m
@@ -99,14 +99,6 @@ Debug = true
 [33m[your-program] [0m$ 
 [33m[stage-3] [0m[94m> invalid_command_3[0m
 [33m[your-program] [0mbash: invalid_command_3: command not found
-[33m[stage-3] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ 
-[33m[stage-3] [0m[94m> invalid_command_4[0m
-[33m[your-program] [0mbash: invalid_command_4: command not found
-[33m[stage-3] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ 
-[33m[stage-3] [0m[94m> invalid_command_5[0m
-[33m[your-program] [0mbash: invalid_command_5: command not found
 [33m[stage-3] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ 
 [33m[stage-3] [0m[92mTest passed.[0m
