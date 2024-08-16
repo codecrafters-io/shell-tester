@@ -5,6 +5,7 @@ import (
 	"os"
 	"path"
 	"regexp"
+	"runtime"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
@@ -30,6 +31,12 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	arch := runtime.GOARCH
+	if arch == "arm64" {
+		// The statically linked exe will not run on darwin arm64, just return nil
+		return nil
+	}
+
 	randomCode := GetRandomString()
 	randomName := GetRandomName()
 	exePath := path.Join(randomDir, "my_exe")
@@ -48,7 +55,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	testCase := test_cases.SingleLineOutputTestCase{
 		Command:                    strings.Join(command, " "),
 		ExpectedPattern:            regexp.MustCompile(expectedResponseRegex),
-		ExpectedPatternExplanation: fmt.Sprintf("match %q", expectedResponse+"\n"),
+		ExpectedPatternExplanation: fmt.Sprintf("match %q", expectedResponse),
 		SuccessMessage:             "Received expected response",
 	}
 	if err := testCase.Run(shell, logger); err != nil {
