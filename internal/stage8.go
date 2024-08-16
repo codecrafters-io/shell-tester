@@ -5,7 +5,6 @@ import (
 	"os"
 	"path"
 	"regexp"
-	"runtime"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
@@ -29,12 +28,6 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	if err := shell.Start(); err != nil {
 		return err
-	}
-
-	arch := runtime.GOARCH
-	if arch == "arm64" {
-		// The statically linked exe will not run on darwin arm64, just return nil
-		return nil
 	}
 
 	randomCode := GetRandomString()
