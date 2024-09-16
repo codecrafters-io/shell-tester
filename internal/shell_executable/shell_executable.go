@@ -141,6 +141,21 @@ func (b *ShellExecutable) WaitForTermination() (hasTerminated bool, exitCode int
 	}
 }
 
+func (b *ShellExecutable) ExitCode() int {
+	if b.cmd.ProcessState == nil {
+		// We are okay with waiting here,
+		// Since if the user's shell is still running, read would have timed out
+		// If it didn't time out, it means the program has exited, that's why we are here
+		exited, exitCode := b.WaitForTermination()
+		if !exited {
+			// fmt.Println("Process has not exited yet.")
+			return -1
+		}
+		return exitCode
+	}
+	return b.cmd.ProcessState.ExitCode()
+}
+
 func (b *ShellExecutable) writeAndReadReflection(command string) error {
 	b.pty.Write([]byte(command + "\n"))
 
