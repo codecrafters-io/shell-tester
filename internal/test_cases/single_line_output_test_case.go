@@ -54,7 +54,7 @@ func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, l
 		if errors.Is(err, shell_executable.ErrConditionNotMet) {
 			return fmt.Errorf("Expected first line of output to end with '\\n' (newline), got %q", string(cleanedOutput))
 		} else if errors.Is(err, shell_executable.ErrProgramExited) {
-			return fmt.Errorf("Expected shell to be a long-running process, but it exited")
+			return fmt.Errorf("Expected first line of output to end with '\\n' (newline), got %q, and your program exited with code: %d", string(cleanedOutput), shell.ExitCode())
 		}
 		return err
 	}
