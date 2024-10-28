@@ -6,7 +6,7 @@ toolchain go1.22.3
 
 require (
 	github.com/codecrafters-io/tester-utils v0.2.38
-	github.com/creack/pty v1.1.21
+	github.com/creack/pty v1.1.23
 	go.chromium.org/luci v0.0.0-20240530183920-783ca64715fa
 )
 
