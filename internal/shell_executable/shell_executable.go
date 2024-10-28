@@ -141,6 +141,16 @@ func (b *ShellExecutable) WaitForTermination() (hasTerminated bool, exitCode int
 	}
 }
 
+func (b *ShellExecutable) ExitCode() int {
+	// Calling WaitForTermination multiple times is okay, Wait() would error out, but we will get the exit code
+	exited, exitCode := b.WaitForTermination()
+	if !exited {
+		// fmt.Println("Process has not exited yet.")
+		return -1
+	}
+	return exitCode
+}
+
 func (b *ShellExecutable) writeAndReadReflection(command string) error {
 	b.pty.Write([]byte(command + "\n"))
 

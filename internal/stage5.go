@@ -28,7 +28,7 @@ func testEcho(stageHarness *test_case_harness.TestCaseHarness) error {
 		testCase := test_cases.SingleLineOutputTestCase{
 			Command:                    command,
 			ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s$`, words)),
-			ExpectedPatternExplanation: fmt.Sprintf("match %q", fmt.Sprintf("%s\n", words)),
+			ExpectedPatternExplanation: fmt.Sprintf("match %q", words),
 			SuccessMessage:             "Received expected response",
 		}
 		if err := testCase.Run(shell, logger); err != nil {

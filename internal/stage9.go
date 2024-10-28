@@ -65,7 +65,7 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 	testCase = test_cases.SingleLineOutputTestCase{
 		Command:                    "pwd",
 		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s$`, cwd)),
-		ExpectedPatternExplanation: fmt.Sprintf("match %q", cwd+"\n"),
+		ExpectedPatternExplanation: fmt.Sprintf("match %q", cwd),
 		SuccessMessage:             "Received current working directory response",
 	}
 	if err := testCase.Run(shell, logger); err != nil {
