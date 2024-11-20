@@ -38,6 +38,7 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 	for _, invalidCommand := range invalidCommands {
 		command := fmt.Sprintf("type %s", invalidCommand)
 
+		// ToDo: Should be match not contains
 		testCase := test_cases.SingleLineOutputTestCase{
 			Command:                    command,
 			ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^(bash: type: )?%s[:]? not found$`, invalidCommand)),
