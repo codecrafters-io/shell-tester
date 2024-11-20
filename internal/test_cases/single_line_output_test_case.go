@@ -5,10 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
+	"github.com/fatih/color"
 )
 
 // SingleLineOutputTestCase verifies a prompt exists, sends a command and matches the output against a string.
@@ -69,7 +71,7 @@ func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, l
 		if err == nil {
 			shell.LogOutput(sanitizeLogOutput(restOfOutput))
 		}
-		return fmt.Errorf("Expected first line of output to %s, got %q", t.ExpectedPatternExplanation, string(cleanedOutput))
+		return fmt.Errorf(getColoredErrorMessage(t.ExpectedPatternExplanation, string(cleanedOutput)))
 	}
 
 	logger.Successf("✓ %s", t.SuccessMessage)
@@ -102,4 +104,22 @@ func sanitizeLogOutput(buf []byte) []byte {
 	buf = squashMultipleCR(buf)
 	buf = stripLineEnding(buf)
 	return buf
+}
+
+func colorizeString(colorToUse color.Attribute, msg string) string {
+	c := color.New(colorToUse)
+	return c.Sprint(msg)
+}
+
+func getColoredErrorMessage(expectedPatternExplanation string, cleanedOutput string) string {
+	indent := 32 - 3 + len(strings.Split(expectedPatternExplanation, " ")[0]) + 1
+
+	errorMsg := "Expected first line of output to" // 32
+	errorMsg += " " + colorizeString(color.FgGreen, expectedPatternExplanation)
+	errorMsg += "\n"
+	errorMsg += strings.Repeat(" ", indent)
+	errorMsg += colorizeString(color.FgRed, "got") // 3
+	errorMsg += " " + colorizeString(color.FgRed, cleanedOutput)
+
+	return errorMsg
 }
