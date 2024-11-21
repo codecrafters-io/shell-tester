@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"regexp"
 	"runtime"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -25,10 +24,10 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		return fmt.Errorf("CodeCrafters internal error. Error getting cwd: %v", err)
 	}
 
-	testCase := test_cases.SingleLineOutputTestCase{
+	testCase := test_cases.SingleLineExactMatchTestCase{
 		Command:                    "type pwd",
-		ExpectedPattern:            regexp.MustCompile(`^pwd is a( special)? shell builtin$`),
-		ExpectedPatternExplanation: fmt.Sprintf("match %q", `pwd is a shell builtin`),
+		ExpectedPattern:            `^pwd is a( special)? shell builtin$`,
+		ExpectedPatternExplanation: `pwd is a shell builtin`,
 		SuccessMessage:             "Received 'pwd is a shell builtin'",
 	}
 	if err := testCase.Run(shell, logger); err != nil {
@@ -62,10 +61,10 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		}(exec.Command("sh", "-c", revertCommand))
 	}
 
-	testCase = test_cases.SingleLineOutputTestCase{
+	testCase = test_cases.SingleLineExactMatchTestCase{
 		Command:                    "pwd",
-		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s$`, cwd)),
-		ExpectedPatternExplanation: fmt.Sprintf("match %q", cwd),
+		ExpectedPattern:            fmt.Sprintf(`^%s$`, cwd),
+		ExpectedPatternExplanation: cwd,
 		SuccessMessage:             "Received current working directory response",
 	}
 	if err := testCase.Run(shell, logger); err != nil {
