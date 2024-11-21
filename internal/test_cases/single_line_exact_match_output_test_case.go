@@ -10,9 +10,10 @@ import (
 	"github.com/fatih/color"
 )
 
-// SingleLineExactMatchTestCase verifies a prompt exists, sends a command and matches the output against a string.
+// SingleLineExactMatchTestCase internally creates a SingleLineOutputTestCase with a validator that matches the output against a pattern.
+// We look for an exact match in this case, so our error logs can take advantage of color to highlight the exact mismatch.
 type SingleLineExactMatchTestCase struct {
-	// The command to execute (the command's output will be matched against ExpectedPattern)
+	// Command is the command to execute, whose output will be matched against ExpectedPattern.
 	Command string
 
 	// ExpectedPattern is the regex that is evaluated against the command's output.

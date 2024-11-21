@@ -8,9 +8,10 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-// SingleLinePatternMatchTestCase verifies a prompt exists, sends a command and matches the output against a string.
+// SingleLinePatternMatchTestCase internally creates a SingleLineOutputTestCase with a validator that matches the output against a pattern.
+// We look for a partial `contains` match in this case.
 type SingleLinePatternMatchTestCase struct {
-	// The command to execute (the command's output will be matched against ExpectedPattern)
+	// Command is the command to execute, whose output will be matched against ExpectedPattern.
 	Command string
 
 	// ExpectedPattern is the regex that is evaluated against the command's output.
