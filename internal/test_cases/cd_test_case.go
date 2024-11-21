@@ -3,7 +3,6 @@ package test_cases
 import (
 	"fmt"
 	"os"
-	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
@@ -38,10 +37,10 @@ func (t *CDAndPWDTestCase) Run(shell *shell_executable.ShellExecutable, logger *
 	nextCommand := "pwd"
 
 	// Next we send pwd and check that the directory we cd'ed into is the response
-	testCase := SingleLineOutputTestCase{
+	testCase := SingleLineExactMatchTestCase{
 		Command:                    nextCommand,
-		ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s$`, t.Response)),
-		ExpectedPatternExplanation: fmt.Sprintf("match %q", t.Response),
+		ExpectedPattern:            fmt.Sprintf(`^%s$`, t.Response),
+		ExpectedPatternExplanation: t.Response,
 		SuccessMessage:             "Received current working directory response",
 	}
 	if err := testCase.Run(shell, logger); err != nil {
