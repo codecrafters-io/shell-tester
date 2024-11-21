@@ -24,7 +24,7 @@ type SingleLinePatternMatchTestCase struct {
 }
 
 func (t SingleLinePatternMatchTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	singleLineOutputTestCase := SingleLineOutputTestCase{
+	singleLineOutputTestCase := singleLineOutputTestCase{
 		Command:        t.Command,
 		Validator:      BuildPatternMatchValidator(t.ExpectedPattern, t.ExpectedPatternExplanation),
 		SuccessMessage: t.SuccessMessage,

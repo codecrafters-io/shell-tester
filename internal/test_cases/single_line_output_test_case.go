@@ -11,8 +11,8 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-// SingleLineOutputTestCase verifies a prompt exists, sends a command and matches the output against a string.
-type SingleLineOutputTestCase struct {
+// singleLineOutputTestCase verifies a prompt exists, sends a command and matches the output against a string.
+type singleLineOutputTestCase struct {
 	// The command to execute (the command's output will be matched using the Validator function)
 	Command string
 
@@ -24,7 +24,7 @@ type SingleLineOutputTestCase struct {
 	SuccessMessage string
 }
 
-func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
+func (t singleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	promptTestCase := NewSilentPromptTestCase("$ ")
 
 	if err := promptTestCase.Run(shell, logger); err != nil {
@@ -62,7 +62,7 @@ func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, l
 	}
 
 	if t.Validator == nil {
-		panic("CodeCrafters internal error: No validator provided for SingleLineOutputTestCase")
+		panic("CodeCrafters internal error: No validator provided for singleLineOutputTestCase")
 	}
 
 	if validatorErr := t.Validator(cleanedOutput); validatorErr != nil {

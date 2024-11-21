@@ -26,7 +26,7 @@ type SingleLineExactMatchTestCase struct {
 }
 
 func (t SingleLineExactMatchTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	singleLineOutputTestCase := SingleLineOutputTestCase{
+	singleLineOutputTestCase := singleLineOutputTestCase{
 		Command:        t.Command,
 		Validator:      BuildExactMatchValidator(t.ExpectedPattern, t.ExpectedPatternExplanation),
 		SuccessMessage: t.SuccessMessage,
