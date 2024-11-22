@@ -3,7 +3,6 @@ package test_cases
 import (
 	"fmt"
 	"regexp"
-	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
@@ -29,7 +28,7 @@ type SingleLineExactMatchTestCase struct {
 func (t SingleLineExactMatchTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	singleLineOutputTestCase := singleLineOutputTestCase{
 		Command:        t.Command,
-		Validator:      BuildExactMatchValidator(t.ExpectedPattern, t.ExpectedPatternExplanation),
+		Validator:      BuildExactMatchValidator(t.ExpectedPattern, t.ExpectedPatternExplanation, logger),
 		SuccessMessage: t.SuccessMessage,
 	}
 
@@ -37,11 +36,13 @@ func (t SingleLineExactMatchTestCase) Run(shell *shell_executable.ShellExecutabl
 
 }
 
-func BuildExactMatchValidator(pattern string, simplifiedPatternExplanation string) func([]byte) error {
+func BuildExactMatchValidator(pattern string, simplifiedPatternExplanation string, logger *logger.Logger) func([]byte) error {
 	re := regexp.MustCompile(pattern)
 	return func(output []byte) error {
 		if !re.Match(output) {
-			return fmt.Errorf(BuildColoredErrorMessage(simplifiedPatternExplanation, string(output)))
+			detailedErrorMessage := BuildColoredErrorMessage(simplifiedPatternExplanation, string(output))
+			logger.Infof(detailedErrorMessage)
+			return fmt.Errorf("Received output does not match expectation.")
 		}
 		return nil
 	}
@@ -53,14 +54,11 @@ func colorizeString(colorToUse color.Attribute, msg string) string {
 }
 
 func BuildColoredErrorMessage(expectedPatternExplanation string, cleanedOutput string) string {
-	indent := 9 - 4
-
-	errorMsg := "Expected:" // 9
-	errorMsg += " " + colorizeString(color.FgGreen, expectedPatternExplanation)
+	errorMsg := colorizeString(color.FgGreen, "Expected:")
+	errorMsg += " \"" + expectedPatternExplanation + "\""
 	errorMsg += "\n"
-	errorMsg += strings.Repeat(" ", indent)
-	errorMsg += "Got:" // 4
-	errorMsg += " " + colorizeString(color.FgRed, cleanedOutput)
+	errorMsg += colorizeString(color.FgRed, "Received:")
+	errorMsg += " \"" + cleanedOutput + "\""
 
 	return errorMsg
 }
