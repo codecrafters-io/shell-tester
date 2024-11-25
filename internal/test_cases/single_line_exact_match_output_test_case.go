@@ -55,10 +55,10 @@ func colorizeString(colorToUse color.Attribute, msg string) string {
 
 func BuildColoredErrorMessage(expectedPatternExplanation string, cleanedOutput string) string {
 	errorMsg := colorizeString(color.FgGreen, "Expected:")
-	errorMsg += " \"" + expectedPatternExplanation + "\""
+	errorMsg += fmt.Sprintf("%q", expectedPatternExplanation)
 	errorMsg += "\n"
 	errorMsg += colorizeString(color.FgRed, "Received:")
-	errorMsg += " \"" + cleanedOutput + "\""
+	errorMsg += fmt.Sprintf("%q", cleanedOutput)
 
 	return errorMsg
 }
