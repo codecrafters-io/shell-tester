@@ -57,11 +57,10 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
 	for _, testCaseContent := range testCaseContents {
-		testCase := test_cases.SingleLineExactMatchTestCase{
-			Command:                    testCaseContent.Input,
-			ExpectedPattern:            fmt.Sprintf("^%s$", testCaseContent.ExpectedOutput),
-			ExpectedPatternExplanation: testCaseContent.ExpectedOutput,
-			SuccessMessage:             "Received expected response",
+		testCase := test_cases.SingleLineStringMatchTestCase{
+			Command:        testCaseContent.Input,
+			ExpectedOutput: testCaseContent.ExpectedOutput,
+			SuccessMessage: "Received expected response",
 		}
 		if err := testCase.Run(shell, logger); err != nil {
 			return err
