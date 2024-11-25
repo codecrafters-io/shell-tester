@@ -39,7 +39,7 @@ func testQ3(stageHarness *test_case_harness.TestCaseHarness) error {
 		path.Join(fileDir, "f1"),
 		path.Join(fileDir, "f2"),
 		path.Join(fileDir, "f3"),
-	}, []string{`echo Hello\\nWorld`, `echo \\\\`, `echo 'single' '\n\n\n\''` + "\n"}, logger)
+	}, []string{`Hello\\nWorld`, `\\\\`, `'single' '\n\n\n\''` + "\n"}, logger)
 
 	_, L := getRandomWordsSmallAndLarge(5, 5)
 	inputs := []string{
@@ -52,7 +52,7 @@ func testQ3(stageHarness *test_case_harness.TestCaseHarness) error {
 		`before\   after`,
 		fmt.Sprintf("%s      %s", L[0], L[1]),
 		fmt.Sprintf("%sn%s", L[2], L[3]),
-		`Hello\nWorld` + `\\\\` + `'single' '\n\n\n\''`,
+		`Hello\\nWorld` + `\\\\` + `'single' '\n\n\n\''`,
 	}
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
