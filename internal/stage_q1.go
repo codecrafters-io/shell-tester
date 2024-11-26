@@ -29,6 +29,9 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	// ToDo: Create dir
+	// Randomize dir name, use small words
+	// Cleanup files after test
 	fileDir := "/tmp/q1"
 	writeFiles([]string{
 		path.Join(fileDir, "f1"),
@@ -90,7 +93,7 @@ func writeFile(path string, content string) error {
 
 func writeFiles(paths []string, contents []string, logger *logger.Logger) error {
 	for i, content := range contents {
-		logger.Infof("Writing file %s with content %q", paths[i], content)
+		logger.Infof("Writing file %s with content \"%s\"", paths[i], content)
 		if err := writeFile(paths[i], content); err != nil {
 			logger.Errorf("Error writing file %s: %v", paths[i], err)
 			return err
@@ -107,3 +110,5 @@ func getRandomWordsSmallAndLarge(smallCount int, largeCount int) ([]string, []st
 	largeWords := random.RandomElementsFromArray(LARGE_WORDS, largeCount)
 	return smallWords, largeWords
 }
+
+var ADJECTIVES = []string{"cute", "soft", "furry", "tiny", "cozy", "sweet", "warm", "calm"}
