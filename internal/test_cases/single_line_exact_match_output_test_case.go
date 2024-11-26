@@ -3,6 +3,7 @@ package test_cases
 import (
 	"fmt"
 	"regexp"
+	"unicode"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
@@ -84,12 +85,24 @@ func colorizeString(colorToUse color.Attribute, msg string) string {
 	return c.Sprint(msg)
 }
 
-func BuildColoredErrorMessage(expectedPatternExplanation string, cleanedOutput string) string {
+func BuildColoredErrorMessage(expectedPatternExplanation string, output string) string {
 	errorMsg := colorizeString(color.FgGreen, "Expected:")
 	errorMsg += " \"" + expectedPatternExplanation + "\""
 	errorMsg += "\n"
 	errorMsg += colorizeString(color.FgRed, "Received:")
-	errorMsg += " \"" + cleanedOutput + "\""
+	errorMsg += " \"" + removeNonPrintableCharacters(output) + "\""
 
 	return errorMsg
+}
+
+func removeNonPrintableCharacters(output string) string {
+	result := ""
+	for _, r := range output {
+		if unicode.IsPrint(r) {
+			result += string(r)
+		} else {
+			result += "�" // U+FFFD
+		}
+	}
+	return result
 }
