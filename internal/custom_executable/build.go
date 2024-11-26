@@ -40,6 +40,18 @@ func ReplaceAndBuild(outputPath, randomString string) error {
 	return nil
 }
 
+func CopyExecutable(sourcePath, destinationPath string) error {
+	// Copy the source executable to the destination path
+	command := fmt.Sprintf("cp %s %s", sourcePath, destinationPath)
+	copyCmd := exec.Command("sh", "-c", command)
+	copyCmd.Stdout = io.Discard
+	copyCmd.Stderr = io.Discard
+	if err := copyCmd.Run(); err != nil {
+		return fmt.Errorf("CodeCrafters Internal Error: cp failed: %w", err)
+	}
+	return nil
+}
+
 func CreateExecutable(randomString, outputPath string) error {
 	// Call the replaceAndBuild function
 	return ReplaceAndBuild(outputPath, randomString)
