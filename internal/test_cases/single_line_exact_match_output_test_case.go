@@ -42,8 +42,15 @@ func (t SingleLineExactMatchTestCase) Run(shell *shell_executable.ShellExecutabl
 
 func BuildExactMatchValidator(fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string, expectedOutput string, logger *logger.Logger) func([]byte) error {
 	return func(output []byte) error {
+		if fallbackPatterns != nil && expectedPatternExplanation == "" {
+			// expectedPatternExplanation is required for the error message on the FallbackPatterns path
+			panic("CodeCrafters Internal Error: expectedPatternExplanation is empty on FallbackPatterns path")
+		}
+
 		regexPatternMatch := false
 
+		// For each fallback pattern, check if the output matches
+		// If it does, we break out of the loop and don't check for anything else, just return nil
 		for _, pattern := range fallbackPatterns {
 			if pattern.Match(output) {
 				regexPatternMatch = true
@@ -52,11 +59,14 @@ func BuildExactMatchValidator(fallbackPatterns []*regexp.Regexp, expectedPattern
 		}
 
 		if !regexPatternMatch {
+			// No regex match till now, if expectedOutput is nil, we need to return an error
+			// On this path, expectedPatternExplanation is required for the error message
 			if expectedOutput == "" {
-				detailedErrorMessage := BuildColoredErrorMessage(expectedOutputExplanation, string(output))
+				detailedErrorMessage := BuildColoredErrorMessage(expectedPatternExplanation, string(output))
 				logger.Infof(detailedErrorMessage)
 				return fmt.Errorf("Received output does not match expectation.")
 			} else {
+				// ExpectedOutput is not nil, we can use it for exact string comparison
 				if string(output) != expectedOutput {
 					detailedErrorMessage := BuildColoredErrorMessage(expectedOutput, string(output))
 					logger.Infof(detailedErrorMessage)
