@@ -30,6 +30,16 @@ func GetRandomDirectory() (string, error) {
 	return randomDir, nil
 }
 
+// GetShortRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
+// directory is of the form `/tmp/<random-word>`
+func GetShortRandomDirectory() (string, error) {
+	randomDir := path.Join("/tmp", random.RandomElementFromArray(SMALL_WORDS))
+	if err := os.MkdirAll(randomDir, 0755); err != nil {
+		return "", fmt.Errorf("CodeCrafters internal error. Error creating directory %s: %v", randomDir, err)
+	}
+	return randomDir, nil
+}
+
 func GetRandomString() string {
 	// We will use a random numeric string of length = 6
 	var result string
