@@ -52,6 +52,15 @@ func CopyExecutable(sourcePath, destinationPath string) error {
 	return nil
 }
 
+func CopyExecutableToMultiplePaths(sourcePath string, destinationPaths []string) error {
+	for _, destinationPath := range destinationPaths {
+		if err := CopyExecutable(sourcePath, destinationPath); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func CreateExecutable(randomString, outputPath string) error {
 	// Call the replaceAndBuild function
 	return ReplaceAndBuild(outputPath, randomString)

@@ -6,6 +6,7 @@ import (
 	"path"
 	"path/filepath"
 
+	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/random"
@@ -16,14 +17,17 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 
-	if err := shell.Start(); err != nil {
-		return err
-	}
-
 	fileDir := "/tmp/"
 	fileDir = filepath.Join(fileDir, random.RandomElementFromArray([]string{"foo", "bar", "baz"}))
 	if _, err := os.Stat(fileDir); os.IsNotExist(err) {
 		os.Mkdir(fileDir, 0755)
+	}
+
+	currentPath := os.Getenv("PATH")
+	shell.Setenv("PATH", fmt.Sprintf("%s:%s", fileDir, currentPath))
+
+	if err := shell.Start(); err != nil {
+		return err
 	}
 
 	_, L := getRandomWordsSmallAndLarge(5, 6)
@@ -39,12 +43,17 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	executableName3 := fmt.Sprintf(`"'%s'"\ \ 'cat'`, adjectives[2])
 	executableName4 := fmt.Sprintf(`%s\ncat`, adjectives[3])
 
+	err := custom_executable.CopyExecutableToMultiplePaths("/usr/bin/cat", []string{path.Join(fileDir, executableName1), path.Join(fileDir, executableName2), path.Join(fileDir, executableName3), path.Join(fileDir, executableName4)})
+	if err != nil {
+		panic("CodeCrafters Internal Error: Cannot copy executable")
+	}
+
 	writeFiles([]string{
 		path.Join(fileDir, "f1"),
 		path.Join(fileDir, "f2"),
 		path.Join(fileDir, "f3"),
 		path.Join(fileDir, "f4"),
-	}, []string{file1Contents, file2Contents, file3Contents, file4Contents + "\n"}, logger)
+	}, []string{file1Contents + "\n", file2Contents + "\n", file3Contents + "\n", file4Contents + "\n"}, logger)
 
 	inputs := []string{
 		fmt.Sprintf(`%s %s/f1`, executableName1, fileDir),
@@ -53,10 +62,10 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 		fmt.Sprintf(`%s %s/f4`, executableName4, fileDir),
 	}
 	expectedOutputs := []string{
-		fmt.Sprintf(`%s\\\n%s`, L[0], L[1]),
-		fmt.Sprintf(`%s\"%s%s\"%s`, L[0], L[1], L[2], L[3]),
-		fmt.Sprintf(`%s\\n%s`, L[2], L[3]),
-		fmt.Sprintf(`'%s'"'%s''%s'\"\"'%s''%s'\''%s'`, L[0], L[1], L[2], L[3], L[4], L[5]),
+		fmt.Sprintf(`'%s'"'%s'`, L[0], L[1]),
+		fmt.Sprintf(`'%s'\"\"'%s'`, L[2], L[3]),
+		fmt.Sprintf(`'%s'\''%s'`, L[4], L[5]),
+		fmt.Sprintf(`%s\ncat`, adjectives[3]),
 	}
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
