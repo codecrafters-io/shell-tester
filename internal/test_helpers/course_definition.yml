@@ -460,3 +460,10 @@ stages:
       - The home directory is typically specified by the `HOME` environment variable.
     marketing_md: |-
       In this stage, you'll implement the ability for your shell to run the `cd` built-in command with the `HOME` directory.
+
+  - slug: "q1"
+  - slug: "q2"
+  - slug: "q3"
+  - slug: "q4"
+  - slug: "q5"
+  - slug: "q6"
