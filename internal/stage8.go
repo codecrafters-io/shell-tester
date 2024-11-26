@@ -43,10 +43,9 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	testCase := test_cases.SingleLineExactMatchTestCase{
-		Command:                    strings.Join(command, " "),
-		ExpectedPattern:            fmt.Sprintf("^Hello %s! The secret code is %s.$", randomName, randomCode),
-		ExpectedPatternExplanation: fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode),
-		SuccessMessage:             "Received expected response",
+		Command:        strings.Join(command, " "),
+		ExpectedOutput: fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode),
+		SuccessMessage: "Received expected response",
 	}
 	if err := testCase.Run(shell, logger); err != nil {
 		return err

@@ -25,10 +25,9 @@ func testEcho(stageHarness *test_case_harness.TestCaseHarness) error {
 		command := fmt.Sprintf("echo %s", words)
 
 		testCase := test_cases.SingleLineExactMatchTestCase{
-			Command:                    command,
-			ExpectedPattern:            fmt.Sprintf(`^%s$`, words),
-			ExpectedPatternExplanation: words,
-			SuccessMessage:             "Received expected response",
+			Command:        command,
+			ExpectedOutput: words,
+			SuccessMessage: "Received expected response",
 		}
 		if err := testCase.Run(shell, logger); err != nil {
 			return err
