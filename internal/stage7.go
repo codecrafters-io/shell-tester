@@ -5,7 +5,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -53,11 +52,10 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 			expectedPath = path
 		}
 
-		expectedPattern := fmt.Sprintf(`^(%s is )?%s$`, executable, expectedPath)
-		testCase := test_cases.SingleLineOutputTestCase{
+		testCase := test_cases.SingleLineExactMatchTestCase{
 			Command:                    command,
-			ExpectedPattern:            regexp.MustCompile(expectedPattern),
-			ExpectedPatternExplanation: fmt.Sprintf("match %q", fmt.Sprintf(`%s is %s`, executable, expectedPath)),
+			ExpectedPattern:            fmt.Sprintf(`^(%s is )?%s$`, executable, expectedPath),
+			ExpectedPatternExplanation: fmt.Sprintf(`%s is %s`, executable, expectedPath),
 			SuccessMessage:             "Received expected response",
 		}
 		if err := testCase.Run(shell, logger); err != nil {
@@ -69,11 +67,10 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	for _, executable := range nonAvailableExecutables {
 		command := fmt.Sprintf("type %s", executable)
-		expectedPattern := fmt.Sprintf(`^(bash: type: )?%s: not found$`, executable)
-		testCase := test_cases.SingleLineOutputTestCase{
+		testCase := test_cases.SingleLineExactMatchTestCase{
 			Command:                    command,
-			ExpectedPattern:            regexp.MustCompile(expectedPattern),
-			ExpectedPatternExplanation: fmt.Sprintf("match %q", fmt.Sprintf(`%s: not found`, executable)),
+			ExpectedPattern:            fmt.Sprintf(`^(bash: type: )?%s: not found$`, executable),
+			ExpectedPatternExplanation: fmt.Sprintf(`%s: not found`, executable),
 			SuccessMessage:             "Received expected response",
 		}
 		if err := testCase.Run(shell, logger); err != nil {

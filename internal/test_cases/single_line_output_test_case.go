@@ -11,22 +11,20 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-// SingleLineOutputTestCase verifies a prompt exists, sends a command and matches the output against a string.
-type SingleLineOutputTestCase struct {
-	// The command to execute (the command's output will be matched against ExpectedPattern)
+// singleLineOutputTestCase verifies a prompt exists, sends a command and matches the output against a string.
+type singleLineOutputTestCase struct {
+	// The command to execute (the command's output will be matched using the Validator function)
 	Command string
 
-	// ExpectedPattern is the regex that is evaluated against the command's output.
-	ExpectedPattern *regexp.Regexp
-
-	// ExpectedPatternExplanation is used in the error message if the ExpectedPattern doesn't match the command's output
-	ExpectedPatternExplanation string
+	// Validator is a function that contains the expected pattern and the expected pattern explanation,
+	// and returns an error if the output does not match the expected pattern.
+	Validator func([]byte) error
 
 	// SuccessMessage is logged if the ExpectedPattern matches the command's output
 	SuccessMessage string
 }
 
-func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
+func (t singleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	promptTestCase := NewSilentPromptTestCase("$ ")
 
 	if err := promptTestCase.Run(shell, logger); err != nil {
@@ -63,13 +61,17 @@ func (t SingleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, l
 		}
 	}
 
-	if !t.ExpectedPattern.Match(cleanedOutput) {
+	if t.Validator == nil {
+		panic("CodeCrafters internal error: No validator provided for singleLineOutputTestCase")
+	}
+
+	if validatorErr := t.Validator(cleanedOutput); validatorErr != nil {
 		// If test fails, we still want to log the rest of the output
 		restOfOutput, err := shell.ReadBytesUntilTimeout(100 * time.Millisecond)
 		if err == nil {
 			shell.LogOutput(sanitizeLogOutput(restOfOutput))
 		}
-		return fmt.Errorf("Expected first line of output to %s, got %q", t.ExpectedPatternExplanation, string(cleanedOutput))
+		return validatorErr
 	}
 
 	logger.Successf("✓ %s", t.SuccessMessage)

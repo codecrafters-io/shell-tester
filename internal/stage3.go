@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"regexp"
 	"strconv"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -24,10 +23,10 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 	for i := 0; i < numberOfCommands; i++ {
 		command := "invalid_command_" + strconv.Itoa(i+1)
 
-		testCase := test_cases.SingleLineOutputTestCase{
+		testCase := test_cases.SingleLinePatternMatchTestCase{
 			Command:                    command,
-			ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^(bash: )?%s: (command )?not found$`, command)),
-			ExpectedPatternExplanation: fmt.Sprintf("contain %q", fmt.Sprintf("%s: command not found", command)),
+			ExpectedPattern:            fmt.Sprintf(`^(bash: )?%s: (command )?not found$`, command),
+			ExpectedPatternExplanation: fmt.Sprintf("%s: command not found", command),
 			SuccessMessage:             "Received command not found message",
 		}
 

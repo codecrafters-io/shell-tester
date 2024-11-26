@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"regexp"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -25,10 +24,10 @@ func testEcho(stageHarness *test_case_harness.TestCaseHarness) error {
 		words := strings.Join(random.RandomWords(random.RandomInt(2, 4)), " ")
 		command := fmt.Sprintf("echo %s", words)
 
-		testCase := test_cases.SingleLineOutputTestCase{
+		testCase := test_cases.SingleLineExactMatchTestCase{
 			Command:                    command,
-			ExpectedPattern:            regexp.MustCompile(fmt.Sprintf(`^%s$`, words)),
-			ExpectedPatternExplanation: fmt.Sprintf("match %q", words),
+			ExpectedPattern:            fmt.Sprintf(`^%s$`, words),
+			ExpectedPatternExplanation: words,
 			SuccessMessage:             "Received expected response",
 		}
 		if err := testCase.Run(shell, logger); err != nil {

@@ -7,6 +7,7 @@ toolchain go1.22.3
 require (
 	github.com/codecrafters-io/tester-utils v0.2.38
 	github.com/creack/pty v1.1.23
+	github.com/fatih/color v1.17.0
 	go.chromium.org/luci v0.0.0-20240530183920-783ca64715fa
 )
 
@@ -15,7 +16,6 @@ require (
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/fatih/color v1.17.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect

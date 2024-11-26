@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"regexp"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
@@ -43,12 +42,10 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 		"my_exe", randomName,
 	}
 
-	expectedResponseRegex := fmt.Sprintf("^Hello %s! The secret code is %s.$", randomName, randomCode)
-	expectedResponse := fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode)
-	testCase := test_cases.SingleLineOutputTestCase{
+	testCase := test_cases.SingleLineExactMatchTestCase{
 		Command:                    strings.Join(command, " "),
-		ExpectedPattern:            regexp.MustCompile(expectedResponseRegex),
-		ExpectedPatternExplanation: fmt.Sprintf("match %q", expectedResponse),
+		ExpectedPattern:            fmt.Sprintf("^Hello %s! The secret code is %s.$", randomName, randomCode),
+		ExpectedPatternExplanation: fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode),
 		SuccessMessage:             "Received expected response",
 	}
 	if err := testCase.Run(shell, logger); err != nil {
