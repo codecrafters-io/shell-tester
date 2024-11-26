@@ -17,34 +17,26 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 
-	randomDir, err := GetRandomDirectory()
+	randomDir, err := GetShortRandomDirectory()
 	if err != nil {
 		return err
 	}
+	defer os.RemoveAll(randomDir)
 
-	// Add randomDir to PATH (That is where the my_exe file is created)
-	currentPath := os.Getenv("PATH")
-	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, currentPath))
+	files, err := writeFilesToDirectory(randomDir, []string{"new line", "new line", "new     line\n"}, logger)
+	if err != nil {
+		return err
+	}
 
 	if err := shell.Start(); err != nil {
 		return err
 	}
 
-	// ToDo: Create dir
-	// Randomize dir name, use small words
-	// Cleanup files after test
-	fileDir := "/tmp/q1"
-	writeFiles([]string{
-		path.Join(fileDir, "f1"),
-		path.Join(fileDir, "f2"),
-		path.Join(fileDir, "f3"),
-	}, []string{"new line", "new line", "new     line\n"}, logger)
-
 	inputs := []string{
 		`echo 'new line'`,
 		`echo new     line`,
 		`echo 'new     line'`,
-		fmt.Sprintf(`cat %s/f1 %s/f2 %s/f3`, fileDir, fileDir, fileDir),
+		fmt.Sprintf(`cat %s %s %s`, files[0], files[1], files[2]),
 	}
 	expectedOutputs := []string{
 		"new line",
@@ -101,6 +93,21 @@ func writeFiles(paths []string, contents []string, logger *logger.Logger) error 
 		}
 	}
 	return nil
+}
+
+func writeFilesToDirectory(directory string, contents []string, logger *logger.Logger) ([]string, error) {
+	writtenFiles := []string{}
+
+	for _, content := range contents {
+		path := path.Join(directory, fmt.Sprintf("f%d", random.RandomInt(1, 100)))
+		writtenFiles = append(writtenFiles, path)
+		logger.Infof("Writing file %s with content \"%s\"", path, strings.TrimRight(content, "\n"))
+		if err := writeFile(path, content); err != nil {
+			logger.Errorf("Error writing file %s: %v", path, err)
+			return nil, err
+		}
+	}
+	return writtenFiles, nil
 }
 
 var SMALL_WORDS = []string{"foo", "bar", "baz", "qux", "quz"}
