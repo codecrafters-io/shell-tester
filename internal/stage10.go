@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -31,8 +32,10 @@ func testCd1(stageHarness *test_case_harness.TestCaseHarness) error {
 	command := fmt.Sprintf("cd %s", directory)
 
 	failureTestCase := test_cases.SingleLineExactMatchTestCase{
-		Command:                    command,
-		ExpectedPattern:            fmt.Sprintf(`^(can't cd to %s|((bash: )?cd: )?%s: No such file or directory)$`, directory, directory),
+		Command: command,
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(fmt.Sprintf(`^(can't cd to %s|((bash: )?cd: )?%s: No such file or directory)$`, directory, directory)),
+		},
 		ExpectedPatternExplanation: fmt.Sprintf(`cd: %s: No such file or directory`, directory),
 		SuccessMessage:             "Received error message",
 	}
