@@ -47,7 +47,7 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
 	for _, testCaseContent := range testCaseContents {
-		testCase := test_cases.SingleLineStringMatchTestCase{
+		testCase := test_cases.SingleLineExactMatchTestCase{
 			Command:        testCaseContent.Input,
 			ExpectedOutput: testCaseContent.ExpectedOutput,
 			SuccessMessage: "Received expected response",
@@ -101,7 +101,7 @@ func writeFilesToDirectory(directory string, contents []string, logger *logger.L
 	for _, content := range contents {
 		path := path.Join(directory, fmt.Sprintf("f%d", random.RandomInt(1, 100)))
 		writtenFiles = append(writtenFiles, path)
-		logger.Infof("Writing file %s with content \"%s\"", path, strings.TrimRight(content, "\n"))
+		logger.Infof("Writing file %q with content \"%s\"", path, strings.TrimRight(content, "\n"))
 		if err := writeFile(path, content); err != nil {
 			logger.Errorf("Error writing file %s: %v", path, err)
 			return nil, err

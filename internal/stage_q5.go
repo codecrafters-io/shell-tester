@@ -33,7 +33,7 @@ func testQ5(stageHarness *test_case_harness.TestCaseHarness) error {
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
 	for _, testCaseContent := range testCaseContents {
-		testCase := test_cases.SingleLineStringMatchTestCase{
+		testCase := test_cases.SingleLineExactMatchTestCase{
 			Command:        testCaseContent.Input,
 			ExpectedOutput: testCaseContent.ExpectedOutput,
 			SuccessMessage: "Received expected response",
