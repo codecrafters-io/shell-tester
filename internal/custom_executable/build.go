@@ -7,6 +7,8 @@ import (
 	"os"
 	"os/exec"
 	"path"
+
+	"github.com/codecrafters-io/tester-utils/logger"
 )
 
 func ReplaceAndBuild(outputPath, randomString string) error {
@@ -40,8 +42,9 @@ func ReplaceAndBuild(outputPath, randomString string) error {
 	return nil
 }
 
-func CopyExecutable(sourcePath, destinationPath string) error {
+func CopyExecutable(sourcePath, destinationPath string, logger *logger.Logger) error {
 	// Copy the source executable to the destination path
+	logger.Infof("Copying executable from %s to %s", sourcePath, destinationPath)
 	command := fmt.Sprintf("cp %s %s", sourcePath, destinationPath)
 	copyCmd := exec.Command("sh", "-c", command)
 	copyCmd.Stdout = io.Discard
@@ -52,9 +55,9 @@ func CopyExecutable(sourcePath, destinationPath string) error {
 	return nil
 }
 
-func CopyExecutableToMultiplePaths(sourcePath string, destinationPaths []string) error {
+func CopyExecutableToMultiplePaths(sourcePath string, destinationPaths []string, logger *logger.Logger) error {
 	for _, destinationPath := range destinationPaths {
-		if err := CopyExecutable(sourcePath, destinationPath); err != nil {
+		if err := CopyExecutable(sourcePath, destinationPath, logger); err != nil {
 			return err
 		}
 	}

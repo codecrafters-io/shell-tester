@@ -43,7 +43,7 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	executableName3 := fmt.Sprintf(`"'%s'"\ \ 'cat'`, adjectives[2])
 	executableName4 := fmt.Sprintf(`%s\ncat`, adjectives[3])
 
-	err := custom_executable.CopyExecutableToMultiplePaths("/usr/bin/cat", []string{path.Join(fileDir, executableName1), path.Join(fileDir, executableName2), path.Join(fileDir, executableName3), path.Join(fileDir, executableName4)})
+	err := custom_executable.CopyExecutableToMultiplePaths("/usr/bin/cat", []string{path.Join(fileDir, executableName1), path.Join(fileDir, executableName2), path.Join(fileDir, executableName3), path.Join(fileDir, executableName4)}, logger)
 	if err != nil {
 		panic("CodeCrafters Internal Error: Cannot copy executable")
 	}
