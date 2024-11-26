@@ -20,7 +20,7 @@ type SingleLineExactMatchTestCase struct {
 
 	// FallbackPatterns are a list of regex patterns that are evaluated against the command's output first
 	// and only if none of them match, the ExpectedOutput is used to compare against the output.
-	FallbackPatterns []regexp.Regexp
+	FallbackPatterns []*regexp.Regexp
 
 	// ExpectedPatternExplanation is used in the error message if the ExpectedPattern doesn't match the command's output
 	ExpectedPatternExplanation string
@@ -40,7 +40,7 @@ func (t SingleLineExactMatchTestCase) Run(shell *shell_executable.ShellExecutabl
 
 }
 
-func BuildExactMatchValidator(fallbackPatterns []regexp.Regexp, expectedOutputExplanation string, expectedOutput string, logger *logger.Logger) func([]byte) error {
+func BuildExactMatchValidator(fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string, expectedOutput string, logger *logger.Logger) func([]byte) error {
 	return func(output []byte) error {
 		regexPatternMatch := false
 
