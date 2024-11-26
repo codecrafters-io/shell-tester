@@ -38,10 +38,9 @@ func (t *CDAndPWDTestCase) Run(shell *shell_executable.ShellExecutable, logger *
 
 	// Next we send pwd and check that the directory we cd'ed into is the response
 	testCase := SingleLineExactMatchTestCase{
-		Command:                    nextCommand,
-		ExpectedPattern:            fmt.Sprintf(`^%s$`, t.Response),
-		ExpectedPatternExplanation: t.Response,
-		SuccessMessage:             "Received current working directory response",
+		Command:        nextCommand,
+		ExpectedOutput: t.Response,
+		SuccessMessage: "Received current working directory response",
 	}
 	if err := testCase.Run(shell, logger); err != nil {
 		return err
