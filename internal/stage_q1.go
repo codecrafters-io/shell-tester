@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -93,7 +94,7 @@ func writeFile(path string, content string) error {
 
 func writeFiles(paths []string, contents []string, logger *logger.Logger) error {
 	for i, content := range contents {
-		logger.Infof("Writing file %s with content \"%s\"", paths[i], content)
+		logger.Infof("Writing file %s with content \"%s\"", paths[i], strings.TrimRight(content, "\n"))
 		if err := writeFile(paths[i], content); err != nil {
 			logger.Errorf("Error writing file %s: %v", paths[i], err)
 			return err
