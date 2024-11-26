@@ -16,7 +16,11 @@ type SingleLineExactMatchTestCase struct {
 	Command string
 
 	// ExpectedPattern is the regex that is evaluated against the command's output.
-	ExpectedPattern string
+	ExpectedOutput string
+
+	// FallbackPatterns are a list of regex patterns that are evaluated against the command's output first
+	// and only if none of them match, the ExpectedOutput is used to compare against the output.
+	FallbackPatterns []regexp.Regexp
 
 	// ExpectedPatternExplanation is used in the error message if the ExpectedPattern doesn't match the command's output
 	ExpectedPatternExplanation string
@@ -28,7 +32,7 @@ type SingleLineExactMatchTestCase struct {
 func (t SingleLineExactMatchTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	singleLineOutputTestCase := singleLineOutputTestCase{
 		Command:        t.Command,
-		Validator:      BuildExactMatchValidator(t.ExpectedPattern, t.ExpectedPatternExplanation, logger),
+		Validator:      BuildExactMatchValidator(t.FallbackPatterns, t.ExpectedPatternExplanation, t.ExpectedOutput, logger),
 		SuccessMessage: t.SuccessMessage,
 	}
 
@@ -36,14 +40,31 @@ func (t SingleLineExactMatchTestCase) Run(shell *shell_executable.ShellExecutabl
 
 }
 
-func BuildExactMatchValidator(pattern string, simplifiedPatternExplanation string, logger *logger.Logger) func([]byte) error {
-	re := regexp.MustCompile(pattern)
+func BuildExactMatchValidator(fallbackPatterns []regexp.Regexp, expectedOutputExplanation string, expectedOutput string, logger *logger.Logger) func([]byte) error {
 	return func(output []byte) error {
-		if !re.Match(output) {
-			detailedErrorMessage := BuildColoredErrorMessage(simplifiedPatternExplanation, string(output))
-			logger.Infof(detailedErrorMessage)
-			return fmt.Errorf("Received output does not match expectation.")
+		regexPatternMatch := false
+
+		for _, pattern := range fallbackPatterns {
+			if pattern.Match(output) {
+				regexPatternMatch = true
+				break
+			}
 		}
+
+		if !regexPatternMatch {
+			if expectedOutput == "" {
+				detailedErrorMessage := BuildColoredErrorMessage(expectedOutputExplanation, string(output))
+				logger.Infof(detailedErrorMessage)
+				return fmt.Errorf("Received output does not match expectation.")
+			} else {
+				if string(output) != expectedOutput {
+					detailedErrorMessage := BuildColoredErrorMessage(expectedOutput, string(output))
+					logger.Infof(detailedErrorMessage)
+					return fmt.Errorf("Received output does not match expectation.")
+				}
+			}
+		}
+
 		return nil
 	}
 }
