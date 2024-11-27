@@ -16,7 +16,7 @@ import (
 func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Add the random directory to PATH (where the my_exe file is created)
 
-	randomDir, err := GetRandomDirectory()
+	randomDir, err := getRandomDirectory()
 	if err != nil {
 		return err
 	}
@@ -27,7 +27,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, path))
 
 	customExecutablePath := filepath.Join(randomDir, "my_exe")
-	err = custom_executable.CreateExecutable(GetRandomString(), customExecutablePath)
+	err = custom_executable.CreateExecutable(getRandomString(), customExecutablePath)
 	if err != nil {
 		return err
 	}

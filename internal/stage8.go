@@ -16,7 +16,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 
-	randomDir, err := GetRandomDirectory()
+	randomDir, err := getRandomDirectory()
 	if err != nil {
 		return err
 	}
@@ -29,8 +29,8 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	randomCode := GetRandomString()
-	randomName := GetRandomName()
+	randomCode := getRandomString()
+	randomName := getRandomName()
 	exePath := path.Join(randomDir, "my_exe")
 
 	err = custom_executable.CreateExecutable(randomCode, exePath)

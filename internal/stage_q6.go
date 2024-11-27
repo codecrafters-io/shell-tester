@@ -17,7 +17,7 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 
-	randomDir, err := GetShortRandomDirectory()
+	randomDir, err := getShortRandomDirectory()
 	if err != nil {
 		return err
 	}

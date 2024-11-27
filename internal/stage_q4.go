@@ -20,7 +20,7 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	randomDir, err := GetShortRandomDirectory()
+	randomDir, err := getShortRandomDirectory()
 	if err != nil {
 		return err
 	}

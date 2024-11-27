@@ -8,7 +8,6 @@ import (
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
-	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -17,7 +16,7 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 
-	randomDir, err := GetShortRandomDirectory()
+	randomDir, err := getShortRandomDirectory()
 	if err != nil {
 		return err
 	}
@@ -98,28 +97,4 @@ func newTestCaseContents(inputs []string, expectedOutputs []string) []testCaseCo
 		testCases = append(testCases, newTestCaseContent(input, expectedOutputs[i]))
 	}
 	return testCases
-}
-
-func writeFile(path string, content string) error {
-	return os.WriteFile(path, []byte(content), 0644)
-}
-
-func writeFiles(paths []string, contents []string, logger *logger.Logger) error {
-	for i, content := range contents {
-		logger.Infof("Writing file \"%s\" with content \"%s\"", paths[i], strings.TrimRight(content, "\n"))
-		if err := writeFile(paths[i], content); err != nil {
-			logger.Errorf("Error writing file %s: %v", paths[i], err)
-			return err
-		}
-	}
-	return nil
-}
-
-var SMALL_WORDS = []string{"foo", "bar", "baz", "qux", "quz"}
-var LARGE_WORDS = []string{"hello", "world", "test", "example", "shell", "script"}
-
-func getRandomWordsSmallAndLarge(smallCount int, largeCount int) ([]string, []string) {
-	smallWords := random.RandomElementsFromArray(SMALL_WORDS, smallCount)
-	largeWords := random.RandomElementsFromArray(LARGE_WORDS, largeCount)
-	return smallWords, largeWords
 }

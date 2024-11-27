@@ -10,7 +10,7 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 
-	randomDir, err := GetRandomDirectory()
+	randomDir, err := getRandomDirectory()
 	if err != nil {
 		return err
 	}
