@@ -49,7 +49,7 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
-	for _, testCaseContent := range testCaseContents {
+	for _, testCaseContent := range testCaseContents[:3] {
 		testCase := test_cases.SingleLineExactMatchTestCase{
 			Command:        testCaseContent.Input,
 			ExpectedOutput: testCaseContent.ExpectedOutput,
@@ -58,6 +58,19 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 		if err := testCase.Run(shell, logger); err != nil {
 			return err
 		}
+	}
+
+	if err := writeFiles(filePaths, []string{"new line", "new line", "new     line\n"}, logger); err != nil {
+		return err
+	}
+
+	testCase := test_cases.SingleLineExactMatchTestCase{
+		Command:        testCaseContents[3].Input,
+		ExpectedOutput: testCaseContents[3].ExpectedOutput,
+		SuccessMessage: "Received expected response",
+	}
+	if err := testCase.Run(shell, logger); err != nil {
+		return err
 	}
 
 	return assertShellIsRunning(shell, logger)
@@ -89,7 +102,7 @@ func writeFile(path string, content string) error {
 
 func writeFiles(paths []string, contents []string, logger *logger.Logger) error {
 	for i, content := range contents {
-		logger.Infof("Writing file %s with content \"%s\"", paths[i], strings.TrimRight(content, "\n"))
+		logger.Infof("Writing file %q with content \"%s\"", paths[i], strings.TrimRight(content, "\n"))
 		if err := writeFile(paths[i], content); err != nil {
 			logger.Errorf("Error writing file %s: %v", paths[i], err)
 			return err
