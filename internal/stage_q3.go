@@ -37,7 +37,7 @@ func testQ3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	_, L := getRandomWordsSmallAndLarge(5, 5)
+	L := random.RandomElementsFromArray(LARGE_WORDS, 5)
 	inputs := []string{
 		`echo "before\   after"`,
 		fmt.Sprintf(`echo %s\ \ \ \ \ \ %s`, L[0], L[1]),

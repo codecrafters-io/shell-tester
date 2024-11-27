@@ -26,7 +26,7 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	defer os.RemoveAll(randomDir)
 
-	_, L := getRandomWordsSmallAndLarge(5, 6)
+	L := random.RandomElementsFromArray(LARGE_WORDS, 6)
 	filePaths := []string{
 		path.Join(randomDir, fmt.Sprintf(`'f %d'`, random.RandomInt(1, 100))),
 		path.Join(randomDir, fmt.Sprintf(`'f  \%d'`, random.RandomInt(1, 100))),

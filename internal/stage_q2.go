@@ -37,17 +37,17 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	S, L := getRandomWordsSmallAndLarge(5, 5)
+	L := random.RandomElementsFromArray(LARGE_WORDS, 5)
 	inputs := []string{
-		fmt.Sprintf(`echo "%s %s"`, S[1], L[1]),
-		fmt.Sprintf(`echo "%s  %s"  "%s"`, S[2], L[2], S[3]),
-		fmt.Sprintf(`echo "%s"  "%s's"  "%s"`, S[3], L[4], S[1]),
+		fmt.Sprintf(`echo "%s %s"`, L[0], L[1]),
+		fmt.Sprintf(`echo "%s  %s"  "%s"`, L[1], L[2], L[3]),
+		fmt.Sprintf(`echo "%s"  "%s's"  "%s"`, L[3], L[4], L[1]),
 		fmt.Sprintf(`cat "%s" "%s" "%s"`, filePaths[0], filePaths[1], filePaths[2]),
 	}
 	expectedOutputs := []string{
-		fmt.Sprintf("%s %s", S[1], L[1]),
-		fmt.Sprintf("%s  %s %s", S[2], L[2], S[3]),
-		fmt.Sprintf(`%s %s's %s`, S[3], L[4], S[1]),
+		fmt.Sprintf("%s %s", L[0], L[1]),
+		fmt.Sprintf("%s  %s %s", L[1], L[2], L[3]),
+		fmt.Sprintf(`%s %s's %s`, L[3], L[4], L[1]),
 		fileContents[0] + fileContents[1] + strings.TrimRight(fileContents[2], "\n"),
 	}
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)

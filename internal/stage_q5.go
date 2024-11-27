@@ -37,7 +37,7 @@ func testQ5(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	_, L := getRandomWordsSmallAndLarge(5, 5)
+	L := random.RandomElementsFromArray(LARGE_WORDS, 5)
 	inputs := []string{
 		fmt.Sprintf(`echo "%s'%s'\\n'%s"`, L[0], L[1], L[2]),
 		fmt.Sprintf(`echo "%s\"insidequotes"%s\"`, L[0], L[1]),

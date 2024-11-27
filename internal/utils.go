@@ -12,6 +12,9 @@ import (
 	"github.com/codecrafters-io/tester-utils/random"
 )
 
+var SMALL_WORDS = []string{"foo", "bar", "baz", "qux", "quz"}
+var LARGE_WORDS = []string{"hello", "world", "test", "example", "shell", "script"}
+
 func assertShellIsRunning(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	testCase := test_cases.NewSilentPromptTestCase("$ ")
 
@@ -71,13 +74,4 @@ func writeFiles(paths []string, contents []string, logger *logger.Logger) error 
 		}
 	}
 	return nil
-}
-
-var SMALL_WORDS = []string{"foo", "bar", "baz", "qux", "quz"}
-var LARGE_WORDS = []string{"hello", "world", "test", "example", "shell", "script"}
-
-func getRandomWordsSmallAndLarge(smallCount int, largeCount int) ([]string, []string) {
-	smallWords := random.RandomElementsFromArray(SMALL_WORDS, smallCount)
-	largeWords := random.RandomElementsFromArray(LARGE_WORDS, largeCount)
-	return smallWords, largeWords
 }
