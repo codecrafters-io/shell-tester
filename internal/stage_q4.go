@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"path/filepath"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -20,38 +20,39 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	fileDir := "/tmp/"
-	fileDir = filepath.Join(fileDir, random.RandomElementFromArray([]string{"foo", "bar", "baz"}))
-	if _, err := os.Stat(fileDir); os.IsNotExist(err) {
-		os.Mkdir(fileDir, 0755)
+	randomDir, err := GetShortRandomDirectory()
+	if err != nil {
+		return err
 	}
+	defer os.RemoveAll(randomDir)
 
 	_, L := getRandomWordsSmallAndLarge(5, 6)
-	file1Contents := fmt.Sprintf(`'%s'"'%s'`, L[0], L[1])
-	file2Contents := fmt.Sprintf(`'%s'\"\"'%s'`, L[2], L[3])
-	file3Contents := fmt.Sprintf(`'%s'\''%s'`, L[4], L[5])
-
-	writeFiles([]string{
-		path.Join(fileDir, "f1"),
-		path.Join(fileDir, "f2"),
-		path.Join(fileDir, "f3"),
-	}, []string{file1Contents, file2Contents, file3Contents + "\n"}, logger)
+	filePaths := []string{
+		path.Join(randomDir, fmt.Sprintf(`'f %d'`, random.RandomInt(1, 100))),
+		path.Join(randomDir, fmt.Sprintf(`'f  \%d'`, random.RandomInt(1, 100))),
+		path.Join(randomDir, fmt.Sprintf(`'f \%d\'`, random.RandomInt(1, 100))),
+	}
+	fileContents := []string{
+		strings.Join(random.RandomWords(2), " ") + ".",
+		strings.Join(random.RandomWords(2), " ") + ".",
+		strings.Join(random.RandomWords(2), " ") + "." + "\n",
+	}
 
 	inputs := []string{
 		fmt.Sprintf(`echo '%s\\\n%s'`, L[0], L[1]),
-		fmt.Sprintf(`echo '%s\"%s%s\"%s'`, L[0], L[1], L[2], L[3]),
-		fmt.Sprintf(`echo '%s\\n%s'`, L[2], L[3]),
-		fmt.Sprintf(`cat %s/f1 %s/f2 %s/f3`, fileDir, fileDir, fileDir),
+		fmt.Sprintf(`echo '%s\"%s%s\"%s'`, L[2], L[3], L[4], L[0]),
+		fmt.Sprintf(`echo '%s\\n%s'`, L[4], L[1]),
+		fmt.Sprintf(`cat "%s" "%s" "%s"`, filePaths[0], filePaths[1], filePaths[2]),
 	}
 	expectedOutputs := []string{
 		fmt.Sprintf(`%s\\\n%s`, L[0], L[1]),
-		fmt.Sprintf(`%s\"%s%s\"%s`, L[0], L[1], L[2], L[3]),
-		fmt.Sprintf(`%s\\n%s`, L[2], L[3]),
-		fmt.Sprintf(`'%s'"'%s''%s'\"\"'%s''%s'\''%s'`, L[0], L[1], L[2], L[3], L[4], L[5]),
+		fmt.Sprintf(`%s\"%s%s\"%s`, L[2], L[3], L[4], L[0]),
+		fmt.Sprintf(`%s\\n%s`, L[4], L[1]),
+		fileContents[0] + fileContents[1] + strings.TrimRight(fileContents[2], "\n"),
 	}
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
-	for _, testCaseContent := range testCaseContents {
+	for _, testCaseContent := range testCaseContents[:3] {
 		testCase := test_cases.SingleLineExactMatchTestCase{
 			Command:        testCaseContent.Input,
 			ExpectedOutput: testCaseContent.ExpectedOutput,
@@ -60,6 +61,19 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 		if err := testCase.Run(shell, logger); err != nil {
 			return err
 		}
+	}
+
+	if err := writeFiles(filePaths, fileContents, logger); err != nil {
+		return err
+	}
+
+	testCase := test_cases.SingleLineExactMatchTestCase{
+		Command:        testCaseContents[3].Input,
+		ExpectedOutput: testCaseContents[3].ExpectedOutput,
+		SuccessMessage: "Received expected response",
+	}
+	if err := testCase.Run(shell, logger); err != nil {
+		return err
 	}
 
 	return assertShellIsRunning(shell, logger)
