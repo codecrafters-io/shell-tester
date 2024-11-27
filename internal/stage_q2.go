@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"path/filepath"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -34,20 +33,20 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	S, L := getRandomWordsSmallAndLarge(5, 5)
 	inputs := []string{
-		fmt.Sprintf(`echo "%s"`, S[0]),
 		fmt.Sprintf(`echo "%s %s"`, S[1], L[1]),
 		fmt.Sprintf(`echo "%s  %s"  "%s"`, S[2], L[2], S[3]),
-		fmt.Sprintf(`cat %s/f1 %s/f2 %s/f3`, fileDir, fileDir, fileDir),
+		fmt.Sprintf(`echo "%s"  "%s's"  "%s"`, S[3], L[4], S[1]),
+		fmt.Sprintf(`cat "%s" "%s" "%s"`, filePaths[0], filePaths[1], filePaths[2]),
 	}
 	expectedOutputs := []string{
-		S[0],
 		fmt.Sprintf("%s %s", S[1], L[1]),
 		fmt.Sprintf("%s  %s %s", S[2], L[2], S[3]),
+		fmt.Sprintf(`%s %s's %s`, S[3], L[4], S[1]),
 		`'single'` + `"double" "double's   single"` + `'single' "double" 'single'`,
 	}
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
-	for _, testCaseContent := range testCaseContents {
+	for _, testCaseContent := range testCaseContents[:3] {
 		testCase := test_cases.SingleLineExactMatchTestCase{
 			Command:        testCaseContent.Input,
 			ExpectedOutput: testCaseContent.ExpectedOutput,
@@ -61,5 +60,14 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err := writeFiles(filePaths, []string{`'single'`, `"double" "double's   single"`, `'single' "double" 'single'` + "\n"}, logger); err != nil {
 		return err
 	}
+	testCase := test_cases.SingleLineExactMatchTestCase{
+		Command:        testCaseContents[3].Input,
+		ExpectedOutput: testCaseContents[3].ExpectedOutput,
+		SuccessMessage: "Received expected response",
+	}
+	if err := testCase.Run(shell, logger); err != nil {
+		return err
+	}
+
 	return assertShellIsRunning(shell, logger)
 }
