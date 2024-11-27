@@ -41,6 +41,7 @@ func (t singleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, l
 
 	output, err := shell.ReadBytesUntil(CRLFCondition)
 
+	// ToDo: Log the next lines of the user output too ?
 	// Whether the condition fails on not, we want to log the output
 	if len(output) > 0 {
 		shell.LogOutput(sanitizeLogOutput(output))
