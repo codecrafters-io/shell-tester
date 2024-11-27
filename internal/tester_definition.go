@@ -71,32 +71,32 @@ var testerDefinition = tester_definition.TesterDefinition{
 			Timeout:  15 * time.Second,
 		},
 		{
-			Slug:     "q1",
+			Slug:     "ni6",
 			TestFunc: testQ1,
 			Timeout:  15 * time.Second,
 		},
 		{
-			Slug:     "q2",
+			Slug:     "tg6",
 			TestFunc: testQ2,
 			Timeout:  15 * time.Second,
 		},
 		{
-			Slug:     "q3",
+			Slug:     "yt5",
 			TestFunc: testQ3,
 			Timeout:  15 * time.Second,
 		},
 		{
-			Slug:     "q4",
+			Slug:     "le5",
 			TestFunc: testQ4,
 			Timeout:  15 * time.Second,
 		},
 		{
-			Slug:     "q5",
+			Slug:     "gu3",
 			TestFunc: testQ5,
 			Timeout:  15 * time.Second,
 		},
 		{
-			Slug:     "q6",
+			Slug:     "qj0",
 			TestFunc: testQ6,
 			Timeout:  15 * time.Second,
 		},

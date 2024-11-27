@@ -104,11 +104,18 @@ copy_course_file:
 test_quoting: build
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"q1\",\"tester_log_prefix\":\"tester::#q1\",\"title\":\"Stage #1: Quoting with single quotes\"}, \
-		{\"slug\":\"q2\",\"tester_log_prefix\":\"tester::#q2\",\"title\":\"Stage #2: Quoting with double quotes\"}, \
-		{\"slug\":\"q3\",\"tester_log_prefix\":\"tester::#q3\",\"title\":\"Stage #3: Quoting with backslashes\"}, \
-		{\"slug\":\"q4\",\"tester_log_prefix\":\"tester::#q4\",\"title\":\"Stage #4: Quoting with single and double quotes\"}, \
-		{\"slug\":\"q5\",\"tester_log_prefix\":\"tester::#q5\",\"title\":\"Stage #5: Quoting with mixed quotes\"}, \
-		{\"slug\":\"q6\",\"tester_log_prefix\":\"tester::#q6\",\"title\":\"Stage #6: Quoting program names\"} \
+		{\"slug\":\"ni6\",\"tester_log_prefix\":\"tester::#ni6\",\"title\":\"Stage #1: Quoting with single quotes\"}, \
+		{\"slug\":\"tg6\",\"tester_log_prefix\":\"tester::#tg6\",\"title\":\"Stage #2: Quoting with double quotes\"}, \
+		{\"slug\":\"yt5\",\"tester_log_prefix\":\"tester::#yt5\",\"title\":\"Stage #3: Quoting with backslashes\"}, \
+		{\"slug\":\"le5\",\"tester_log_prefix\":\"tester::#le5\",\"title\":\"Stage #4: Quoting with single and double quotes\"}, \
+		{\"slug\":\"gu3\",\"tester_log_prefix\":\"tester::#gu3\",\"title\":\"Stage #5: Quoting with mixed quotes\"}, \
+		{\"slug\":\"qj0\",\"tester_log_prefix\":\"tester::#qj0\",\"title\":\"Stage #6: Quoting program names\"} \
+	]" \
+	dist/main.out
+
+test_quoting_minimal: build
+	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
+	CODECRAFTERS_TEST_CASES_JSON="[ \
+		{\"slug\":\"ni6\",\"tester_log_prefix\":\"tester::#q1\",\"title\":\"Stage #1: Quoting with single quotes\"} \
 	]" \
 	dist/main.out
