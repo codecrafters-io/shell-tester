@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"path/filepath"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -17,55 +17,54 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 
-	fileDir := "/tmp/"
-	fileDir = filepath.Join(fileDir, random.RandomElementFromArray([]string{"foo", "bar", "baz"}))
-	if _, err := os.Stat(fileDir); os.IsNotExist(err) {
-		os.Mkdir(fileDir, 0755)
+	randomDir, err := GetShortRandomDirectory()
+	if err != nil {
+		return err
 	}
+	defer os.RemoveAll(randomDir)
 
 	currentPath := os.Getenv("PATH")
-	shell.Setenv("PATH", fmt.Sprintf("%s:%s", fileDir, currentPath))
+	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, currentPath))
 
 	if err := shell.Start(); err != nil {
 		return err
 	}
 
-	_, L := getRandomWordsSmallAndLarge(5, 6)
-	adjectives := random.RandomElementsFromArray(ADJECTIVES, 4)
+	fileContents := []string{
+		strings.Join(random.RandomWords(2), " ") + ".",
+		strings.Join(random.RandomWords(2), " ") + ".",
+		strings.Join(random.RandomWords(2), " ") + ".",
+		strings.Join(random.RandomWords(2), " ") + ".",
+	}
 
-	file1Contents := fmt.Sprintf(`'%s'"'%s'`, L[0], L[1])
-	file2Contents := fmt.Sprintf(`'%s'\"\"'%s'`, L[2], L[3])
-	file3Contents := fmt.Sprintf(`'%s'\''%s'`, L[4], L[5])
-	file4Contents := fmt.Sprintf(`%s\ncat`, adjectives[3])
+	executableName1 := `'exe  with  space'`
+	executableName2 := `'exe with "quotes"'`
+	executableName3 := `"exe with \'single quotes\'"`
+	executableName4 := `'exe with \n newline'`
 
-	executableName1 := fmt.Sprintf(`'%s     cat'`, adjectives[0])
-	executableName2 := fmt.Sprintf(`"\"%s\" cat"`, adjectives[1])
-	executableName3 := fmt.Sprintf(`"'%s'"\ \ 'cat'`, adjectives[2])
-	executableName4 := fmt.Sprintf(`%s\ncat`, adjectives[3])
-
-	err := custom_executable.CopyExecutableToMultiplePaths("/usr/bin/cat", []string{path.Join(fileDir, executableName1), path.Join(fileDir, executableName2), path.Join(fileDir, executableName3), path.Join(fileDir, executableName4)}, logger)
+	err = custom_executable.CopyExecutableToMultiplePaths("/usr/bin/cat", []string{path.Join(randomDir, executableName1), path.Join(randomDir, executableName2), path.Join(randomDir, executableName3), path.Join(randomDir, executableName4)}, logger)
 	if err != nil {
 		panic("CodeCrafters Internal Error: Cannot copy executable")
 	}
 
 	writeFiles([]string{
-		path.Join(fileDir, "f1"),
-		path.Join(fileDir, "f2"),
-		path.Join(fileDir, "f3"),
-		path.Join(fileDir, "f4"),
-	}, []string{file1Contents + "\n", file2Contents + "\n", file3Contents + "\n", file4Contents + "\n"}, logger)
+		path.Join(randomDir, "f1"),
+		path.Join(randomDir, "f2"),
+		path.Join(randomDir, "f3"),
+		path.Join(randomDir, "f4"),
+	}, []string{fileContents[0] + "\n", fileContents[1] + "\n", fileContents[2] + "\n", fileContents[3] + "\n"}, logger)
 
 	inputs := []string{
-		fmt.Sprintf(`%s %s/f1`, executableName1, fileDir),
-		fmt.Sprintf(`%s %s/f2`, executableName2, fileDir),
-		fmt.Sprintf(`%s %s/f3`, executableName3, fileDir),
-		fmt.Sprintf(`%s %s/f4`, executableName4, fileDir),
+		fmt.Sprintf(`%s %s/f1`, executableName1, randomDir),
+		fmt.Sprintf(`%s %s/f2`, executableName2, randomDir),
+		fmt.Sprintf(`%s %s/f3`, executableName3, randomDir),
+		fmt.Sprintf(`%s %s/f4`, executableName4, randomDir),
 	}
 	expectedOutputs := []string{
-		fmt.Sprintf(`'%s'"'%s'`, L[0], L[1]),
-		fmt.Sprintf(`'%s'\"\"'%s'`, L[2], L[3]),
-		fmt.Sprintf(`'%s'\''%s'`, L[4], L[5]),
-		fmt.Sprintf(`%s\ncat`, adjectives[3]),
+		fileContents[0],
+		fileContents[1],
+		fileContents[2],
+		fileContents[3],
 	}
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
