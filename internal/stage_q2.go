@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -26,6 +27,11 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 		path.Join(randomDir, fmt.Sprintf("f   %d", random.RandomInt(1, 100))),
 		path.Join(randomDir, fmt.Sprintf("f's%d", random.RandomInt(1, 100))),
 	}
+	fileContents := []string{
+		strings.Join(random.RandomWords(2), " ") + ".",
+		strings.Join(random.RandomWords(2), " ") + ".",
+		strings.Join(random.RandomWords(2), " ") + "." + "\n",
+	}
 
 	if err := shell.Start(); err != nil {
 		return err
@@ -42,7 +48,7 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 		fmt.Sprintf("%s %s", S[1], L[1]),
 		fmt.Sprintf("%s  %s %s", S[2], L[2], S[3]),
 		fmt.Sprintf(`%s %s's %s`, S[3], L[4], S[1]),
-		`'single'` + `"double" "double's   single"` + `'single' "double" 'single'`,
+		fileContents[0] + fileContents[1] + strings.TrimRight(fileContents[2], "\n"),
 	}
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
@@ -57,7 +63,7 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 	}
 
-	if err := writeFiles(filePaths, []string{`'single'`, `"double" "double's   single"`, `'single' "double" 'single'` + "\n"}, logger); err != nil {
+	if err := writeFiles(filePaths, fileContents, logger); err != nil {
 		return err
 	}
 	testCase := test_cases.SingleLineExactMatchTestCase{
