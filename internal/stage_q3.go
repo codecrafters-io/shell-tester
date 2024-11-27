@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"path/filepath"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -16,47 +16,43 @@ func testQ3(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 
-	randomDir, err := GetRandomDirectory()
+	randomDir, err := GetShortRandomDirectory()
 	if err != nil {
 		return err
 	}
+	defer os.RemoveAll(randomDir)
 
-	// Add randomDir to PATH (That is where the my_exe file is created)
-	currentPath := os.Getenv("PATH")
-	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, currentPath))
+	filePaths := []string{
+		path.Join(randomDir, fmt.Sprintf("f\\n%d", random.RandomInt(1, 100))),
+		path.Join(randomDir, fmt.Sprintf("f\\%d", random.RandomInt(1, 100))),
+		path.Join(randomDir, fmt.Sprintf("f'\\'%d", random.RandomInt(1, 100))),
+	}
+	fileContents := []string{
+		strings.Join(random.RandomWords(2), " ") + ".",
+		strings.Join(random.RandomWords(2), " ") + ".",
+		strings.Join(random.RandomWords(2), " ") + "." + "\n",
+	}
 
 	if err := shell.Start(); err != nil {
 		return err
 	}
-
-	fileDir := "/tmp/"
-	fileDir = filepath.Join(fileDir, random.RandomElementFromArray([]string{"foo", "bar", "baz"}))
-	if _, err := os.Stat(fileDir); os.IsNotExist(err) {
-		os.Mkdir(fileDir, 0755)
-	}
-
-	writeFiles([]string{
-		path.Join(fileDir, "f1"),
-		path.Join(fileDir, "f2"),
-		path.Join(fileDir, "f3"),
-	}, []string{`Hello\\nWorld`, `\\\\`, `'single' '\n\n\n\''` + "\n"}, logger)
 
 	_, L := getRandomWordsSmallAndLarge(5, 5)
 	inputs := []string{
 		`echo "before\   after"`,
 		fmt.Sprintf(`echo %s\ \ \ \ \ \ %s`, L[0], L[1]),
 		fmt.Sprintf(`echo %s\n%s`, L[2], L[3]),
-		fmt.Sprintf(`cat %s/f1 %s/f2 %s/f3`, fileDir, fileDir, fileDir),
+		fmt.Sprintf(`cat "%s" "%s" "%s"`, filePaths[0], filePaths[1], filePaths[2]),
 	}
 	expectedOutputs := []string{
 		`before\   after`,
 		fmt.Sprintf("%s      %s", L[0], L[1]),
 		fmt.Sprintf("%sn%s", L[2], L[3]),
-		`Hello\\nWorld` + `\\\\` + `'single' '\n\n\n\''`,
+		fileContents[0] + fileContents[1] + strings.TrimRight(fileContents[2], "\n"),
 	}
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
-	for _, testCaseContent := range testCaseContents {
+	for _, testCaseContent := range testCaseContents[:3] {
 		testCase := test_cases.SingleLineExactMatchTestCase{
 			Command:        testCaseContent.Input,
 			ExpectedOutput: testCaseContent.ExpectedOutput,
@@ -65,6 +61,19 @@ func testQ3(stageHarness *test_case_harness.TestCaseHarness) error {
 		if err := testCase.Run(shell, logger); err != nil {
 			return err
 		}
+	}
+
+	if err := writeFiles(filePaths, fileContents, logger); err != nil {
+		return err
+	}
+
+	testCase := test_cases.SingleLineExactMatchTestCase{
+		Command:        testCaseContents[3].Input,
+		ExpectedOutput: testCaseContents[3].ExpectedOutput,
+		SuccessMessage: "Received expected response",
+	}
+	if err := testCase.Run(shell, logger); err != nil {
+		return err
 	}
 
 	return assertShellIsRunning(shell, logger)
