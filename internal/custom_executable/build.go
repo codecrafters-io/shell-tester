@@ -44,7 +44,7 @@ func ReplaceAndBuild(outputPath, randomString string) error {
 
 func CopyExecutable(sourcePath, destinationPath string, logger *logger.Logger) error {
 	// Copy the source executable to the destination path
-	logger.Infof("Copying executable from %s to %s", sourcePath, destinationPath)
+	logger.Infof("Copying %s to %s", sourcePath, destinationPath)
 	command := fmt.Sprintf("cp %s %s", sourcePath, destinationPath)
 	copyCmd := exec.Command("sh", "-c", command)
 	copyCmd.Stdout = io.Discard
