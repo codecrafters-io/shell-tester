@@ -16,30 +16,21 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 
-	randomDir, err := GetRandomDirectory()
+	randomDir, err := GetShortRandomDirectory()
 	if err != nil {
 		return err
 	}
+	defer os.RemoveAll(randomDir)
 
-	// Add randomDir to PATH (That is where the my_exe file is created)
-	currentPath := os.Getenv("PATH")
-	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, currentPath))
+	filePaths := []string{
+		path.Join(randomDir, fmt.Sprintf("f %d", random.RandomInt(1, 100))),
+		path.Join(randomDir, fmt.Sprintf("f   %d", random.RandomInt(1, 100))),
+		path.Join(randomDir, fmt.Sprintf("f's%d", random.RandomInt(1, 100))),
+	}
 
 	if err := shell.Start(); err != nil {
 		return err
 	}
-
-	fileDir := "/tmp/"
-	fileDir = filepath.Join(fileDir, random.RandomElementFromArray([]string{"foo", "bar", "baz"}))
-	if _, err := os.Stat(fileDir); os.IsNotExist(err) {
-		os.Mkdir(fileDir, 0755)
-	}
-
-	writeFiles([]string{
-		path.Join(fileDir, "f1"),
-		path.Join(fileDir, "f2"),
-		path.Join(fileDir, "f3"),
-	}, []string{`'single'`, `"double" "double's   single"`, `'single' "double" 'single'` + "\n"}, logger)
 
 	S, L := getRandomWordsSmallAndLarge(5, 5)
 	inputs := []string{
@@ -67,5 +58,8 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 	}
 
+	if err := writeFiles(filePaths, []string{`'single'`, `"double" "double's   single"`, `'single' "double" 'single'` + "\n"}, logger); err != nil {
+		return err
+	}
 	return assertShellIsRunning(shell, logger)
 }
