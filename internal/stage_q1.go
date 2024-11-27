@@ -115,21 +115,6 @@ func writeFiles(paths []string, contents []string, logger *logger.Logger) error 
 	return nil
 }
 
-func writeFilesToDirectory(directory string, contents []string, logger *logger.Logger) ([]string, error) {
-	writtenFiles := []string{}
-
-	for _, content := range contents {
-		path := path.Join(directory, fmt.Sprintf("f%d", random.RandomInt(1, 100)))
-		writtenFiles = append(writtenFiles, path)
-		logger.Infof("Writing file %q with content \"%s\"", path, strings.TrimRight(content, "\n"))
-		if err := writeFile(path, content); err != nil {
-			logger.Errorf("Error writing file %s: %v", path, err)
-			return nil, err
-		}
-	}
-	return writtenFiles, nil
-}
-
 var SMALL_WORDS = []string{"foo", "bar", "baz", "qux", "quz"}
 var LARGE_WORDS = []string{"hello", "world", "test", "example", "shell", "script"}
 
@@ -138,5 +123,3 @@ func getRandomWordsSmallAndLarge(smallCount int, largeCount int) ([]string, []st
 	largeWords := random.RandomElementsFromArray(LARGE_WORDS, largeCount)
 	return smallWords, largeWords
 }
-
-var ADJECTIVES = []string{"cute", "soft", "furry", "tiny", "cozy", "sweet", "warm", "calm"}

@@ -49,7 +49,7 @@ func (t singleLineOutputTestCase) Run(shell *shell_executable.ShellExecutable, l
 
 	cleanedOutput := sanitizeLogOutput(output)
 	if err != nil {
-		// Here, we are sure we have read the entire output, so we don't read any more
+		// Here, we are sure we have read the entire output, so we don't read anymore
 		if errors.Is(err, shell_executable.ErrConditionNotMet) {
 			return fmt.Errorf("Expected first line of output to end with '\\n' (newline), got %q", string(cleanedOutput))
 		} else if errors.Is(err, shell_executable.ErrProgramExited) {

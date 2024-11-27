@@ -43,7 +43,7 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 	if sudoNotFoundErr == nil {
 		moveCommand = "sudo" + " " + moveCommand
 	}
-	// On MacOS, the OS doesn't allow renaming the `pwd` binary
+	// On macOS, the OS doesn't allow renaming the `pwd` binary
 	if pwdNotFoundErr == nil && runtime.GOOS != "darwin" {
 		// os.Rename is unable to complete this operation on some systems due to permission issues
 		command := fmt.Sprintf("%s %s %s", moveCommand, path, newPath)

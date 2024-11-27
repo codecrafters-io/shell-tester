@@ -198,7 +198,7 @@ func StripANSI(data []byte) []byte {
 }
 
 func wrapReaderError(readerErr error) error {
-	// Linux returns syscall.EIO when the process is killed, MacOS returns io.EOF
+	// Linux returns syscall.EIO when the process is killed, macOS returns io.EOF
 	if errors.Is(readerErr, io.EOF) || errors.Is(readerErr, syscall.EIO) {
 		return ErrProgramExited
 	}
