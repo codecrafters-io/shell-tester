@@ -28,6 +28,11 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 		path.Join(randomDir, fmt.Sprintf("f   %d", random.RandomInt(1, 100))),
 		path.Join(randomDir, fmt.Sprintf("f   %d", random.RandomInt(1, 100))),
 	}
+	fileContents := []string{
+		strings.Join(random.RandomWords(2), " ") + ".",
+		strings.Join(random.RandomWords(2), " ") + ".",
+		strings.Join(random.RandomWords(2), " ") + "." + "\n",
+	}
 
 	if err := shell.Start(); err != nil {
 		return err
@@ -44,8 +49,7 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 		fmt.Sprintf("%s %s", L[0], L[1]),
 		fmt.Sprintf("%s %s", L[1], L[4]),
 		fmt.Sprintf("%s     %s", L[2], L[3]),
-		// fmt.Sprintf("%s %s %s", L[0], L[1], L[2]),
-		`new line` + `new line` + `new     line`,
+		fileContents[0] + fileContents[1] + strings.TrimRight(fileContents[2], "\n"),
 	}
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
@@ -60,7 +64,7 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 	}
 
-	if err := writeFiles(filePaths, []string{"new line", "new line", "new     line\n"}, logger); err != nil {
+	if err := writeFiles(filePaths, fileContents, logger); err != nil {
 		return err
 	}
 
