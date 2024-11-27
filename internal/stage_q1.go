@@ -23,9 +23,10 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	defer os.RemoveAll(randomDir)
 
-	files, err := writeFilesToDirectory(randomDir, []string{"new line", "new line", "new     line\n"}, logger)
-	if err != nil {
-		return err
+	filePaths := []string{
+		path.Join(randomDir, fmt.Sprintf("f   %d", random.RandomInt(1, 100))),
+		path.Join(randomDir, fmt.Sprintf("f   %d", random.RandomInt(1, 100))),
+		path.Join(randomDir, fmt.Sprintf("f   %d", random.RandomInt(1, 100))),
 	}
 
 	if err := shell.Start(); err != nil {
