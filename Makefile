@@ -56,7 +56,6 @@ test_dash: build
 test_ryan: build
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/ryan_shell \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#oo8\",\"title\":\"Stage #1: Init\"}, \
 		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#cz2\",\"title\":\"Stage #2: Missing Command\"}, \
 		{\"slug\":\"ff0\",\"tester_log_prefix\":\"tester::#ff0\",\"title\":\"Stage #3: REPL\"}, \
 		{\"slug\":\"iz3\",\"tester_log_prefix\":\"tester::#iz3\",\"title\":\"Stage #5: Echo\"}, \
@@ -101,3 +100,22 @@ copy_course_file:
 		| jq -r .content \
 		| base64 -d \
 		> internal/test_helpers/course_definition.yml
+
+test_quoting: build
+	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
+	CODECRAFTERS_TEST_CASES_JSON="[ \
+		{\"slug\":\"ni6\",\"tester_log_prefix\":\"tester::#ni6\",\"title\":\"Stage #1: Quoting with single quotes\"}, \
+		{\"slug\":\"tg6\",\"tester_log_prefix\":\"tester::#tg6\",\"title\":\"Stage #2: Quoting with double quotes\"}, \
+		{\"slug\":\"yt5\",\"tester_log_prefix\":\"tester::#yt5\",\"title\":\"Stage #3: Quoting with backslashes\"}, \
+		{\"slug\":\"le5\",\"tester_log_prefix\":\"tester::#le5\",\"title\":\"Stage #4: Quoting with single and double quotes\"}, \
+		{\"slug\":\"gu3\",\"tester_log_prefix\":\"tester::#gu3\",\"title\":\"Stage #5: Quoting with mixed quotes\"}, \
+		{\"slug\":\"qj0\",\"tester_log_prefix\":\"tester::#qj0\",\"title\":\"Stage #6: Quoting program names\"} \
+	]" \
+	dist/main.out
+
+test_quoting_minimal: build
+	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
+	CODECRAFTERS_TEST_CASES_JSON="[ \
+		{\"slug\":\"ni6\",\"tester_log_prefix\":\"tester::#q1\",\"title\":\"Stage #1: Quoting with single quotes\"} \
+	]" \
+	dist/main.out

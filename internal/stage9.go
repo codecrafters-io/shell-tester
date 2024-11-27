@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"regexp"
 	"runtime"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -26,7 +27,7 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	testCase := test_cases.SingleLineExactMatchTestCase{
 		Command:                    "type pwd",
-		ExpectedPattern:            `^pwd is a( special)? shell builtin$`,
+		FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(`^pwd is a( special)? shell builtin$`)},
 		ExpectedPatternExplanation: `pwd is a shell builtin`,
 		SuccessMessage:             "Received 'pwd is a shell builtin'",
 	}
@@ -42,7 +43,7 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 	if sudoNotFoundErr == nil {
 		moveCommand = "sudo" + " " + moveCommand
 	}
-	// On MacOS, the OS doesn't allow renaming the `pwd` binary
+	// On macOS, the OS doesn't allow renaming the `pwd` binary
 	if pwdNotFoundErr == nil && runtime.GOOS != "darwin" {
 		// os.Rename is unable to complete this operation on some systems due to permission issues
 		command := fmt.Sprintf("%s %s %s", moveCommand, path, newPath)
@@ -62,10 +63,9 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	testCase = test_cases.SingleLineExactMatchTestCase{
-		Command:                    "pwd",
-		ExpectedPattern:            fmt.Sprintf(`^%s$`, cwd),
-		ExpectedPatternExplanation: cwd,
-		SuccessMessage:             "Received current working directory response",
+		Command:        "pwd",
+		ExpectedOutput: cwd,
+		SuccessMessage: "Received current working directory response",
 	}
 	if err := testCase.Run(shell, logger); err != nil {
 		return err

@@ -1,6 +1,8 @@
 package internal
 
 import (
+	"regexp"
+
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
@@ -16,7 +18,7 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	testCase := test_cases.SingleLineExactMatchTestCase{
 		Command:                    "nonexistent",
-		ExpectedPattern:            `^(bash: )?nonexistent: (command )?not found$`,
+		FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(`^(bash: )?nonexistent: (command )?not found$`)},
 		ExpectedPatternExplanation: "nonexistent: command not found",
 		SuccessMessage:             "Received command not found message",
 	}

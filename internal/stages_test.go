@@ -33,6 +33,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/missing_command/wrong_output",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"quoting_pass": {
+			StageSlugs:          []string{"ni6", "tg6", "yt5", "le5", "gu3", "qj0"},
+			CodePath:            "./test_helpers/bash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/quoting/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 	}
 
 	testerUtilsTesting.TestTesterOutput(t, testerDefinition, testCases)

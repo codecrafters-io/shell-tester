@@ -3,6 +3,7 @@ package internal
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 	"time"
 
@@ -22,7 +23,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	// We test a nonexistent command first, just to make sure the logic works in a "loop"
 	testCase := test_cases.SingleLineExactMatchTestCase{
 		Command:                    "invalid_command_1",
-		ExpectedPattern:            `^(bash: )?invalid_command_1: (command )?not found$`,
+		FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(`^(bash: )?invalid_command_1: (command )?not found$`)},
 		ExpectedPatternExplanation: "invalid_command_1: command not found",
 		SuccessMessage:             "Received command not found message",
 	}

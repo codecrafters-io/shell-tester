@@ -1,14 +1,14 @@
 slug: "shell"
 name: "Build your own Shell"
 short_name: "Shell"
-release_status: "alpha"
+release_status: "live"
 
 description_md: |-
   A shell is a command-line interface that executes commands and manages processes. In this challenge, you'll build your own
   [POSIX compliant](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html) shell that's capable of interpreting
-  shell commands, running external programs and built-in commands like `cd`, `pwd`, `echo` and more.
+  shell commands, running external programs and builtin commands like `cd`, `pwd`, `echo` and more.
 
-  Along the way, you'll learn about REPLs, shell command parsing, built-in commands, and more.
+  Along the way, you'll learn about shell command parsing, REPLs, builtin commands, and more.
 
 short_description_md: |-
   Learn about parsing shell commands, executing programs and more
@@ -16,9 +16,21 @@ short_description_md: |-
 completion_percentage: 20
 
 languages:
+  - slug: "c"
+  - slug: "cpp"
+  - slug: "csharp"
   - slug: "go"
+  - slug: "java"
+  - slug: "javascript"
+    release_status: "alpha"
+  - slug: "kotlin"
   - slug: "python"
+  - slug: "ruby"
+    release_status: "alpha"
   - slug: "rust"
+  - slug: "typescript"
+    release_status: "alpha"
+  - slug: "zig"
 
 marketing:
   difficulty: medium
@@ -40,11 +52,18 @@ marketing:
 
 extensions:
   - slug: "navigation"
-    name: "Directory Navigation"
+    name: "Navigation"
     description_markdown: |
-      In this challenge extension, you'll add directory navigation support to your shell implementation by introducing the `cd` and `pwd` commands.
+      In this challenge extension, you'll add directory navigation support by implementing the `cd` and `pwd` commands.
 
-      Along the way, you'll learn about handling paths, changing the current working directory, and printing the current working directory. These commands are essential for effective navigation and file system management in any shell environment.
+      Along the way, you'll learn about what the "current working directory" is, how to change it and more.
+  
+  - slug: "quoting"
+    name: "Quoting"
+    description_markdown: |
+      In this challenge extension, you'll add quoting support to your shell.
+
+      Quoting allows you to preserve whitespace and special characters in your shell commands.
 
 stages:
   - slug: "oo8"
@@ -58,14 +77,14 @@ stages:
       The tester will execute your program like this:
 
       ```bash
-      ./your_shell.sh
+      ./your_program.sh
       ```
 
       The tester will then check whether your shell prints the `$ ` prompt and waits for user input.
 
       ### Notes
 
-      - The prompt has two characters: `$`, and a space after it.
+      - There's a space after the `$` character in the prompt.
       - Your program must not exit after printing `$ `, it should wait for user input.
       - We'll handle reading commands and executing them in later stages, this stage only deals with printing the prompt.
     marketing_md: |-
@@ -82,7 +101,7 @@ stages:
       The tester will execute your program like this:
 
       ```bash
-      ./your_shell.sh
+      ./your_program.sh
       ```
 
       It will then send the following command to your shell:
@@ -116,7 +135,7 @@ stages:
       The tester will execute your program like this:
 
       ```bash
-      ./your_shell.sh
+      ./your_program.sh
       ```
 
       It will then send a series of commands to your shell:
@@ -141,17 +160,17 @@ stages:
       In this stage, you'll implement a REPL (Read-Eval-Print Loop) for your shell.
 
   - slug: "pn5"
-    name: "The exit built-in"
+    name: "The exit builtin"
     difficulty: easy
     description_md: |-
-      In this stage, you'll implement the [`exit` built-in](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#exit).
+      In this stage, you'll implement the [exit](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#exit) builtin.
 
       ### Tests
 
       The tester will execute your program like this:
 
       ```bash
-      ./your_shell.sh
+      ./your_program.sh
       ```
 
       It'll then send an invalid command to your shell, followed by the `exit` command:
@@ -168,20 +187,20 @@ stages:
 
       - The tester will always pass in `0` as the argument to the `exit` command.
     marketing_md: |-
-      In this stage, you'll implement the `exit` built-in command for your shell.
+      In this stage, you'll implement the `exit` builtin command.
 
   - slug: "iz3"
-    name: "The echo built-in"
+    name: "The echo builtin"
     difficulty: medium
     description_md: |-
-      In this stage, you'll implement the [`echo`](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/echo.html) built-in.
+      In this stage, you'll implement the [echo](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/echo.html) builtin.
 
       ### Tests
 
       The tester will execute your program like this:
 
       ```bash
-      ./your_shell.sh
+      ./your_program.sh
       ```
 
       It'll then send a series of `echo` commands to your shell:
@@ -190,140 +209,158 @@ stages:
       $ echo hello world
       hello world
       $ echo pineapple strawberry
-      pineapple apple
+      pineapple strawberry
       $
       ```
 
       After each command, the tester will check if the `echo` command correctly prints the provided text back.
     marketing_md: |-
-      In this stage, you'll implement the `echo` built-in command for your shell.
+      In this stage, you'll implement the `echo` builtin command.
 
   - slug: "ez5"
-    name: "The type built-in: built-ins"
+    name: "The type builtin: builtins"
     difficulty: medium
     description_md: |-
-      In this stage, you'll implement the `type` built-in command for your shell.
+      In this stage, you'll implement the `type` builtin command for your shell.
 
-      The `type` command is used to determine how a command would be interpreted if used. For built-in commands, it should indicate that they are shell built-ins. If the command is not recognized, it should indicate that the command is not found.
+      The `type` builtin is used to determine how a command would be interpreted if used. Example:
+
+      ```bash
+      $ type echo
+      echo is a shell builtin
+      $ type exit
+      exit is a shell builtin
+      $ type nonexistent
+      nonexistent: not found
+      $ type cat
+      cat is /bin/cat
+      ```
+
+      In this stage we'll only test two cases: builtin commands and unrecognized commands. We'll handle
+      executable files in later stages.
 
       ### Tests
 
       The tester will execute your program like this:
 
       ```bash
-      ./your_shell.sh
+      ./your_program.sh
       ```
 
       It'll then send a series of `type` commands to your shell:
 
       ```bash
       $ type echo
-      echo is a shell built-in
+      echo is a shell builtin
       $ type exit
-      exit is a shell built-in
+      exit is a shell builtin
       $ type type
-      type is a shell built-in
+      type is a shell builtin
       $ type nonexistent
-      nonexistent: command not found
+      nonexistent: not found
       $
       ```
 
-      The tester will check if the `type` command correctly identifies built-in commands and provides the appropriate message for unrecognized commands.
+      The tester will check if the `type` command responds correctly based on the command provided:
+
+      - If a command is a shell builtin, the expected output is `<command> is a shell builtin`.
+      - If a command is not recognized, the expected output is `<command>: not found`.
 
       ### Notes
 
-      - Ensure that the `type` command identifies built-in commands correctly.
-      - The output for recognized built-ins should be `<command> is a shell built-in`.
-      - The output for unrecognized commands should be `<command>: command not found`
+      - The tester will only check for builtin commands and unrecognized commands in this stage.
+      - `type` itself is a shell builtin command, so `$ type type` should print `type is a shell builtin`.
     marketing_md: |-
-      In this stage, you'll implement the `type` built-in command for your shell.
+      In this stage, you'll implement the `type` builtin command.
 
   - slug: "mg5"
-    name: "The type built-in: executable files"
-    difficulty: hard
+    name: "The type builtin: executable files"
+    difficulty: medium
     description_md: |-
-      In this stage, you'll enhance the `type` built-in command to search for executable files using the PATH environment variable.
+      In this stage, you'll extend the `type` builtin to search for executable files using [PATH](https://en.wikipedia.org/wiki/PATH_(variable)).
 
-      When a command is received, the program should search for the command in the directories listed in the PATH environment variable. If the command is found, the program should print the path to the command. If the command is not found, the program should print `<command>: command not found`.
+      [PATH](https://en.wikipedia.org/wiki/PATH_(variable)) is an environment variable that specifies a set of directories
+      where executable programs are located. When a command is received, the program should search for the command in the
+      directories listed in the PATH environment variable. If the command is found, the program should print the path to the command. If the command is not found, the program should print `<command>: not found`.
 
       ### Tests
 
-      The tester will execute your program like this:
+      The tester will execute your program with a custom `PATH` like this:
 
       ```bash
-      ./your_shell.sh
+      PATH="/usr/bin:/usr/local/bin" ./your_program.sh
       ```
 
       It'll then send a series of `type` commands to your shell:
 
       ```bash
       $ type ls
-      /usr/bin/ls
+      ls is /usr/bin/ls
       $ type abcd
-      /usr/local/bin/abcd
-      $ type missing
-      missing: command not found
+      abcd is /usr/local/bin/abcd
+      $ type missing_cmd
+      missing_cmd: not found
       $
       ```
 
-      The tester will check if the `type` command correctly identifies executable files in the PATH and provides the appropriate message for unrecognized commands.
+      The tester will check if the `type` command correctly identifies executable files in the PATH.
 
       ### Notes
 
-      - Ensure that the `type` command searches the directories listed in the PATH environment variable.
-      - The output for found commands should be the full path to the command.
-      - The output for unrecognized commands should be `<command>: command not found`
+      - The actual value of the `PATH` environment variable will be random for each test case.
+      - `PATH` can contain multiple directories separated by colons (`:`), your program should
+        search for programs in each directory in order and return the first match.
     marketing_md: |-
-      In this stage, you'll implement the `type` built-in command for your shell.
+      In this stage, you'll implement the `type` builtin command for your shell.
 
   - slug: "ip1"
     name: "Run a program"
-    difficulty: hard
+    difficulty: medium
     description_md: |-
-      In this stage, you'll implement the ability for your shell to run external programs with arguments.
+      In this stage, you'll add support for running external programs with arguments.
 
-      When a valid program and its arguments are received as input, your shell should execute the program with the provided arguments. This is a fundamental feature of any shell, allowing users to run various commands and utilities.
+      External programs are located using the `PATH` environment variable, as described in previous stages.
 
       ### Tests
 
       The tester will execute your program like this:
 
       ```bash
-      ./your_shell.sh
+      ./your_program.sh
       ```
 
-      It'll then send a command, that you need to execute:
+      It'll then send a command that you need to execute:
 
       ```bash
-      $ ./my_exe
-      random_string
-      $
+      $ program_1234 alice
+      Hello alice! The secret code is 1234.
       ```
 
-      The tester will check if your shell correctly executes the given command. The output of the command will be checked to ensure that it matches the expected output.
+      The command (`program_1234`) in the example above will be present in `PATH` and will be an executable file.
+
+      The tester will check if your shell correctly executes the given command and prints the output.
 
       ### Notes
 
-      - Ensure that the shell can correctly parse and execute commands with their arguments.
+      - The program name, arguments and the expected output will be random for each test case.
     marketing_md: |-
       In this stage, you'll implement the ability for your shell to run external programs with arguments.
 
   - slug: "ei0"
     primary_extension_slug: "navigation"
-    name: "The pwd built-in"
+    name: "The pwd builtin"
     difficulty: easy
     description_md: |-
-      In this stage, you'll implement the `pwd` built-in command for your shell.
+      In this stage, you'll implement the `pwd` builtin command.
 
-      [pwd](https://en.wikipedia.org/wiki/Pwd) stands for "print working directory" and is used to output the current working directory. This command is essential for users to know their current location in the filesystem.
+      [pwd](https://en.wikipedia.org/wiki/Pwd) stands for "print working directory".
 
       ### Tests
-
 
       The tester will execute your program like this:
 
       ```bash
-      ./your_shell.sh
+      ./your_program.sh
       ```
 
       It'll then send a `pwd` command to your shell:
@@ -338,25 +375,30 @@ stages:
 
       ### Notes
 
-      - Ensure that the `pwd` command outputs the full path of the current working directory.
+      - The `pwd` command must print the full absolute path of the current working directory.
     marketing_md: |-
       In this stage, you'll implement the ability for your shell to print the current working directory.
 
   - slug: "ra6"
     primary_extension_slug: "navigation"
-    name: "The cd built-in: Absolute paths"
+    name: "The cd builtin: Absolute paths"
     difficulty: medium
     description_md: |-
-      In this stage, you'll implement the `cd` built-in command to handle absolute paths for your shell.
+      In this stage, you'll implement the `cd` builtin command to handle absolute paths.
 
-      The `cd` command is used to change the current working directory. When an absolute path to an existing directory is provided, the shell should change the current working directory to that path. If the directory doesn't exist, it should print an error message indicating that the directory was not found.
+      The `cd` command is used to change the current working directory. `cd` can receive multiple
+      argument types. In this challenge we'll cover:
+
+      - Absolute paths, like `/usr/local/bin`. (**This stage**)
+      - Relative paths, like `./`, `../`, `./dir`. (Later stages)
+      - The `~` character, which stands for the user's home directory (Later stages)
 
       ### Tests
 
       The tester will execute your program like this:
 
       ```bash
-      ./your_shell.sh
+      ./your_program.sh
       ```
 
       It'll then send a series of `cd` commands to your shell:
@@ -370,31 +412,35 @@ stages:
       $
       ```
 
-      The tester will check if the `cd` command correctly changes the directory when a valid path is provided and if it properly handles invalid paths by displaying an appropriate error message.
+      The tester will check if the `cd` command correctly changes the directory when a valid path is provided. It'll
+      also check whether the message `cd: <directory>: No such file or directory` is printed if the provided path is invalid.
 
       ### Notes
 
-      - If the specified directory does not exist, print `cd: <directory>: No such file or directory`.
-      - The `pwd` command will be used to verify the current working directory after using `cd`.
-      ```
+      - The `cd` command doesn't print anything if the directory is changed successfully. The tester will use `pwd` to verify
+        the current working directory after using `cd`.
     marketing_md: |-
-      In this stage, you'll implement the ability for your shell to run the `cd` built-in command with absolute paths.
+      In this stage, you'll implement the ability for your shell to run the `cd` builtin command with absolute paths.
 
   - slug: "gq9"
     primary_extension_slug: "navigation"
-    name: "The cd built-in: Relative paths"
+    name: "The cd builtin: Relative paths"
     difficulty: hard
     description_md: |-
-      In this stage, you'll implement the `cd` built-in command to handle relative paths for your shell.
+      In this stage, you'll extend your `cd` builtin command to handle relative paths.
 
-      The `cd` command should be able to change the current working directory using relative paths. Relative paths are specified relative to the current directory. If the specified directory does not exist, it should print an error message indicating that the directory was not found.
+      As a recap, `cd` can receive multiple argument types:
+
+      - Absolute paths, like `/usr/local/bin`. (Previous stages)
+      - Relative paths, like `./`, `../`, `./dir`. (**This stage**)
+      - The `~` character, which stands for the user's home directory (Later stages)
 
       ### Tests
 
       The tester will execute your program like this:
 
       ```bash
-      ./your_shell.sh
+      ./your_program.sh
       ```
 
       It'll then send a series of `cd` commands to your shell:
@@ -409,34 +455,45 @@ stages:
       $ cd ../../
       $ pwd
       /usr
-      $ 
+      $
       ```
 
-      The tester will check if the `cd` command correctly changes the directory using relative paths and if it properly handles invalid paths by displaying an appropriate error message.
+      The tester will check if the `cd` command correctly changes the directory when a valid path is provided. It'll
+      also check whether the message `cd: <directory>: No such file or directory` is printed if the provided path is invalid.
 
       ### Notes
 
-      - The `pwd` command will be used to verify the current working directory after using `cd`.
-      - If the specified directory does not exist, print `cd: <directory>: No such file or directory`.
+      - The actual directory names used will be random, so you can't hardcode the expected output.
       - Relative paths like `./`, `../`, and more complex relative paths should be handled correctly.
+      - The `cd` command doesn't print anything if the directory is changed successfully. The tester will use `pwd` to verify
+        the current working directory after using `cd`.
     marketing_md: |-
-      In this stage, you'll implement the ability for your shell to run the `cd` built-in command with relative paths.
+      In this stage, you'll implement the ability for your shell to run the `cd` builtin command with relative paths.
 
   - slug: "gp4"
     primary_extension_slug: "navigation"
-    name: "The cd built-in: Home directory"
+    name: "The cd builtin: Home directory"
     difficulty: medium
     description_md: |-
-      In this stage, you'll implement the `cd` built-in command to handle the `~` character for your shell.
+      In this stage, you'll extend your `cd` builtin command to handle the `~` character.
 
-      The `~` character is a shorthand for the user's home directory. When `cd` is received with `~`, your shell should change the current working directory to the user's home directory. This feature enhances user convenience, making it easier to navigate to the home directory.
+      As a recap, `cd` can receive multiple argument types:
+
+      - Absolute paths, like `/usr/local/bin`. (Previous stages)
+      - Relative paths, like `./`, `../`, `./dir`. (Previous stages)
+      - The `~` character, which stands for the user's home directory (**This stage**)
+
+      The `~` character is shorthand for the user's home directory. When `cd` is received with `~`, your shell should
+      change the current working directory to the user's home directory. The home directory is specified by the
+      [`HOME`](https://unix.stackexchange.com/questions/123858/is-the-home-environment-variable-always-set-on-a-linux-system)
+      environment variable.
 
       ### Tests
 
       The tester will execute your program like this:
 
       ```bash
-      ./your_shell.sh
+      ./your_program.sh
       ```
 
       It'll then send a series of `cd` commands to your shell:
@@ -451,12 +508,247 @@ stages:
       $
       ```
 
-      The tester will check if the `cd` command correctly changes the directory to the user's home directory when `~` is used. You need to fetch the user's home directory from the `HOME` environment variable.
+      The tester will check if the `cd` command correctly changes the directory to the user's home directory when `~` is used.
 
       ### Notes
 
-      - Ensure that the `cd` command interprets `~` as the user's home directory.
       - The `pwd` command will be used to verify the current working directory after using `cd ~`.
-      - The home directory is typically specified by the `HOME` environment variable.
+      - The home directory is specified by the `HOME` environment variable.
     marketing_md: |-
-      In this stage, you'll implement the ability for your shell to run the `cd` built-in command with the `HOME` directory.
+      In this stage, you'll implement the ability for your shell to run the `cd` builtin command with the `HOME` directory.
+
+  - slug: "ni6"
+    primary_extension_slug: "quoting"
+    name: "Single quotes"
+    difficulty: medium
+    description_md: |-
+      In this stage, you'll implement support for quoting with single quotes.
+
+      Enclosing characters in single quotes preserves the literal value of each character within the quotes. Read more about quoting with single quotes [here](https://www.gnu.org/software/bash/manual/bash.html#Single-Quotes).
+
+      ### Tests
+
+      The tester will execute your program like this:
+
+      ```bash
+      ./your_program.sh
+      ```
+
+      It'll then send a series of `echo` commands to your shell:
+
+      ```bash
+      $ echo 'shell hello'
+      shell hello
+      $ echo 'world     test'
+      world     test
+      $
+      ```
+
+      The tester will check if the `echo` command correctly prints the quoted text.
+
+      Then it will also send a `cat` command, with the file name parameter enclosed in single quotes:
+
+      ```bash
+      $ cat '/tmp/file name' '/tmp/file name with spaces' 
+      content1 content2
+      ```
+
+      The tester will check if the `cat` command correctly prints the file content.
+
+    marketing_md: |-
+      In this stage, you'll implement support for quoting with single quotes.
+
+  - slug: "tg6"
+    primary_extension_slug: "quoting"
+    name: "Double quotes"
+    difficulty: medium
+    description_md: |-
+      In this stage, you'll implement support for quoting with double quotes.
+
+      Enclosing characters in double quotes preserves the literal value of each character within the quotes except `\`, the backslash retains its special meaning when followed by `\`, `$`, `"` or newline. Read more about quoting with double quotes [here](https://www.gnu.org/software/bash/manual/bash.html#Double-Quotes).
+
+      ### Tests
+
+      The tester will execute your program like this:
+
+      ```bash
+      ./your_program.sh
+      ```
+
+      It'll then send a series of `echo` commands to your shell:
+
+      ```bash
+      $ echo "quz  hello"  "bar"
+      quz hello bar
+      $ echo "bar"  "shell's"  "foo"
+      bar shell's foo
+      $
+      ```
+
+      The tester will check if the `echo` command correctly prints the quoted text.
+
+      Then it will also send a `cat` command, with the file name parameter enclosed in double quotes:
+
+      ```bash
+      $ cat "/tmp/file name" "/tmp/'file name' with spaces" 
+      content1 content2
+      ```
+
+      The tester will check if the `cat` command correctly prints the file content.
+
+    marketing_md: |-
+      In this stage, you'll implement support for quoting with double quotes.
+
+  - slug: "yt5"
+    primary_extension_slug: "quoting"
+    name: "Backslash outside quotes"
+    difficulty: medium
+    description_md: |-
+      In this stage, you'll implement support for quoting with backslashes.
+
+      A non-quoted backslash `\` is treated as an escape character. It preserves the literal value of the next character. Read more about quoting with backslashes [here](https://www.gnu.org/software/bash/manual/bash.html#Escape-Character).
+
+      ### Tests
+
+      The tester will execute your program like this:
+
+      ```bash
+      ./your_program.sh
+      ```
+
+      It'll then send a series of `echo` commands to your shell:
+
+      ```bash
+      $ echo "before\   after"
+      before\   after
+      $ echo world\ \ \ \ \ \ script
+      world      script
+      $
+      ```
+
+      The tester will check if the `echo` command correctly prints the quoted text.
+
+      Then it will also send a `cat` command, with the file name parameters consisting of backslashes inside quotes:
+
+      ```bash
+      $ cat "/tmp/file\\name" "/tmp/file\ name" 
+      content1 content2
+      ```
+
+      The tester will check if the `cat` command correctly prints the file content.
+
+    marketing_md: |-
+      In this stage, you'll implement support for quoting with backslashes only.
+
+  - slug: "le5"
+    primary_extension_slug: "quoting"
+    name: "Backslash within single quotes"
+    difficulty: medium
+    description_md: |-
+      In this stage, you'll implement support for quoting with backslashes within single quotes.
+
+      Enclosing characters in single quotes `'` preserves the literal value of each character within the quotes, even backslashes. Read more about quoting with backslashes within single quotes [here](https://www.gnu.org/software/bash/manual/bash.html#Single-Quotes).
+
+      ### Tests
+
+      The tester will execute your program like this:
+
+      ```bash
+      ./your_program.sh
+      ```
+
+      It'll then send a series of `echo` commands to your shell:
+
+      ```bash
+      $ echo 'shell\\\nscript'
+      shell\\\nscript
+      $ echo 'example\"testhello\"shell'
+      example\"testhello\"shell
+      $
+      ```
+
+      The tester will check if the `echo` command correctly prints the quoted text.
+
+
+      Then it will also send a `cat` command, with the file name parameters consisting of backslashes inside single quotes:
+      ```bash
+      $ cat "/tmp/file/'name'" "/tmp/file/'\name\'"  
+      content1 content2
+      ```
+
+      The tester will check if the `cat` command correctly prints the file content.
+
+    marketing_md: |-
+      In this stage, you'll implement support for quoting with backslashes within single quotes.
+
+  - slug: "gu3"
+    primary_extension_slug: "quoting"
+    name: "Backslash within double quotes"
+    difficulty: medium
+    description_md: |-
+      In this stage, you'll implement support for quoting with backslashes within double quotes.
+
+      Enclosing backslashes within double quotes `"` preserves the special meaning of the backslash, only when it is followed by `\`, `$`, `"` or newline. Read more about quoting with backslashes within double quotes [here](https://www.gnu.org/software/bash/manual/bash.html#Double-Quotes).
+
+      ### Tests
+
+      The tester will execute your program like this:
+
+      ```bash
+      ./your_program.sh
+      ```
+
+      It'll then send a series of `echo` commands to your shell:
+
+      ```bash
+      $ echo "hello'script'\\n'world"
+      hello'script'\n'world
+      $ echo "hello\"insidequotes\"script\"
+      hello"insidequotesscript"
+      $
+      ```
+
+      The tester will check if the `echo` command correctly prints the quoted text.
+
+      Then it will also send a `cat` command, with the file name parameters consisting of backslashes inside double quotes:
+
+      ```bash
+      $ cat "/tmp/"file\name"" "/tmp/"file name"" 
+      content1 content2
+      ```
+
+      The tester will check if the `cat` command correctly prints the file content.
+
+    marketing_md: |-
+      In this stage, you'll implement support for quoting with backslashes within double quotes.
+
+  - slug: "qj0"
+    primary_extension_slug: "quoting"
+    name: "Executing a quoted executable"
+    difficulty: medium
+    description_md: |-
+      In this stage, you'll implement support for executing a quoted executable.
+
+      The tester will rename the `cat` executable to something containing spaces, quotes and backslashes.
+
+      ### Tests
+
+      The tester will execute your program like this:
+
+      ```bash
+      ./your_program.sh
+      ```
+
+      It'll then send a series of commands to your shell, executing the renamed `cat` executable:
+
+      ```bash
+      $ 'exe with "quotes"' file
+      content1
+      $ "exe with 'single quotes'" file
+      content2
+      ```
+
+      The tester will check if the commands correctly execute the renamed `cat` executable, and that the output is correct.
+
+    marketing_md: |-
+      In this stage, you'll implement support for executing a quoted executable.

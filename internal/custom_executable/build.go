@@ -7,6 +7,8 @@ import (
 	"os"
 	"os/exec"
 	"path"
+
+	"github.com/codecrafters-io/tester-utils/logger"
 )
 
 func ReplaceAndBuild(outputPath, randomString string) error {
@@ -37,6 +39,28 @@ func ReplaceAndBuild(outputPath, randomString string) error {
 		return fmt.Errorf("CodeCrafters Internal Error: dd replace failed: %w", err)
 	}
 
+	return nil
+}
+
+func CopyExecutable(sourcePath, destinationPath string, logger *logger.Logger) error {
+	// Copy the source executable to the destination path
+	logger.Infof("Copying %s to %s", sourcePath, destinationPath)
+	command := fmt.Sprintf("cp %s %s", sourcePath, destinationPath)
+	copyCmd := exec.Command("sh", "-c", command)
+	copyCmd.Stdout = io.Discard
+	copyCmd.Stderr = io.Discard
+	if err := copyCmd.Run(); err != nil {
+		return fmt.Errorf("CodeCrafters Internal Error: cp failed: %w", err)
+	}
+	return nil
+}
+
+func CopyExecutableToMultiplePaths(sourcePath string, destinationPaths []string, logger *logger.Logger) error {
+	for _, destinationPath := range destinationPaths {
+		if err := CopyExecutable(sourcePath, destinationPath, logger); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -15,7 +16,7 @@ import (
 func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Add the random directory to PATH (where the my_exe file is created)
 
-	randomDir, err := GetRandomDirectory()
+	randomDir, err := getRandomDirectory()
 	if err != nil {
 		return err
 	}
@@ -26,7 +27,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, path))
 
 	customExecutablePath := filepath.Join(randomDir, "my_exe")
-	err = custom_executable.CreateExecutable(GetRandomString(), customExecutablePath)
+	err = custom_executable.CreateExecutable(getRandomString(), customExecutablePath)
 	if err != nil {
 		return err
 	}
@@ -54,7 +55,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 		testCase := test_cases.SingleLineExactMatchTestCase{
 			Command:                    command,
-			ExpectedPattern:            fmt.Sprintf(`^(%s is )?%s$`, executable, expectedPath),
+			FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^(%s is )?%s$`, executable, expectedPath))},
 			ExpectedPatternExplanation: fmt.Sprintf(`%s is %s`, executable, expectedPath),
 			SuccessMessage:             "Received expected response",
 		}
@@ -69,7 +70,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		command := fmt.Sprintf("type %s", executable)
 		testCase := test_cases.SingleLineExactMatchTestCase{
 			Command:                    command,
-			ExpectedPattern:            fmt.Sprintf(`^(bash: type: )?%s: not found$`, executable),
+			FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^(bash: type: )?%s: not found$`, executable))},
 			ExpectedPatternExplanation: fmt.Sprintf(`%s: not found`, executable),
 			SuccessMessage:             "Received expected response",
 		}

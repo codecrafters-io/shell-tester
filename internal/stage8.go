@@ -16,7 +16,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 
-	randomDir, err := GetRandomDirectory()
+	randomDir, err := getRandomDirectory()
 	if err != nil {
 		return err
 	}
@@ -29,8 +29,8 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	randomCode := GetRandomString()
-	randomName := GetRandomName()
+	randomCode := getRandomString()
+	randomName := getRandomName()
 	exePath := path.Join(randomDir, "my_exe")
 
 	err = custom_executable.CreateExecutable(randomCode, exePath)
@@ -43,10 +43,9 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	testCase := test_cases.SingleLineExactMatchTestCase{
-		Command:                    strings.Join(command, " "),
-		ExpectedPattern:            fmt.Sprintf("^Hello %s! The secret code is %s.$", randomName, randomCode),
-		ExpectedPatternExplanation: fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode),
-		SuccessMessage:             "Received expected response",
+		Command:        strings.Join(command, " "),
+		ExpectedOutput: fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode),
+		SuccessMessage: "Received expected response",
 	}
 	if err := testCase.Run(shell, logger); err != nil {
 		return err

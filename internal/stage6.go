@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -23,7 +24,7 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 		testCase := test_cases.SingleLineExactMatchTestCase{
 			Command:                    command,
-			ExpectedPattern:            fmt.Sprintf(`^%s is a( special)? shell builtin$`, builtIn),
+			FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^%s is a( special)? shell builtin$`, builtIn))},
 			ExpectedPatternExplanation: fmt.Sprintf(`%s is a shell builtin`, builtIn),
 			SuccessMessage:             "Received expected response",
 		}
@@ -39,7 +40,7 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 		testCase := test_cases.SingleLineExactMatchTestCase{
 			Command:                    command,
-			ExpectedPattern:            fmt.Sprintf(`^(bash: type: )?%s[:]? not found$`, invalidCommand),
+			FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^(bash: type: )?%s[:]? not found$`, invalidCommand))},
 			ExpectedPatternExplanation: fmt.Sprintf("%s: not found", invalidCommand),
 			SuccessMessage:             "Received expected response",
 		}
