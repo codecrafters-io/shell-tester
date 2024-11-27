@@ -33,16 +33,18 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	_, L := getRandomWordsSmallAndLarge(5, 5)
 	inputs := []string{
-		`echo 'new line'`,
-		`echo new     line`,
-		`echo 'new     line'`,
-		fmt.Sprintf(`cat %s %s %s`, files[0], files[1], files[2]),
+		fmt.Sprintf(`echo '%s %s'`, L[0], L[1]),
+		fmt.Sprintf(`echo %s     %s`, L[1], L[4]),
+		fmt.Sprintf(`echo '%s     %s'`, L[2], L[3]),
+		fmt.Sprintf(`cat '%s' '%s' '%s'`, filePaths[0], filePaths[1], filePaths[2]),
 	}
 	expectedOutputs := []string{
-		"new line",
-		"new line",
-		"new     line",
+		fmt.Sprintf("%s %s", L[0], L[1]),
+		fmt.Sprintf("%s %s", L[1], L[4]),
+		fmt.Sprintf("%s     %s", L[2], L[3]),
+		// fmt.Sprintf("%s %s %s", L[0], L[1], L[2]),
 		`new line` + `new line` + `new     line`,
 	}
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
