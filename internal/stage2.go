@@ -5,10 +5,11 @@ import (
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
+func testInvalidCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 
@@ -16,10 +17,12 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	invalidCommand := random.RandomWord()
+
 	testCase := test_cases.SingleLineExactMatchTestCase{
-		Command:                    "nonexistent",
-		FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(`^(bash: )?nonexistent: (command )?not found$`)},
-		ExpectedPatternExplanation: "nonexistent: command not found",
+		Command:                    invalidCommand,
+		FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(`^(bash: )?` + invalidCommand + `: (command )?not found$`)},
+		ExpectedPatternExplanation: invalidCommand + ": command not found",
 		SuccessMessage:             "Received command not found message",
 	}
 

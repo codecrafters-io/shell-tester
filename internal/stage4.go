@@ -20,11 +20,11 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// We test a nonexistent command first, just to make sure the logic works in a "loop"
+	// We test an invalid command first, just to make sure the logic works in a "loop"
 	testCase := test_cases.SingleLineExactMatchTestCase{
-		Command:                    "invalid_command_1",
-		FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(`^(bash: )?invalid_command_1: (command )?not found$`)},
-		ExpectedPatternExplanation: "invalid_command_1: command not found",
+		Command:                    "invalid_command",
+		FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(`^(bash: )?invalid_command: (command )?not found$`)},
+		ExpectedPatternExplanation: "invalid_command: command not found",
 		SuccessMessage:             "Received command not found message",
 	}
 

@@ -10,6 +10,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -64,7 +65,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 	}
 
-	nonAvailableExecutables := []string{"nonexistent"}
+	nonAvailableExecutables := random.RandomWords(2)
 
 	for _, executable := range nonAvailableExecutables {
 		command := fmt.Sprintf("type %s", executable)
