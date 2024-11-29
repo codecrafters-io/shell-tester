@@ -128,6 +128,6 @@ test_quoting_minimal: build
 	dist/main.out
 
 test_bash:
-	test_base_w_bash 
-	test_nav_w_bash
-	test_quoting_w_bash
+	make test_base_w_bash 
+	make test_nav_w_bash
+	make test_quoting_w_bash
