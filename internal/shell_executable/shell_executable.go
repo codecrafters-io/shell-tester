@@ -38,6 +38,7 @@ type ShellExecutable struct {
 	cmd       *exec.Cmd
 	pty       *os.File
 	ptyReader condition_reader.ConditionReader
+	vt        *virtualTerminal
 }
 
 func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellExecutable {
@@ -63,7 +64,7 @@ func (b *ShellExecutable) Start(args ...string) error {
 	b.logger.Infof(b.getInitialLogLine(args...))
 
 	b.Setenv("PS1", "$ ")
-	b.Setenv("TERM", "dumb") // test_all_success works without this too, do we need it?
+	// b.Setenv("TERM", "dumb") // test_all_success works without this too, do we need it?
 
 	cmd := exec.Command(b.executable.Path, args...)
 	cmd.Env = b.env.Sorted()
@@ -76,6 +77,8 @@ func (b *ShellExecutable) Start(args ...string) error {
 	b.cmd = cmd
 	b.pty = pty
 	b.ptyReader = condition_reader.NewConditionReader(b.pty)
+	b.vt = NewStandardVT()
+	// defer b.vt.Close() // ToDo ??
 
 	return nil
 }
