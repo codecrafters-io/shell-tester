@@ -9,6 +9,7 @@ import (
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -20,11 +21,13 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	invalidCommand := random.RandomWord()
+
 	// We test an invalid command first, just to make sure the logic works in a "loop"
 	testCase := test_cases.SingleLineExactMatchTestCase{
-		Command:                    "invalid_command",
-		FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(`^(bash: )?invalid_command: (command )?not found$`)},
-		ExpectedPatternExplanation: "invalid_command: command not found",
+		Command:                    invalidCommand,
+		FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(`^(bash: )?` + invalidCommand + `: (command )?not found$`)},
+		ExpectedPatternExplanation: invalidCommand + ": command not found",
 		SuccessMessage:             "Received command not found message",
 	}
 
