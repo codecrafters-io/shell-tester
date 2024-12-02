@@ -60,7 +60,7 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		defer func(command *exec.Cmd) {
 			err := command.Run()
 			if err != nil {
-				logger.Errorf(revertCmd.String(), err.Error())
+				logger.Errorf(command.String(), err.Error())
 				logger.Errorf("CodeCrafters internal error. Error renaming %q to %q: %v", newPath, path, err)
 			}
 		}(revertCmd)
