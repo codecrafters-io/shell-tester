@@ -21,6 +21,7 @@ jobs:
       - uses: jirutka/setup-alpine@v1
         with:
           branch: v3.15
+          packages: make gcc musl-dev
 
       - run: cat /etc/alpine-release
         shell: alpine.sh {0}
@@ -32,10 +33,6 @@ jobs:
         uses: actions/setup-go@v1
         with:
           go-version: 1.22.x
-
-      # Add this step to install required packages
-      - run: sudo apk add make gcc musl-dev
-        shell: alpine.sh {0}
 
       - run: make test-alpine
         shell: alpine.sh {0}
