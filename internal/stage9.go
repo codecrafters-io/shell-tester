@@ -47,19 +47,23 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 	if pwdNotFoundErr == nil && runtime.GOOS != "darwin" {
 		// os.Rename is unable to complete this operation on some systems due to permission issues
 		command := fmt.Sprintf("%s %s %s", moveCommand, path, newPath)
-		err = exec.Command("sh", "-c", command).Run()
+		fullCommand := fmt.Sprintf("sh -c '%s'", command)
+		err = exec.Command(fullCommand).Run()
 		if err != nil {
+			logger.Errorf(fullCommand, err.Error())
 			return fmt.Errorf("CodeCrafters internal error. Error renaming %q to %q: %v", path, newPath, err)
 		}
 
 		revertCommand := fmt.Sprintf("%s %s %s", moveCommand, newPath, path)
+		fullRevertCommand := fmt.Sprintf("sh -c '%s'", revertCommand)
 
 		defer func(command *exec.Cmd) {
 			err := command.Run()
 			if err != nil {
+				logger.Errorf(fullRevertCommand, err.Error())
 				logger.Errorf("CodeCrafters internal error. Error renaming %q to %q: %v", newPath, path, err)
 			}
-		}(exec.Command("sh", "-c", revertCommand))
+		}(exec.Command(fullRevertCommand))
 	}
 
 	testCase = test_cases.SingleLineExactMatchTestCase{
