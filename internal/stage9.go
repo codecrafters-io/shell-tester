@@ -47,7 +47,7 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 	if pwdNotFoundErr == nil && runtime.GOOS != "darwin" {
 		// os.Rename is unable to complete this operation on some systems due to permission issues
 		command := fmt.Sprintf("%s %s %s", moveCommand, path, newPath)
-		cmd := exec.Command("sh", "-c", command)
+		cmd := exec.Command("sh", "-c", fmt.Sprintf("'%s'", command))
 		err = cmd.Run()
 		if err != nil {
 			logger.Errorf(cmd.String())
