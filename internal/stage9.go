@@ -50,7 +50,8 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		cmd := exec.Command("sh", "-c", command)
 		err = cmd.Run()
 		if err != nil {
-			logger.Errorf(cmd.String(), err.Error())
+			logger.Errorf(cmd.String())
+			logger.Errorf(err.Error())
 			return fmt.Errorf("CodeCrafters internal error. Error renaming %q to %q: %v", path, newPath, err)
 		}
 
