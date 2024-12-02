@@ -39,10 +39,6 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 	newPath := path + "Backup"
 
 	moveCommand := "mv"
-	_, sudoNotFoundErr := exec.LookPath("sudo")
-	if sudoNotFoundErr == nil {
-		moveCommand = "sudo" + " " + moveCommand
-	}
 
 	shellExecutablePath, err := exec.LookPath("sh")
 	if err != nil {
