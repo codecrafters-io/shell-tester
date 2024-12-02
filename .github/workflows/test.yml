@@ -21,18 +21,13 @@ jobs:
       - uses: jirutka/setup-alpine@v1
         with:
           branch: v3.15
-          packages: make gcc musl-dev
+          packages: make gcc musl-dev go
 
       - run: cat /etc/alpine-release
         shell: alpine.sh {0}
     
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Set up Go
-        uses: actions/setup-go@v1
-        with:
-          go-version: 1.22.x
 
       - run: make test-alpine
         shell: alpine.sh {0}
