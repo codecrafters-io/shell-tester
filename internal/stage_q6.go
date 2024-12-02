@@ -5,7 +5,6 @@ import (
 	"os"
 	"os/exec"
 	"path"
-	"runtime"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
@@ -44,11 +43,11 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	executableName3 := `"exe with \'single quotes\'"`
 	executableName4 := `'exe with \n newline'`
 
-	originalExecutablePath, err := getLocationOfExecutable("cat")
-	if err != nil {
-		panic(fmt.Sprintf("CodeCrafters Internal Error: Cannot get location of cat executable on %s/%s", runtime.GOOS, runtime.GOARCH))
-	}
-	err = custom_executable.CopyExecutableToMultiplePaths(originalExecutablePath, []string{path.Join(randomDir, executableName1), path.Join(randomDir, executableName2), path.Join(randomDir, executableName3), path.Join(randomDir, executableName4)}, logger)
+	// originalExecutablePath, err := getLocationOfExecutable("cat")
+	// if err != nil {
+	// 	panic(fmt.Sprintf("CodeCrafters Internal Error: Cannot get location of cat executable on %s/%s", runtime.GOOS, runtime.GOARCH))
+	// }
+	err = custom_executable.CopyExecutableToMultiplePaths("/usr/bin/cat", []string{path.Join(randomDir, executableName1), path.Join(randomDir, executableName2), path.Join(randomDir, executableName3), path.Join(randomDir, executableName4)}, logger)
 	if err != nil {
 		panic("CodeCrafters Internal Error: Cannot copy executable")
 	}
