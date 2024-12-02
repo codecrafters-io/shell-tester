@@ -21,7 +21,7 @@ jobs:
       - uses: jirutka/setup-alpine@v1
         with:
           branch: latest-stable
-          packages: make gcc musl-dev go~=1.22
+          packages: make gcc musl-dev go~=1.22 python3 bash
 
       - run: cat /etc/alpine-release
         shell: alpine.sh {0}
