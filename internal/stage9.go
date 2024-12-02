@@ -50,19 +50,16 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		cmd := exec.Command("sh", "-c", fmt.Sprintf("'%s'", command))
 		err = cmd.Run()
 		if err != nil {
-			logger.Errorf(cmd.String())
-			logger.Errorf(err.Error())
-			return fmt.Errorf("CodeCrafters internal error. Error renaming %q to %q: %v", path, newPath, err)
+			return fmt.Errorf("CodeCrafters internal error. Command failed: %s, Error renaming %q to %q: %v", cmd.String(), path, newPath, err)
 		}
 
 		revertCommand := fmt.Sprintf("%s %s %s", moveCommand, newPath, path)
-		revertCmd := exec.Command("sh", "-c", revertCommand)
+		revertCmd := exec.Command("sh", "-c", fmt.Sprintf("'%s'", revertCommand))
 
 		defer func(command *exec.Cmd) {
 			err := command.Run()
 			if err != nil {
-				logger.Errorf(command.String(), err.Error())
-				logger.Errorf("CodeCrafters internal error. Error renaming %q to %q: %v", newPath, path, err)
+				logger.Errorf("CodeCrafters internal error. Command failed: %s, Error renaming %q to %q: %v", command.String(), newPath, path, err)
 			}
 		}(revertCmd)
 	}
