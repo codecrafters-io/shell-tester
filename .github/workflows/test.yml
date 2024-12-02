@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: jirutka/setup-alpine@v1
         with:
-          branch: v3.15
+          branch: latest-stable
           packages: make gcc musl-dev go~=1.22
 
       - run: cat /etc/alpine-release
