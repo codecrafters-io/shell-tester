@@ -15,6 +15,26 @@ jobs:
 
       - run: make test
 
+  test-alpine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: jirutka/setup-alpine@v1
+        with:
+          branch: v3.15
+
+      - run: cat /etc/alpine-release
+        shell: alpine.sh {0}
+    
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.22.x
+
+      - run: make test
+
   lint:
     runs-on: ubuntu-latest
     steps:
