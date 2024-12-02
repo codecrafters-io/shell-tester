@@ -33,7 +33,8 @@ jobs:
         with:
           go-version: 1.22.x
 
-      - run: make test
+      - run: make test-alpine
+        shell: alpine.sh {0}
 
   lint:
     runs-on: ubuntu-latest

@@ -17,6 +17,9 @@ build:
 test:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/...
 
+test-alpine:
+	TESTER_DIR=$(shell pwd) sh -c "go test -count=1 -p 1 -v ./internal/..."
+
 test_bash: build
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
