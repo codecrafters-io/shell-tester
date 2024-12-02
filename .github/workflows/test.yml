@@ -33,6 +33,10 @@ jobs:
         with:
           go-version: 1.22.x
 
+      # Add this step to install required packages
+      - run: apk add make gcc musl-dev
+        shell: alpine.sh {0}
+
       - run: make test-alpine
         shell: alpine.sh {0}
 
