@@ -3,9 +3,7 @@ package internal
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"path"
-	"runtime"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
@@ -44,10 +42,12 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	executableName3 := `"exe with \'single quotes\'"`
 	executableName4 := `'exe with \n newline'`
 
-	originalExecutablePath, err := getLocationOfExecutable("cat")
+	originalExecutablePath := "/tmp/catexe"
+	err = createExecutableCallingCat(originalExecutablePath)
 	if err != nil {
-		panic(fmt.Sprintf("CodeCrafters Internal Error: Cannot get location of cat executable on %s/%s", runtime.GOOS, runtime.GOARCH))
+		panic("CodeCrafters Internal Error: Cannot create executable")
 	}
+
 	err = custom_executable.CopyExecutableToMultiplePaths(originalExecutablePath, []string{path.Join(randomDir, executableName1), path.Join(randomDir, executableName2), path.Join(randomDir, executableName3), path.Join(randomDir, executableName4)}, logger)
 	if err != nil {
 		panic("CodeCrafters Internal Error: Cannot copy executable")
@@ -88,10 +88,12 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	return assertShellIsRunning(shell, logger)
 }
 
-func getLocationOfExecutable(executableName string) (string, error) {
-	executablePath, err := exec.LookPath(executableName)
-	if err != nil {
-		return "", err
-	}
-	return executablePath, nil
+func createExecutableFile(path string, contents string) error {
+	return os.WriteFile(path, []byte(contents), 0o755)
+}
+
+func createExecutableCallingCat(path string) error {
+	content := `#!/bin/sh
+exec cat "$@"`
+	return createExecutableFile(path, content)
 }
