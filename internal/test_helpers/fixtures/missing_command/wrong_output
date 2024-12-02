@@ -3,9 +3,9 @@ Debug = true
 [33m[stage-2] [0m[94mRunning tests for Stage #2: cz2[0m
 [33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
-[33m[stage-2] [0m[94m> pear[0m
-[33m[your-program] [0mCommand: pear
-[33m[stage-2] [0m[94m[32mExpected:[0m "pear: command not found"[0m
-[33m[stage-2] [0m[94m[31mReceived:[0m "Command: pear"[0m
+[33m[stage-2] [0m[94m> invalid_pear_command[0m
+[33m[your-program] [0mCommand: invalid_pear_command
+[33m[stage-2] [0m[94m[32mExpected:[0m "invalid_pear_command: command not found"[0m
+[33m[stage-2] [0m[94m[31mReceived:[0m "Command: invalid_pear_command"[0m
 [33m[stage-2] [0m[91mReceived output does not match expectation.[0m
 [33m[stage-2] [0m[91mTest failed[0m
