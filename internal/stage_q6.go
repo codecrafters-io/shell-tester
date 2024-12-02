@@ -42,7 +42,7 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	executableName3 := `"exe with \'single quotes\'"`
 	executableName4 := `'exe with \n newline'`
 
-	originalExecutablePath := "/tmp/catexe"
+	originalExecutablePath := "/tmp/custom_cat_executable"
 	err = createExecutableCallingCat(originalExecutablePath)
 	if err != nil {
 		panic("CodeCrafters Internal Error: Cannot create executable")
