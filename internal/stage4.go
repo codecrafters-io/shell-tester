@@ -9,7 +9,6 @@ import (
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
-	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -21,7 +20,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	invalidCommand := random.RandomWord()
+	invalidCommand := getRandomInvalidCommand()
 
 	// We test an invalid command first, just to make sure the logic works in a "loop"
 	testCase := test_cases.SingleLineExactMatchTestCase{

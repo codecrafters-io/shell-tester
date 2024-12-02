@@ -6,7 +6,6 @@ import (
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
-	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -34,7 +33,7 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 	}
 
-	invalidCommands := random.RandomWords(2)
+	invalidCommands := getRandomInvalidCommands(2)
 
 	for _, invalidCommand := range invalidCommands {
 		command := fmt.Sprintf("type %s", invalidCommand)
