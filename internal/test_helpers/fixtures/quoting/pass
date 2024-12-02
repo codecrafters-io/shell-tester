@@ -122,10 +122,10 @@ Debug = true
 
 [33m[stage-1] [0m[94mRunning tests for Stage #1: qj0[0m
 [33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
-[33m[stage-1] [0m[94mCopying /usr/bin/cat to /tmp/foo/'exe  with  space'[0m
-[33m[stage-1] [0m[94mCopying /usr/bin/cat to /tmp/foo/'exe with "quotes"'[0m
-[33m[stage-1] [0m[94mCopying /usr/bin/cat to /tmp/foo/"exe with \'single quotes\'"[0m
-[33m[stage-1] [0m[94mCopying /usr/bin/cat to /tmp/foo/'exe with \n newline'[0m
+[33m[stage-1] [0m[94mCopying /tmp/custom_cat_executable to /tmp/foo/'exe  with  space'[0m
+[33m[stage-1] [0m[94mCopying /tmp/custom_cat_executable to /tmp/foo/'exe with "quotes"'[0m
+[33m[stage-1] [0m[94mCopying /tmp/custom_cat_executable to /tmp/foo/"exe with \'single quotes\'"[0m
+[33m[stage-1] [0m[94mCopying /tmp/custom_cat_executable to /tmp/foo/'exe with \n newline'[0m
 [33m[stage-1] [0m[94mWriting file "/tmp/foo/f1" with content "raspberry blueberry."[0m
 [33m[stage-1] [0m[94mWriting file "/tmp/foo/f2" with content "apple pineapple."[0m
 [33m[stage-1] [0m[94mWriting file "/tmp/foo/f3" with content "strawberry raspberry."[0m
