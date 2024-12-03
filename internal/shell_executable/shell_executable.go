@@ -95,6 +95,8 @@ func (b *ShellExecutable) ReadBytesUntil(condition func([]byte) bool) ([]byte, e
 		return readBytes, wrapReaderError(err)
 	}
 
+	b.vt.Write(readBytes)
+
 	return readBytes, nil
 }
 
@@ -103,6 +105,8 @@ func (b *ShellExecutable) ReadBytesUntilTimeout(timeout time.Duration) ([]byte, 
 	if err != nil {
 		return readBytes, wrapReaderError(err)
 	}
+
+	b.vt.Write(readBytes)
 
 	return readBytes, nil
 }
