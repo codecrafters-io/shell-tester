@@ -46,7 +46,7 @@ func (t PromptTestCaseVT) Run(shell *shell_executable.ShellExecutable, logger *l
 	extraOutput := shell.GetRowsTillEndForLogging(1, false)
 
 	// Whether the value matches our expectations or not, we print it
-	shell.LogOutput([]byte(extraOutput))
+	shell.LogOutput(append([]byte(actualValue), []byte(extraOutput)...))
 
 	// We failed to read extra output
 	if extraOutputErr != nil {
