@@ -83,6 +83,71 @@ func (b *ShellExecutable) Start(args ...string) error {
 	return nil
 }
 
+func (b *ShellExecutable) GetScreenState(retainColors bool) [][]string {
+	return b.vt.GetScreenState(retainColors)
+}
+
+func (b *ShellExecutable) GetScreenStateSingleRow(row int, retainColors bool) []string {
+	return b.vt.GetRow(row, retainColors)
+}
+
+func (b *ShellExecutable) GetScreenStateForLogging(retainColors bool) string {
+	fullScreenState := b.GetScreenState(retainColors)
+	screenStateString := ""
+	for _, row := range fullScreenState {
+		var filteredRow []string
+		for _, cell := range row {
+			if cell != "." {
+				filteredRow = append(filteredRow, cell)
+			}
+		}
+		if len(filteredRow) == 0 {
+			continue
+		}
+		screenStateString += strings.Join(filteredRow, "")
+		screenStateString += "\n"
+	}
+	return screenStateString
+}
+
+func (b *ShellExecutable) GetRowsTillEndForLogging(startingRow int, retainColors bool) string {
+	fullScreenState := b.vt.GetRowsTillEnd(startingRow, retainColors)
+	screenStateString := ""
+	for _, row := range fullScreenState {
+		var filteredRow []string
+		for _, cell := range row {
+			if cell != "." {
+				filteredRow = append(filteredRow, cell)
+			}
+		}
+		if len(filteredRow) == 0 {
+			continue
+		}
+		screenStateString += strings.Join(filteredRow, "")
+		screenStateString += "\n"
+	}
+	return screenStateString
+}
+
+func (b *ShellExecutable) GetScreenStateSingleRowForLogging(row int, retainColors bool) string {
+	screenStateSingleRow := b.GetScreenStateSingleRow(row, retainColors)
+
+	screenStateString := ""
+	var filteredRow []string
+	for _, cell := range screenStateSingleRow {
+		if cell != "." {
+			filteredRow = append(filteredRow, cell)
+		}
+	}
+	if len(filteredRow) == 0 {
+		return ""
+	}
+	screenStateString += strings.Join(filteredRow, "")
+	screenStateString += "\n"
+
+	return screenStateString
+}
+
 // TODO: Do tests cases _need_ to decide when to log output and when to not? Can we just always log from within ReadBytes...?
 
 func (b *ShellExecutable) LogOutput(output []byte) {
@@ -172,6 +237,8 @@ func (b *ShellExecutable) writeAndReadReflection(command string) error {
 	if err != nil {
 		return fmt.Errorf("CodeCrafters internal error. Expected %q when writing to pty, but got %q", expectedReflection, string(readBytes))
 	}
+
+	b.vt.Write(readBytes)
 
 	return nil
 }
