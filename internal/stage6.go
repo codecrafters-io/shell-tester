@@ -33,7 +33,7 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 	}
 
-	invalidCommands := []string{"nonexistent", "nonexistentcommand"}
+	invalidCommands := getRandomInvalidCommands(2)
 
 	for _, invalidCommand := range invalidCommands {
 		command := fmt.Sprintf("type %s", invalidCommand)
