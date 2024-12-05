@@ -79,9 +79,10 @@ func getUniqueRandomIntegerFileNames(min, max, count int) []int {
 	randomInts := []int{}
 	for i := 0; i < count; i++ {
 		randomInt := random.RandomInt(min, max)
-		if !slices.Contains(randomInts, randomInt) {
-			randomInts = append(randomInts, randomInt)
+		for slices.Contains(randomInts, randomInt) {
+			randomInt = random.RandomInt(min, max)
 		}
+		randomInts = append(randomInts, randomInt)
 	}
 	return randomInts
 }
