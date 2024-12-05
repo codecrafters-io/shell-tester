@@ -1,0 +1,24 @@
+package shell_executable
+
+import "os"
+
+// TerminalIO represents a terminal input/output pair where
+// reading occurs from the pseudo-terminal (pty) and
+// writing occurs to the virtual terminal (vt)
+type TermIO struct {
+	vt  *VirtualTerminal
+	pty *os.File
+}
+
+// TermIO implements the io.Reader interface
+// But we want vt and pty to be always in sync, so we write to vt whenever we read from pty
+func (t *TermIO) Read(p []byte) (n int, err error) {
+	readBytes, err := t.pty.Read(p)
+	if err != nil {
+		return readBytes, err
+	}
+
+	t.vt.Write(p[:readBytes])
+
+	return readBytes, nil
+}
