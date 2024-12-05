@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"slices"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -72,6 +73,18 @@ func getRandomString() string {
 func getRandomName() string {
 	names := []string{"Alice", "David", "Emily", "James", "Maria"}
 	return names[random.RandomInt(0, len(names))]
+}
+
+func getUniqueRandomIntegerFileNames(min, max, count int) []int {
+	randomInts := []int{}
+	for i := 0; i < count; i++ {
+		randomInt := random.RandomInt(min, max)
+		for slices.Contains(randomInts, randomInt) {
+			randomInt = random.RandomInt(min, max)
+		}
+		randomInts = append(randomInts, randomInt)
+	}
+	return randomInts
 }
 
 // writeFile writes a file to the given path with the given content
