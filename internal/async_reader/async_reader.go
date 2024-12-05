@@ -1,4 +1,4 @@
-package async_bytewise_reader
+package async_reader
 
 import (
 	"errors"
@@ -9,9 +9,10 @@ import (
 var ErrNoData = errors.New("no data available")
 
 // AsyncBytewiseReader : Inspired by https://benjamincongdon.me/blog/2020/04/23/Cancelable-Reads-in-Go/
-type AsyncBytewiseReader struct {
+// We don't require a BytewiseReader anymore, but we still require a cancellable AsyncReader
+type AsyncReader struct {
 	// data is used to send data between the reader goroutine and ReadByte calls
-	data chan byte
+	data chan []byte
 
 	// err is used to store an error occurred during reading.
 	// The error will only be returned on the next ReadByte call.
@@ -21,43 +22,41 @@ type AsyncBytewiseReader struct {
 	reader io.Reader
 }
 
-func New(reader io.Reader) *AsyncBytewiseReader {
-	bytewiseReader := &AsyncBytewiseReader{
+func New(reader io.Reader) *AsyncReader {
+	asyncReader := &AsyncReader{
 		reader: reader,
-		data:   make(chan byte),
+		data:   make(chan []byte),
 	}
 
 	// This goroutine will keep reading until an error or EOF
-	go bytewiseReader.start()
+	go asyncReader.start()
 
-	return bytewiseReader
+	return asyncReader
 }
 
-// ReadByte is the only function that this package exposes. It either reads a byte or returns ErrNoData.
-func (r *AsyncBytewiseReader) ReadByte() (byte, error) {
+// ReadBytes is the only function that this package exposes. It either reads a byte or returns ErrNoData.
+func (r *AsyncReader) ReadBytes() ([]byte, error) {
 	select {
 	// We're checking whether a byte is immediately available, so the timeout can be super low
 	case <-time.After(1 * time.Millisecond):
-		return 0, ErrNoData
-	case readByte, ok := <-r.data:
+		return nil, ErrNoData
+	case readBytes, ok := <-r.data:
 		if !ok {
-			return 0, r.err
+			return nil, r.err
 		}
 
-		return readByte, nil
+		return readBytes, nil
 	}
 }
 
 // Keeps reading forever until an error or EOF
-func (r *AsyncBytewiseReader) start() {
+func (r *AsyncReader) start() {
 	for {
 		buf := make([]byte, 1024)
 		n, err := r.reader.Read(buf)
 
 		if n > 0 {
-			for _, b := range buf[:n] {
-				r.data <- b
-			}
+			r.data <- buf[:n]
 		}
 
 		if err != nil {
