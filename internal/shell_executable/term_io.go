@@ -22,3 +22,10 @@ func (t *TermIO) Read(p []byte) (n int, err error) {
 
 	return readBytes, nil
 }
+
+func NewTermIO(vt *VirtualTerminal, pty *os.File) *TermIO {
+	return &TermIO{
+		vt:  vt,
+		pty: pty,
+	}
+}
