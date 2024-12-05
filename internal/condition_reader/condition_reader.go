@@ -22,12 +22,12 @@ func debugLog(format string, args ...interface{}) {
 
 // ConditionReader wraps an io.Reader and provides methods to read until a condition is met
 type ConditionReader struct {
-	bytewiseReader *async_reader.AsyncReader
+	asyncReader *async_reader.AsyncReader
 }
 
 func NewConditionReader(reader io.Reader) ConditionReader {
 	return ConditionReader{
-		bytewiseReader: async_reader.New(bufio.NewReader(reader)),
+		asyncReader: async_reader.New(bufio.NewReader(reader)),
 	}
 }
 
@@ -40,7 +40,7 @@ func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) boo
 	var accumulatedReadBytes []byte
 
 	for !time.Now().After(deadline) {
-		readBytes, err := t.bytewiseReader.ReadBytes()
+		readBytes, err := t.asyncReader.ReadBytes()
 		if err != nil {
 			if errors.Is(err, async_reader.ErrNoData) {
 				debugLog("condition_reader: No data available")
