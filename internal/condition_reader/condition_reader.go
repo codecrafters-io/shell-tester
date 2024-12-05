@@ -7,7 +7,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/codecrafters-io/shell-tester/internal/async_bytewise_reader"
+	"github.com/codecrafters-io/shell-tester/internal/async_reader"
 )
 
 var ErrConditionNotMet = errors.New("condition not met")
@@ -22,12 +22,12 @@ func debugLog(format string, args ...interface{}) {
 
 // ConditionReader wraps an io.Reader and provides methods to read until a condition is met
 type ConditionReader struct {
-	bytewiseReader *async_bytewise_reader.AsyncBytewiseReader
+	bytewiseReader *async_reader.AsyncReader
 }
 
 func NewConditionReader(reader io.Reader) ConditionReader {
 	return ConditionReader{
-		bytewiseReader: async_bytewise_reader.New(bufio.NewReader(reader)),
+		bytewiseReader: async_reader.New(bufio.NewReader(reader)),
 	}
 }
 
@@ -37,12 +37,12 @@ func (t *ConditionReader) ReadUntilCondition(condition func([]byte) bool) ([]byt
 
 func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) bool, timeout time.Duration) ([]byte, error) {
 	deadline := time.Now().Add(timeout)
-	var readBytes []byte
+	var accumulatedReadBytes []byte
 
 	for !time.Now().After(deadline) {
-		readByte, err := t.bytewiseReader.ReadByte()
+		readBytes, err := t.bytewiseReader.ReadBytes()
 		if err != nil {
-			if errors.Is(err, async_bytewise_reader.ErrNoData) {
+			if errors.Is(err, async_reader.ErrNoData) {
 				debugLog("condition_reader: No data available")
 
 				// Since no data was available, let's avoid a busy loop
@@ -55,16 +55,16 @@ func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) boo
 			}
 		}
 
-		debugLog("condition_reader: readByte: %q", string(readByte))
-		readBytes = append(readBytes, readByte)
+		debugLog("condition_reader: readBytes: %q", string(readBytes))
+		accumulatedReadBytes = append(accumulatedReadBytes, readBytes...)
 
 		// If the condition is met, we can return early. Else the loop runs again
-		if condition(readBytes) {
-			return readBytes, nil
+		if condition(accumulatedReadBytes) {
+			return accumulatedReadBytes, nil
 		}
 	}
 
-	return readBytes, ErrConditionNotMet
+	return accumulatedReadBytes, ErrConditionNotMet
 }
 
 func (t *ConditionReader) ReadUntilTimeout(timeout time.Duration) ([]byte, error) {
