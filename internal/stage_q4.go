@@ -28,9 +28,9 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	L := random.RandomElementsFromArray(LARGE_WORDS, 6)
 	filePaths := []string{
-		path.Join(randomDir, fmt.Sprintf(`'f %d'`, random.RandomInt(1, 100))),
-		path.Join(randomDir, fmt.Sprintf(`'f  \%d'`, random.RandomInt(1, 100))),
-		path.Join(randomDir, fmt.Sprintf(`'f \%d\'`, random.RandomInt(1, 100))),
+		path.Join(randomDir, fmt.Sprintf(`'f %d'`, getUniqueRandomIntegerFileNames(1, 100, 3)[0])),
+		path.Join(randomDir, fmt.Sprintf(`'f  \%d'`, getUniqueRandomIntegerFileNames(1, 100, 3)[1])),
+		path.Join(randomDir, fmt.Sprintf(`'f \%d\'`, getUniqueRandomIntegerFileNames(1, 100, 3)[2])),
 	}
 	fileContents := []string{
 		strings.Join(random.RandomWords(2), " ") + ".",
