@@ -162,8 +162,6 @@ func (b *ShellExecutable) ReadBytesUntil(condition func([]byte) bool) ([]byte, e
 		return readBytes, wrapReaderError(err)
 	}
 
-	b.vt.Write(readBytes)
-
 	return readBytes, nil
 }
 
@@ -172,8 +170,6 @@ func (b *ShellExecutable) ReadBytesUntilTimeout(timeout time.Duration) ([]byte, 
 	if err != nil {
 		return readBytes, wrapReaderError(err)
 	}
-
-	b.vt.Write(readBytes)
 
 	return readBytes, nil
 }
@@ -239,8 +235,6 @@ func (b *ShellExecutable) writeAndReadReflection(command string) error {
 	if err != nil {
 		return fmt.Errorf("CodeCrafters internal error. Expected %q when writing to pty, but got %q", expectedReflection, string(readBytes))
 	}
-
-	b.vt.Write(readBytes)
 
 	return nil
 }
