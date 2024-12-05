@@ -7,36 +7,36 @@ import (
 
 const VT_SENTINEL_CHARACTER = "."
 
-type virtualTerminal struct {
+type VirtualTerminal struct {
 	vt   *vterm.VTerm
 	rows int
 	cols int
 }
 
-func NewStandardVT() *virtualTerminal {
+func NewStandardVT() *VirtualTerminal {
 	return NewCustomVT(12, 80)
 }
 
-func NewCustomVT(rows, cols int) *virtualTerminal {
-	return &virtualTerminal{
+func NewCustomVT(rows, cols int) *VirtualTerminal {
+	return &VirtualTerminal{
 		vt:   vterm.New(rows, cols),
 		rows: rows,
 		cols: cols,
 	}
 }
 
-func (vt *virtualTerminal) Close() {
+func (vt *VirtualTerminal) Close() {
 	vt.vt.Free()
 }
 
-func (vt *virtualTerminal) Write(p []byte) (n int, err error) {
+func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 	if len(p) == 0 {
 		return 0, nil
 	}
 	return vt.vt.Write(p)
 }
 
-func (vt *virtualTerminal) GetScreenState(retainColors bool) [][]string {
+func (vt *VirtualTerminal) GetScreenState(retainColors bool) [][]string {
 	screenState := make([][]string, vt.rows)
 	for i := 0; i < vt.rows; i++ {
 		screenState[i] = make([]string, vt.cols)
@@ -59,7 +59,7 @@ func (vt *virtualTerminal) GetScreenState(retainColors bool) [][]string {
 	return screenState
 }
 
-func (vt *virtualTerminal) GetRow(row int, retainColors bool) []string {
+func (vt *VirtualTerminal) GetRow(row int, retainColors bool) []string {
 	screenState := make([]string, vt.cols)
 	for j := 0; j < vt.cols; j++ {
 		c := vt.vt.CellAt(row, j)
@@ -79,7 +79,7 @@ func (vt *virtualTerminal) GetRow(row int, retainColors bool) []string {
 	return screenState
 }
 
-func (vt *virtualTerminal) GetRowsTillEnd(startingRow int, retainColors bool) [][]string {
+func (vt *VirtualTerminal) GetRowsTillEnd(startingRow int, retainColors bool) [][]string {
 	screenState := make([][]string, vt.rows)
 	for i := startingRow; i < vt.rows; i++ {
 		screenState[i] = make([]string, vt.cols)

@@ -38,7 +38,7 @@ type ShellExecutable struct {
 	cmd       *exec.Cmd
 	pty       *os.File
 	ptyReader condition_reader.ConditionReader
-	vt        *virtualTerminal
+	vt        *VirtualTerminal
 }
 
 func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellExecutable {
