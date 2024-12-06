@@ -7,6 +7,7 @@ import (
 
 const VT_SENTINEL_CHARACTER = "."
 
+// TODO: See if we can remove this wrapper entirely, and only add helpers to fetch rows/data from the vterm instance directly
 type VirtualTerminal struct {
 	vt   *vterm.VTerm
 	rows int
@@ -36,6 +37,7 @@ func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 	return vt.vt.Write(p)
 }
 
+// TODO: Remove all references to colors until we actually use it
 func (vt *VirtualTerminal) GetScreenState(retainColors bool) [][]string {
 	screenState := make([][]string, vt.rows)
 	for i := 0; i < vt.rows; i++ {

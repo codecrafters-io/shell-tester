@@ -86,67 +86,6 @@ func (b *ShellExecutable) GetScreenState() [][]string {
 	return b.vt.GetScreenState(false)
 }
 
-func (b *ShellExecutable) GetScreenStateSingleRow(row int, retainColors bool) []string {
-	return b.vt.GetRow(row, retainColors)
-}
-
-func (b *ShellExecutable) GetScreenStateForLogging() string {
-	fullScreenState := b.GetScreenState()
-	screenStateString := ""
-	for _, row := range fullScreenState {
-		var filteredRow []string
-		for _, cell := range row {
-			if cell != "." {
-				filteredRow = append(filteredRow, cell)
-			}
-		}
-		if len(filteredRow) == 0 {
-			continue
-		}
-		screenStateString += strings.Join(filteredRow, "")
-		screenStateString += "\n"
-	}
-	return screenStateString
-}
-
-func (b *ShellExecutable) GetRowsTillEndForLogging(startingRow int) string {
-	fullScreenState := b.vt.GetRowsTillEnd(startingRow, false)
-	screenStateString := ""
-	for _, row := range fullScreenState {
-		var filteredRow []string
-		for _, cell := range row {
-			if cell != "." {
-				filteredRow = append(filteredRow, cell)
-			}
-		}
-		if len(filteredRow) == 0 {
-			continue
-		}
-		screenStateString += strings.Join(filteredRow, "")
-		screenStateString += "\n"
-	}
-	return screenStateString
-}
-
-func (b *ShellExecutable) GetScreenStateSingleRowForLogging(row int, retainColors bool) string {
-	screenStateSingleRow := b.GetScreenStateSingleRow(row, retainColors)
-
-	screenStateString := ""
-	var filteredRow []string
-	for _, cell := range screenStateSingleRow {
-		if cell != "." {
-			filteredRow = append(filteredRow, cell)
-		}
-	}
-	if len(filteredRow) == 0 {
-		return ""
-	}
-	screenStateString += strings.Join(filteredRow, "")
-	screenStateString += "\n"
-
-	return screenStateString
-}
-
 // TODO: Do tests cases _need_ to decide when to log output and when to not? Can we just always log from within ReadBytes...?
 
 // TODO: This is used to access programLogger, figure out where to use it
@@ -154,7 +93,7 @@ func (b *ShellExecutable) LogOutput(output []byte) {
 	b.programLogger.Plainln(string(output))
 }
 
-func (b *ShellExecutable) ReadUntil(condition func([]byte) bool) error {
+func (b *ShellExecutable) ReadUntil(condition func() bool) error {
 	_, err := b.ptyReader.ReadUntilCondition(condition)
 	if err != nil {
 		return wrapReaderError(err)
@@ -175,7 +114,7 @@ func (b *ShellExecutable) ReadUntilTimeout(timeout time.Duration) error {
 func (b *ShellExecutable) SendCommand(command string) error {
 	b.logger.Infof("> %s", command)
 
-	if err := b.writeAndReadReflection(command); err != nil {
+	if _, err := b.pty.Write([]byte(command + "\n")); err != nil {
 		return err
 	}
 
@@ -217,24 +156,6 @@ func (b *ShellExecutable) ExitCode() int {
 		return -1
 	}
 	return exitCode
-}
-
-func (b *ShellExecutable) writeAndReadReflection(command string) error {
-	b.pty.Write([]byte(command + "\n"))
-
-	expectedReflection := command + "\r\n"
-	var readBytes []byte
-
-	reflectionCondition := func(buf []byte) bool {
-		return string(buf) == expectedReflection
-	}
-
-	readBytes, err := b.ptyReader.ReadUntilCondition(reflectionCondition)
-	if err != nil {
-		return fmt.Errorf("CodeCrafters internal error. Expected %q when writing to pty, but got %q", expectedReflection, string(readBytes))
-	}
-
-	return nil
 }
 
 func (b *ShellExecutable) getInitialLogLine(args ...string) string {
