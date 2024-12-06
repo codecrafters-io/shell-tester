@@ -40,11 +40,6 @@ func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) boo
 	deadline := time.Now().Add(timeout)
 	var accumulatedReadBytes []byte
 
-	if len(t.nonAccumulatedBuffer) > 0 {
-		accumulatedReadBytes = append(accumulatedReadBytes, t.nonAccumulatedBuffer...)
-		t.nonAccumulatedBuffer = []byte{}
-	}
-
 	for !time.Now().After(deadline) {
 		readBytes, err := t.asyncReader.ReadBytes()
 		if err != nil {
@@ -61,17 +56,21 @@ func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) boo
 			}
 		}
 
-		// There might be a situation where we read more than the string `S` that satisfies the condition.
-		// For that reason, we'll accumulate byte by byte and make sure we don't overshoot the condition.
 		debugLog("condition_reader: readBytes: %q", string(readBytes))
 
-		for i, byte := range readBytes {
+		// Non-accumulated buffer can also suffer from the same problem, so we'll append it to the readBytes
+		// And process that too byte by byte
+		totalBytesToProcess := append(t.nonAccumulatedBuffer, readBytes...)
+
+		// There might be a situation where we read more than the string `S` that satisfies the condition.
+		// For that reason, we'll accumulate byte by byte and make sure we don't overshoot the condition.
+		for i, byte := range totalBytesToProcess {
 			accumulatedReadBytes = append(accumulatedReadBytes, byte)
 			// If the condition is met, we can return early. Else the loop runs again
 			if condition(accumulatedReadBytes) {
 				// Of the complete string `S`, if S[:i] satisfies the conditon, we can't discard the bytes after `i`
 				// Then our next line's readUntilCondition will miss that starting bytes and fail
-				t.nonAccumulatedBuffer = readBytes[i+1:]
+				t.nonAccumulatedBuffer = totalBytesToProcess[i+1:]
 
 				return accumulatedReadBytes, nil
 			}
