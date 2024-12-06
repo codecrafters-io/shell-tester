@@ -29,7 +29,7 @@ func NewSilentPromptAssertion(rowIndex int, expectedPrompt string) PromptAsserti
 }
 
 func (t PromptAssertion) Run() error {
-	rawRow := t.screenAsserter.shell.GetScreenState()[t.rowIndex]
+	rawRow := t.screenAsserter.Shell.GetScreenState()[t.rowIndex]
 	cleanedRow := buildCleanedRow(rawRow)
 
 	if !strings.EqualFold(cleanedRow, t.expectedPrompt) {
@@ -37,4 +37,9 @@ func (t PromptAssertion) Run() error {
 	}
 
 	return nil
+}
+
+func (t PromptAssertion) WrappedRun() bool {
+	// True if the prompt assertion is a success
+	return t.Run() == nil
 }
