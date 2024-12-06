@@ -39,7 +39,6 @@ type ShellExecutable struct {
 	pty       *os.File
 	ptyReader condition_reader.ConditionReader
 	vt        *VirtualTerminal
-	termIO    *TermIO
 }
 
 func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellExecutable {
@@ -78,8 +77,7 @@ func (b *ShellExecutable) Start(args ...string) error {
 	b.cmd = cmd
 	b.pty = pty
 	b.vt = NewStandardVT()
-	b.termIO = NewTermIO(b.vt, b.pty)
-	b.ptyReader = condition_reader.NewConditionReader(b.termIO)
+	b.ptyReader = condition_reader.NewConditionReader(io.TeeReader(b.pty, b.vt))
 	// defer b.vt.Close() // ToDo ??
 
 	return nil
