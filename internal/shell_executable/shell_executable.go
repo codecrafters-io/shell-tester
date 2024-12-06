@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/exec"
 	"path"
-	"regexp"
 	"strings"
 	"syscall"
 	"time"
@@ -150,26 +149,27 @@ func (b *ShellExecutable) GetScreenStateSingleRowForLogging(row int, retainColor
 
 // TODO: Do tests cases _need_ to decide when to log output and when to not? Can we just always log from within ReadBytes...?
 
+// TODO: This can't be here anymore, likely has to be in assertion, or the "composite asserter" class
 func (b *ShellExecutable) LogOutput(output []byte) {
 	b.programLogger.Plainln(string(output))
 }
 
-func (b *ShellExecutable) ReadBytesUntil(condition func([]byte) bool) ([]byte, error) {
-	readBytes, err := b.ptyReader.ReadUntilCondition(condition)
+func (b *ShellExecutable) ReadUntil(condition func([]byte) bool) error {
+	_, err := b.ptyReader.ReadUntilCondition(condition)
 	if err != nil {
-		return readBytes, wrapReaderError(err)
+		return wrapReaderError(err)
 	}
 
-	return readBytes, nil
+	return nil
 }
 
-func (b *ShellExecutable) ReadBytesUntilTimeout(timeout time.Duration) ([]byte, error) {
-	readBytes, err := b.ptyReader.ReadUntilTimeout(timeout)
+func (b *ShellExecutable) ReadUntilTimeout(timeout time.Duration) error {
+	_, err := b.ptyReader.ReadUntilTimeout(timeout)
 	if err != nil {
-		return readBytes, wrapReaderError(err)
+		return wrapReaderError(err)
 	}
 
-	return readBytes, nil
+	return nil
 }
 
 func (b *ShellExecutable) SendCommand(command string) error {
@@ -254,15 +254,6 @@ func (b *ShellExecutable) getInitialLogLine(args ...string) string {
 	}
 
 	return log
-}
-
-func StripANSI(data []byte) []byte {
-	// https://github.com/acarl005/stripansi/blob/master/stripansi.go
-	const ansi = "[\u001B\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[a-zA-Z\\d]*)*)?\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PRZcf-ntqry=><~]))"
-
-	var re = regexp.MustCompile(ansi)
-
-	return re.ReplaceAll(data, []byte(""))
 }
 
 func wrapReaderError(readerErr error) error {
