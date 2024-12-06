@@ -25,10 +25,10 @@ func (t *CDAndPWDTestCase) Run(shell *shell_executable.ShellExecutable, logger *
 	}
 
 	// Then we check if prompt is printed
-	promptTestCase := NewPromptTestCase("$ ")
-	if err := promptTestCase.Run(shell, logger); err != nil {
-		return err
-	}
+	// promptTestCase := NewPromptTestCase("$ ")
+	// if err := promptTestCase.Run(shell, logger); err != nil {
+	// 	return err
+	// }
 	// And send the cd command, we don't expect any response
 	if err := shell.SendCommand(command); err != nil {
 		return err

@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/exec"
 	"path"
-	"regexp"
 	"strings"
 	"syscall"
 	"time"
@@ -39,7 +38,6 @@ type ShellExecutable struct {
 	pty       *os.File
 	ptyReader condition_reader.ConditionReader
 	vt        *VirtualTerminal
-	termIO    *TermIO
 }
 
 func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellExecutable {
@@ -78,106 +76,45 @@ func (b *ShellExecutable) Start(args ...string) error {
 	b.cmd = cmd
 	b.pty = pty
 	b.vt = NewStandardVT()
-	b.termIO = NewTermIO(b.vt, b.pty)
-	b.ptyReader = condition_reader.NewConditionReader(b.termIO)
+	b.ptyReader = condition_reader.NewConditionReader(io.TeeReader(b.pty, b.vt))
 	// defer b.vt.Close() // ToDo ??
 
 	return nil
 }
 
-func (b *ShellExecutable) GetScreenState(retainColors bool) [][]string {
-	return b.vt.GetScreenState(retainColors)
-}
-
-func (b *ShellExecutable) GetScreenStateSingleRow(row int, retainColors bool) []string {
-	return b.vt.GetRow(row, retainColors)
-}
-
-func (b *ShellExecutable) GetScreenStateForLogging(retainColors bool) string {
-	fullScreenState := b.GetScreenState(retainColors)
-	screenStateString := ""
-	for _, row := range fullScreenState {
-		var filteredRow []string
-		for _, cell := range row {
-			if cell != "." {
-				filteredRow = append(filteredRow, cell)
-			}
-		}
-		if len(filteredRow) == 0 {
-			continue
-		}
-		screenStateString += strings.Join(filteredRow, "")
-		screenStateString += "\n"
-	}
-	return screenStateString
-}
-
-func (b *ShellExecutable) GetRowsTillEndForLogging(startingRow int, retainColors bool) string {
-	fullScreenState := b.vt.GetRowsTillEnd(startingRow, retainColors)
-	screenStateString := ""
-	for _, row := range fullScreenState {
-		var filteredRow []string
-		for _, cell := range row {
-			if cell != "." {
-				filteredRow = append(filteredRow, cell)
-			}
-		}
-		if len(filteredRow) == 0 {
-			continue
-		}
-		screenStateString += strings.Join(filteredRow, "")
-		screenStateString += "\n"
-	}
-	return screenStateString
-}
-
-func (b *ShellExecutable) GetScreenStateSingleRowForLogging(row int, retainColors bool) string {
-	screenStateSingleRow := b.GetScreenStateSingleRow(row, retainColors)
-
-	screenStateString := ""
-	var filteredRow []string
-	for _, cell := range screenStateSingleRow {
-		if cell != "." {
-			filteredRow = append(filteredRow, cell)
-		}
-	}
-	if len(filteredRow) == 0 {
-		return ""
-	}
-	screenStateString += strings.Join(filteredRow, "")
-	screenStateString += "\n"
-
-	return screenStateString
+func (b *ShellExecutable) GetScreenState() [][]string {
+	return b.vt.GetScreenState(false)
 }
 
 // TODO: Do tests cases _need_ to decide when to log output and when to not? Can we just always log from within ReadBytes...?
 
+// TODO: This is used to access programLogger, figure out where to use it
 func (b *ShellExecutable) LogOutput(output []byte) {
 	b.programLogger.Plainln(string(output))
 }
 
-func (b *ShellExecutable) ReadBytesUntil(condition func([]byte) bool) ([]byte, error) {
-	readBytes, err := b.ptyReader.ReadUntilCondition(condition)
+func (b *ShellExecutable) ReadUntil(condition func() bool) error {
+	err := b.ptyReader.ReadUntilCondition(condition)
 	if err != nil {
-		return readBytes, wrapReaderError(err)
+		return wrapReaderError(err)
 	}
 
-	return readBytes, nil
+	return nil
 }
 
-func (b *ShellExecutable) ReadBytesUntilTimeout(timeout time.Duration) ([]byte, error) {
-	readBytes, err := b.ptyReader.ReadUntilTimeout(timeout)
+func (b *ShellExecutable) ReadUntilTimeout(timeout time.Duration) error {
+	err := b.ptyReader.ReadUntilTimeout(timeout)
 	if err != nil {
-		return readBytes, wrapReaderError(err)
+		return wrapReaderError(err)
 	}
 
-	return readBytes, nil
+	return nil
 }
 
 func (b *ShellExecutable) SendCommand(command string) error {
 	b.logger.Infof("> %s", command)
 
-	if err := b.writeAndReadReflection(command); err != nil {
+	if _, err := b.pty.Write([]byte(command + "\n")); err != nil {
 		return err
 	}
 
@@ -221,24 +158,6 @@ func (b *ShellExecutable) ExitCode() int {
 	return exitCode
 }
 
-func (b *ShellExecutable) writeAndReadReflection(command string) error {
-	b.pty.Write([]byte(command + "\n"))
-
-	expectedReflection := command + "\r\n"
-	var readBytes []byte
-
-	reflectionCondition := func(buf []byte) bool {
-		return string(buf) == expectedReflection
-	}
-
-	readBytes, err := b.ptyReader.ReadUntilCondition(reflectionCondition)
-	if err != nil {
-		return fmt.Errorf("CodeCrafters internal error. Expected %q when writing to pty, but got %q", expectedReflection, string(readBytes))
-	}
-
-	return nil
-}
-
 func (b *ShellExecutable) getInitialLogLine(args ...string) string {
 	var log string
 
@@ -256,15 +175,6 @@ func (b *ShellExecutable) getInitialLogLine(args ...string) string {
 	}
 
 	return log
-}
-
-func StripANSI(data []byte) []byte {
-	// https://github.com/acarl005/stripansi/blob/master/stripansi.go
-	const ansi = "[\u001B\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[a-zA-Z\\d]*)*)?\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PRZcf-ntqry=><~]))"
-
-	var re = regexp.MustCompile(ansi)
-
-	return re.ReplaceAll(data, []byte(""))
 }
 
 func wrapReaderError(readerErr error) error {
