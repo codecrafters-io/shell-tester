@@ -94,7 +94,7 @@ func (b *ShellExecutable) LogOutput(output []byte) {
 }
 
 func (b *ShellExecutable) ReadUntil(condition func() bool) error {
-	_, err := b.ptyReader.ReadUntilCondition(condition)
+	err := b.ptyReader.ReadUntilCondition(condition)
 	if err != nil {
 		return wrapReaderError(err)
 	}
@@ -103,7 +103,7 @@ func (b *ShellExecutable) ReadUntil(condition func() bool) error {
 }
 
 func (b *ShellExecutable) ReadUntilTimeout(timeout time.Duration) error {
-	_, err := b.ptyReader.ReadUntilTimeout(timeout)
+	err := b.ptyReader.ReadUntilTimeout(timeout)
 	if err != nil {
 		return wrapReaderError(err)
 	}
