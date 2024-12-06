@@ -8,7 +8,7 @@ import (
 
 var ErrNoData = errors.New("no data available")
 
-// AsyncBytewiseReader : Inspired by https://benjamincongdon.me/blog/2020/04/23/Cancelable-Reads-in-Go/
+// AsyncReader : Inspired by https://benjamincongdon.me/blog/2020/04/23/Cancelable-Reads-in-Go/
 // We don't require a BytewiseReader anymore, but we still require a cancellable AsyncReader
 type AsyncReader struct {
 	// data is used to send data between the reader goroutine and ReadByte calls
