@@ -55,12 +55,17 @@ func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) boo
 			}
 		}
 
+		// There might be a situation where we read more than the string `S` that satisfies the condition.
+		// For that reason, we'll accumulate byte by byte and make sure we don't overshoot the condition.
 		debugLog("condition_reader: readBytes: %q", string(readBytes))
-		accumulatedReadBytes = append(accumulatedReadBytes, readBytes...)
 
-		// If the condition is met, we can return early. Else the loop runs again
-		if condition(accumulatedReadBytes) {
-			return accumulatedReadBytes, nil
+		for _, byte := range readBytes {
+			accumulatedReadBytes = append(accumulatedReadBytes, byte)
+
+			// If the condition is met, we can return early. Else the loop runs again
+			if condition(accumulatedReadBytes) {
+				return accumulatedReadBytes, nil
+			}
 		}
 	}
 
