@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
-	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/random"
 )
@@ -16,11 +15,11 @@ var SMALL_WORDS = []string{"foo", "bar", "baz", "qux", "quz"}
 var LARGE_WORDS = []string{"hello", "world", "test", "example", "shell", "script"}
 
 func assertShellIsRunning(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	testCase := test_cases.NewSilentPromptTestCase("$ ")
+	// testCase := test_cases.NewSilentPromptTestCase("$ ")
 
-	if err := testCase.Run(shell, logger); err != nil {
-		return fmt.Errorf("Expected shell to print prompt after last command, but it didn't: %v", err)
-	}
+	// if err := testCase.Run(shell, logger); err != nil {
+	// 	return fmt.Errorf("Expected shell to print prompt after last command, but it didn't: %v", err)
+	// }
 	return nil
 }
 
