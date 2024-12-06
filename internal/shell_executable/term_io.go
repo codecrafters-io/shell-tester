@@ -1,6 +1,14 @@
 package shell_executable
 
-import "os"
+import (
+	"io"
+	"os"
+)
+
+// ToDo Replace this module with the TeeReader from the stdlib
+func TeeReader(reader io.Reader, writer io.Writer) io.Reader {
+	return io.TeeReader(reader, writer)
+}
 
 // TermIO represents a terminal input/output pair where
 // reading occurs from the pseudo-terminal (pty) and
