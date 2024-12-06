@@ -1,12 +1,6 @@
 package test_cases
 
 import (
-	"bytes"
-	"errors"
-	"fmt"
-	"regexp"
-	"time"
-
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
 )

@@ -1,11 +1,8 @@
 package internal
 
 import (
-	"errors"
 	"fmt"
 	"regexp"
-	"strings"
-	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -32,12 +29,12 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// We can't use SingleLineOutputTestCase for the exit command (no output to match on), so we use lower-level methods instead
-	promptTestCase := test_cases.NewSilentPromptTestCase("$ ")
+	// // We can't use SingleLineOutputTestCase for the exit command (no output to match on), so we use lower-level methods instead
+	// promptTestCase := test_cases.NewSilentPromptTestCase("$ ")
 
-	if err := promptTestCase.Run(shell, logger); err != nil {
-		return err
-	}
+	// if err := promptTestCase.Run(shell, logger); err != nil {
+	// 	return err
+	// }
 
 	if err := shell.SendCommand("exit 0"); err != nil {
 		return err

@@ -1,9 +1,6 @@
 package test_cases
 
 import (
-	"fmt"
-	"time"
-
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
