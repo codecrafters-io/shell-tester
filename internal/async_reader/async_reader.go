@@ -20,6 +20,9 @@ type AsyncReader struct {
 
 	// reader is the underlying reader that this wrapper will read from
 	reader io.Reader
+
+	// unreadBuffer is used to store unprocessed bytes
+	unreadBuffer []byte
 }
 
 func New(reader io.Reader) *AsyncReader {
@@ -39,14 +42,31 @@ func (r *AsyncReader) ReadBytes() ([]byte, error) {
 	select {
 	// We're checking whether a byte is immediately available, so the timeout can be super low
 	case <-time.After(1 * time.Millisecond):
+		if len(r.unreadBuffer) > 0 {
+			readBytes := r.unreadBuffer
+			r.unreadBuffer = []byte{}
+			return readBytes, nil
+		}
+
 		return nil, ErrNoData
 	case readBytes, ok := <-r.data:
 		if !ok {
 			return nil, r.err
 		}
 
+		if len(r.unreadBuffer) > 0 {
+			readBytes = append(r.unreadBuffer, readBytes...)
+			r.unreadBuffer = []byte{}
+		}
+
 		return readBytes, nil
 	}
+}
+
+// Unread will push the unprocessed bytes into a buffer inside this AsyncReader
+// This buffer content will be returned in the next ReadBytes call
+func (r *AsyncReader) Unread(data []byte) {
+	r.unreadBuffer = append(r.unreadBuffer, data...)
 }
 
 // Keeps reading forever until an error or EOF
