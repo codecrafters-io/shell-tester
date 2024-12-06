@@ -9,17 +9,30 @@ import (
 	"github.com/fatih/color"
 )
 
-type ScreenStateAssertion struct {
+const VT_SENTINEL_CHARACTER = "."
+
+// SingleLineScreenStateAssertion are implicitly constrained to a single line of output
+// Our ScreenState is composed of multiple lines, so we need to assert on each line individually
+// This SingleLineScreenStateAssertion will assert only on a single given row (rowIndex)
+// Ideally, we want to be able to assert using the expectedOutput string, a == b matching
+// But, if that is not possible, we can use fallbackPatterns to match against multiple regexes
+// And in the failure case, we want to show the expectedPatternExplanation to the user
+type SingleLineScreenStateAssertion struct {
+	rowIndex                   int
 	expectedOutput             string
 	fallbackPatterns           []*regexp.Regexp
 	expectedPatternExplanation string
 }
 
-func NewScreenStateAssertion(expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string) ScreenStateAssertion {
-	return ScreenStateAssertion{expectedOutput: expectedOutput, fallbackPatterns: fallbackPatterns, expectedPatternExplanation: expectedPatternExplanation}
+func NewSingleLineScreenStateAssertion(rowIndex int, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string) SingleLineScreenStateAssertion {
+	return SingleLineScreenStateAssertion{rowIndex: rowIndex, expectedOutput: expectedOutput, fallbackPatterns: fallbackPatterns, expectedPatternExplanation: expectedPatternExplanation}
 }
 
-func (a ScreenStateAssertion) Run(output string, logger *logger.Logger) error {
+// ToDo: screenState as its own type and wrap index / cursors inside it
+func (a SingleLineScreenStateAssertion) Run(screenState [][]string, logger *logger.Logger) error {
+	rawRow := screenState[a.rowIndex]
+	cleanedRow := buildCleanedRow(rawRow)
+
 	if a.fallbackPatterns != nil && a.expectedPatternExplanation == "" {
 		// expectedPatternExplanation is required for the error message on the FallbackPatterns path
 		panic("CodeCrafters Internal Error: expectedPatternExplanation is empty on FallbackPatterns path")
@@ -30,7 +43,7 @@ func (a ScreenStateAssertion) Run(output string, logger *logger.Logger) error {
 	// For each fallback pattern, check if the output matches
 	// If it does, we break out of the loop and don't check for anything else, just return nil
 	for _, pattern := range a.fallbackPatterns {
-		if pattern.Match([]byte(output)) {
+		if pattern.Match([]byte(cleanedRow)) {
 			regexPatternMatch = true
 			break
 		}
@@ -40,13 +53,13 @@ func (a ScreenStateAssertion) Run(output string, logger *logger.Logger) error {
 		// No regex match till now, if expectedOutput is nil, we need to return an error
 		// On this path, expectedPatternExplanation is required for the error message
 		if a.expectedOutput == "" {
-			detailedErrorMessage := BuildColoredErrorMessage(a.expectedPatternExplanation, output)
+			detailedErrorMessage := BuildColoredErrorMessage(a.expectedPatternExplanation, cleanedRow)
 			logger.Infof(detailedErrorMessage)
 			return fmt.Errorf("Received output does not match expectation.")
 		} else {
 			// ExpectedOutput is not nil, we can use it for exact string comparison
-			if output != a.expectedOutput {
-				detailedErrorMessage := BuildColoredErrorMessage(a.expectedOutput, output)
+			if cleanedRow != a.expectedOutput {
+				detailedErrorMessage := BuildColoredErrorMessage(a.expectedOutput, cleanedRow)
 				logger.Infof(detailedErrorMessage)
 				return fmt.Errorf("Received output does not match expectation.")
 			}
@@ -78,6 +91,17 @@ func removeNonPrintableCharacters(output string) string {
 			result += string(r)
 		} else {
 			result += "�" // U+FFFD
+		}
+	}
+	return result
+}
+
+// ToDo: move this to its own package along with all vterm interface code
+func buildCleanedRow(row []string) string {
+	result := ""
+	for _, cell := range row {
+		if cell != VT_SENTINEL_CHARACTER {
+			result += cell
 		}
 	}
 	return result
