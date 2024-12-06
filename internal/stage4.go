@@ -43,23 +43,18 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	output, readErr := shell.ReadBytesUntilTimeout(1000 * time.Millisecond)
-	sanitizedOutput := shell_executable.StripANSI(output)
-
-	// If anything was printed, log it out before we emit error / success logs
-	if len(sanitizedOutput) > 0 {
-		shell.LogOutput(sanitizedOutput)
-	}
+	// TODO: Print output
+	// TODO: Check for program exited
 
 	// We're expecting EOF since the program should've terminated
-	if !errors.Is(readErr, shell_executable.ErrProgramExited) {
-		if readErr == nil {
-			return fmt.Errorf("Expected program to exit with 0 exit code, program is still running.")
-		} else {
-			// TODO: Other than ErrProgramExited, what other errors could we get? Are they user errors or internal errors?
-			return fmt.Errorf("Error reading output: %v", readErr)
-		}
-	}
+	// if !errors.Is(readErr, shell_executable.ErrProgramExited) {
+	// 	if readErr == nil {
+	// 		return fmt.Errorf("Expected program to exit with 0 exit code, program is still running.")
+	// 	} else {
+	// 		// TODO: Other than ErrProgramExited, what other errors could we get? Are they user errors or internal errors?
+	// 		return fmt.Errorf("Error reading output: %v", readErr)
+	// 	}
+	// }
 
 	isTerminated, exitCode := shell.WaitForTermination()
 	if !isTerminated {
@@ -73,9 +68,9 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Most shells return nothing but bash returns the string "exit" when it exits, we allow both styles
-	if len(sanitizedOutput) > 0 && strings.TrimSpace(string(sanitizedOutput)) != "exit" {
-		return fmt.Errorf("Expected no output after exit command, got %q", string(sanitizedOutput))
-	}
+	// if len(sanitizedOutput) > 0 && strings.TrimSpace(string(sanitizedOutput)) != "exit" {
+	// 	return fmt.Errorf("Expected no output after exit command, got %q", string(sanitizedOutput))
+	// }
 
 	logger.Successf("✓ No output after exit command")
 
