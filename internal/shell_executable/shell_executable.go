@@ -82,16 +82,16 @@ func (b *ShellExecutable) Start(args ...string) error {
 	return nil
 }
 
-func (b *ShellExecutable) GetScreenState(retainColors bool) [][]string {
-	return b.vt.GetScreenState(retainColors)
+func (b *ShellExecutable) GetScreenState() [][]string {
+	return b.vt.GetScreenState(false)
 }
 
 func (b *ShellExecutable) GetScreenStateSingleRow(row int, retainColors bool) []string {
 	return b.vt.GetRow(row, retainColors)
 }
 
-func (b *ShellExecutable) GetScreenStateForLogging(retainColors bool) string {
-	fullScreenState := b.GetScreenState(retainColors)
+func (b *ShellExecutable) GetScreenStateForLogging() string {
+	fullScreenState := b.GetScreenState()
 	screenStateString := ""
 	for _, row := range fullScreenState {
 		var filteredRow []string
@@ -109,8 +109,8 @@ func (b *ShellExecutable) GetScreenStateForLogging(retainColors bool) string {
 	return screenStateString
 }
 
-func (b *ShellExecutable) GetRowsTillEndForLogging(startingRow int, retainColors bool) string {
-	fullScreenState := b.vt.GetRowsTillEnd(startingRow, retainColors)
+func (b *ShellExecutable) GetRowsTillEndForLogging(startingRow int) string {
+	fullScreenState := b.vt.GetRowsTillEnd(startingRow, false)
 	screenStateString := ""
 	for _, row := range fullScreenState {
 		var filteredRow []string
@@ -149,7 +149,7 @@ func (b *ShellExecutable) GetScreenStateSingleRowForLogging(row int, retainColor
 
 // TODO: Do tests cases _need_ to decide when to log output and when to not? Can we just always log from within ReadBytes...?
 
-// TODO: This can't be here anymore, likely has to be in assertion, or the "composite asserter" class
+// TODO: This is used to access programLogger, figure out where to use it
 func (b *ShellExecutable) LogOutput(output []byte) {
 	b.programLogger.Plainln(string(output))
 }
