@@ -22,8 +22,7 @@ func debugLog(format string, args ...interface{}) {
 
 // ConditionReader wraps an io.Reader and provides methods to read until a condition is met
 type ConditionReader struct {
-	asyncReader          *async_reader.AsyncReader
-	nonAccumulatedBuffer []byte
+	asyncReader *async_reader.AsyncReader
 }
 
 func NewConditionReader(reader io.Reader) ConditionReader {
@@ -58,19 +57,15 @@ func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) boo
 
 		debugLog("condition_reader: readBytes: %q", string(readBytes))
 
-		// Non-accumulated buffer can also suffer from the same problem, so we'll append it to the readBytes
-		// And process that too byte by byte
-		totalBytesToProcess := append(t.nonAccumulatedBuffer, readBytes...)
-
 		// There might be a situation where we read more than the string `S` that satisfies the condition.
 		// For that reason, we'll accumulate byte by byte and make sure we don't overshoot the condition.
-		for i, byte := range totalBytesToProcess {
+		for i, byte := range readBytes {
 			accumulatedReadBytes = append(accumulatedReadBytes, byte)
 			// If the condition is met, we can return early. Else the loop runs again
 			if condition(accumulatedReadBytes) {
 				// Of the complete string `S`, if S[:i] satisfies the conditon, we can't discard the bytes after `i`
 				// Then our next line's readUntilCondition will miss that starting bytes and fail
-				t.nonAccumulatedBuffer = totalBytesToProcess[i+1:]
+				t.asyncReader.Unread(readBytes[i+1:])
 
 				return accumulatedReadBytes, nil
 			}
