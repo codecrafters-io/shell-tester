@@ -38,6 +38,8 @@ type ShellExecutable struct {
 	cmd       *exec.Cmd
 	pty       *os.File
 	ptyReader condition_reader.ConditionReader
+	vt        *VirtualTerminal
+	termIO    *TermIO
 }
 
 func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellExecutable {
@@ -63,7 +65,7 @@ func (b *ShellExecutable) Start(args ...string) error {
 	b.logger.Infof(b.getInitialLogLine(args...))
 
 	b.Setenv("PS1", "$ ")
-	b.Setenv("TERM", "dumb") // test_all_success works without this too, do we need it?
+	// b.Setenv("TERM", "dumb") // test_all_success works without this too, do we need it?
 
 	cmd := exec.Command(b.executable.Path, args...)
 	cmd.Env = b.env.Sorted()
@@ -75,9 +77,77 @@ func (b *ShellExecutable) Start(args ...string) error {
 
 	b.cmd = cmd
 	b.pty = pty
-	b.ptyReader = condition_reader.NewConditionReader(b.pty)
+	b.vt = NewStandardVT()
+	b.termIO = NewTermIO(b.vt, b.pty)
+	b.ptyReader = condition_reader.NewConditionReader(b.termIO)
+	// defer b.vt.Close() // ToDo ??
 
 	return nil
+}
+
+func (b *ShellExecutable) GetScreenState(retainColors bool) [][]string {
+	return b.vt.GetScreenState(retainColors)
+}
+
+func (b *ShellExecutable) GetScreenStateSingleRow(row int, retainColors bool) []string {
+	return b.vt.GetRow(row, retainColors)
+}
+
+func (b *ShellExecutable) GetScreenStateForLogging(retainColors bool) string {
+	fullScreenState := b.GetScreenState(retainColors)
+	screenStateString := ""
+	for _, row := range fullScreenState {
+		var filteredRow []string
+		for _, cell := range row {
+			if cell != "." {
+				filteredRow = append(filteredRow, cell)
+			}
+		}
+		if len(filteredRow) == 0 {
+			continue
+		}
+		screenStateString += strings.Join(filteredRow, "")
+		screenStateString += "\n"
+	}
+	return screenStateString
+}
+
+func (b *ShellExecutable) GetRowsTillEndForLogging(startingRow int, retainColors bool) string {
+	fullScreenState := b.vt.GetRowsTillEnd(startingRow, retainColors)
+	screenStateString := ""
+	for _, row := range fullScreenState {
+		var filteredRow []string
+		for _, cell := range row {
+			if cell != "." {
+				filteredRow = append(filteredRow, cell)
+			}
+		}
+		if len(filteredRow) == 0 {
+			continue
+		}
+		screenStateString += strings.Join(filteredRow, "")
+		screenStateString += "\n"
+	}
+	return screenStateString
+}
+
+func (b *ShellExecutable) GetScreenStateSingleRowForLogging(row int, retainColors bool) string {
+	screenStateSingleRow := b.GetScreenStateSingleRow(row, retainColors)
+
+	screenStateString := ""
+	var filteredRow []string
+	for _, cell := range screenStateSingleRow {
+		if cell != "." {
+			filteredRow = append(filteredRow, cell)
+		}
+	}
+	if len(filteredRow) == 0 {
+		return ""
+	}
+	screenStateString += strings.Join(filteredRow, "")
+	screenStateString += "\n"
+
+	return screenStateString
 }
 
 // TODO: Do tests cases _need_ to decide when to log output and when to not? Can we just always log from within ReadBytes...?

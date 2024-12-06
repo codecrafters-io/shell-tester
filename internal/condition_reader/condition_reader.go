@@ -7,7 +7,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/codecrafters-io/shell-tester/internal/async_bytewise_reader"
+	"github.com/codecrafters-io/shell-tester/internal/async_reader"
 )
 
 var ErrConditionNotMet = errors.New("condition not met")
@@ -22,12 +22,12 @@ func debugLog(format string, args ...interface{}) {
 
 // ConditionReader wraps an io.Reader and provides methods to read until a condition is met
 type ConditionReader struct {
-	bytewiseReader *async_bytewise_reader.AsyncBytewiseReader
+	asyncReader *async_reader.AsyncReader
 }
 
 func NewConditionReader(reader io.Reader) ConditionReader {
 	return ConditionReader{
-		bytewiseReader: async_bytewise_reader.New(bufio.NewReader(reader)),
+		asyncReader: async_reader.New(bufio.NewReader(reader)),
 	}
 }
 
@@ -37,12 +37,12 @@ func (t *ConditionReader) ReadUntilCondition(condition func([]byte) bool) ([]byt
 
 func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) bool, timeout time.Duration) ([]byte, error) {
 	deadline := time.Now().Add(timeout)
-	var readBytes []byte
+	var accumulatedReadBytes []byte
 
 	for !time.Now().After(deadline) {
-		readByte, err := t.bytewiseReader.ReadByte()
+		readBytes, err := t.asyncReader.ReadBytes()
 		if err != nil {
-			if errors.Is(err, async_bytewise_reader.ErrNoData) {
+			if errors.Is(err, async_reader.ErrNoData) {
 				debugLog("condition_reader: No data available")
 
 				// Since no data was available, let's avoid a busy loop
@@ -55,16 +55,24 @@ func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) boo
 			}
 		}
 
-		debugLog("condition_reader: readByte: %q", string(readByte))
-		readBytes = append(readBytes, readByte)
+		debugLog("condition_reader: readBytes: %q", string(readBytes))
 
-		// If the condition is met, we can return early. Else the loop runs again
-		if condition(readBytes) {
-			return readBytes, nil
+		// There might be a situation where we read more than the string `S` that satisfies the condition.
+		// For that reason, we'll accumulate byte by byte and make sure we don't overshoot the condition.
+		for i, byte := range readBytes {
+			accumulatedReadBytes = append(accumulatedReadBytes, byte)
+			// If the condition is met, we can return early. Else the loop runs again
+			if condition(accumulatedReadBytes) {
+				// Of the complete string `S`, if S[:i] satisfies the conditon, we can't discard the bytes after `i`
+				// Then our next line's readUntilCondition will miss that starting bytes and fail
+				t.asyncReader.Unread(readBytes[i+1:])
+
+				return accumulatedReadBytes, nil
+			}
 		}
 	}
 
-	return readBytes, ErrConditionNotMet
+	return accumulatedReadBytes, ErrConditionNotMet
 }
 
 func (t *ConditionReader) ReadUntilTimeout(timeout time.Duration) ([]byte, error) {
