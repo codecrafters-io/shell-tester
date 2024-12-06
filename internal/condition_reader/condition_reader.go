@@ -22,7 +22,8 @@ func debugLog(format string, args ...interface{}) {
 
 // ConditionReader wraps an io.Reader and provides methods to read until a condition is met
 type ConditionReader struct {
-	asyncReader *async_reader.AsyncReader
+	asyncReader          *async_reader.AsyncReader
+	nonAccumulatedBuffer []byte
 }
 
 func NewConditionReader(reader io.Reader) ConditionReader {
@@ -38,6 +39,11 @@ func (t *ConditionReader) ReadUntilCondition(condition func([]byte) bool) ([]byt
 func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) bool, timeout time.Duration) ([]byte, error) {
 	deadline := time.Now().Add(timeout)
 	var accumulatedReadBytes []byte
+
+	if len(t.nonAccumulatedBuffer) > 0 {
+		accumulatedReadBytes = append(accumulatedReadBytes, t.nonAccumulatedBuffer...)
+		t.nonAccumulatedBuffer = []byte{}
+	}
 
 	for !time.Now().After(deadline) {
 		readBytes, err := t.asyncReader.ReadBytes()
@@ -59,11 +65,14 @@ func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) boo
 		// For that reason, we'll accumulate byte by byte and make sure we don't overshoot the condition.
 		debugLog("condition_reader: readBytes: %q", string(readBytes))
 
-		for _, byte := range readBytes {
+		for i, byte := range readBytes {
 			accumulatedReadBytes = append(accumulatedReadBytes, byte)
-
 			// If the condition is met, we can return early. Else the loop runs again
 			if condition(accumulatedReadBytes) {
+				// Of the complete string `S`, if S[:i] satisfies the conditon, we can't discard the bytes after `i`
+				// Then our next line's readUntilCondition will miss that starting bytes and fail
+				t.nonAccumulatedBuffer = readBytes[i+1:]
+
 				return accumulatedReadBytes, nil
 			}
 		}
