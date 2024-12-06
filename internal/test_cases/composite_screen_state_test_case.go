@@ -17,6 +17,7 @@ func NewCompositeScreenStateTestCase() *CompositeScreenStateTestCase {
 }
 
 func (t *CompositeScreenStateTestCase) Run(screenState [][]string, logger *logger.Logger) error {
+	// currentRowIndex := 0
 	for _, assertion := range t.ScreenStateAssertions {
 		if err := assertion.Run(screenState, logger); err != nil {
 			return err

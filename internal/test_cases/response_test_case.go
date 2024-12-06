@@ -4,36 +4,36 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-// PromptTestCase verifies a prompt exists, and that there's no extra output after it.
-type PromptTestCase struct {
+// ResponseTestCase reads the output from the shell, and verifies that it matches the expected output.
+type ResponseTestCase struct {
 	// expectedPrompt is the prompt expected to be displayed (example: "$ ")
 	expectedPrompt string
 
-	// shouldOmitSuccessLog determines whether a success log should be written.
-	//
-	// When re-using this test case within other higher-order test cases, emitting success logs
-	// all the time can get pretty noisy.
+	assertion assertions.SingleLineScreenStateAssertion
+
 	shouldOmitSuccessLog bool
 }
 
-func NewPromptTestCase(expectedPrompt string) PromptTestCase {
-	return PromptTestCase{expectedPrompt: expectedPrompt}
+func NewResponseTestCase(expectedPrompt string, assertion assertions.SingleLineScreenStateAssertion, shouldOmitSuccessLog bool) ResponseTestCase {
+	return ResponseTestCase{expectedPrompt: expectedPrompt, assertion: assertion, shouldOmitSuccessLog: shouldOmitSuccessLog}
 }
 
-func NewSilentPromptTestCase(expectedPrompt string) PromptTestCase {
-	return PromptTestCase{expectedPrompt: expectedPrompt, shouldOmitSuccessLog: true}
+func NewSilentResponseTestCase(expectedPrompt string, assertion assertions.SingleLineScreenStateAssertion) ResponseTestCase {
+	return ResponseTestCase{expectedPrompt: expectedPrompt, assertion: assertion, shouldOmitSuccessLog: true}
 }
 
-func (t PromptTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
+func (t ResponseTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
+	// We can't use the assertion directly as a condition to break out of reads, because of a mismtach in the types that the Read passes and what the assertion expects.
 	matchesPromptCondition := func(buf []byte) bool {
 		return string(shell_executable.StripANSI(buf)) == t.expectedPrompt
 	}
 
-	actualValue, err := shell.ReadBytesUntil(matchesPromptCondition)
+	actualValue, err := shell.ReadBytesUntil(t.assertion.Run())
 
 	if err != nil {
 		// If the user sent any output, let's print it before the error message.
