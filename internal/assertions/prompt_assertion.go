@@ -20,14 +20,6 @@ type PromptAssertion struct {
 	shouldOmitSuccessLog bool
 }
 
-func NewPromptAssertion(rowIndex int, expectedPrompt string, screenAsserter *ScreenAsserter) PromptAssertion {
-	return PromptAssertion{rowIndex: rowIndex, expectedPrompt: expectedPrompt, screenAsserter: screenAsserter}
-}
-
-func NewSilentPromptAssertion(rowIndex int, expectedPrompt string, screenAsserter *ScreenAsserter) PromptAssertion {
-	return PromptAssertion{rowIndex: rowIndex, expectedPrompt: expectedPrompt, screenAsserter: screenAsserter, shouldOmitSuccessLog: true}
-}
-
 func (t PromptAssertion) Run() error {
 	screen := t.screenAsserter.Shell.GetScreenState()
 	if len(screen) == 0 {
