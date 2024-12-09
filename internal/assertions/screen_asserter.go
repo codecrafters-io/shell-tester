@@ -7,8 +7,9 @@ import (
 
 // ToDo: Prototype, not yet sure what the ideal consituents of this struct should be
 type ScreenAsserter struct {
-	Shell  *shell_executable.ShellExecutable
-	Logger *logger.Logger
+	Shell      *shell_executable.ShellExecutable
+	Logger     *logger.Logger
+	Assertions []Assertion
 }
 
 func NewScreenAsserter(shell *shell_executable.ShellExecutable, logger *logger.Logger) *ScreenAsserter {
@@ -22,4 +23,26 @@ func (s ScreenAsserter) LogFullScreenState() {
 			s.Logger.Debugf(cleanedRow)
 		}
 	}
+}
+
+func (s ScreenAsserter) PromptAssertion(rowIndex int, expectedPrompt string, shouldOmitSuccessLog bool) PromptAssertion {
+	return PromptAssertion{rowIndex: rowIndex, expectedPrompt: expectedPrompt, screenAsserter: &s, shouldOmitSuccessLog: shouldOmitSuccessLog}
+}
+
+func (s *ScreenAsserter) AddAssertion(assertion Assertion) {
+	s.Assertions = append(s.Assertions, assertion)
+}
+
+func (s *ScreenAsserter) RunAllAssertions() error {
+	for _, assertion := range s.Assertions {
+		if err := assertion.Run(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *ScreenAsserter) WrappedRunAllAssertions() bool {
+	// True if the prompt assertion is a success
+	return s.RunAllAssertions() == nil
 }
