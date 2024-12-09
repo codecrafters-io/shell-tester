@@ -39,7 +39,7 @@ func (t CommandResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter, 
 	err = screenAsserter.Shell.ReadUntilTimeout(10 * time.Millisecond)
 
 	// Whether the value matches our expectations or not, we print it
-	screenAsserter.LogFullScreenState()
+	screenAsserter.LogUptoCurrentRow()
 
 	// We failed to read extra output
 	if err != nil {
