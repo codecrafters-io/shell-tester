@@ -29,8 +29,8 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	screenAsserter := assertions.NewScreenAsserter(shell, logger)
 
-	assertion := screenAsserter.PromptAssertion(0, "$ ", true)
-	screenAsserter.AddAssertion(assertion)
+	promptAssertion := screenAsserter.PromptAssertion(0, "$ ", true)
+	screenAsserter.AddAssertion(promptAssertion)
 
 	testCase := test_cases.NewResponseTestCase()
 
