@@ -5,7 +5,6 @@ import (
 	"regexp"
 	"unicode"
 
-	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/fatih/color"
 )
 
@@ -18,22 +17,33 @@ const VT_SENTINEL_CHARACTER = "."
 // But, if that is not possible, we can use fallbackPatterns to match against multiple regexes
 // And in the failure case, we want to show the expectedPatternExplanation to the user
 type SingleLineScreenStateAssertion struct {
-	rowIndex                   int
-	expectedOutput             string
-	fallbackPatterns           []*regexp.Regexp
+	// screenAsserter is the ScreenAsserter that contains the rendered screenstate
+	screenAsserter *ScreenAsserter
+
+	// rowIndex is the index of the row in the screenstate that we want to assert on
+	rowIndex int
+
+	// expectedOutput is the expected output string to match against
+	expectedOutput string
+
+	// fallbackPatterns is a list of regex patterns to match against
+	fallbackPatterns []*regexp.Regexp
+
+	// expectedPatternExplanation is the explanation of the expected pattern to
+	// show in the error message in case of failure
 	expectedPatternExplanation string
 }
 
-func NewSingleLineScreenStateAssertion(rowIndex int, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string) SingleLineScreenStateAssertion {
-	return SingleLineScreenStateAssertion{rowIndex: rowIndex, expectedOutput: expectedOutput, fallbackPatterns: fallbackPatterns, expectedPatternExplanation: expectedPatternExplanation}
-}
-
 // ToDo: screenState as its own type and wrap index / cursors inside it
-func (a SingleLineScreenStateAssertion) Run(screenState [][]string, logger *logger.Logger) error {
-	rawRow := screenState[a.rowIndex]
+func (t SingleLineScreenStateAssertion) Run() error {
+	screen := t.screenAsserter.Shell.GetScreenState()
+	if len(screen) == 0 {
+		return fmt.Errorf("expected screen to have at least one row, but it was empty")
+	}
+	rawRow := screen[t.rowIndex]
 	cleanedRow := buildCleanedRow(rawRow)
 
-	if a.fallbackPatterns != nil && a.expectedPatternExplanation == "" {
+	if t.fallbackPatterns != nil && t.expectedPatternExplanation == "" {
 		// expectedPatternExplanation is required for the error message on the FallbackPatterns path
 		panic("CodeCrafters Internal Error: expectedPatternExplanation is empty on FallbackPatterns path")
 	}
@@ -42,7 +52,7 @@ func (a SingleLineScreenStateAssertion) Run(screenState [][]string, logger *logg
 
 	// For each fallback pattern, check if the output matches
 	// If it does, we break out of the loop and don't check for anything else, just return nil
-	for _, pattern := range a.fallbackPatterns {
+	for _, pattern := range t.fallbackPatterns {
 		if pattern.Match([]byte(cleanedRow)) {
 			regexPatternMatch = true
 			break
@@ -52,21 +62,26 @@ func (a SingleLineScreenStateAssertion) Run(screenState [][]string, logger *logg
 	if !regexPatternMatch {
 		// No regex match till now, if expectedOutput is nil, we need to return an error
 		// On this path, expectedPatternExplanation is required for the error message
-		if a.expectedOutput == "" {
-			detailedErrorMessage := BuildColoredErrorMessage(a.expectedPatternExplanation, cleanedRow)
-			logger.Infof(detailedErrorMessage)
+		if t.expectedOutput == "" {
+			detailedErrorMessage := BuildColoredErrorMessage(t.expectedPatternExplanation, cleanedRow)
+			t.screenAsserter.Logger.Infof(detailedErrorMessage)
 			return fmt.Errorf("Received output does not match expectation.")
 		} else {
 			// ExpectedOutput is not nil, we can use it for exact string comparison
-			if cleanedRow != a.expectedOutput {
-				detailedErrorMessage := BuildColoredErrorMessage(a.expectedOutput, cleanedRow)
-				logger.Infof(detailedErrorMessage)
+			if cleanedRow != t.expectedOutput {
+				detailedErrorMessage := BuildColoredErrorMessage(t.expectedOutput, cleanedRow)
+				t.screenAsserter.Logger.Infof(detailedErrorMessage)
 				return fmt.Errorf("Received output does not match expectation.")
 			}
 		}
 	}
 
 	return nil
+}
+
+func (t SingleLineScreenStateAssertion) WrappedRun() bool {
+	// True if the single line screen state assertion is a success
+	return t.Run() == nil
 }
 
 func colorizeString(colorToUse color.Attribute, msg string) string {
