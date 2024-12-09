@@ -13,18 +13,14 @@ import (
 type ResponseTestCase struct {
 	// command is the command that will be sent to the shell
 	command string
-
-	assertion assertions.Assertion
-
-	shouldOmitSuccessLog bool
 }
 
-func NewResponseTestCase(command string, assertion assertions.Assertion, shouldOmitSuccessLog bool) ResponseTestCase {
-	return ResponseTestCase{command: command, assertion: assertion, shouldOmitSuccessLog: shouldOmitSuccessLog}
+func NewResponseTestCase() ResponseTestCase {
+	return ResponseTestCase{}
 }
 
-func (t ResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter) error {
-	err := screenAsserter.Shell.ReadUntil(t.assertion.WrappedRun)
+func (t ResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter, shouldOmitSuccessLog bool) error {
+	err := screenAsserter.Shell.ReadUntil(screenAsserter.WrappedRunAllAssertions)
 
 	if err != nil {
 		// If the user sent any output, let's print it before the error message.
@@ -45,7 +41,7 @@ func (t ResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter) error {
 		return fmt.Errorf("Error reading output: %v", err)
 	}
 
-	if !t.shouldOmitSuccessLog {
+	if !shouldOmitSuccessLog {
 		screenAsserter.Logger.Successf("✓ Received prompt")
 	}
 
