@@ -1,7 +1,6 @@
 package assertions
 
 import (
-	"fmt"
 	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -63,12 +62,12 @@ func (s *ScreenAsserter) UpdateLoggedUptoRowIndex() {
 	s.loggedUptoRowIndex = s.rowIndex
 }
 
-func (s ScreenAsserter) PromptAssertion(rowIndex int, expectedPrompt string) PromptAssertion {
-	return PromptAssertion{rowIndex: rowIndex, expectedPrompt: expectedPrompt, screenAsserter: &s}
+func (s ScreenAsserter) PromptAssertion(rowIndex int, expectedPrompt string, screenAsserter *ScreenAsserter) PromptAssertion {
+	return PromptAssertion{rowIndex: rowIndex, expectedPrompt: expectedPrompt, screenAsserter: screenAsserter}
 }
 
-func (s ScreenAsserter) SingleLineAssertion(rowIndex int, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string) SingleLineScreenStateAssertion {
-	return SingleLineScreenStateAssertion{rowIndex: rowIndex, expectedOutput: expectedOutput, fallbackPatterns: fallbackPatterns, expectedPatternExplanation: expectedPatternExplanation, screenAsserter: &s}
+func (s ScreenAsserter) SingleLineAssertion(rowIndex int, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string, screenAsserter *ScreenAsserter) SingleLineScreenStateAssertion {
+	return SingleLineScreenStateAssertion{rowIndex: rowIndex, expectedOutput: expectedOutput, fallbackPatterns: fallbackPatterns, expectedPatternExplanation: expectedPatternExplanation, screenAsserter: screenAsserter}
 }
 
 func (s *ScreenAsserter) AddAssertion(assertion Assertion) {
@@ -76,9 +75,7 @@ func (s *ScreenAsserter) AddAssertion(assertion Assertion) {
 }
 
 func (s *ScreenAsserter) UpdateRowIndex(increment int) {
-	fmt.Println("Updating row index", increment)
 	s.rowIndex += increment
-	fmt.Println(s.rowIndex)
 }
 
 func (s *ScreenAsserter) RunAllAssertions() error {
@@ -87,7 +84,6 @@ func (s *ScreenAsserter) RunAllAssertions() error {
 			return err
 		}
 		assertion.UpdateRowIndex()
-		fmt.Println(s.rowIndex)
 	}
 	return nil
 }
