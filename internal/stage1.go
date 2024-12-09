@@ -29,7 +29,7 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	screenAsserter := assertions.NewScreenAsserter(shell, logger)
 
-	testCase := test_cases.NewResponseTestCase("$ ", assertions.NewPromptAssertion(0, "$ "), true)
+	testCase := test_cases.NewResponseTestCase("$ ", assertions.NewSilentPromptAssertion(0, "$ ", screenAsserter), true)
 
 	if err := testCase.Run(screenAsserter); err != nil {
 		return err
