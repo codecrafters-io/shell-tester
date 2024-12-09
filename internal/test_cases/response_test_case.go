@@ -11,8 +11,6 @@ import (
 // TODO: Remove ResponseTestCase entirely, replace with SingleLineOutputAssertion invoked within ScreenAsserter
 // ResponseTestCase reads the output from the shell, and verifies that it matches the expected output.
 type ResponseTestCase struct {
-	// command is the command that will be sent to the shell
-	command string
 }
 
 func NewResponseTestCase() ResponseTestCase {
@@ -28,7 +26,8 @@ func (t ResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter, shouldO
 			screenAsserter.LogFullScreenState()
 		}
 
-		return fmt.Errorf("Expected response %q, got %q", t.command, buildCleanedRow(screenAsserter.Shell.GetScreenState()[0]))
+		// ToDo: ??
+		return fmt.Errorf("Expected response %q, got %q", "", buildCleanedRow(screenAsserter.Shell.GetScreenState()[0]))
 	}
 
 	err = screenAsserter.Shell.ReadUntilTimeout(10 * time.Millisecond)
