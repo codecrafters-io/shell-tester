@@ -38,6 +38,10 @@ func (t *ConditionReader) ReadUntilCondition(condition func() bool) error {
 func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func() bool, timeout time.Duration) error {
 	deadline := time.Now().Add(timeout)
 
+	if condition() {
+		return nil
+	}
+
 	for !time.Now().After(deadline) {
 		readBytes, err := t.asyncReader.Read()
 		if err != nil {
