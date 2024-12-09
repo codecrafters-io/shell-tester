@@ -13,11 +13,6 @@ type PromptAssertion struct {
 
 	// expectedPrompt is the prompt expected to be displayed (example: "$ ")
 	expectedPrompt string
-
-	// shouldOmitSuccessLog determines whether a success log should be written.
-	// When re-using this test case within other higher-order test cases,
-	// emitting success logs all the time can get pretty noisy.
-	shouldOmitSuccessLog bool
 }
 
 func (t PromptAssertion) Run() error {
@@ -38,4 +33,13 @@ func (t PromptAssertion) Run() error {
 func (t PromptAssertion) WrappedRun() bool {
 	// True if the prompt assertion is a success
 	return t.Run() == nil
+}
+
+func (t PromptAssertion) GetRowUpdateCount() int {
+	return 0
+}
+
+func (t *PromptAssertion) UpdateRowIndex() {
+	// Prompts are always on the same line, so we don't need to update the row index
+	t.screenAsserter.UpdateRowIndex(t.GetRowUpdateCount())
 }

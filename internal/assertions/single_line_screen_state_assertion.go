@@ -87,6 +87,15 @@ func (t SingleLineScreenStateAssertion) WrappedRun() bool {
 	return t.Run() == nil
 }
 
+func (t SingleLineScreenStateAssertion) GetRowUpdateCount() int {
+	return 1
+}
+
+func (t *SingleLineScreenStateAssertion) UpdateRowIndex() {
+	// Single line screen state assertions are always on the same line, so we need to update the row index
+	t.screenAsserter.UpdateRowIndex(t.GetRowUpdateCount())
+}
+
 func colorizeString(colorToUse color.Attribute, msg string) string {
 	c := color.New(colorToUse)
 	return c.Sprint(msg)
