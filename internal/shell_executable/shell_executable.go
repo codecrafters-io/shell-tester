@@ -112,7 +112,7 @@ func (b *ShellExecutable) ReadUntilTimeout(timeout time.Duration) error {
 }
 
 func (b *ShellExecutable) SendCommand(command string) error {
-	b.logger.Infof("> %s", command)
+	// b.logger.Infof("> %s", command)
 
 	if _, err := b.pty.Write([]byte(command + "\n")); err != nil {
 		return err

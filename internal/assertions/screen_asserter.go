@@ -23,26 +23,25 @@ func NewScreenAsserter(shell *shell_executable.ShellExecutable, logger *logger.L
 }
 
 func (s ScreenAsserter) LogFullScreenState() {
-	s.Logger.Debugf("--------------------------------")
 	for _, row := range s.Shell.GetScreenState() {
 		cleanedRow := buildCleanedRow(row)
 		if len(cleanedRow) > 0 {
 			s.Logger.Debugf(cleanedRow)
 		}
 	}
-	s.Logger.Debugf("--------------------------------")
 }
 
 func (s ScreenAsserter) LogCurrentRow() {
-	s.Logger.Debugf("--------------------------------")
 	cleanedRow := buildCleanedRow(s.Shell.GetScreenState()[s.rowIndex])
 	if len(cleanedRow) > 0 {
 		s.Logger.Debugf(cleanedRow)
 	}
-	s.Logger.Debugf("--------------------------------")
 }
 
 func (s *ScreenAsserter) LogUptoCurrentRow() {
+	if s.loggedUptoRowIndex == s.rowIndex {
+		return
+	}
 	for i := s.loggedUptoRowIndex; i <= s.rowIndex; i++ {
 		s.LogRow(i)
 	}
@@ -50,16 +49,14 @@ func (s *ScreenAsserter) LogUptoCurrentRow() {
 }
 
 func (s *ScreenAsserter) LogRow(rowIndex int) {
-	s.Logger.Debugf("--------------------------------")
 	cleanedRow := buildCleanedRow(s.Shell.GetScreenState()[rowIndex])
 	if len(cleanedRow) > 0 {
 		s.Logger.Debugf(cleanedRow)
 	}
-	s.Logger.Debugf("--------------------------------")
 }
 
 func (s *ScreenAsserter) UpdateLoggedUptoRowIndex() {
-	s.loggedUptoRowIndex = s.rowIndex
+	s.loggedUptoRowIndex = s.rowIndex + 1
 }
 
 func (s ScreenAsserter) PromptAssertion(rowIndex int, expectedPrompt string, screenAsserter *ScreenAsserter) PromptAssertion {
