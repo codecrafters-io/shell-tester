@@ -63,14 +63,17 @@ func (t SingleLineScreenStateAssertion) Run() error {
 		// No regex match till now, if expectedOutput is nil, we need to return an error
 		// On this path, expectedPatternExplanation is required for the error message
 		if t.expectedOutput == "" {
-			detailedErrorMessage := BuildColoredErrorMessage(t.expectedPatternExplanation, cleanedRow)
-			t.screenAsserter.Logger.Infof(detailedErrorMessage)
+			// ToDo: Can't log it here
+			// As this assertion would repeatedly fail while reading bytes
+			// Possibly change loggers / return from here log outside
+			// detailedErrorMessage := BuildColoredErrorMessage(t.expectedPatternExplanation, cleanedRow)
+			// t.screenAsserter.Logger.Infof(detailedErrorMessage)
 			return fmt.Errorf("Received output does not match expectation.")
 		} else {
 			// ExpectedOutput is not nil, we can use it for exact string comparison
 			if cleanedRow != t.expectedOutput {
-				detailedErrorMessage := BuildColoredErrorMessage(t.expectedOutput, cleanedRow)
-				t.screenAsserter.Logger.Infof(detailedErrorMessage)
+				// detailedErrorMessage := BuildColoredErrorMessage(t.expectedOutput, cleanedRow)
+				// t.screenAsserter.Logger.Infof(detailedErrorMessage)
 				return fmt.Errorf("Received output does not match expectation.")
 			}
 		}

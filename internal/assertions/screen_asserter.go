@@ -19,12 +19,14 @@ func NewScreenAsserter(shell *shell_executable.ShellExecutable, logger *logger.L
 }
 
 func (s ScreenAsserter) LogFullScreenState() {
+	s.Logger.Debugf("--------------------------------")
 	for _, row := range s.Shell.GetScreenState() {
 		cleanedRow := buildCleanedRow(row)
 		if len(cleanedRow) > 0 {
 			s.Logger.Debugf(cleanedRow)
 		}
 	}
+	s.Logger.Debugf("--------------------------------")
 }
 
 func (s ScreenAsserter) PromptAssertion(rowIndex int, expectedPrompt string, shouldOmitSuccessLog bool) PromptAssertion {
