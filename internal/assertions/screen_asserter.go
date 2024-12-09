@@ -1,6 +1,8 @@
 package assertions
 
 import (
+	"regexp"
+
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
 )
@@ -29,6 +31,10 @@ func (s ScreenAsserter) PromptAssertion(rowIndex int, expectedPrompt string, sho
 	return PromptAssertion{rowIndex: rowIndex, expectedPrompt: expectedPrompt, screenAsserter: &s, shouldOmitSuccessLog: shouldOmitSuccessLog}
 }
 
+func (s ScreenAsserter) SingleLineAssertion(rowIndex int, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string) SingleLineScreenStateAssertion {
+	return SingleLineScreenStateAssertion{rowIndex: rowIndex, expectedOutput: expectedOutput, fallbackPatterns: fallbackPatterns, expectedPatternExplanation: expectedPatternExplanation, screenAsserter: &s}
+}
+
 func (s *ScreenAsserter) AddAssertion(assertion Assertion) {
 	s.Assertions = append(s.Assertions, assertion)
 }
@@ -45,4 +51,8 @@ func (s *ScreenAsserter) RunAllAssertions() error {
 func (s *ScreenAsserter) WrappedRunAllAssertions() bool {
 	// True if the prompt assertion is a success
 	return s.RunAllAssertions() == nil
+}
+
+func (s *ScreenAsserter) ClearAssertions() {
+	s.Assertions = []Assertion{}
 }
