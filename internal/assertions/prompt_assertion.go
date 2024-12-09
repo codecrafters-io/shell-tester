@@ -20,16 +20,20 @@ type PromptAssertion struct {
 	shouldOmitSuccessLog bool
 }
 
-func NewPromptAssertion(rowIndex int, expectedPrompt string) PromptAssertion {
-	return PromptAssertion{rowIndex: rowIndex, expectedPrompt: expectedPrompt}
+func NewPromptAssertion(rowIndex int, expectedPrompt string, screenAsserter *ScreenAsserter) PromptAssertion {
+	return PromptAssertion{rowIndex: rowIndex, expectedPrompt: expectedPrompt, screenAsserter: screenAsserter}
 }
 
-func NewSilentPromptAssertion(rowIndex int, expectedPrompt string) PromptAssertion {
-	return PromptAssertion{rowIndex: rowIndex, expectedPrompt: expectedPrompt, shouldOmitSuccessLog: true}
+func NewSilentPromptAssertion(rowIndex int, expectedPrompt string, screenAsserter *ScreenAsserter) PromptAssertion {
+	return PromptAssertion{rowIndex: rowIndex, expectedPrompt: expectedPrompt, screenAsserter: screenAsserter, shouldOmitSuccessLog: true}
 }
 
 func (t PromptAssertion) Run() error {
-	rawRow := t.screenAsserter.Shell.GetScreenState()[t.rowIndex]
+	screen := t.screenAsserter.Shell.GetScreenState()
+	if len(screen) == 0 {
+		return fmt.Errorf("expected screen to have at least one row, but it was empty")
+	}
+	rawRow := screen[t.rowIndex]
 	cleanedRow := buildCleanedRow(rawRow)
 
 	if !strings.EqualFold(cleanedRow, t.expectedPrompt) {

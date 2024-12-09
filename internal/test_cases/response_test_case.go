@@ -23,7 +23,7 @@ func NewResponseTestCase(command string, assertion assertions.Assertion, shouldO
 	return ResponseTestCase{command: command, assertion: assertion, shouldOmitSuccessLog: shouldOmitSuccessLog}
 }
 
-func (t ResponseTestCase) Run(screenAsserter assertions.ScreenAsserter) error {
+func (t ResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter) error {
 	err := screenAsserter.Shell.ReadUntil(t.assertion.WrappedRun)
 
 	if err != nil {
@@ -45,7 +45,9 @@ func (t ResponseTestCase) Run(screenAsserter assertions.ScreenAsserter) error {
 		return fmt.Errorf("Error reading output: %v", err)
 	}
 
-	screenAsserter.Logger.Successf("✓ Received prompt")
+	if !t.shouldOmitSuccessLog {
+		screenAsserter.Logger.Successf("✓ Received prompt")
+	}
 
 	return nil
 }

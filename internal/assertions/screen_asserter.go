@@ -1,8 +1,6 @@
 package assertions
 
 import (
-	"strings"
-
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
 )
@@ -13,12 +11,15 @@ type ScreenAsserter struct {
 	Logger *logger.Logger
 }
 
-func NewScreenAsserter(shell *shell_executable.ShellExecutable, logger *logger.Logger) ScreenAsserter {
-	return ScreenAsserter{Shell: shell, Logger: logger}
+func NewScreenAsserter(shell *shell_executable.ShellExecutable, logger *logger.Logger) *ScreenAsserter {
+	return &ScreenAsserter{Shell: shell, Logger: logger}
 }
 
 func (s ScreenAsserter) LogFullScreenState() {
 	for _, row := range s.Shell.GetScreenState() {
-		s.Logger.Debugf(strings.Join(row, ""))
+		cleanedRow := buildCleanedRow(row)
+		if len(cleanedRow) > 0 {
+			s.Logger.Debugf(cleanedRow)
+		}
 	}
 }
