@@ -18,8 +18,8 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	screenAsserter := assertions.NewScreenAsserter(shell, logger)
-	promptAssertion := screenAsserter.PromptAssertion(0, "$ ", true)
-	screenAsserter.AddAssertion(promptAssertion)
+	promptAssertion := screenAsserter.PromptAssertion(0, "$ ", screenAsserter)
+	screenAsserter.AddAssertion(&promptAssertion)
 
 	responseTestCase := test_cases.NewResponseTestCase()
 
@@ -28,15 +28,15 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	screenAsserter.ClearAssertions()
-	firstLineAssertion := screenAsserter.SingleLineAssertion(0, "$ nonexistent", nil, "nonexistent")
-	screenAsserter.AddAssertion(firstLineAssertion)
+	firstLineAssertion := screenAsserter.SingleLineAssertion(0, "$ nonexistent", nil, "nonexistent", screenAsserter)
+	screenAsserter.AddAssertion(&firstLineAssertion)
 	commandResponseTestCase := test_cases.NewCommandResponseTestCase("nonexistent")
 	if err := commandResponseTestCase.Run(screenAsserter, true); err != nil {
 		return err
 	}
 
-	secondLineAssertion := screenAsserter.SingleLineAssertion(1, "", []*regexp.Regexp{regexp.MustCompile(`bash: nonexistent: command not found`)}, "nonexistent: command not found")
-	screenAsserter.AddAssertion(secondLineAssertion)
+	secondLineAssertion := screenAsserter.SingleLineAssertion(1, "", []*regexp.Regexp{regexp.MustCompile(`bash: nonexistent: command not found`)}, "nonexistent: command not found", screenAsserter)
+	screenAsserter.AddAssertion(&secondLineAssertion)
 	if err := responseTestCase.Run(screenAsserter, true); err != nil {
 		return err
 	}
