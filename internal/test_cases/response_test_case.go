@@ -28,7 +28,7 @@ func (t ResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter, shouldO
 			screenAsserter.LogFullScreenState()
 		}
 
-		return fmt.Errorf("Expected prompt (%q) to be printed, got %q", t.command, screenAsserter.Shell.GetScreenState()[0])
+		return fmt.Errorf("Expected response %q, got %q", t.command, buildCleanedRow(screenAsserter.Shell.GetScreenState()[0]))
 	}
 
 	err = screenAsserter.Shell.ReadUntilTimeout(10 * time.Millisecond)
