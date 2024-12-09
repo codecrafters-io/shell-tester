@@ -3,6 +3,7 @@ package internal
 import (
 	"regexp"
 
+	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
@@ -16,14 +17,27 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	testCase := test_cases.SingleLineExactMatchTestCase{
-		Command:                    "nonexistent",
-		FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(`^(bash: )?nonexistent: (command )?not found$`)},
-		ExpectedPatternExplanation: "nonexistent: command not found",
-		SuccessMessage:             "Received command not found message",
+	screenAsserter := assertions.NewScreenAsserter(shell, logger)
+	promptAssertion := screenAsserter.PromptAssertion(0, "$ ", true)
+	screenAsserter.AddAssertion(promptAssertion)
+
+	responseTestCase := test_cases.NewResponseTestCase()
+
+	if err := responseTestCase.Run(screenAsserter, true); err != nil {
+		return err
 	}
 
-	if err := testCase.Run(shell, logger); err != nil {
+	screenAsserter.ClearAssertions()
+	firstLineAssertion := screenAsserter.SingleLineAssertion(0, "$ nonexistent", nil, "nonexistent")
+	screenAsserter.AddAssertion(firstLineAssertion)
+	commandResponseTestCase := test_cases.NewCommandResponseTestCase("nonexistent")
+	if err := commandResponseTestCase.Run(screenAsserter, true); err != nil {
+		return err
+	}
+
+	secondLineAssertion := screenAsserter.SingleLineAssertion(1, "", []*regexp.Regexp{regexp.MustCompile(`bash: nonexistent: command not found`)}, "nonexistent: command not found")
+	screenAsserter.AddAssertion(secondLineAssertion)
+	if err := responseTestCase.Run(screenAsserter, true); err != nil {
 		return err
 	}
 
