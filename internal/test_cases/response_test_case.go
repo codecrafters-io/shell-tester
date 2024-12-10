@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 )
 
 // ToDo: This is a prototype, think about edge cases + implement prompt test case specifically
@@ -31,7 +32,7 @@ func (t ResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter, shouldO
 		}
 
 		// ToDo: Figure out how to get the expected output here
-		return fmt.Errorf("Expected response %q, got %q", "", buildCleanedRow(screenAsserter.Shell.GetScreenState()[0]))
+		return fmt.Errorf("Expected response %q, got %q", "", utils.BuildCleanedRow(screenAsserter.Shell.GetScreenState()[0]))
 	}
 
 	err = screenAsserter.Shell.ReadUntilTimeout(10 * time.Millisecond)
