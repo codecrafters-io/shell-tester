@@ -39,9 +39,6 @@ func (s ScreenAsserter) LogCurrentRow() {
 }
 
 func (s *ScreenAsserter) LogUptoCurrentRow() {
-	if s.loggedUptoRowIndex == s.rowIndex {
-		return
-	}
 	for i := s.loggedUptoRowIndex; i <= s.rowIndex; i++ {
 		s.LogRow(i)
 	}
@@ -60,11 +57,11 @@ func (s *ScreenAsserter) UpdateLoggedUptoRowIndex() {
 }
 
 func (s ScreenAsserter) PromptAssertion(rowIndex int, expectedPrompt string, screenAsserter *ScreenAsserter) PromptAssertion {
-	return PromptAssertion{rowIndex: rowIndex, expectedPrompt: expectedPrompt, screenAsserter: screenAsserter}
+	return NewPromptAssertion(screenAsserter, rowIndex, expectedPrompt)
 }
 
 func (s ScreenAsserter) SingleLineAssertion(rowIndex int, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string, screenAsserter *ScreenAsserter) SingleLineScreenStateAssertion {
-	return SingleLineScreenStateAssertion{rowIndex: rowIndex, expectedOutput: expectedOutput, fallbackPatterns: fallbackPatterns, expectedPatternExplanation: expectedPatternExplanation, screenAsserter: screenAsserter}
+	return NewSingleLineScreenStateAssertion(screenAsserter, rowIndex, expectedOutput, fallbackPatterns, expectedPatternExplanation)
 }
 
 func (s *ScreenAsserter) AddAssertion(assertion Assertion) {
@@ -75,19 +72,21 @@ func (s *ScreenAsserter) UpdateRowIndex(increment int) {
 	s.rowIndex += increment
 }
 
-func (s *ScreenAsserter) RunAllAssertions() error {
+func (s *ScreenAsserter) RunAllAssertions(prohibitSideEffects bool) error {
 	for _, assertion := range s.Assertions {
 		if err := assertion.Run(); err != nil {
 			return err
 		}
-		assertion.UpdateRowIndex()
+		if !prohibitSideEffects {
+			assertion.UpdateRowIndex()
+		}
 	}
 	return nil
 }
 
 func (s *ScreenAsserter) WrappedRunAllAssertions() bool {
 	// True if the prompt assertion is a success
-	return s.RunAllAssertions() == nil
+	return s.RunAllAssertions(true) == nil
 }
 
 func (s *ScreenAsserter) ClearAssertions() {
