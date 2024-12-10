@@ -7,6 +7,7 @@ toolchain go1.22.3
 require (
 	github.com/codecrafters-io/tester-utils v0.2.38
 	github.com/creack/pty v1.1.23
+	github.com/edgaru089/vterm v0.0.0-20200817072248-91b02909843c
 	github.com/fatih/color v1.17.0
 	go.chromium.org/luci v0.0.0-20240530183920-783ca64715fa
 )

@@ -17,6 +17,7 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 	ptylib "github.com/creack/pty"
+	"github.com/edgaru089/vterm"
 	"go.chromium.org/luci/common/system/environ"
 )
 
@@ -51,6 +52,9 @@ func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellE
 
 	// TODO: Kill pty process?
 	// stageHarness.RegisterTeardownFunc(func() { b.Kill() })
+
+	vt := vterm.New(80, 25)
+	defer vt.Free()
 
 	return b
 }
