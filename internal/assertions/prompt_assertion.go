@@ -7,12 +7,14 @@ import (
 
 // PromptTestCase verifies a prompt exists, and that there's no extra output after it.
 type PromptAssertion struct {
-	screenAsserter *ScreenAsserter
-
-	rowIndex int
+	BaseAssertion
 
 	// expectedPrompt is the prompt expected to be displayed (example: "$ ")
 	expectedPrompt string
+}
+
+func NewPromptAssertion(screenAsserter *ScreenAsserter, rowIndex int, expectedPrompt string) PromptAssertion {
+	return PromptAssertion{BaseAssertion: BaseAssertion{screenAsserter: screenAsserter, rowIndex: rowIndex}, expectedPrompt: expectedPrompt}
 }
 
 func (t PromptAssertion) Run() error {
@@ -41,5 +43,10 @@ func (t PromptAssertion) GetRowUpdateCount() int {
 
 func (t *PromptAssertion) UpdateRowIndex() {
 	// Prompts are always on the same line, so we don't need to update the row index
+	if t.ifUpdatedRowIndex {
+		return
+	}
 	t.screenAsserter.UpdateRowIndex(t.GetRowUpdateCount())
+	t.ifUpdatedRowIndex = true
+	// fmt.Println("PromptAssertion.UpdateRowIndex() called, leading to row index", t.screenAsserter.GetRowIndex())
 }
