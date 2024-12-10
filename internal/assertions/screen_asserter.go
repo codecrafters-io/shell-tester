@@ -13,14 +13,12 @@ type ScreenAsserter struct {
 	Shell      *shell_executable.ShellExecutable
 	Logger     *logger.Logger
 	Assertions []Assertion
-	// This is the cursor we will use for selecting the row to assert on ideally
-	// For now this is only used for logging
-	rowIndex           int
-	loggedUptoRowIndex int
+
+	lastLoggedRowIndex int
 }
 
 func NewScreenAsserter(shell *shell_executable.ShellExecutable, logger *logger.Logger) *ScreenAsserter {
-	return &ScreenAsserter{Shell: shell, Logger: logger, rowIndex: 0, loggedUptoRowIndex: 0}
+	return &ScreenAsserter{Shell: shell, Logger: logger}
 }
 
 func (s *ScreenAsserter) LogFullScreenState() {
@@ -32,19 +30,19 @@ func (s *ScreenAsserter) LogFullScreenState() {
 	}
 }
 
-func (s *ScreenAsserter) LogCurrentRow() {
-	cleanedRow := utils.BuildCleanedRow(s.Shell.GetScreenState()[s.rowIndex])
-	if len(cleanedRow) > 0 {
-		s.Logger.Debugf(cleanedRow)
-	}
-}
+// func (s *ScreenAsserter) LogCurrentRow() {
+// 	cleanedRow := utils.BuildCleanedRow(s.Shell.GetScreenState()[s.rowIndex])
+// 	if len(cleanedRow) > 0 {
+// 		s.Logger.Debugf(cleanedRow)
+// 	}
+// }
 
-func (s *ScreenAsserter) LogUptoCurrentRow() {
-	for i := s.loggedUptoRowIndex; i <= s.rowIndex; i++ {
-		s.LogRow(i)
-	}
-	s.UpdateLoggedUptoRowIndex()
-}
+// func (s *ScreenAsserter) LogUptoCurrentRow() {
+// 	for i := s.loggedUptoRowIndex; i <= s.rowIndex; i++ {
+// 		s.LogRow(i)
+// 	}
+// 	s.UpdateLoggedUptoRowIndex()
+// }
 
 func (s *ScreenAsserter) LogRow(rowIndex int) {
 	cleanedRow := utils.BuildCleanedRow(s.Shell.GetScreenState()[rowIndex])
@@ -53,12 +51,12 @@ func (s *ScreenAsserter) LogRow(rowIndex int) {
 	}
 }
 
-func (s *ScreenAsserter) UpdateLoggedUptoRowIndex() {
-	s.loggedUptoRowIndex = s.rowIndex + 1
-}
+// func (s *ScreenAsserter) UpdateLoggedUptoRowIndex() {
+// 	s.loggedUptoRowIndex = s.rowIndex + 1
+// }
 
-func (s *ScreenAsserter) PromptAssertion(rowIndex int, expectedPrompt string) PromptAssertion {
-	return NewPromptAssertion(s, rowIndex, expectedPrompt)
+func (s *ScreenAsserter) PromptAssertion(expectedPrompt string) PromptAssertion {
+	return NewPromptAssertion(expectedPrompt)
 }
 
 func (s *ScreenAsserter) SingleLineAssertion(rowIndex int, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string) SingleLineScreenStateAssertion {
@@ -69,41 +67,44 @@ func (s *ScreenAsserter) AddAssertion(assertion Assertion) {
 	s.Assertions = append(s.Assertions, assertion)
 }
 
-func (s *ScreenAsserter) UpdateRowIndex(increment int) {
-	s.rowIndex += increment
+func (s *ScreenAsserter) RunWithPromptAssertion() error {
+	currentRowIndex := 0
+	s.AddAssertion(s.PromptAssertion("$ "))
+	defer {
+		s.PopAssertion()
+	}
+
+	return s.Run()
 }
 
-func (s *ScreenAsserter) RunAllAssertions(prohibitSideEffects bool) error {
+func (s *ScreenAsserter) Run() error {
+	currentRowIndex := 0
+
 	for _, assertion := range s.Assertions {
-		if err := assertion.Run(); err != nil {
+		processedRowCount, err := assertion.Run(s.Shell.GetScreenState(), currentRowIndex)
+
+		if err != nil {
 			return err
 		}
-		if !prohibitSideEffects {
-			assertion.UpdateRowIndex()
+
+		currentRowIndex += processedRowCount
+
+		// TODO: Off by one
+		if currentRowIndex > s.lastLoggedRowIndex {
+			// Log "success" rows that were processed
+			s.lastLoggedRowIndex = currentRowIndex
 		}
+
 	}
+
 	return nil
 }
 
-func (s *ScreenAsserter) WrappedRunAllAssertions() bool {
+func (s *ScreenAsserter) RunBool() bool {
 	// True if the prompt assertion is a success
-	return s.RunAllAssertions(true) == nil
+	return s.Run() == nil
 }
 
 func (s *ScreenAsserter) ClearAssertions() {
 	s.Assertions = []Assertion{}
-}
-
-func (s *ScreenAsserter) GetRowIndex() int {
-	return s.rowIndex
-}
-
-func (s *ScreenAsserter) GetLoggedUptoRowIndex() int {
-	return s.loggedUptoRowIndex
-}
-
-// Returns true if there is only one assertion and it is a prompt assertion
-// In such cases we need not log the current row
-func (s *ScreenAsserter) LonePromptAssertion() bool {
-	return len(s.Assertions) == 1 && s.Assertions[0].GetType() == "prompt"
 }
