@@ -100,3 +100,9 @@ func (s *ScreenAsserter) GetRowIndex() int {
 func (s *ScreenAsserter) GetLoggedUptoRowIndex() int {
 	return s.loggedUptoRowIndex
 }
+
+// Returns true if there is only one assertion and it is a prompt assertion
+// In such cases we need not log the current row
+func (s *ScreenAsserter) LonePromptAssertion() bool {
+	return len(s.Assertions) == 1 && s.Assertions[0].GetType() == "prompt"
+}
