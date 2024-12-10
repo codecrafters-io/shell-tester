@@ -75,6 +75,18 @@ func getRandomName() string {
 	return names[random.RandomInt(0, len(names))]
 }
 
+func getUniqueRandomIntegerFileNames(min, max, count int) []int {
+	randomInts := []int{}
+	for i := 0; i < count; i++ {
+		randomInt := random.RandomInt(min, max)
+		for slices.Contains(randomInts, randomInt) {
+			randomInt = random.RandomInt(min, max)
+		}
+		randomInts = append(randomInts, randomInt)
+	}
+	return randomInts
+}
+
 // writeFile writes a file to the given path with the given content
 func writeFile(path string, content string) error {
 	return os.WriteFile(path, []byte(content), 0644)
@@ -90,31 +102,4 @@ func writeFiles(paths []string, contents []string, logger *logger.Logger) error 
 		}
 	}
 	return nil
-}
-
-func getUniqueRandomIntegerFileNames(min, max, count int) []int {
-	randomInts := []int{}
-	for i := 0; i < count; i++ {
-		randomInt := random.RandomInt(min, max)
-		for slices.Contains(randomInts, randomInt) {
-			randomInt = random.RandomInt(min, max)
-		}
-		randomInts = append(randomInts, randomInt)
-	}
-	return randomInts
-}
-
-func test_getUniqueRandomIntegerFileNames() {
-	LOOP := 100000
-	N := 50
-	for i := 0; i < LOOP; i++ {
-		randomInts := getUniqueRandomIntegerFileNames(1, 100, N)
-		uniqueInts := make(map[int]struct{})
-		for _, v := range randomInts {
-			uniqueInts[v] = struct{}{}
-		}
-		if len(uniqueInts) != N {
-			panic(fmt.Sprintf("expected %d unique random integers, got %v", N, randomInts))
-		}
-	}
 }
