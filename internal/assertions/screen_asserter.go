@@ -57,12 +57,12 @@ func (s *ScreenAsserter) UpdateLoggedUptoRowIndex() {
 	s.loggedUptoRowIndex = s.rowIndex + 1
 }
 
-func (s *ScreenAsserter) PromptAssertion(rowIndex int, expectedPrompt string, screenAsserter *ScreenAsserter) PromptAssertion {
-	return NewPromptAssertion(screenAsserter, rowIndex, expectedPrompt)
+func (s *ScreenAsserter) PromptAssertion(rowIndex int, expectedPrompt string) PromptAssertion {
+	return NewPromptAssertion(s, rowIndex, expectedPrompt)
 }
 
-func (s *ScreenAsserter) SingleLineAssertion(rowIndex int, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string, screenAsserter *ScreenAsserter) SingleLineScreenStateAssertion {
-	return NewSingleLineScreenStateAssertion(screenAsserter, rowIndex, expectedOutput, fallbackPatterns, expectedPatternExplanation)
+func (s *ScreenAsserter) SingleLineAssertion(rowIndex int, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string) SingleLineScreenStateAssertion {
+	return NewSingleLineScreenStateAssertion(s, rowIndex, expectedOutput, fallbackPatterns, expectedPatternExplanation)
 }
 
 func (s *ScreenAsserter) AddAssertion(assertion Assertion) {

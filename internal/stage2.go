@@ -18,7 +18,7 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	screenAsserter := assertions.NewScreenAsserter(shell, logger)
-	promptAssertion := screenAsserter.PromptAssertion(0, "$ ", screenAsserter)
+	promptAssertion := screenAsserter.PromptAssertion(0, "$ ")
 	screenAsserter.AddAssertion(&promptAssertion)
 
 	responseTestCase := test_cases.NewResponseTestCase()
@@ -28,19 +28,19 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	screenAsserter.ClearAssertions()
-	firstLineAssertion := screenAsserter.SingleLineAssertion(0, "$ nonexistent", nil, "nonexistent", screenAsserter)
+	firstLineAssertion := screenAsserter.SingleLineAssertion(0, "$ nonexistent", nil, "nonexistent")
 	screenAsserter.AddAssertion(&firstLineAssertion)
 	commandResponseTestCase := test_cases.NewCommandResponseTestCase("nonexistent")
 	if err := commandResponseTestCase.Run(screenAsserter, true); err != nil {
 		return err
 	}
 
-	secondLineAssertion := screenAsserter.SingleLineAssertion(1, "", []*regexp.Regexp{regexp.MustCompile(`bash: nonexistent: command not found`)}, "nonexistent: command not found", screenAsserter)
+	secondLineAssertion := screenAsserter.SingleLineAssertion(1, "", []*regexp.Regexp{regexp.MustCompile(`bash: nonexistent: command not found`)}, "nonexistent: command not found")
 	screenAsserter.AddAssertion(&secondLineAssertion)
 
 	// At this stage the user might or might not have implemented a REPL to print the prompt again, so we won't test further
 	// ToDo: Remove this prompt assertion from here
-	promptAssertion = screenAsserter.PromptAssertion(2, "$ ", screenAsserter)
+	promptAssertion = screenAsserter.PromptAssertion(2, "$ ")
 	screenAsserter.AddAssertion(&promptAssertion)
 
 	if err := responseTestCase.Run(screenAsserter, true); err != nil {
