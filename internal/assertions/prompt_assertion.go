@@ -18,18 +18,20 @@ func NewPromptAssertion(expectedPrompt string) PromptAssertion {
 }
 
 func (t *PromptAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err error) {
+	processedRowCount = 1
+
 	if len(screenState) == 0 {
-		return fmt.Errorf("expected screen to have at least one row, but it was empty")
+		return processedRowCount, fmt.Errorf("expected screen to have at least one row, but it was empty")
 	}
 
 	rawRow := screenState[startRowIndex]
 	cleanedRow := utils.BuildCleanedRow(rawRow)
 
 	if !strings.EqualFold(cleanedRow, t.expectedPrompt) {
-		return 0, fmt.Errorf("expected prompt to be %q, but got %q", t.expectedPrompt, cleanedRow)
+		return processedRowCount, fmt.Errorf("expected prompt to be %q, but got %q", t.expectedPrompt, cleanedRow)
 	}
 
-	return 0, nil
+	return processedRowCount, nil
 }
 
 func (t *PromptAssertion) GetType() string {
