@@ -37,11 +37,15 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	secondLineAssertion := screenAsserter.SingleLineAssertion(1, "", []*regexp.Regexp{regexp.MustCompile(`bash: nonexistent: command not found`)}, "nonexistent: command not found", screenAsserter)
 	screenAsserter.AddAssertion(&secondLineAssertion)
+
+	// At this stage the user might or might not have implemented a REPL to print the prompt again, so we won't test further
+	// ToDo: Remove this prompt assertion from here
+	promptAssertion = screenAsserter.PromptAssertion(2, "$ ", screenAsserter)
+	screenAsserter.AddAssertion(&promptAssertion)
+
 	if err := responseTestCase.Run(screenAsserter, true); err != nil {
 		return err
 	}
-
-	// At this stage the user might or might not have implemented a REPL to print the prompt again, so we won't test further
 
 	return nil
 }
