@@ -17,7 +17,7 @@ func NewPromptAssertion(expectedPrompt string) PromptAssertion {
 	return PromptAssertion{expectedPrompt: expectedPrompt}
 }
 
-func (t *PromptAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err error) {
+func (t PromptAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err error) {
 	processedRowCount = 1
 
 	if len(screenState) == 0 {
@@ -32,8 +32,4 @@ func (t *PromptAssertion) Run(screenState [][]string, startRowIndex int) (proces
 	}
 
 	return processedRowCount, nil
-}
-
-func (t *PromptAssertion) GetType() string {
-	return "prompt"
 }
