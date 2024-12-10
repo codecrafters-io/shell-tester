@@ -138,3 +138,7 @@ func buildCleanedRow(row []string) string {
 	}
 	return result
 }
+
+func (t SingleLineScreenStateAssertion) GetType() string {
+	return "single_line_screen_state"
+}

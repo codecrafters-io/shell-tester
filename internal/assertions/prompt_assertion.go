@@ -50,3 +50,7 @@ func (t *PromptAssertion) UpdateRowIndex() {
 	t.ifUpdatedRowIndex = true
 	// fmt.Println("PromptAssertion.UpdateRowIndex() called, leading to row index", t.screenAsserter.GetRowIndex())
 }
+
+func (t PromptAssertion) GetType() string {
+	return "prompt"
+}

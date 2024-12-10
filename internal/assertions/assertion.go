@@ -18,4 +18,5 @@ type Assertion interface {
 	WrappedRun() bool
 	GetRowUpdateCount() int
 	UpdateRowIndex()
+	GetType() string
 }
