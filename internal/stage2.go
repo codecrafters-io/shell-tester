@@ -24,9 +24,8 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	// TODO: Can shorten into a SingleLineCommandTestCase
 	// ------ Test case starts
 	shell.SendCommand("nonexistent")
-	screenAsserter.AddAssertion(screenAsserter.SingleLineAssertion(0, "$ nonexistent", nil, "nonexistent"))
-	screenAsserter.AddAssertion(screenAsserter.SingleLineAssertion(1, "", nil, "nonexistent: command not found"))
-
+	screenAsserter.PushAssertion(screenAsserter.SingleLineAssertion(0, "$ nonexistent", nil, "nonexistent"))
+	screenAsserter.PushAssertion(screenAsserter.SingleLineAssertion(1, "", nil, "nonexistent: command not found"))
 
 	if err := screenAsserter.Run(); err != nil {
 		return err
@@ -49,7 +48,7 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// screenAsserter := assertions.NewScreenAsserter(shell, logger)
 	// promptAssertion := screenAsserter.PromptAssertion(0, "$ ")
-	// screenAsserter.AddAssertion(&promptAssertion)
+	// screenAsserter.PushAssertion(&promptAssertion)
 
 	// responseTestCase := test_cases.NewResponseTestCase()
 
@@ -59,19 +58,19 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// screenAsserter.ClearAssertions()
 	// firstLineAssertion := screenAsserter.SingleLineAssertion(0, "$ nonexistent", nil, "nonexistent")
-	// screenAsserter.AddAssertion(&firstLineAssertion)
+	// screenAsserter.PushAssertion(&firstLineAssertion)
 	// commandResponseTestCase := test_cases.NewCommandResponseTestCase("nonexistent")
 	// if err := commandResponseTestCase.Run(screenAsserter, true); err != nil {
 	// 	return err
 	// }
 
 	// secondLineAssertion := screenAsserter.SingleLineAssertion(1, "", []*regexp.Regexp{regexp.MustCompile(`bash: nonexistent: command not found`)}, "nonexistent: command not found")
-	// screenAsserter.AddAssertion(&secondLineAssertion)
+	// screenAsserter.PushAssertion(&secondLineAssertion)
 
 	// // At this stage the user might or might not have implemented a REPL to print the prompt again, so we won't test further
 	// // ToDo: Remove this prompt assertion from here
 	// promptAssertion = screenAsserter.PromptAssertion(2, "$ ")
-	// screenAsserter.AddAssertion(&promptAssertion)
+	// screenAsserter.PushAssertion(&promptAssertion)
 
 	// if err := responseTestCase.Run(screenAsserter, true); err != nil {
 	// 	return err
