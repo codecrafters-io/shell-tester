@@ -27,6 +27,8 @@ func (t CommandResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter, 
 
 	err = screenAsserter.Shell.ReadUntil(screenAsserter.WrappedRunAllAssertions)
 
+	screenAsserter.RunAllAssertions(false)
+
 	if err != nil {
 		// If the user sent any output, let's print it before the error message.
 		if len(screenAsserter.Shell.GetScreenState()) > 0 {
