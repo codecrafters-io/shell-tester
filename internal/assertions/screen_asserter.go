@@ -24,7 +24,7 @@ func NewScreenAsserter(shell *shell_executable.ShellExecutable, logger *logger.L
 
 func (s ScreenAsserter) LogFullScreenState() {
 	for _, row := range s.Shell.GetScreenState() {
-		cleanedRow := buildCleanedRow(row)
+		cleanedRow := utils.BuildCleanedRow(row)
 		if len(cleanedRow) > 0 {
 			s.Logger.Debugf(cleanedRow)
 		}
@@ -32,7 +32,7 @@ func (s ScreenAsserter) LogFullScreenState() {
 }
 
 func (s ScreenAsserter) LogCurrentRow() {
-	cleanedRow := buildCleanedRow(s.Shell.GetScreenState()[s.rowIndex])
+	cleanedRow := utils.BuildCleanedRow(s.Shell.GetScreenState()[s.rowIndex])
 	if len(cleanedRow) > 0 {
 		s.Logger.Debugf(cleanedRow)
 	}
@@ -46,7 +46,7 @@ func (s *ScreenAsserter) LogUptoCurrentRow() {
 }
 
 func (s *ScreenAsserter) LogRow(rowIndex int) {
-	cleanedRow := buildCleanedRow(s.Shell.GetScreenState()[rowIndex])
+	cleanedRow := utils.BuildCleanedRow(s.Shell.GetScreenState()[rowIndex])
 	if len(cleanedRow) > 0 {
 		s.Logger.Debugf(cleanedRow)
 	}

@@ -23,7 +23,7 @@ func (t PromptAssertion) Run() error {
 		return fmt.Errorf("expected screen to have at least one row, but it was empty")
 	}
 	rawRow := screen[t.rowIndex]
-	cleanedRow := buildCleanedRow(rawRow)
+	cleanedRow := utils.BuildCleanedRow(rawRow)
 
 	if !strings.EqualFold(cleanedRow, t.expectedPrompt) {
 		return fmt.Errorf("expected prompt to be %q, but got %q", t.expectedPrompt, cleanedRow)

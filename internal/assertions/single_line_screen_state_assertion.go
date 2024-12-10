@@ -8,8 +8,6 @@ import (
 	"github.com/fatih/color"
 )
 
-const VT_SENTINEL_CHARACTER = "."
-
 // SingleLineScreenStateAssertion are implicitly constrained to a single line of output
 // Our ScreenState is composed of multiple lines, so we need to assert on each line individually
 // This SingleLineScreenStateAssertion will assert only on a single given row (rowIndex)
@@ -41,7 +39,7 @@ func (t SingleLineScreenStateAssertion) Run() error {
 		return fmt.Errorf("expected screen to have at least one row, but it was empty")
 	}
 	rawRow := screen[t.rowIndex]
-	cleanedRow := buildCleanedRow(rawRow)
+	cleanedRow := utils.BuildCleanedRow(rawRow)
 
 	if t.fallbackPatterns != nil && t.expectedPatternExplanation == "" {
 		// expectedPatternExplanation is required for the error message on the FallbackPatterns path
@@ -101,44 +99,6 @@ func (t *SingleLineScreenStateAssertion) UpdateRowIndex() {
 	// fmt.Println("SingleLineScreenStateAssertion.UpdateRowIndex() called, leading to row index", t.screenAsserter.GetRowIndex())
 }
 
-func colorizeString(colorToUse color.Attribute, msg string) string {
-	c := color.New(colorToUse)
-	return c.Sprint(msg)
-}
-
-func BuildColoredErrorMessage(expectedPatternExplanation string, output string) string {
-	errorMsg := colorizeString(color.FgGreen, "Expected:")
-	errorMsg += " \"" + expectedPatternExplanation + "\""
-	errorMsg += "\n"
-	errorMsg += colorizeString(color.FgRed, "Received:")
-	errorMsg += " \"" + removeNonPrintableCharacters(output) + "\""
-
-	return errorMsg
-}
-
-func removeNonPrintableCharacters(output string) string {
-	result := ""
-	for _, r := range output {
-		if unicode.IsPrint(r) {
-			result += string(r)
-		} else {
-			result += "�" // U+FFFD
-		}
-	}
-	return result
-}
-
-// ToDo: move this to its own package along with all vterm interface code
-func buildCleanedRow(row []string) string {
-	result := ""
-	for _, cell := range row {
-		if cell != VT_SENTINEL_CHARACTER {
-			result += cell
-		}
-	}
-	return result
-}
-
-func (t SingleLineScreenStateAssertion) GetType() string {
+func (t *SingleLineScreenStateAssertion) GetType() string {
 	return "single_line_screen_state"
 }
