@@ -131,3 +131,12 @@ test_bash:
 	make test_base_w_bash 
 	make test_nav_w_bash
 	make test_quoting_w_bash
+
+
+test_vt: build
+	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
+	CODECRAFTERS_TEST_CASES_JSON="[ \
+		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#oo8\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#cz2\",\"title\":\"Stage #2: Missing Command\"} \
+	]" \
+	dist/main.out

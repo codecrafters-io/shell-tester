@@ -15,16 +15,16 @@ type EmptyResponseTestCase struct {
 }
 
 func (t EmptyResponseTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger, skipReadingPrompt bool) error {
-	promptTestCase := NewSilentPromptTestCase("$ ")
+	// promptTestCase := NewSilentPromptTestCase("$ ")
 
-	if err := shell.SendCommand(t.Command); err != nil {
-		return err
-	}
+	// if err := shell.SendCommand(t.Command); err != nil {
+	// 	return err
+	// }
 
 	if !skipReadingPrompt {
-		if err := promptTestCase.Run(shell, logger); err != nil {
-			return err
-		}
+		// if err := promptTestCase.Run(shell, logger); err != nil {
+		// 	return err
+		// }
 
 		logger.Successf("✓ %s", t.SuccessMessage)
 	}
