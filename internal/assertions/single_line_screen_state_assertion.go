@@ -14,8 +14,6 @@ import (
 // But, if that is not possible, we can use fallbackPatterns to match against multiple regexes
 // And in the failure case, we want to show the expectedPatternExplanation to the user
 type SingleLineScreenStateAssertion struct {
-	BaseAssertion
-
 	// expectedOutput is the expected output string to match against
 	expectedOutput string
 
@@ -28,16 +26,18 @@ type SingleLineScreenStateAssertion struct {
 }
 
 func NewSingleLineScreenStateAssertion(screenAsserter *ScreenAsserter, rowIndex int, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string) SingleLineScreenStateAssertion {
-	return SingleLineScreenStateAssertion{BaseAssertion: BaseAssertion{screenAsserter: screenAsserter, rowIndex: rowIndex}, expectedOutput: expectedOutput, fallbackPatterns: fallbackPatterns, expectedPatternExplanation: expectedPatternExplanation}
+	return SingleLineScreenStateAssertion{expectedOutput: expectedOutput, fallbackPatterns: fallbackPatterns, expectedPatternExplanation: expectedPatternExplanation}
 }
 
 // ToDo: screenState as its own type and wrap index / cursors inside it
-func (t *SingleLineScreenStateAssertion) Run() error {
-	screen := t.screenAsserter.Shell.GetScreenState()
+func (t SingleLineScreenStateAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err error) {
+	screen := screenState
+	processedRowCount = 1
+
 	if len(screen) == 0 {
-		return fmt.Errorf("expected screen to have at least one row, but it was empty")
+		return processedRowCount, fmt.Errorf("expected screen to have at least one row, but it was empty")
 	}
-	rawRow := screen[t.rowIndex]
+	rawRow := screen[startRowIndex]
 	cleanedRow := utils.BuildCleanedRow(rawRow)
 
 	if t.fallbackPatterns != nil && t.expectedPatternExplanation == "" {
@@ -65,39 +65,16 @@ func (t *SingleLineScreenStateAssertion) Run() error {
 			// Possibly change loggers / return from here log outside
 			// detailedErrorMessage := BuildColoredErrorMessage(t.expectedPatternExplanation, cleanedRow)
 			// t.screenAsserter.Logger.Infof(detailedErrorMessage)
-			return fmt.Errorf("Received output does not match expectation.")
+			return processedRowCount, fmt.Errorf("Received output does not match expectation.")
 		} else {
 			// ExpectedOutput is not nil, we can use it for exact string comparison
 			if cleanedRow != t.expectedOutput {
 				// detailedErrorMessage := BuildColoredErrorMessage(t.expectedOutput, cleanedRow)
 				// t.screenAsserter.Logger.Infof(detailedErrorMessage)
-				return fmt.Errorf("Received output does not match expectation.")
+				return processedRowCount, fmt.Errorf("Received output does not match expectation.")
 			}
 		}
 	}
 
-	return nil
-}
-
-func (t *SingleLineScreenStateAssertion) WrappedRun() bool {
-	// True if the single line screen state assertion is a success
-	return t.Run() == nil
-}
-
-func (t *SingleLineScreenStateAssertion) GetRowUpdateCount() int {
-	return 1
-}
-
-func (t *SingleLineScreenStateAssertion) UpdateRowIndex() {
-	// Single line screen state assertions are always on the same line, so we need to update the row index
-	if t.ifUpdatedRowIndex {
-		return
-	}
-	t.screenAsserter.UpdateRowIndex(t.GetRowUpdateCount())
-	t.ifUpdatedRowIndex = true
-	// fmt.Println("SingleLineScreenStateAssertion.UpdateRowIndex() called, leading to row index", t.screenAsserter.GetRowIndex())
-}
-
-func (t *SingleLineScreenStateAssertion) GetType() string {
-	return "single_line_screen_state"
+	return processedRowCount, nil
 }
