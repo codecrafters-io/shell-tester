@@ -17,11 +17,14 @@ func NewCompositeScreenStateTestCase() *CompositeScreenStateTestCase {
 }
 
 func (t *CompositeScreenStateTestCase) Run(screenState [][]string, logger *logger.Logger) error {
-	// currentRowIndex := 0
+	currentRowIndex := 0
 	for _, assertion := range t.ScreenStateAssertions {
-		if err := assertion.Run(); err != nil {
+		processedRowCount, err := assertion.Run(screenState, currentRowIndex)
+		if err != nil {
 			return err
 		}
+
+		currentRowIndex += processedRowCount
 	}
 
 	return nil
