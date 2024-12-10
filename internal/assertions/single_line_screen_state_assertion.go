@@ -17,11 +17,7 @@ const VT_SENTINEL_CHARACTER = "."
 // But, if that is not possible, we can use fallbackPatterns to match against multiple regexes
 // And in the failure case, we want to show the expectedPatternExplanation to the user
 type SingleLineScreenStateAssertion struct {
-	// screenAsserter is the ScreenAsserter that contains the rendered screenstate
-	screenAsserter *ScreenAsserter
-
-	// rowIndex is the index of the row in the screenstate that we want to assert on
-	rowIndex int
+	BaseAssertion
 
 	// expectedOutput is the expected output string to match against
 	expectedOutput string
@@ -32,6 +28,10 @@ type SingleLineScreenStateAssertion struct {
 	// expectedPatternExplanation is the explanation of the expected pattern to
 	// show in the error message in case of failure
 	expectedPatternExplanation string
+}
+
+func NewSingleLineScreenStateAssertion(screenAsserter *ScreenAsserter, rowIndex int, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string) SingleLineScreenStateAssertion {
+	return SingleLineScreenStateAssertion{BaseAssertion: BaseAssertion{screenAsserter: screenAsserter, rowIndex: rowIndex}, expectedOutput: expectedOutput, fallbackPatterns: fallbackPatterns, expectedPatternExplanation: expectedPatternExplanation}
 }
 
 // ToDo: screenState as its own type and wrap index / cursors inside it
@@ -93,7 +93,12 @@ func (t SingleLineScreenStateAssertion) GetRowUpdateCount() int {
 
 func (t *SingleLineScreenStateAssertion) UpdateRowIndex() {
 	// Single line screen state assertions are always on the same line, so we need to update the row index
+	if t.ifUpdatedRowIndex {
+		return
+	}
 	t.screenAsserter.UpdateRowIndex(t.GetRowUpdateCount())
+	t.ifUpdatedRowIndex = true
+	// fmt.Println("SingleLineScreenStateAssertion.UpdateRowIndex() called, leading to row index", t.screenAsserter.GetRowIndex())
 }
 
 func colorizeString(colorToUse color.Attribute, msg string) string {
