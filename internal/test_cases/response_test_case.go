@@ -19,6 +19,7 @@ func NewResponseTestCase() ResponseTestCase {
 
 func (t ResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter, shouldOmitSuccessLog bool) error {
 	err := screenAsserter.Shell.ReadUntil(screenAsserter.WrappedRunAllAssertions)
+	// If assertions contain a single assertion and if that is a prompt assertion, we need to log current row else pass
 
 	if err != nil {
 		// If the user sent any output, let's print it before the error message.
@@ -26,14 +27,16 @@ func (t ResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter, shouldO
 			screenAsserter.LogFullScreenState()
 		}
 
-		// ToDo: ??
+		// ToDo: Figure out how to get the expected output here
 		return fmt.Errorf("Expected response %q, got %q", "", buildCleanedRow(screenAsserter.Shell.GetScreenState()[0]))
 	}
 
 	err = screenAsserter.Shell.ReadUntilTimeout(10 * time.Millisecond)
 
 	// Whether the value matches our expectations or not, we print it
+	fmt.Println("Before logging in response test case", screenAsserter.GetRowIndex(), screenAsserter.GetLoggedUptoRowIndex())
 	screenAsserter.LogUptoCurrentRow()
+	fmt.Println("After logging in response test case", screenAsserter.GetRowIndex(), screenAsserter.GetLoggedUptoRowIndex())
 
 	// We failed to read extra output
 	if err != nil {
