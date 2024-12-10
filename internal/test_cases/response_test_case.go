@@ -19,11 +19,11 @@ func NewResponseTestCase() ResponseTestCase {
 }
 
 func (t ResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter, shouldOmitSuccessLog bool) error {
-	err := screenAsserter.Shell.ReadUntil(screenAsserter.WrappedRunAllAssertions)
+	err := screenAsserter.Shell.ReadUntil(screenAsserter.RunBool)
 	// If assertions contain a single assertion and if that is a prompt assertion, we need to log current row else pass
 
 	// For side effects of assertions, we need to run them again
-	screenAsserter.RunAllAssertions(false)
+	screenAsserter.RunBool()
 
 	if err != nil {
 		// If the user sent any output, let's print it before the error message.
@@ -38,9 +38,9 @@ func (t ResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter, shouldO
 	err = screenAsserter.Shell.ReadUntilTimeout(10 * time.Millisecond)
 
 	// Whether the value matches our expectations or not, we print it
-	if !screenAsserter.LonePromptAssertion() {
-		screenAsserter.LogUptoCurrentRow()
-	}
+	// if !screenAsserter.LonePromptAssertion() {
+	// 	screenAsserter.LogUptoCurrentRow()
+	// }
 
 	// We failed to read extra output
 	if err != nil {
