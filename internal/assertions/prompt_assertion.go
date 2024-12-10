@@ -3,6 +3,8 @@ package assertions
 import (
 	"fmt"
 	"strings"
+
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 )
 
 // PromptTestCase verifies a prompt exists, and that there's no extra output after it.
@@ -17,7 +19,7 @@ func NewPromptAssertion(screenAsserter *ScreenAsserter, rowIndex int, expectedPr
 	return PromptAssertion{BaseAssertion: BaseAssertion{screenAsserter: screenAsserter, rowIndex: rowIndex}, expectedPrompt: expectedPrompt}
 }
 
-func (t PromptAssertion) Run() error {
+func (t *PromptAssertion) Run() error {
 	screen := t.screenAsserter.Shell.GetScreenState()
 	if len(screen) == 0 {
 		return fmt.Errorf("expected screen to have at least one row, but it was empty")
@@ -32,12 +34,12 @@ func (t PromptAssertion) Run() error {
 	return nil
 }
 
-func (t PromptAssertion) WrappedRun() bool {
+func (t *PromptAssertion) WrappedRun() bool {
 	// True if the prompt assertion is a success
 	return t.Run() == nil
 }
 
-func (t PromptAssertion) GetRowUpdateCount() int {
+func (t *PromptAssertion) GetRowUpdateCount() int {
 	return 0
 }
 
@@ -51,6 +53,6 @@ func (t *PromptAssertion) UpdateRowIndex() {
 	// fmt.Println("PromptAssertion.UpdateRowIndex() called, leading to row index", t.screenAsserter.GetRowIndex())
 }
 
-func (t PromptAssertion) GetType() string {
+func (t *PromptAssertion) GetType() string {
 	return "prompt"
 }

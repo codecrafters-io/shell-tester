@@ -4,6 +4,7 @@ import (
 	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
@@ -22,7 +23,7 @@ func NewScreenAsserter(shell *shell_executable.ShellExecutable, logger *logger.L
 	return &ScreenAsserter{Shell: shell, Logger: logger, rowIndex: 0, loggedUptoRowIndex: 0}
 }
 
-func (s ScreenAsserter) LogFullScreenState() {
+func (s *ScreenAsserter) LogFullScreenState() {
 	for _, row := range s.Shell.GetScreenState() {
 		cleanedRow := utils.BuildCleanedRow(row)
 		if len(cleanedRow) > 0 {
@@ -31,7 +32,7 @@ func (s ScreenAsserter) LogFullScreenState() {
 	}
 }
 
-func (s ScreenAsserter) LogCurrentRow() {
+func (s *ScreenAsserter) LogCurrentRow() {
 	cleanedRow := utils.BuildCleanedRow(s.Shell.GetScreenState()[s.rowIndex])
 	if len(cleanedRow) > 0 {
 		s.Logger.Debugf(cleanedRow)
@@ -56,11 +57,11 @@ func (s *ScreenAsserter) UpdateLoggedUptoRowIndex() {
 	s.loggedUptoRowIndex = s.rowIndex + 1
 }
 
-func (s ScreenAsserter) PromptAssertion(rowIndex int, expectedPrompt string, screenAsserter *ScreenAsserter) PromptAssertion {
+func (s *ScreenAsserter) PromptAssertion(rowIndex int, expectedPrompt string, screenAsserter *ScreenAsserter) PromptAssertion {
 	return NewPromptAssertion(screenAsserter, rowIndex, expectedPrompt)
 }
 
-func (s ScreenAsserter) SingleLineAssertion(rowIndex int, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string, screenAsserter *ScreenAsserter) SingleLineScreenStateAssertion {
+func (s *ScreenAsserter) SingleLineAssertion(rowIndex int, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string, screenAsserter *ScreenAsserter) SingleLineScreenStateAssertion {
 	return NewSingleLineScreenStateAssertion(screenAsserter, rowIndex, expectedOutput, fallbackPatterns, expectedPatternExplanation)
 }
 

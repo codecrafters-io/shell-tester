@@ -3,9 +3,8 @@ package assertions
 import (
 	"fmt"
 	"regexp"
-	"unicode"
 
-	"github.com/fatih/color"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 )
 
 // SingleLineScreenStateAssertion are implicitly constrained to a single line of output
@@ -33,7 +32,7 @@ func NewSingleLineScreenStateAssertion(screenAsserter *ScreenAsserter, rowIndex 
 }
 
 // ToDo: screenState as its own type and wrap index / cursors inside it
-func (t SingleLineScreenStateAssertion) Run() error {
+func (t *SingleLineScreenStateAssertion) Run() error {
 	screen := t.screenAsserter.Shell.GetScreenState()
 	if len(screen) == 0 {
 		return fmt.Errorf("expected screen to have at least one row, but it was empty")
@@ -80,12 +79,12 @@ func (t SingleLineScreenStateAssertion) Run() error {
 	return nil
 }
 
-func (t SingleLineScreenStateAssertion) WrappedRun() bool {
+func (t *SingleLineScreenStateAssertion) WrappedRun() bool {
 	// True if the single line screen state assertion is a success
 	return t.Run() == nil
 }
 
-func (t SingleLineScreenStateAssertion) GetRowUpdateCount() int {
+func (t *SingleLineScreenStateAssertion) GetRowUpdateCount() int {
 	return 1
 }
 
