@@ -63,16 +63,9 @@ func (s *ScreenAsserter) SingleLineAssertion(rowIndex int, expectedOutput string
 	return NewSingleLineScreenStateAssertion(s, rowIndex, expectedOutput, fallbackPatterns, expectedPatternExplanation)
 }
 
-func (s *ScreenAsserter) AddAssertion(assertion Assertion) {
-	s.Assertions = append(s.Assertions, assertion)
-}
-
 func (s *ScreenAsserter) RunWithPromptAssertion() error {
-	currentRowIndex := 0
-	s.AddAssertion(s.PromptAssertion("$ "))
-	defer {
-		s.PopAssertion()
-	}
+	s.PushAssertion(s.PromptAssertion("$ "))
+	defer s.PopAssertion()
 
 	return s.Run()
 }
@@ -103,6 +96,21 @@ func (s *ScreenAsserter) Run() error {
 func (s *ScreenAsserter) RunBool() bool {
 	// True if the prompt assertion is a success
 	return s.Run() == nil
+}
+
+// Composition of Assertions
+
+func (s *ScreenAsserter) PushAssertion(assertion Assertion) {
+	s.Assertions = append(s.Assertions, assertion)
+}
+
+func (s *ScreenAsserter) PopAssertion() Assertion {
+	if len(s.Assertions) == 0 {
+		return nil
+	}
+	lastAssertion := s.Assertions[len(s.Assertions)-1]
+	s.Assertions = s.Assertions[:len(s.Assertions)-1]
+	return lastAssertion
 }
 
 func (s *ScreenAsserter) ClearAssertions() {
