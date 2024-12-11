@@ -18,7 +18,8 @@ func NewPromptAssertion(expectedPrompt string) PromptAssertion {
 }
 
 func (t PromptAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err error) {
-	processedRowCount = 1
+	// We don't want to count the processed prompt as a complete row
+	processedRowCount = 0
 
 	if len(screenState) == 0 {
 		return processedRowCount, fmt.Errorf("expected screen to have at least one row, but it was empty")
