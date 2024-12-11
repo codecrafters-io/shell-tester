@@ -22,14 +22,14 @@ func (t PromptAssertion) Run(screenState [][]string, startRowIndex int) (process
 	processedRowCount = 0
 
 	if len(screenState) == 0 {
-		return processedRowCount, fmt.Errorf("expected screen to have at least one row, but it was empty")
+		return processedRowCount, fmt.Errorf("Expected to receive prompt: %q, but received no output", t.expectedPrompt)
 	}
 
 	rawRow := screenState[startRowIndex]
 	cleanedRow := utils.BuildCleanedRow(rawRow)
 
 	if !strings.EqualFold(cleanedRow, t.expectedPrompt) {
-		return processedRowCount, fmt.Errorf("expected prompt to be %q, but got %q", t.expectedPrompt, cleanedRow)
+		return processedRowCount, fmt.Errorf("Expected prompt: %q, but received: %q", t.expectedPrompt, cleanedRow)
 	}
 
 	return processedRowCount, nil
