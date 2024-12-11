@@ -26,8 +26,13 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	screenAsserter := assertions.NewScreenAsserter(shell, logger)
-	if err := screenAsserter.RunWithPromptAssertion(); err != nil {
+	screenAsserter := assertions.NewScreenAsserter(shell, logger).WithPromptAssertion()
+	err = screenAsserter.Shell.ReadUntil(screenAsserter.RunBool)
+	if err != nil {
+		return err
+	}
+
+	if err := screenAsserter.Run(); err != nil {
 		return err
 	}
 	logger.Successf("✓ Received prompt")
