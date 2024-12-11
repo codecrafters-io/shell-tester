@@ -9,27 +9,36 @@ import (
 func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-
 	if err := shell.Start(); err != nil {
 		return err
 	}
 
-	screenAsserter := assertions.NewScreenAsserter(shell, logger)
+	screenAsserter := assertions.NewScreenAsserter(shell, logger).WithPromptAssertion()
+	if err := screenAsserter.Shell.ReadUntil(screenAsserter.RunBool); err != nil {
+		return err
+	}
 
 	// Checks if prompt is present
 	if err := screenAsserter.Run(); err != nil {
 		return err
 	}
+	screenAsserter.PopAssertion()
 
 	// TODO: Can shorten into a SingleLineCommandTestCase
 	// ------ Test case starts
 	shell.SendCommand("nonexistent")
 	screenAsserter.PushAssertion(screenAsserter.SingleLineAssertion(0, "$ nonexistent", nil, "nonexistent"))
-	screenAsserter.PushAssertion(screenAsserter.SingleLineAssertion(1, "", nil, "nonexistent: command not found"))
-
+	screenAsserter.PushAssertion(screenAsserter.SingleLineAssertion(1, "bash: nonexistent: command not found", nil, ""))
+	screenAsserter.PushAssertion(screenAsserter.PromptAssertion("$ "))
+	if err := screenAsserter.Shell.ReadUntil(screenAsserter.RunBool); err != nil {
+		screenAsserter.LogFullScreenState()
+		return err
+	}
 	if err := screenAsserter.Run(); err != nil {
 		return err
 	}
+	logger.Successf("$ ")
+
 	// ------ Test case ends
 
 	// if err := screenAsserter.RunWithoutLastPromptAssertion(); err != nil {
