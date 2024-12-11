@@ -63,7 +63,8 @@ func (s *ScreenAsserter) PushAssertion(assertion assertions.Assertion) {
 func (s *ScreenAsserter) logRow(rowIndex int) {
 	cleanedRow := utils.BuildCleanedRow(s.Shell.GetScreenState()[rowIndex])
 	if len(cleanedRow) > 0 {
-		s.Logger.Debugf(cleanedRow)
+		// s.Logger.Debugf(cleanedRow)
+		s.Shell.LogOutput([]byte(cleanedRow))
 	} else {
 		// ToDo: Remove this, this is an assertion for rowIndex
 		// values not going out of range
