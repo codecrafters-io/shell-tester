@@ -14,7 +14,7 @@ type ScreenAsserter struct {
 	Logger     *logger.Logger
 	Assertions []Assertion
 
-	lastLoggedRowIndex int
+	nextRowToLog int
 }
 
 func NewScreenAsserter(shell *shell_executable.ShellExecutable, logger *logger.Logger) *ScreenAsserter {
@@ -48,6 +48,10 @@ func (s *ScreenAsserter) LogRow(rowIndex int) {
 	cleanedRow := utils.BuildCleanedRow(s.Shell.GetScreenState()[rowIndex])
 	if len(cleanedRow) > 0 {
 		s.Logger.Debugf(cleanedRow)
+	} else {
+		// ToDo: Remove this, this is an assertion for rowIndex
+		// values not going out of range
+		s.Logger.Debugf("No output")
 	}
 }
 
@@ -90,17 +94,13 @@ func (s *ScreenAsserter) Run() error {
 
 		currentRowIndex += processedRowCount
 
-		// TODO: Off by one
-		// fmt.Println("Start Logging, ", currentRowIndex, s.lastLoggedRowIndex)
-		if currentRowIndex > s.lastLoggedRowIndex {
-			// Log "success" rows that were processed
-			for i := s.lastLoggedRowIndex; i <= currentRowIndex; i++ {
-				// fmt.Println("Logging row, ", i)
+		// Log "success" rows that were processed
+		if s.nextRowToLog <= currentRowIndex {
+			for i := s.nextRowToLog; i < currentRowIndex; i++ {
 				s.LogRow(i)
 			}
-			s.lastLoggedRowIndex = currentRowIndex
+			s.nextRowToLog = currentRowIndex
 		}
-
 	}
 
 	return nil
