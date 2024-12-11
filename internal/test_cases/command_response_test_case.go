@@ -5,6 +5,7 @@ import (
 	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
+	"github.com/codecrafters-io/shell-tester/internal/screen_asserter"
 )
 
 // CommandResponseTestCase
@@ -21,7 +22,7 @@ func NewCommandResponseTestCase(command string, expectedOutput string, fallbackP
 	return CommandResponseTestCase{command: command, SingleLineScreenStateAssertion: assertions.NewSingleLineScreenStateAssertion(nil, 0, expectedOutput, fallbackPatterns, expectedPatternExplanation)}
 }
 
-func (t CommandResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter) error {
+func (t CommandResponseTestCase) Run(screenAsserter *screen_asserter.ScreenAsserter) error {
 	err := screenAsserter.Shell.SendCommand(t.command)
 	if err != nil {
 		return fmt.Errorf("Error sending command: %v", err)
