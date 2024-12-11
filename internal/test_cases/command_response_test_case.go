@@ -2,56 +2,47 @@ package test_cases
 
 import (
 	"fmt"
-	"time"
+	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
-	"github.com/codecrafters-io/shell-tester/internal/utils"
 )
 
-// ToDo: This is a prototype, think about edge cases + implement prompt test case specifically
-// TODO: Remove CommandResponseTestCase entirely, replace with SingleLineOutputAssertion invoked within ScreenAsserter
-// CommandResponseTestCase reads the output from the shell, and verifies that it matches the expected output.
+// CommandResponseTestCase
+// Sends a command to the shell
+// Verifies that command is printed to the screen `$ <COMMAND>` (we expect the prompt to also be present)
+// Reads the output from the shell, and verifies that it matches the expected output
+// If any error occurs returns the error from the corresponding assertion
 type CommandResponseTestCase struct {
-	// command is the command that will be sent to the shell
 	command string
+	assertions.SingleLineScreenStateAssertion
 }
 
-func NewCommandResponseTestCase(command string) CommandResponseTestCase {
-	return CommandResponseTestCase{command: command}
+func NewCommandResponseTestCase(command string, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string) CommandResponseTestCase {
+	return CommandResponseTestCase{command: command, SingleLineScreenStateAssertion: assertions.NewSingleLineScreenStateAssertion(nil, 0, expectedOutput, fallbackPatterns, expectedPatternExplanation)}
 }
 
-func (t CommandResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter, shouldOmitSuccessLog bool) error {
+func (t CommandResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter) error {
 	err := screenAsserter.Shell.SendCommand(t.command)
 	if err != nil {
 		return fmt.Errorf("Error sending command: %v", err)
 	}
 
-	err = screenAsserter.Shell.ReadUntil(screenAsserter.RunBool)
+	expectedCommandLine := fmt.Sprintf("$ %s", t.command)
+	screenAsserter.PushAssertion(screenAsserter.SingleLineAssertion(0, expectedCommandLine, nil, ""))
+	screenAsserter.PushAssertion(t.SingleLineScreenStateAssertion)
 
-	screenAsserter.RunBool()
-
-	if err != nil {
-		// If the user sent any output, let's print it before the error message.
-		if len(screenAsserter.Shell.GetScreenState()) > 0 {
-			screenAsserter.LogFullScreenState()
+	if err := screenAsserter.Shell.ReadUntil(AsBool(screenAsserter.RunWithPromptAssertion)); err != nil {
+		if err := screenAsserter.RunWithPromptAssertion(); err != nil {
+			return err
 		}
-
-		return fmt.Errorf("Expected prompt (%q) to be printed, got %q", t.command, utils.BuildCleanedRow(screenAsserter.Shell.GetScreenState()[0]))
-	}
-
-	err = screenAsserter.Shell.ReadUntilTimeout(10 * time.Millisecond)
-
-	// Whether the value matches our expectations or not, we print it
-	// screenAsserter.LogUptoCurrentRow()
-
-	// We failed to read extra output
-	if err != nil {
-		return fmt.Errorf("Error reading output: %v", err)
-	}
-
-	if !shouldOmitSuccessLog {
-		screenAsserter.Logger.Successf("✓ Received prompt")
 	}
 
 	return nil
+}
+
+func AsBool(T func() error) func() bool {
+	// Takes in a function that takes no params & returns an error
+	// Returns the function wrapped in a helper such that it returns a bool
+	// in liue of the error, true if the function execution is a success
+	return func() bool { return T() == nil }
 }
