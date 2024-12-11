@@ -25,9 +25,9 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	// TODO: Can shorten into a SingleLineCommandTestCase
 	// ------ Test case starts
 	shell.SendCommand("nonexistent")
-	screenAsserter.PushAssertion(screenAsserter.SingleLineAssertion(0, "$ nonexistent", nil, "nonexistent"))
+	screenAsserter.PushAssertion(screenAsserter.SingleLineAssertion(0, "$ nonexistent", nil, ""))
 	screenAsserter.PushAssertion(screenAsserter.SingleLineAssertion(1, "", []*regexp.Regexp{regexp.MustCompile(`^bash: nonexistent: command not found$`)}, "bash: nonexistent: command not found"))
-	if err := screenAsserter.Shell.ReadUntil(AsBool(screenAsserter.RunWithPromptAssertion)); err != nil {
+	if err := shell.ReadUntil(AsBool(screenAsserter.RunWithPromptAssertion)); err != nil {
 		if err := screenAsserter.RunWithPromptAssertion(); err != nil {
 			return err
 		}
