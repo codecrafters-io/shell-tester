@@ -25,11 +25,10 @@ type SingleLineScreenStateAssertion struct {
 	expectedPatternExplanation string
 }
 
-func NewSingleLineScreenStateAssertion(screenAsserter *ScreenAsserter, rowIndex int, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string) SingleLineScreenStateAssertion {
+func NewSingleLineScreenStateAssertion(expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string) SingleLineScreenStateAssertion {
 	return SingleLineScreenStateAssertion{expectedOutput: expectedOutput, fallbackPatterns: fallbackPatterns, expectedPatternExplanation: expectedPatternExplanation}
 }
 
-// ToDo: screenState as its own type and wrap index / cursors inside it
 func (t SingleLineScreenStateAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err error) {
 	screen := screenState
 	processedRowCount = 1

@@ -28,7 +28,7 @@ func (s *ScreenAsserter) RunWithPromptAssertion() error {
 	})
 }
 
-func (s *ScreenAsserter) Run(screenState []string) error {
+func (s *ScreenAsserter) Run() error {
 	return s.RunWithExtraAssertions(nil)
 }
 
