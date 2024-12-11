@@ -19,16 +19,17 @@ func NewResponseTestCase() ResponseTestCase {
 }
 
 func (t ResponseTestCase) Run(screenAsserter *screen_asserter.ScreenAsserter, shouldOmitSuccessLog bool) error {
-	err := screenAsserter.Shell.ReadUntil(screenAsserter.RunBool)
+	err := screenAsserter.Shell.ReadUntil(AsBool(screenAsserter.Run))
 	// If assertions contain a single assertion and if that is a prompt assertion, we need to log current row else pass
 
 	// For side effects of assertions, we need to run them again
-	screenAsserter.RunBool()
+	AsBool(screenAsserter.Run)()
 
 	if err != nil {
 		// If the user sent any output, let's print it before the error message.
 		if len(screenAsserter.Shell.GetScreenState()) > 0 {
-			screenAsserter.LogFullScreenState()
+			// ToDo: Log full screen state
+			// screenAsserter.LogFullScreenState()
 		}
 
 		// ToDo: Figure out how to get the expected output here

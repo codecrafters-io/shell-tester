@@ -15,11 +15,20 @@ import (
 // If any error occurs returns the error from the corresponding assertion
 type CommandResponseTestCase struct {
 	command string
-	assertions.SingleLineScreenStateAssertion
+
+	// expectedOutput is the expected output string to match against
+	expectedOutput string
+
+	// fallbackPatterns is a list of regex patterns to match against
+	fallbackPatterns []*regexp.Regexp
+
+	// expectedPatternExplanation is the explanation of the expected pattern to
+	// show in the error message in case of failure
+	expectedPatternExplanation string
 }
 
 func NewCommandResponseTestCase(command string, expectedOutput string, fallbackPatterns []*regexp.Regexp, expectedPatternExplanation string) CommandResponseTestCase {
-	return CommandResponseTestCase{command: command, SingleLineScreenStateAssertion: assertions.NewSingleLineScreenStateAssertion(nil, 0, expectedOutput, fallbackPatterns, expectedPatternExplanation)}
+	return CommandResponseTestCase{command: command, expectedOutput: expectedOutput, fallbackPatterns: fallbackPatterns, expectedPatternExplanation: expectedPatternExplanation}
 }
 
 func (t CommandResponseTestCase) Run(screenAsserter *screen_asserter.ScreenAsserter) error {
@@ -29,8 +38,8 @@ func (t CommandResponseTestCase) Run(screenAsserter *screen_asserter.ScreenAsser
 	}
 
 	expectedCommandLine := fmt.Sprintf("$ %s", t.command)
-	screenAsserter.PushAssertion(screenAsserter.SingleLineAssertion(0, expectedCommandLine, nil, ""))
-	screenAsserter.PushAssertion(t.SingleLineScreenStateAssertion)
+	screenAsserter.PushAssertion(assertions.NewSingleLineScreenStateAssertion(expectedCommandLine, nil, ""))
+	screenAsserter.PushAssertion(assertions.NewSingleLineScreenStateAssertion(t.expectedOutput, t.fallbackPatterns, t.expectedPatternExplanation))
 
 	if err := screenAsserter.Shell.ReadUntil(AsBool(screenAsserter.RunWithPromptAssertion)); err != nil {
 		if err := screenAsserter.RunWithPromptAssertion(); err != nil {
