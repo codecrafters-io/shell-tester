@@ -1,7 +1,7 @@
 package internal
 
 import (
-	"github.com/codecrafters-io/shell-tester/internal/assertions"
+	"github.com/codecrafters-io/shell-tester/internal/screen_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
@@ -14,7 +14,7 @@ func testMissingCommand2(stageHarness *test_case_harness.TestCaseHarness) error 
 		return err
 	}
 
-	screenAsserter := assertions.NewScreenAsserter(shell, logger)
+	screenAsserter := screen_asserter.NewScreenAsserter(shell, logger)
 	if err := screenAsserter.Shell.ReadUntil(AsBool(screenAsserter.RunWithPromptAssertion)); err != nil {
 		if err := screenAsserter.RunWithPromptAssertion(); err != nil {
 			return err

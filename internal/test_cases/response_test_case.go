@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/codecrafters-io/shell-tester/internal/assertions"
+	"github.com/codecrafters-io/shell-tester/internal/screen_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/utils"
 )
 
@@ -18,7 +18,7 @@ func NewResponseTestCase() ResponseTestCase {
 	return ResponseTestCase{}
 }
 
-func (t ResponseTestCase) Run(screenAsserter *assertions.ScreenAsserter, shouldOmitSuccessLog bool) error {
+func (t ResponseTestCase) Run(screenAsserter *screen_asserter.ScreenAsserter, shouldOmitSuccessLog bool) error {
 	err := screenAsserter.Shell.ReadUntil(screenAsserter.RunBool)
 	// If assertions contain a single assertion and if that is a prompt assertion, we need to log current row else pass
 
