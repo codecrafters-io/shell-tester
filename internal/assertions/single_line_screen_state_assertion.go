@@ -35,7 +35,7 @@ func (t SingleLineScreenStateAssertion) Run(screenState [][]string, startRowInde
 	processedRowCount = 1
 
 	if len(screen) == 0 {
-		return processedRowCount, fmt.Errorf("expected screen to have at least one row, but it was empty")
+		return 0, fmt.Errorf("expected screen to have at least one row, but it was empty")
 	}
 	rawRow := screen[startRowIndex]
 	cleanedRow := utils.BuildCleanedRow(rawRow)
@@ -65,13 +65,13 @@ func (t SingleLineScreenStateAssertion) Run(screenState [][]string, startRowInde
 			// Possibly change loggers / return from here log outside
 			// detailedErrorMessage := BuildColoredErrorMessage(t.expectedPatternExplanation, cleanedRow)
 			// t.screenAsserter.Logger.Infof(detailedErrorMessage)
-			return processedRowCount, fmt.Errorf("Received output does not match expectation.")
+			return 0, fmt.Errorf("Received output does not match expectation.")
 		} else {
 			// ExpectedOutput is not nil, we can use it for exact string comparison
 			if cleanedRow != t.expectedOutput {
 				// detailedErrorMessage := BuildColoredErrorMessage(t.expectedOutput, cleanedRow)
 				// t.screenAsserter.Logger.Infof(detailedErrorMessage)
-				return processedRowCount, fmt.Errorf("Received output does not match expectation.")
+				return 0, fmt.Errorf("Received output does not match expectation.")
 			}
 		}
 	}
