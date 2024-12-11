@@ -106,6 +106,7 @@ func (s *ScreenAsserter) Run() error {
 	return nil
 }
 
+// ToDo: Remove in lieu of AsBool() helper
 func (s *ScreenAsserter) RunBool() bool {
 	// True if the prompt assertion is a success
 	return s.Run() == nil

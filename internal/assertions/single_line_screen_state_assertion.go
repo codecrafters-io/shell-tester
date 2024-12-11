@@ -65,13 +65,13 @@ func (t SingleLineScreenStateAssertion) Run(screenState [][]string, startRowInde
 			// Possibly change loggers / return from here log outside
 			// detailedErrorMessage := BuildColoredErrorMessage(t.expectedPatternExplanation, cleanedRow)
 			// t.screenAsserter.Logger.Infof(detailedErrorMessage)
-			return 0, fmt.Errorf("Received output does not match expectation.")
+			return 0, fmt.Errorf("Expected output to match pattern: %q, but received: %q", t.expectedPatternExplanation, cleanedRow)
 		} else {
 			// ExpectedOutput is not nil, we can use it for exact string comparison
 			if cleanedRow != t.expectedOutput {
 				// detailedErrorMessage := BuildColoredErrorMessage(t.expectedOutput, cleanedRow)
 				// t.screenAsserter.Logger.Infof(detailedErrorMessage)
-				return 0, fmt.Errorf("Received output does not match expectation.")
+				return 0, fmt.Errorf("Expected output: %s, but received: %s", t.expectedOutput, cleanedRow)
 			}
 		}
 	}
