@@ -44,3 +44,10 @@ func BuildCleanedRow(row []string) string {
 	}
 	return result
 }
+
+func AsBool(T func() error) func() bool {
+	// Takes in a function that takes no params & returns an error
+	// Returns the function wrapped in a helper such that it returns a bool
+	// in liue of the error, true if the function execution is a success
+	return func() bool { return T() == nil }
+}

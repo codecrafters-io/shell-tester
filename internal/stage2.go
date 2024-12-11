@@ -4,6 +4,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/screen_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -15,7 +16,7 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	screenAsserter := screen_asserter.NewScreenAsserter(shell, logger)
-	if err := screenAsserter.Shell.ReadUntil(AsBool(screenAsserter.RunWithPromptAssertion)); err != nil {
+	if err := screenAsserter.Shell.ReadUntil(utils.AsBool(screenAsserter.RunWithPromptAssertion)); err != nil {
 		if err := screenAsserter.RunWithPromptAssertion(); err != nil {
 			return err
 		}
@@ -26,13 +27,6 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	logger.Successf("$ ")
+	shell.LogOutput([]byte("$ "))
 	return nil
-}
-
-func AsBool(T func() error) func() bool {
-	// Takes in a function that takes no params & returns an error
-	// Returns the function wrapped in a helper such that it returns a bool
-	// in liue of the error, true if the function execution is a success
-	return func() bool { return T() == nil }
 }

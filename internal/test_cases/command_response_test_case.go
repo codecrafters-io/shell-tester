@@ -6,6 +6,7 @@ import (
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/screen_asserter"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 )
 
 // CommandResponseTestCase
@@ -41,18 +42,11 @@ func (t CommandResponseTestCase) Run(screenAsserter *screen_asserter.ScreenAsser
 	screenAsserter.PushAssertion(assertions.NewSingleLineScreenStateAssertion(expectedCommandLine, nil, ""))
 	screenAsserter.PushAssertion(assertions.NewSingleLineScreenStateAssertion(t.expectedOutput, t.fallbackPatterns, t.expectedPatternExplanation))
 
-	if err := screenAsserter.Shell.ReadUntil(AsBool(screenAsserter.RunWithPromptAssertion)); err != nil {
+	if err := screenAsserter.Shell.ReadUntil(utils.AsBool(screenAsserter.RunWithPromptAssertion)); err != nil {
 		if err := screenAsserter.RunWithPromptAssertion(); err != nil {
 			return err
 		}
 	}
 
 	return nil
-}
-
-func AsBool(T func() error) func() bool {
-	// Takes in a function that takes no params & returns an error
-	// Returns the function wrapped in a helper such that it returns a bool
-	// in liue of the error, true if the function execution is a success
-	return func() bool { return T() == nil }
 }
