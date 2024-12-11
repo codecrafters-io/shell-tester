@@ -1,6 +1,8 @@
 package internal
 
 import (
+	"regexp"
+
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
@@ -28,10 +30,9 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	// ------ Test case starts
 	shell.SendCommand("nonexistent")
 	screenAsserter.PushAssertion(screenAsserter.SingleLineAssertion(0, "$ nonexistent", nil, "nonexistent"))
-	screenAsserter.PushAssertion(screenAsserter.SingleLineAssertion(1, "bash: nonexistent: command not found", nil, ""))
+	screenAsserter.PushAssertion(screenAsserter.SingleLineAssertion(1, "", []*regexp.Regexp{regexp.MustCompile(`^bash: nonexistent: command not found$`)}, "bash: nonexistent: command not found"))
 	screenAsserter.PushAssertion(screenAsserter.PromptAssertion("$ "))
 	if err := screenAsserter.Shell.ReadUntil(screenAsserter.RunBool); err != nil {
-		screenAsserter.LogFullScreenState()
 		return err
 	}
 	if err := screenAsserter.Run(); err != nil {
