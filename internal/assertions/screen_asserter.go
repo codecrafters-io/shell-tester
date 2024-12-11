@@ -63,6 +63,12 @@ func (s *ScreenAsserter) SingleLineAssertion(rowIndex int, expectedOutput string
 	return NewSingleLineScreenStateAssertion(s, rowIndex, expectedOutput, fallbackPatterns, expectedPatternExplanation)
 }
 
+func (s *ScreenAsserter) WithPromptAssertion() *ScreenAsserter {
+	s.PushAssertion(s.PromptAssertion("$ "))
+
+	return s
+}
+
 func (s *ScreenAsserter) RunWithPromptAssertion() error {
 	s.PushAssertion(s.PromptAssertion("$ "))
 	defer s.PopAssertion()
@@ -72,10 +78,12 @@ func (s *ScreenAsserter) RunWithPromptAssertion() error {
 
 func (s *ScreenAsserter) Run() error {
 	currentRowIndex := 0
+	// fmt.Println("Starting Run")
+	// s.LogFullScreenState()
 
 	for _, assertion := range s.Assertions {
 		processedRowCount, err := assertion.Run(s.Shell.GetScreenState(), currentRowIndex)
-
+		// fmt.Println(currentRowIndex, processedRowCount, assertion, err)
 		if err != nil {
 			return err
 		}
@@ -83,8 +91,13 @@ func (s *ScreenAsserter) Run() error {
 		currentRowIndex += processedRowCount
 
 		// TODO: Off by one
+		// fmt.Println("Start Logging, ", currentRowIndex, s.lastLoggedRowIndex)
 		if currentRowIndex > s.lastLoggedRowIndex {
 			// Log "success" rows that were processed
+			for i := s.lastLoggedRowIndex; i <= currentRowIndex; i++ {
+				// fmt.Println("Logging row, ", i)
+				s.LogRow(i)
+			}
 			s.lastLoggedRowIndex = currentRowIndex
 		}
 
