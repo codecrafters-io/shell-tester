@@ -31,7 +31,7 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 	for i := 0; i < numberOfCommands; i++ {
 		command := "invalid_command_" + strconv.Itoa(i+1)
 
-		commandResponseTestCase := test_cases.CommandResponseTestCase{
+		test_case := test_cases.CommandResponseTestCase{
 			Command:        command,
 			ExpectedOutput: fmt.Sprintf("%s: command not found", command),
 			FallbackPatterns: []*regexp.Regexp{
@@ -41,7 +41,7 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 			SuccessMessage: "✓ Received command not found message",
 		}
 
-		if err := commandResponseTestCase.Run(shell, logger, asserter); err != nil {
+		if err := test_case.Run(asserter, shell, logger); err != nil {
 			return err
 		}
 	}

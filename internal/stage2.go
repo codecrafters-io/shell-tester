@@ -26,7 +26,7 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	invalidCommand := "nonexistent"
 
-	commandResponseTestCase := test_cases.CommandResponseTestCase{
+	test_case := test_cases.CommandResponseTestCase{
 		Command:        invalidCommand,
 		ExpectedOutput: fmt.Sprintf("%s: command not found", invalidCommand),
 		FallbackPatterns: []*regexp.Regexp{
@@ -36,7 +36,7 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 		SuccessMessage: "✓ Received command not found message",
 	}
 
-	if err := commandResponseTestCase.Run(shell, logger, asserter); err != nil {
+	if err := test_case.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
