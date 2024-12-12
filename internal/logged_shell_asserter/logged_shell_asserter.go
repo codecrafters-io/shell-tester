@@ -91,3 +91,7 @@ func (a *LoggedShellAsserter) LogRemainingOutput() {
 		}
 	}
 }
+
+func (a *LoggedShellAsserter) GetLastLoggedRowIndex() int {
+	return a.lastLoggedRowIndex
+}
