@@ -80,3 +80,14 @@ func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRow
 func (a *LoggedShellAsserter) logAssertionError(err error) {
 	// TODO: Log all shell output remaining
 }
+
+func (a *LoggedShellAsserter) LogRemainingOutput() {
+	endRowIndex := len(a.Shell.GetScreenState())
+	for i := a.lastLoggedRowIndex + 1; i < endRowIndex; i++ {
+		rawRow := a.Shell.GetScreenState()[i]
+		cleanedRow := utils.BuildCleanedRow(rawRow)
+		if len(cleanedRow) > 0 {
+			a.Shell.LogOutput([]byte(cleanedRow))
+		}
+	}
+}
