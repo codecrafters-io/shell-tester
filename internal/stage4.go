@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -42,6 +43,11 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err := shell.SendCommand("exit 0"); err != nil {
 		return err
 	}
+
+	commandReflection := fmt.Sprintf("$ %s", "exit 0")
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: commandReflection,
+	})
 
 	assertFn := func() error {
 		return asserter.AssertionCollection.RunWithPromptAssertion(shell.GetScreenState())
