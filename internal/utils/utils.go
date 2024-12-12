@@ -35,6 +35,8 @@ func RemoveNonPrintableCharacters(output string) string {
 	return result
 }
 
+// TODO: What if there are tabs, will we have SENTINEL_CHAR in the middle of a row?
+// Alternative here would be to TrimRight(SENTINEL_CHAR)
 func BuildCleanedRow(row []string) string {
 	result := ""
 	for _, cell := range row {

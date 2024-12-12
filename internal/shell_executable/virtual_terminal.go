@@ -15,7 +15,8 @@ type VirtualTerminal struct {
 }
 
 func NewStandardVT() *VirtualTerminal {
-	return NewCustomVT(12, 80)
+	// TODO: Check if this affects performance
+	return NewCustomVT(1000, 1000)
 }
 
 func NewCustomVT(rows, cols int) *VirtualTerminal {
@@ -37,6 +38,7 @@ func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 	return vt.vt.Write(p)
 }
 
+// TODO: What if there are tabs, will we have SENTINEL_CHAR in the middle of a row?
 func (vt *VirtualTerminal) GetScreenState(retainColors bool) [][]string {
 	screenState := make([][]string, vt.rows)
 	for i := 0; i < vt.rows; i++ {

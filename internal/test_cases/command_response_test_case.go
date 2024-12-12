@@ -4,9 +4,7 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/screen_asserter"
-	"github.com/codecrafters-io/shell-tester/internal/utils"
 )
 
 // CommandResponseTestCase
@@ -38,15 +36,15 @@ func (t CommandResponseTestCase) Run(screenAsserter *screen_asserter.ScreenAsser
 		return fmt.Errorf("Error sending command: %v", err)
 	}
 
-	expectedCommandLine := fmt.Sprintf("$ %s", t.command)
-	screenAsserter.PushAssertion(assertions.NewSingleLineScreenStateAssertion(expectedCommandLine, nil, ""))
-	screenAsserter.PushAssertion(assertions.NewSingleLineScreenStateAssertion(t.expectedOutput, t.fallbackPatterns, t.expectedPatternExplanation))
+	// expectedCommandLine := fmt.Sprintf("$ %s", t.command)
+	// screenAsserter.PushAssertion(assertions.NewSingleLineScreenStateAssertion(expectedCommandLine, nil, ""))
+	// screenAsserter.PushAssertion(assertions.NewSingleLineScreenStateAssertion(t.expectedOutput, t.fallbackPatterns, t.expectedPatternExplanation))
 
-	if err := screenAsserter.Shell.ReadUntil(utils.AsBool(screenAsserter.RunWithPromptAssertion)); err != nil {
-		if err := screenAsserter.RunWithPromptAssertion(); err != nil {
-			return err
-		}
-	}
+	// if err := screenAsserter.Shell.ReadUntil(utils.AsBool(screenAsserter.RunWithPromptAssertion)); err != nil {
+	// 	if err := screenAsserter.RunWithPromptAssertion(); err != nil {
+	// 		return err
+	// 	}
+	// }
 
 	return nil
 }

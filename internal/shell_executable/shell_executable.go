@@ -26,7 +26,8 @@ var ErrConditionNotMet = condition_reader.ErrConditionNotMet
 var ErrProgramExited = errors.New("Program exited")
 
 type ShellExecutable struct {
-	executable    *executable.Executable
+	executable *executable.Executable
+	// TODO: Rename to stageLogger?
 	logger        *logger.Logger
 	programLogger *logger.Logger
 
