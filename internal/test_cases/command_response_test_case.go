@@ -29,7 +29,7 @@ type CommandResponseTestCase struct {
 	SuccessMessage string
 }
 
-func (t CommandResponseTestCase) Run(shell *shell_executable.ShellExecutable, logger *logger.Logger, asserter *logged_shell_asserter.LoggedShellAsserter) error {
+func (t CommandResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	if err := shell.SendCommand(t.Command); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
