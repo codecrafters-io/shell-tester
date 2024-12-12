@@ -17,19 +17,28 @@ func NewPromptAssertion(expectedPrompt string) PromptAssertion {
 	return PromptAssertion{expectedPrompt: expectedPrompt}
 }
 
-func (t PromptAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err error) {
+func (t PromptAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err *AssertionError) {
 	// We don't want to count the processed prompt as a complete row
 	processedRowCount = 0
 
+	// TODO: Move these to assertion collection
 	if len(screenState) == 0 {
-		return processedRowCount, fmt.Errorf("Expected to receive prompt: %q, but received no output", t.expectedPrompt)
+		panic("CodeCrafters internal error: Expected screen state to have at least one row")
 	}
 
-	rawRow := screenState[startRowIndex]
+	if startRowIndex >= len(screenState) {
+		panic("CodeCrafters internal error: startRowIndex is larger than screenState rows")
+	}
+
+	rawRow := screenState[startRowIndex] // Could be nil?
 	cleanedRow := utils.BuildCleanedRow(rawRow)
 
 	if !strings.EqualFold(cleanedRow, t.expectedPrompt) {
-		return processedRowCount, fmt.Errorf("Expected prompt: %q, but received: %q", t.expectedPrompt, cleanedRow)
+		return processedRowCount, &AssertionError{
+			StartRowIndex: startRowIndex,
+			ErrorRowIndex: startRowIndex,
+			Message:       fmt.Sprintf("Expected prompt (%q) but received %q", t.expectedPrompt, cleanedRow),
+		}
 	}
 
 	return processedRowCount, nil
