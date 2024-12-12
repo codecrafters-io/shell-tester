@@ -43,7 +43,7 @@ func (a *LoggedShellAsserter) Assert() error {
 		if assertionErr := assertFn(); assertionErr != nil {
 			a.logAssertionError(assertionErr)
 			// TODO: Figure out remaining output in SUCCESS scenario
-			asserter.LogRemainingOutput()
+			// asserter.LogRemainingOutput()
 
 			return fmt.Errorf("Assertion failed.")
 		}
@@ -53,26 +53,28 @@ func (a *LoggedShellAsserter) Assert() error {
 }
 
 func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRowCount int) {
-	if processedRowCount == 0 {
+	shouldPrintDebugLogs := assertion_collection.ShouldPrintDebugLogs
+	if shouldPrintDebugLogs {
+		fmt.Printf("debug: onAssertionSuccess called. startRowIndex: %d, processedRowCount: %d, lastLoggedRowIndex: %d\n", startRowIndex, processedRowCount, a.lastLoggedRowIndex)
+	}
+
+	if processedRowCount == 0 || startRowIndex <= a.lastLoggedRowIndex {
 		return
 	}
 
-	lastProcessedRowIndex := startRowIndex + processedRowCount - 1
-
-	// fmt.Printf("debug: onAssertionSuccess called. startRowIndex: %d, processedRowCount: %d, lastProcessedRowIndex: %d\n", startRowIndex, processedRowCount, lastProcessedRowIndex)
-
 	for i := 0; i < processedRowCount; i++ {
-		// fmt.Printf("debug: logging1. i: %d, lastLoggedRowIndex: %d, processedRowCount: %d, lastProcessedRowIndex: %d", i, a.lastLoggedRowIndex, processedRowCount, lastProcessedRowIndex)
+		if shouldPrintDebugLogs {
+			fmt.Printf("debug: logging1. i: %d, lastLoggedRowIndex: %d, processedRowCount: %d, currentRowIndex: %d ", i, a.lastLoggedRowIndex, processedRowCount, a.lastLoggedRowIndex+i+1)
+		}
 		row := a.Shell.GetScreenState()[a.lastLoggedRowIndex+i+1]
-		// fmt.Printf("debug: logging2. i: %d, lastLoggedRowIndex: %d, processedRowCount: %d, lastProcessedRowIndex: %d, row: %q\n", i, a.lastLoggedRowIndex, processedRowCount, lastProcessedRowIndex, utils.BuildCleanedRow(row))
+
+		if shouldPrintDebugLogs {
+			fmt.Printf("debug: row: %q\n", utils.BuildCleanedRow(row))
+		}
 		a.Shell.LogOutput([]byte(utils.BuildCleanedRow(row)))
 	}
 
-	a.lastLoggedRowIndex = lastProcessedRowIndex
-
-	if a.lastLoggedRowIndex > 3 {
-		panic("end")
-	}
+	a.lastLoggedRowIndex += processedRowCount
 }
 
 func (a *LoggedShellAsserter) logAssertionError(err error) {
