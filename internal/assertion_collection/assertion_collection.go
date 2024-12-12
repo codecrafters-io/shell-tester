@@ -7,12 +7,12 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/utils"
 )
 
-const ShouldPrintDebugLogs = true
+const ShouldPrintDebugLogs = false
 
 type AssertionCollection struct {
 	Assertions []assertions.Assertion
 
-	OnAssertionSuccess func(startRowIndex int, endRowIndex int)
+	OnAssertionSuccess func(startRowIndex int, processedRowCount int)
 }
 
 func NewAssertionCollection() *AssertionCollection {
@@ -56,7 +56,7 @@ func (c *AssertionCollection) runWithExtraAssertions(screenState [][]string, ext
 		}
 
 		if c.OnAssertionSuccess != nil {
-			c.OnAssertionSuccess(currentRowIndex, currentRowIndex+processedRowCount-1)
+			c.OnAssertionSuccess(currentRowIndex, processedRowCount)
 		}
 
 		currentRowIndex += processedRowCount
