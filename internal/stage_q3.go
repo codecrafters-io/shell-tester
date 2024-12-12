@@ -22,10 +22,11 @@ func testQ3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	defer os.RemoveAll(randomDir)
 
+	randomUniqueFileNames := random.RandomInts(1, 100, 3)
 	filePaths := []string{
-		path.Join(randomDir, fmt.Sprintf("f\\n%d", getUniqueRandomIntegerFileNames(1, 100, 3)[0])),
-		path.Join(randomDir, fmt.Sprintf("f\\%d", getUniqueRandomIntegerFileNames(1, 100, 3)[1])),
-		path.Join(randomDir, fmt.Sprintf("f'\\'%d", getUniqueRandomIntegerFileNames(1, 100, 3)[2])),
+		path.Join(randomDir, fmt.Sprintf("f\\n%d", randomUniqueFileNames[0])),
+		path.Join(randomDir, fmt.Sprintf("f\\%d", randomUniqueFileNames[1])),
+		path.Join(randomDir, fmt.Sprintf("f'\\'%d", randomUniqueFileNames[2])),
 	}
 	fileContents := []string{
 		strings.Join(random.RandomWords(2), " ") + ".",
