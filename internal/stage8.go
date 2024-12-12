@@ -51,7 +51,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	testCase := test_cases.CommandResponseTestCase{
 		Command:          strings.Join(command, " "),
-		ExpectedOutput:   fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode),
+		ExpectedOutput:   fmt.Sprintf("Hello %s! The secret code is %s", randomName, randomCode),
 		FallbackPatterns: nil,
 		SuccessMessage:   "Received expected response",
 	}
