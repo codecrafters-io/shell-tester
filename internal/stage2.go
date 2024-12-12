@@ -15,13 +15,8 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	if err := shell.Start(); err != nil {
-		return err
-	}
-
-	// First prompt assertion
-	if err := asserter.Assert(); err != nil {
-		return err
+	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
+		return logAndQuit(asserter, err)
 	}
 
 	invalidCommand := "nonexistent"
@@ -37,9 +32,8 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	if err := test_case.Run(asserter, shell, logger); err != nil {
-		return err
+		return logAndQuit(asserter, err)
 	}
 
-	asserter.LogRemainingOutput()
-	return nil
+	return logAndQuit(asserter, nil)
 }
