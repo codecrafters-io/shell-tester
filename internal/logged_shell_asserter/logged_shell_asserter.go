@@ -1,6 +1,8 @@
 package logged_shell_asserter
 
 import (
+	"fmt"
+
 	"github.com/codecrafters-io/shell-tester/internal/assertion_collection"
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -40,7 +42,7 @@ func (a *LoggedShellAsserter) Assert() error {
 	if readErr := a.Shell.ReadUntil(utils.AsBool(assertFn)); readErr != nil {
 		if assertionErr := assertFn(); assertionErr != nil {
 			a.logAssertionError(assertionErr)
-			return assertionErr
+			return fmt.Errorf("Assertion failed.")
 		}
 	}
 

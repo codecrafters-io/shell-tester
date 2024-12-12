@@ -13,6 +13,10 @@ type PromptAssertion struct {
 	ExpectedPrompt string
 }
 
+func (t PromptAssertion) Inspect() string {
+	return fmt.Sprintf("PromptAssertion (%q)", t.ExpectedPrompt)
+}
+
 func (t PromptAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err *AssertionError) {
 	// We don't want to count the processed prompt as a complete row
 	processedRowCount = 0

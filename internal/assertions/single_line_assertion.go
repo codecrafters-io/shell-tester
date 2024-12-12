@@ -16,6 +16,10 @@ type SingleLineAssertion struct {
 	FallbackPatterns []*regexp.Regexp
 }
 
+func (a SingleLineAssertion) Inspect() string {
+	return fmt.Sprintf("SingleLineAssertion (%q)", a.ExpectedOutput)
+}
+
 func (a SingleLineAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err *AssertionError) {
 	// TODO: Move these to assertion collection
 	if len(screenState) == 0 {
