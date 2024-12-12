@@ -77,6 +77,7 @@ func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRow
 	a.lastLoggedRowIndex += processedRowCount
 }
 
+// ToDo: In case of failure log remaining screen state before quitting
 func (a *LoggedShellAsserter) logAssertionError(err error) {
 	// TODO: Log all shell output remaining
 }

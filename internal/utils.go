@@ -6,6 +6,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/random"
@@ -73,4 +74,18 @@ func writeFiles(paths []string, contents []string, logger *logger.Logger) error 
 		}
 	}
 	return nil
+}
+
+func logAndQuit(asserter *logged_shell_asserter.LoggedShellAsserter, err error) error {
+	// ToDo: For error scenario, which logger do we use ?
+	asserter.LogRemainingOutput()
+	return err
+}
+
+func startShellAndAssertPrompt(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable) error {
+	if err := shell.Start(); err != nil {
+		return err
+	}
+
+	return asserter.Assert()
 }
