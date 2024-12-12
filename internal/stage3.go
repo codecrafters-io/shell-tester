@@ -22,6 +22,7 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	// First prompt assertion
 	if err := asserter.Assert(); err != nil {
 		return err
 	}
@@ -36,33 +37,21 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 			ExpectedOutput: fmt.Sprintf("$ %s", command),
 		})
 
-		// TODO: Ensure fallback patterns are accurate, and expected Output is accurate
+		// ToDo: Ensure fallback patterns are accurate, and expected Output is accurate
 		asserter.AddAssertion(assertions.SingleLineAssertion{
 			ExpectedOutput: fmt.Sprintf("%s: command not found", command),
 			FallbackPatterns: []*regexp.Regexp{
-				regexp.MustCompile(fmt.Sprintf(`^(bash: )?%s: (command )?not found$`, command)),
+				regexp.MustCompile(fmt.Sprintf(`^bash: %s: command not found$`, command)),
+				regexp.MustCompile(fmt.Sprintf(`^%s: command not found$`, command)),
 			},
 		})
 
 		if err := asserter.Assert(); err != nil {
 			return err
 		}
-
-		// testCase := test_cases.SingleLinePatternMatchTestCase{
-		// 	Command:                    command,
-		// 	ExpectedPattern:            fmt.Sprintf(`^(bash: )?%s: (command )?not found$`, command),
-		// 	ExpectedPatternExplanation: fmt.Sprintf("%s: command not found", command),
-		// 	SuccessMessage:             "Received command not found message",
-		// }
-
-		// if err := testCase.Run(shell, logger); err != nil {
-		// 	return err
-		// }
 	}
 
-	// TODO: Figure out remaining output in SUCCESS scenario
-	// asserter.LogRemainingOutput()
-
-	// There must be a prompt after the last command too
-	return assertShellIsRunning(shell, logger)
+	// Assert() already makes sure that the prompt is present in the last row
+	asserter.LogRemainingOutput()
+	return nil
 }
