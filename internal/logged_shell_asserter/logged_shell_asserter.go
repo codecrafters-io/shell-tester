@@ -42,6 +42,9 @@ func (a *LoggedShellAsserter) Assert() error {
 	if readErr := a.Shell.ReadUntil(utils.AsBool(assertFn)); readErr != nil {
 		if assertionErr := assertFn(); assertionErr != nil {
 			a.logAssertionError(assertionErr)
+			// TODO: Figure out remaining output in SUCCESS scenario
+			asserter.LogRemainingOutput()
+
 			return fmt.Errorf("Assertion failed.")
 		}
 	}

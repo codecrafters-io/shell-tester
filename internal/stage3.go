@@ -60,6 +60,9 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 		// }
 	}
 
+	// TODO: Figure out remaining output in SUCCESS scenario
+	asserter.LogRemainingOutput()
+
 	// There must be a prompt after the last command too
 	return assertShellIsRunning(shell, logger)
 }
