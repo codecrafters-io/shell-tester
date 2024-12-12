@@ -1,33 +1,45 @@
 package internal
 
 import (
-	"github.com/codecrafters-io/shell-tester/internal/screen_asserter"
+	"fmt"
+	"regexp"
+
+	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
-	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
 func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
+	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
+
 	if err := shell.Start(); err != nil {
 		return err
 	}
 
-	screenAsserter := screen_asserter.NewScreenAsserter(shell, logger)
-	if err := screenAsserter.Shell.ReadUntil(utils.AsBool(screenAsserter.RunWithPromptAssertion)); err != nil {
-		if err := screenAsserter.RunWithPromptAssertion(); err != nil {
-			return err
-		}
-	}
-
-	commandResponseTestCase := test_cases.NewCommandResponseTestCase("nonexistent", "bash: nonexistent: command not found", nil, "")
-	if err := commandResponseTestCase.Run(screenAsserter); err != nil {
+	// First prompt assertion
+	if err := asserter.Assert(); err != nil {
 		return err
 	}
 
-	shell.LogOutput([]byte("$ "))
-	logger.Successf("✓ Received command not found message")
+	invalidCommand := "nonexistent"
+
+	commandResponseTestCase := test_cases.CommandResponseTestCase{
+		Command:        invalidCommand,
+		ExpectedOutput: fmt.Sprintf("%s: command not found", invalidCommand),
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(fmt.Sprintf(`^bash: %s: command not found$`, invalidCommand)),
+			regexp.MustCompile(fmt.Sprintf(`^%s: command not found$`, invalidCommand)),
+		},
+		SuccessMessage: "✓ Received command not found message",
+	}
+
+	if err := commandResponseTestCase.Run(shell, logger, asserter); err != nil {
+		return err
+	}
+
+	asserter.LogRemainingOutput()
 	return nil
 }
