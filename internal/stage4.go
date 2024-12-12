@@ -19,13 +19,8 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	if err := shell.Start(); err != nil {
-		return err
-	}
-
-	// First prompt assertion
-	if err := asserter.Assert(); err != nil {
-		return err
+	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
+		return logAndQuit(asserter, err)
 	}
 
 	// We test a nonexistent command first, just to make sure the logic works in a "loop"
@@ -37,11 +32,11 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	if err := testCase.Run(asserter, shell, logger); err != nil {
-		return err
+		return logAndQuit(asserter, err)
 	}
 
 	if err := shell.SendCommand("exit 0"); err != nil {
-		return err
+		return logAndQuit(asserter, err)
 	}
 
 	commandReflection := fmt.Sprintf("$ %s", "exit 0")
@@ -83,5 +78,5 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	logger.Successf("✓ No output after exit command")
 
-	return nil
+	return logAndQuit(asserter, nil)
 }
