@@ -21,15 +21,6 @@ func (a SingleLineAssertion) Inspect() string {
 }
 
 func (a SingleLineAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err *AssertionError) {
-	// TODO: Move these to assertion collection
-	if len(screenState) == 0 {
-		panic("CodeCrafters internal error: expected screen to have at least one row, but it was empty")
-	}
-
-	if startRowIndex >= len(screenState) {
-		panic("CodeCrafters internal error: startRowIndex is larger than screenState rows")
-	}
-
 	if a.ExpectedOutput == "" {
 		panic("CodeCrafters Internal Error: ExpectedOutput must be provided")
 	}
