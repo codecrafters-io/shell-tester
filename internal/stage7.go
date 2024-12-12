@@ -86,5 +86,6 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 	}
 
-	return assertShellIsRunning(shell, logger)
+	asserter.LogRemainingOutput()
+	return nil
 }

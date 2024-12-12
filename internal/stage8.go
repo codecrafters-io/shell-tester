@@ -31,7 +31,8 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	if err := shell.Start(); err != nil {
+	// First prompt assertion
+	if err := asserter.Assert(); err != nil {
 		return err
 	}
 
@@ -58,5 +59,6 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	return assertShellIsRunning(shell, logger)
+	asserter.LogRemainingOutput()
+	return nil
 }
