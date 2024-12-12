@@ -1,15 +1,15 @@
 package internal
 
 import (
-	"github.com/codecrafters-io/shell-tester/internal/screen_asserter"
+	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
-	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
 func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
+	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	randomDir, err := getRandomDirectory()
 	if err != nil {
@@ -27,15 +27,12 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	screenAsserter := screen_asserter.NewScreenAsserter(shell, logger)
-	if err := screenAsserter.Shell.ReadUntil(utils.AsBool(screenAsserter.RunWithPromptAssertion)); err != nil {
+	// First prompt assertion
+	if err := asserter.Assert(); err != nil {
 		return err
 	}
 
-	if err := screenAsserter.RunWithPromptAssertion(); err != nil {
-		return err
-	}
-	shell.LogOutput([]byte("$ "))
+	asserter.LogRemainingOutput()
 	logger.Successf("✓ Received prompt")
 
 	return nil
