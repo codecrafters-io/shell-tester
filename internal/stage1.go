@@ -1,8 +1,9 @@
 package internal
 
 import (
+	"github.com/codecrafters-io/shell-tester/internal/screen_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
-	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -26,12 +27,15 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	testCase := test_cases.NewSilentPromptTestCase("$ ")
-
-	if err := testCase.Run(shell, logger); err != nil {
+	screenAsserter := screen_asserter.NewScreenAsserter(shell, logger)
+	if err := screenAsserter.Shell.ReadUntil(utils.AsBool(screenAsserter.RunWithPromptAssertion)); err != nil {
 		return err
 	}
 
+	if err := screenAsserter.RunWithPromptAssertion(); err != nil {
+		return err
+	}
+	shell.LogOutput([]byte("$ "))
 	logger.Successf("✓ Received prompt")
 
 	return nil
