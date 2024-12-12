@@ -7,7 +7,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/utils"
 )
 
-const ShouldPrintDebugLogs = false
+const ShouldPrintDebugLogs = true
 
 type AssertionCollection struct {
 	Assertions []assertions.Assertion

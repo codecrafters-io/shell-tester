@@ -57,6 +57,9 @@ func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRow
 	}
 
 	a.lastLoggedRowIndex = lastProcessedRowIndex
+	if a.lastLoggedRowIndex > 1 {
+		panic("end")
+	}
 }
 
 func (a *LoggedShellAsserter) logAssertionError(err error) {
