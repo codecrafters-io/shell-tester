@@ -28,5 +28,6 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	shell.LogOutput([]byte("$ "))
+	logger.Successf("✓ Received command not found message")
 	return nil
 }
