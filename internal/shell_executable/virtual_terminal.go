@@ -16,7 +16,8 @@ type VirtualTerminal struct {
 
 func NewStandardVT() *VirtualTerminal {
 	// TODO: Check if this affects performance
-	return NewCustomVT(1000, 1000)
+	// This affects performance majorly, improve all functions operating on this
+	return NewCustomVT(100, 100)
 }
 
 func NewCustomVT(rows, cols int) *VirtualTerminal {
