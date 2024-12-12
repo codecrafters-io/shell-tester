@@ -7,14 +7,10 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/utils"
 )
 
-// PromptTestCase verifies a prompt exists, and that there's no extra output after it.
+// PromptAssertion verifies a prompt exists, and that there's no extra output after it.
 type PromptAssertion struct {
-	// expectedPrompt is the prompt expected to be displayed (example: "$ ")
-	expectedPrompt string
-}
-
-func NewPromptAssertion(expectedPrompt string) PromptAssertion {
-	return PromptAssertion{expectedPrompt: expectedPrompt}
+	// ExpectedPrompt is the prompt expected to be displayed (example: "$ ")
+	ExpectedPrompt string
 }
 
 func (t PromptAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err *AssertionError) {
@@ -33,11 +29,11 @@ func (t PromptAssertion) Run(screenState [][]string, startRowIndex int) (process
 	rawRow := screenState[startRowIndex] // Could be nil?
 	cleanedRow := utils.BuildCleanedRow(rawRow)
 
-	if !strings.EqualFold(cleanedRow, t.expectedPrompt) {
+	if !strings.EqualFold(cleanedRow, t.ExpectedPrompt) {
 		return processedRowCount, &AssertionError{
 			StartRowIndex: startRowIndex,
 			ErrorRowIndex: startRowIndex,
-			Message:       fmt.Sprintf("Expected prompt (%q) but received %q", t.expectedPrompt, cleanedRow),
+			Message:       fmt.Sprintf("Expected prompt (%q) but received %q", t.ExpectedPrompt, cleanedRow),
 		}
 	}
 

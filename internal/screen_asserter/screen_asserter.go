@@ -24,7 +24,7 @@ func NewScreenAsserter(shell *shell_executable.ShellExecutable, logger *logger.L
 
 func (s *ScreenAsserter) RunWithPromptAssertion() error {
 	return s.RunWithExtraAssertions([]assertions.Assertion{
-		assertions.NewPromptAssertion("$ "),
+		assertions.PromptAssertion{ExpectedPrompt: "$ "},
 	})
 }
 
