@@ -6,6 +6,8 @@ import (
 
 type AssertionCollection struct {
 	Assertions []assertions.Assertion
+
+	OnAssertionSuccess func(startRowIndex int, endRowIndex int)
 }
 
 func NewAssertionCollection() *AssertionCollection {
@@ -34,6 +36,10 @@ func (c *AssertionCollection) runWithExtraAssertions(screenState [][]string, ext
 		processedRowCount, err := assertion.Run(screenState, currentRowIndex)
 		if err != nil {
 			return err
+		}
+
+		if c.OnAssertionSuccess != nil {
+			c.OnAssertionSuccess(currentRowIndex, currentRowIndex+processedRowCount-1)
 		}
 
 		currentRowIndex += processedRowCount

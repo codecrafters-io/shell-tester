@@ -10,13 +10,22 @@ import (
 type LoggedShellAsserter struct {
 	Shell               *shell_executable.ShellExecutable
 	AssertionCollection *assertion_collection.AssertionCollection
+
+	lastLoggedRowIndex int
 }
 
 func NewLoggedShellAsserter(shell *shell_executable.ShellExecutable) *LoggedShellAsserter {
-	return &LoggedShellAsserter{
+	assertionCollection := assertion_collection.NewAssertionCollection()
+
+	asserter := &LoggedShellAsserter{
 		Shell:               shell,
-		AssertionCollection: assertion_collection.NewAssertionCollection(),
+		AssertionCollection: assertionCollection,
+		lastLoggedRowIndex:  -1,
 	}
+
+	assertionCollection.OnAssertionSuccess = asserter.onAssertionSuccess
+
+	return asserter
 }
 
 func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
@@ -30,9 +39,24 @@ func (a *LoggedShellAsserter) Assert() error {
 
 	if readErr := a.Shell.ReadUntil(utils.AsBool(assertFn)); readErr != nil {
 		if assertionErr := assertFn(); assertionErr != nil {
+			a.logAssertionError(assertionErr)
 			return assertionErr
 		}
 	}
 
 	return nil
+}
+
+func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRowCount int) {
+	lastProcessedRowIndex := startRowIndex + processedRowCount
+
+	for i := 0; i < processedRowCount; i++ {
+		a.Shell.LogOutput([]byte(utils.BuildCleanedRow(a.Shell.GetScreenState()[a.lastLoggedRowIndex+i+1])))
+	}
+
+	a.lastLoggedRowIndex = lastProcessedRowIndex
+}
+
+func (a *LoggedShellAsserter) logAssertionError(err error) {
+	// TODO: Log all shell output remaining
 }
