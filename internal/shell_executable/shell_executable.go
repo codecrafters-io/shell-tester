@@ -27,6 +27,7 @@ var ErrProgramExited = errors.New("Program exited")
 
 type ShellExecutable struct {
 	executable    *executable.Executable
+	// TODO: Rename to stageLogger?
 	logger        *logger.Logger
 	programLogger *logger.Logger
 

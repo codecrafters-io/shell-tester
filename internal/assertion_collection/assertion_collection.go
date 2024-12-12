@@ -1,4 +1,4 @@
-package screen_asserter
+package assertion_collection
 
 import (
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
