@@ -52,7 +52,7 @@ func (c *AssertionCollection) runWithExtraAssertions(screenState [][]string, ext
 		}
 
 		if ShouldPrintDebugLogs {
-			fmt.Printf("✅ %s (%d rows)\n", assertion.Inspect(), processedRowCount)
+			fmt.Printf("✅ %s (%d rows) currentRowIndex: %d\n", assertion.Inspect(), processedRowCount, currentRowIndex)
 		}
 
 		if c.OnAssertionSuccess != nil {
