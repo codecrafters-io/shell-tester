@@ -5,9 +5,10 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -16,7 +17,7 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	numberOfCommands := 2
+	numberOfCommands := random.RandomInt(3, 6)
 
 	if err := shell.Start(); err != nil {
 		return err
@@ -30,23 +31,17 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 	for i := 0; i < numberOfCommands; i++ {
 		command := "invalid_command_" + strconv.Itoa(i+1)
 
-		shell.SendCommand(command)
-
-		// Command Reflection
-		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput: fmt.Sprintf("$ %s", command),
-		})
-
-		// ToDo: Ensure fallback patterns are accurate, and expected Output is accurate
-		asserter.AddAssertion(assertions.SingleLineAssertion{
+		commandResponseTestCase := test_cases.CommandResponseTestCase{
+			Command:        command,
 			ExpectedOutput: fmt.Sprintf("%s: command not found", command),
 			FallbackPatterns: []*regexp.Regexp{
 				regexp.MustCompile(fmt.Sprintf(`^bash: %s: command not found$`, command)),
 				regexp.MustCompile(fmt.Sprintf(`^%s: command not found$`, command)),
 			},
-		})
+			SuccessMessage: "✓ Received command not found message",
+		}
 
-		if err := asserter.Assert(); err != nil {
+		if err := commandResponseTestCase.Run(shell, logger, asserter); err != nil {
 			return err
 		}
 	}
