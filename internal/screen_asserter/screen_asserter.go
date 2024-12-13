@@ -7,9 +7,8 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-// Logging success rows
-// Reading from shell
-// Running assertions
+// ScreenAsserter
+// Reading from shell, Running assertions, Logging success rows
 type ScreenAsserter struct {
 	Shell      *shell_executable.ShellExecutable
 	Logger     *logger.Logger

@@ -36,7 +36,6 @@ func RemoveNonPrintableCharacters(output string) string {
 	return result
 }
 
-// TODO: What if there are tabs, will we have SENTINEL_CHAR in the middle of a row?
 func BuildCleanedRow(row []string) string {
 	result := strings.Join(row, "")
 	result = strings.TrimRight(result, VT_SENTINEL_CHARACTER)
