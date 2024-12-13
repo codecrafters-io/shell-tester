@@ -2,7 +2,6 @@ package logged_shell_asserter
 
 import (
 	"fmt"
-	"reflect"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertion_collection"
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
@@ -36,13 +35,17 @@ func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
 }
 
 func (a *LoggedShellAsserter) Assert() error {
-	assertFn := func() error {
+	assertFn := func() *assertions.AssertionError {
 		return a.AssertionCollection.RunWithPromptAssertion(a.Shell.GetScreenState())
 	}
 
-	if readErr := a.Shell.ReadUntil(utils.AsBool(assertFn)); readErr != nil {
+	conditionFn := func() bool {
+		return assertFn() == nil
+	}
+
+	if readErr := a.Shell.ReadUntil(conditionFn); readErr != nil {
 		if assertionErr := assertFn(); assertionErr != nil {
-			a.logAssertionError(assertionErr)
+			a.logAssertionError(*assertionErr)
 			// TODO: Figure out remaining output in SUCCESS scenario
 			// asserter.LogRemainingOutput()
 
@@ -78,16 +81,14 @@ func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRow
 	a.lastLoggedRowIndex += processedRowCount
 }
 
-// ToDo: Review: For error scenario, which logger do we use ?
-func (a *LoggedShellAsserter) logAssertionError(err error) {
-	// ToDo: Review
+func (a *LoggedShellAsserter) logAssertionError(err assertions.AssertionError) {
+	// ToDo: Log contents UPTO errorrowindex
 	a.LogRemainingOutput()
 
-	if reflect.TypeOf(err) == reflect.TypeOf(&assertions.AssertionError{}) {
-		assertionErr := err.(*assertions.AssertionError)
-		l := a.Shell.GetLogger()
-		l.Errorf("%s", assertionErr.Message)
-	}
+	l := a.Shell.GetLogger()
+	l.Errorf("%s", err.Message)
+
+	// TODO: Log contents AFTER errorrwoindex
 }
 
 func (a *LoggedShellAsserter) LogRemainingOutput() {

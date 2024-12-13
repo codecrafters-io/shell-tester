@@ -23,7 +23,7 @@ func (c *AssertionCollection) AddAssertion(assertion assertions.Assertion) {
 	c.Assertions = append(c.Assertions, assertion)
 }
 
-func (c *AssertionCollection) RunWithPromptAssertion(screenState [][]string) error {
+func (c *AssertionCollection) RunWithPromptAssertion(screenState [][]string) *assertions.AssertionError {
 	return c.runWithExtraAssertions(screenState, []assertions.Assertion{
 		assertions.PromptAssertion{ExpectedPrompt: "$ "},
 	})
@@ -34,7 +34,7 @@ func (c *AssertionCollection) RunWithoutPromptAssertion(screenState [][]string) 
 }
 
 // ToDo: Remove all debug logs
-func (c *AssertionCollection) runWithExtraAssertions(screenState [][]string, extraAssertions []assertions.Assertion) error {
+func (c *AssertionCollection) runWithExtraAssertions(screenState [][]string, extraAssertions []assertions.Assertion) *assertions.AssertionError {
 	allAssertions := append(c.Assertions, extraAssertions...)
 	currentRowIndex := 0
 
