@@ -26,9 +26,8 @@ var ErrConditionNotMet = condition_reader.ErrConditionNotMet
 var ErrProgramExited = errors.New("Program exited")
 
 type ShellExecutable struct {
-	executable *executable.Executable
-	// TODO: Rename to stageLogger?
-	logger        *logger.Logger
+	executable    *executable.Executable
+	stageLogger   *logger.Logger
 	programLogger *logger.Logger
 
 	// env is set to os.Environ() by default, but individual values can be overridden with Setenv
@@ -44,7 +43,7 @@ type ShellExecutable struct {
 func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellExecutable {
 	b := &ShellExecutable{
 		executable:    stageHarness.NewExecutable(),
-		logger:        stageHarness.Logger,
+		stageLogger:   stageHarness.Logger,
 		programLogger: logger.GetLogger(stageHarness.Logger.IsDebug, "[your-program] "),
 	}
 
@@ -61,7 +60,7 @@ func (b *ShellExecutable) Setenv(key, value string) {
 }
 
 func (b *ShellExecutable) Start(args ...string) error {
-	b.logger.Infof(b.getInitialLogLine(args...))
+	b.stageLogger.Infof(b.getInitialLogLine(args...))
 
 	b.Setenv("PS1", "$ ")
 	// b.Setenv("TERM", "dumb") // test_all_success works without this too, do we need it?
@@ -186,7 +185,6 @@ func wrapReaderError(readerErr error) error {
 	return readerErr
 }
 
-// ToDo: Review and possibly remove
 func (b *ShellExecutable) GetLogger() *logger.Logger {
-	return b.logger
+	return b.stageLogger
 }
