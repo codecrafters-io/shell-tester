@@ -35,7 +35,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
-		return logAndQuit(asserter, err)
+		return err
 	}
 
 	availableExecutables := []string{"cat", "cp", "mkdir", "my_exe"}
@@ -62,7 +62,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 			SuccessMessage:   "Received expected response",
 		}
 		if err := testCase.Run(asserter, shell, logger); err != nil {
-			return logAndQuit(asserter, err)
+			return err
 		}
 	}
 
@@ -77,7 +77,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 			SuccessMessage:   "Received expected response",
 		}
 		if err := testCase.Run(asserter, shell, logger); err != nil {
-			return logAndQuit(asserter, err)
+			return err
 		}
 	}
 

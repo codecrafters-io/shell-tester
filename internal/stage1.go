@@ -24,7 +24,7 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell.Setenv("HOME", randomDir)
 
 	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
-		return logAndQuit(asserter, err)
+		return err
 	}
 
 	asserter.LogRemainingOutput()

@@ -19,7 +19,7 @@ func testEcho(stageHarness *test_case_harness.TestCaseHarness) error {
 	numberOfCommands := random.RandomInt(2, 4)
 
 	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
-		return logAndQuit(asserter, err)
+		return err
 	}
 
 	for i := 0; i < numberOfCommands; i++ {
@@ -33,7 +33,7 @@ func testEcho(stageHarness *test_case_harness.TestCaseHarness) error {
 			SuccessMessage:   "Received expected response",
 		}
 		if err := testCase.Run(asserter, shell, logger); err != nil {
-			return logAndQuit(asserter, err)
+			return err
 		}
 	}
 

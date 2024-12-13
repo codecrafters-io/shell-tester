@@ -18,7 +18,7 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 	builtIns := []string{"echo", "exit", "type"}
 
 	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
-		return logAndQuit(asserter, err)
+		return err
 	}
 
 	for _, builtIn := range builtIns {
@@ -31,7 +31,7 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 			SuccessMessage:   "Received expected response",
 		}
 		if err := testCase.Run(asserter, shell, logger); err != nil {
-			return logAndQuit(asserter, err)
+			return err
 		}
 	}
 
@@ -47,7 +47,7 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 			SuccessMessage:   "Received expected response",
 		}
 		if err := testCase.Run(asserter, shell, logger); err != nil {
-			return logAndQuit(asserter, err)
+			return err
 		}
 	}
 

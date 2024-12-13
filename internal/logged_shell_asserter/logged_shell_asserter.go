@@ -2,6 +2,7 @@ package logged_shell_asserter
 
 import (
 	"fmt"
+	"reflect"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertion_collection"
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
@@ -79,7 +80,14 @@ func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRow
 
 // ToDo: In case of failure log remaining screen state before quitting
 func (a *LoggedShellAsserter) logAssertionError(err error) {
-	// TODO: Log all shell output remaining
+	// ToDo: Review
+	a.LogRemainingOutput()
+
+	if reflect.TypeOf(err) == reflect.TypeOf(&assertions.AssertionError{}) {
+		assertionErr := err.(*assertions.AssertionError)
+		l := a.Shell.GetLogger()
+		l.Errorf("%s", assertionErr.Message)
+	}
 }
 
 func (a *LoggedShellAsserter) LogRemainingOutput() {

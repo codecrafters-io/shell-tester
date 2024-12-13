@@ -28,7 +28,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, currentPath))
 
 	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
-		return logAndQuit(asserter, err)
+		return err
 	}
 
 	randomCode := getRandomString()
@@ -46,12 +46,12 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	testCase := test_cases.CommandResponseTestCase{
 		Command:          strings.Join(command, " "),
-		ExpectedOutput:   fmt.Sprintf("Hello %s! The secret code is %s", randomName, randomCode),
+		ExpectedOutput:   fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode),
 		FallbackPatterns: nil,
 		SuccessMessage:   "Received expected response",
 	}
 	if err := testCase.Run(asserter, shell, logger); err != nil {
-		return logAndQuit(asserter, err)
+		return err
 	}
 
 	return logAndQuit(asserter, nil)

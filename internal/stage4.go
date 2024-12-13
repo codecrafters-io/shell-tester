@@ -20,7 +20,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
-		return logAndQuit(asserter, err)
+		return err
 	}
 
 	// We test a nonexistent command first, just to make sure the logic works in a "loop"
@@ -32,11 +32,11 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	if err := testCase.Run(asserter, shell, logger); err != nil {
-		return logAndQuit(asserter, err)
+		return err
 	}
 
 	if err := shell.SendCommand("exit 0"); err != nil {
-		return logAndQuit(asserter, err)
+		return err
 	}
 
 	commandReflection := fmt.Sprintf("$ %s", "exit 0")
