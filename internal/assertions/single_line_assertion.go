@@ -35,13 +35,11 @@ func (a SingleLineAssertion) Run(screenState [][]string, startRowIndex int) (pro
 	}
 
 	if cleanedRow != a.ExpectedOutput {
-		// TODO: Review
-		// detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, cleanedRow)
+		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, cleanedRow)
 		return 0, &AssertionError{
 			StartRowIndex: startRowIndex,
 			ErrorRowIndex: startRowIndex,
-			Message:       fmt.Sprintf("Expected %q, got %q", a.ExpectedOutput, cleanedRow),
-			// Message:       detailedErrorMessage + "\n" + fmt.Sprintf("Expected %q, got %q", a.ExpectedOutput, cleanedRow),
+			Message:       "Output does not match expected value.\n" + detailedErrorMessage,
 		}
 	} else {
 		return 1, nil
