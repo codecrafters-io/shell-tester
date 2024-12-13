@@ -43,17 +43,6 @@ func BuildCleanedRow(row []string) string {
 	return result
 }
 
-func allCellsAreTheSame(row []string) bool {
-	// Returns true if all cells in the row are the same
-	firstCell := row[0]
-	for _, cell := range row {
-		if cell != firstCell {
-			return false
-		}
-	}
-	return true
-}
-
 func AsBool(T func() error) func() bool {
 	// Takes in a function that takes no params & returns an error
 	// Returns the function wrapped in a helper such that it returns a bool
