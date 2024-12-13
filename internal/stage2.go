@@ -7,6 +7,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -21,14 +22,13 @@ func testInvalidCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	invalidCommand := getRandomInvalidCommand()
 
-	if err := shell.SendCommand(invalidCommand); err != nil {
-		return fmt.Errorf("Error sending command to shell: %v", err)
+	testCase := test_cases.CommandReflectionTestCase{
+		Command: invalidCommand,
+	}
+	if err := testCase.Run(asserter, shell, logger, true); err != nil {
+		return err
 	}
 
-	commandReflection := fmt.Sprintf("$ %s", invalidCommand)
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: commandReflection,
-	})
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: fmt.Sprintf("%s: command not found", invalidCommand),
 		FallbackPatterns: []*regexp.Regexp{
