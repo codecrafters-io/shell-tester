@@ -73,7 +73,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Most shells return nothing but bash returns the string "exit" when it exits, we allow both styles
 	if len(output) > 0 && strings.TrimSpace(output) != "exit" {
-		return fmt.Errorf("Expected no output after exit command, got %q", string(output))
+		return fmt.Errorf("Expected no output after exit command, got %q", output)
 	}
 
 	logger.Successf("✓ No output after exit command")

@@ -20,9 +20,6 @@ import (
 	"go.chromium.org/luci/common/system/environ"
 )
 
-// ErrConditionNotMet is re-exported from condition_reader for convenience
-var ErrConditionNotMet = condition_reader.ErrConditionNotMet
-
 // ErrProgramExited is returned when the program exits
 var ErrProgramExited = errors.New("Program exited")
 
@@ -83,7 +80,7 @@ func (b *ShellExecutable) Start(args ...string) error {
 }
 
 func (b *ShellExecutable) GetScreenState() [][]string {
-	return b.vt.GetScreenState(false)
+	return b.vt.GetScreenState()
 }
 
 func (b *ShellExecutable) LogOutput(output []byte) {

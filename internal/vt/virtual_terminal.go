@@ -40,7 +40,7 @@ func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 	return vt.vt.Write(p)
 }
 
-func (vt *VirtualTerminal) GetScreenState(retainColors bool) [][]string {
+func (vt *VirtualTerminal) GetScreenState() [][]string {
 	screenState := make([][]string, vt.rows)
 	for i := 0; i < vt.rows; i++ {
 		screenState[i] = make([]string, vt.cols)
