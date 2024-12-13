@@ -17,7 +17,7 @@ var testerDefinition = tester_definition.TesterDefinition{
 		},
 		{
 			Slug:     "cz2",
-			TestFunc: testMissingCommand,
+			TestFunc: testInvalidCommand,
 			Timeout:  15 * time.Second,
 		},
 		{

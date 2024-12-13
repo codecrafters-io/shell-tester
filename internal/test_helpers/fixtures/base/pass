@@ -22,8 +22,13 @@ Debug = true
 [33m[your-program] [0m$ type my_exe
 [33m[your-program] [0mmy_exe is /tmp/orange/grape/grape/my_exe
 [33m[stage-7] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type nonexistent
-[33m[your-program] [0mbash: type: nonexistent: not found
+[33m[your-program] [0m$ 
+[33m[stage-7] [0m[94m> type invalid_banana_command[0m
+[33m[your-program] [0mbash: type: invalid_banana_command: not found
+[33m[stage-7] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m$ 
+[33m[stage-7] [0m[94m> type invalid_raspberry_command[0m
+[33m[your-program] [0mbash: type: invalid_raspberry_command: not found
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-7] [0m[92mTest passed.[0m
@@ -39,32 +44,37 @@ Debug = true
 [33m[your-program] [0m$ type type
 [33m[your-program] [0mtype is a shell builtin
 [33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type nonexistent
-[33m[your-program] [0mbash: type: nonexistent: not found
-[33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type nonexistentcommand
-[33m[your-program] [0mbash: type: nonexistentcommand: not found
+[33m[your-program] [0m$ 
+[33m[stage-6] [0m[94m> type invalid_apple_command[0m
+[33m[your-program] [0mbash: type: invalid_apple_command: not found
 [33m[stage-6] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
-[33m[stage-6] [0m[92mTest passed.[0m
+[33m[stage-6] [0m[94m> type invalid_grape_command[0m
+[33m[your-program] [0mbash: type: invalid_grape_command: not found
 
 [33m[stage-5] [0m[94mRunning tests for Stage #5: iz3[0m
 [33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo apple banana
-[33m[your-program] [0mapple banana
+[33m[your-program] [0m$ 
+[33m[stage-5] [0m[94m> echo raspberry mango blueberry[0m
+[33m[your-program] [0mraspberry mango blueberry
 [33m[stage-5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo orange blueberry
-[33m[your-program] [0morange blueberry
+[33m[your-program] [0m$ 
+[33m[stage-5] [0m[94m> echo blueberry apple mango[0m
+[33m[your-program] [0mblueberry apple mango
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-5] [0m[92mTest passed.[0m
 
 [33m[stage-4] [0m[94mRunning tests for Stage #4: pn5[0m
 [33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ invalid_command_1
-[33m[your-program] [0mbash: invalid_command_1: command not found
-[33m[stage-4] [0m[92mReceived command not found message[0m
-[33m[your-program] [0m$ exit 0
+[33m[your-program] [0m$ 
+[33m[stage-4] [0m[94m> invalid_apple_command[0m
+[33m[your-program] [0mbash: invalid_apple_command: command not found
+[33m[stage-4] [0m[92m✓ Received command not found message[0m
+[33m[your-program] [0m$ 
+[33m[stage-4] [0m[94m> exit 0[0m
+[33m[your-program] [0mexit
+[33m[your-program] [0m
 [33m[stage-4] [0m[92m✓ Program exited successfully[0m
 [33m[stage-4] [0m[92m✓ No output after exit command[0m
 [33m[your-program] [0mexit
@@ -86,8 +96,9 @@ Debug = true
 
 [33m[stage-2] [0m[94mRunning tests for Stage #2: cz2[0m
 [33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ nonexistent
-[33m[your-program] [0mbash: nonexistent: command not found
+[33m[your-program] [0m$ 
+[33m[stage-2] [0m[94m> invalid_banana_command[0m
+[33m[your-program] [0mbash: invalid_banana_command: command not found
 [33m[stage-2] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ 
 [33m[stage-2] [0m[92mTest passed.[0m

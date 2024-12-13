@@ -66,7 +66,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 	}
 
-	nonAvailableExecutables := []string{"nonexistent"}
+	nonAvailableExecutables := getRandomInvalidCommands(2)
 
 	for _, executable := range nonAvailableExecutables {
 		command := fmt.Sprintf("type %s", executable)

@@ -75,49 +75,18 @@ Debug = true
 [33m[your-program] [0m$ type my_exe
 [33m[your-program] [0mmy_exe is /tmp/banana/pineapple/raspberry/my_exe
 [33m[stage-7] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type nonexistent
-[33m[your-program] [0mbash: type: nonexistent: not found
-[33m[stage-7] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-7] [0m[92mTest passed.[0m
-
-[33m[stage-6] [0m[94mRunning tests for Stage #6: ez5[0m
-[33m[stage-6] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ type echo
-[33m[your-program] [0mecho is a shell builtin
-[33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type exit
-[33m[your-program] [0mexit is a shell builtin
-[33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type type
-[33m[your-program] [0mtype is a shell builtin
-[33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type nonexistent
-[33m[your-program] [0mbash: type: nonexistent: not found
-[33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type nonexistentcommand
-[33m[your-program] [0mbash: type: nonexistentcommand: not found
 [33m[stage-6] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-6] [0m[92mTest passed.[0m
 
 [33m[stage-5] [0m[94mRunning tests for Stage #5: iz3[0m
 [33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo blueberry strawberry apple
-[33m[your-program] [0mblueberry strawberry apple
-[33m[stage-5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo pineapple mango blueberry
-[33m[your-program] [0mpineapple mango blueberry
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-5] [0m[92mTest passed.[0m
 
 [33m[stage-4] [0m[94mRunning tests for Stage #4: pn5[0m
 [33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ invalid_command_1
-[33m[your-program] [0mbash: invalid_command_1: command not found
-[33m[stage-4] [0m[92mReceived command not found message[0m
-[33m[your-program] [0m$ exit 0
 [33m[stage-4] [0m[92m✓ Program exited successfully[0m
 [33m[stage-4] [0m[92m✓ No output after exit command[0m
 [33m[your-program] [0mexit
@@ -136,17 +105,12 @@ Debug = true
 [33m[stage-3] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ invalid_command_4
 [33m[your-program] [0mbash: invalid_command_4: command not found
-[33m[stage-3] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ invalid_command_5
-[33m[your-program] [0mbash: invalid_command_5: command not found
-[33m[stage-3] [0m[92m✓ Received command not found message[0m
+[33m[stage-3] [0m[92m✓ Received command not foun
 [33m[your-program] [0m$ 
 [33m[stage-3] [0m[92mTest passed.[0m
 
 [33m[stage-2] [0m[94mRunning tests for Stage #2: cz2[0m
 [33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ nonexistent
-[33m[your-program] [0mbash: nonexistent: command not found
 [33m[stage-2] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ 
 [33m[stage-2] [0m[92mTest passed.[0m

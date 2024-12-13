@@ -10,7 +10,7 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
+func testInvalidCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
@@ -19,10 +19,13 @@ func testMissingCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	invalidCommand := "nonexistent"
+	invalidCommand := getRandomInvalidCommand()
 
-	if err := shell.SendCommand(invalidCommand); err != nil {
-		return fmt.Errorf("Error sending command to shell: %v", err)
+	testCase := test_cases.SingleLineExactMatchTestCase{
+		Command:                    invalidCommand,
+		FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(`^(bash: )?` + invalidCommand + `: (command )?not found$`)},
+		ExpectedPatternExplanation: invalidCommand + ": command not found",
+		SuccessMessage:             "Received command not found message",
 	}
 
 	commandReflection := fmt.Sprintf("$ %s", invalidCommand)

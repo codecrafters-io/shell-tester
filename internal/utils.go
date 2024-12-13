@@ -25,6 +25,21 @@ func getRandomDirectory() (string, error) {
 	return randomDir, nil
 }
 
+func getRandomInvalidCommand() string {
+	return "invalid_" + random.RandomWord() + "_command"
+}
+
+func getRandomInvalidCommands(n int) []string {
+	words := random.RandomWords(n)
+	invalidCommands := make([]string, n)
+
+	for i := 0; i < n; i++ {
+		invalidCommands[i] = "invalid_" + words[i] + "_command"
+	}
+
+	return invalidCommands
+}
+
 // getShortRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
 // directory is of the form `/tmp/<random-word>`
 func getShortRandomDirectory() (string, error) {

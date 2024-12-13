@@ -24,11 +24,13 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	invalidCommand := getRandomInvalidCommand()
+
 	// We test a nonexistent command first, just to make sure the logic works in a "loop"
 	testCase := test_cases.CommandResponseTestCase{
-		Command:          "invalid_command_1",
-		ExpectedOutput:   "invalid_command_1: command not found",
-		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(`^(bash: )?invalid_command_1: (command )?not found$`)},
+		Command:          invalidCommand,
+		ExpectedOutput:   invalidCommand + ": command not found",
+		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(`^(bash: )?` + invalidCommand + `: (command )?not found$`)},
 		SuccessMessage:   "Received command not found message",
 	}
 

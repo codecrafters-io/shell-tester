@@ -62,19 +62,23 @@ Debug = true
 
 [33m[stage-3] [0m[94mRunning tests for Stage #3: le5[0m
 [33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo 'script\\\ntest'
-[33m[your-program] [0mscript\\\ntest
+[33m[your-program] [0m$ 
+[33m[stage-3] [0m[94m> echo 'test\\\nworld'[0m
+[33m[your-program] [0mtest\\\nworld
 [33m[stage-3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo 'example\"shellhello\"script'
-[33m[your-program] [0mexample\"shellhello\"script
+[33m[your-program] [0m$ 
+[33m[stage-3] [0m[94m> echo 'shell\"examplescript\"test'[0m
+[33m[your-program] [0mshell\"examplescript\"test
 [33m[stage-3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo 'hello\\ntest'
-[33m[your-program] [0mhello\\ntest
+[33m[your-program] [0m$ 
+[33m[stage-3] [0m[94m> echo 'script\\nworld'[0m
+[33m[your-program] [0mscript\\nworld
 [33m[stage-3] [0m[92m✓ Received expected response[0m
-[33m[stage-3] [0m[94mWriting file "/tmp/quz/'f 41'" with content "orange mango."[0m
-[33m[stage-3] [0m[94mWriting file "/tmp/quz/'f  \34'" with content "blueberry orange."[0m
-[33m[stage-3] [0m[94mWriting file "/tmp/quz/'f \41\'" with content "pineapple strawberry."[0m
-[33m[your-program] [0m$ cat "/tmp/quz/'f 41'" "/tmp/quz/'f  \34'" "/tmp/quz/'f \41\'"
+[33m[stage-3] [0m[94mWriting file "/tmp/quz/'f 24'" with content "orange mango."[0m
+[33m[stage-3] [0m[94mWriting file "/tmp/quz/'f  \46'" with content "blueberry orange."[0m
+[33m[stage-3] [0m[94mWriting file "/tmp/quz/'f \68\'" with content "pineapple strawberry."[0m
+[33m[your-program] [0m$ 
+[33m[stage-3] [0m[94m> cat "/tmp/quz/'f 24'" "/tmp/quz/'f  \46'" "/tmp/quz/'f \68\'"[0m
 [33m[your-program] [0morange mango.blueberry orange.pineapple strawberry.
 [33m[stage-3] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -102,10 +106,10 @@ Debug = true
 
 [33m[stage-1] [0m[94mRunning tests for Stage #1: qj0[0m
 [33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
-[33m[stage-1] [0m[94mCopying /usr/bin/cat to /tmp/foo/'exe  with  space'[0m
-[33m[stage-1] [0m[94mCopying /usr/bin/cat to /tmp/foo/'exe with "quotes"'[0m
-[33m[stage-1] [0m[94mCopying /usr/bin/cat to /tmp/foo/"exe with \'single quotes\'"[0m
-[33m[stage-1] [0m[94mCopying /usr/bin/cat to /tmp/foo/'exe with \n newline'[0m
+[33m[stage-1] [0m[94mCopying /tmp/custom_cat_executable to /tmp/foo/'exe  with  space'[0m
+[33m[stage-1] [0m[94mCopying /tmp/custom_cat_executable to /tmp/foo/'exe with "quotes"'[0m
+[33m[stage-1] [0m[94mCopying /tmp/custom_cat_executable to /tmp/foo/"exe with \'single quotes\'"[0m
+[33m[stage-1] [0m[94mCopying /tmp/custom_cat_executable to /tmp/foo/'exe with \n newline'[0m
 [33m[stage-1] [0m[94mWriting file "/tmp/foo/f1" with content "raspberry blueberry."[0m
 [33m[stage-1] [0m[94mWriting file "/tmp/foo/f2" with content "apple pineapple."[0m
 [33m[stage-1] [0m[94mWriting file "/tmp/foo/f3" with content "strawberry raspberry."[0m

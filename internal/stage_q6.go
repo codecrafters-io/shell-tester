@@ -44,7 +44,13 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	executableName3 := `"exe with \'single quotes\'"`
 	executableName4 := `'exe with \n newline'`
 
-	err = custom_executable.CopyExecutableToMultiplePaths("/usr/bin/cat", []string{path.Join(randomDir, executableName1), path.Join(randomDir, executableName2), path.Join(randomDir, executableName3), path.Join(randomDir, executableName4)}, logger)
+	originalExecutablePath := "/tmp/custom_cat_executable"
+	err = createExecutableCallingCat(originalExecutablePath)
+	if err != nil {
+		panic("CodeCrafters Internal Error: Cannot create executable")
+	}
+
+	err = custom_executable.CopyExecutableToMultiplePaths(originalExecutablePath, []string{path.Join(randomDir, executableName1), path.Join(randomDir, executableName2), path.Join(randomDir, executableName3), path.Join(randomDir, executableName4)}, logger)
 	if err != nil {
 		panic("CodeCrafters Internal Error: Cannot copy executable")
 	}
@@ -83,4 +89,14 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	return logAndQuit(asserter, nil)
+}
+
+func createExecutableFile(path string, contents string) error {
+	return os.WriteFile(path, []byte(contents), 0o755)
+}
+
+func createExecutableCallingCat(path string) error {
+	content := `#!/bin/sh
+exec cat "$@"`
+	return createExecutableFile(path, content)
 }
