@@ -77,7 +77,6 @@ func writeFiles(paths []string, contents []string, logger *logger.Logger) error 
 }
 
 func logAndQuit(asserter *logged_shell_asserter.LoggedShellAsserter, err error) error {
-	// ToDo: For error scenario, which logger do we use ?
 	asserter.LogRemainingOutput()
 	return err
 }
