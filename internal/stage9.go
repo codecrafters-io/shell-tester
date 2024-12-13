@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"runtime"
 
+	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
@@ -15,8 +16,9 @@ import (
 func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
+	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	if err := shell.Start(); err != nil {
+	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
 		return err
 	}
 
@@ -25,13 +27,13 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		return fmt.Errorf("CodeCrafters internal error. Error getting cwd: %v", err)
 	}
 
-	testCase := test_cases.SingleLineExactMatchTestCase{
-		Command:                    "type pwd",
-		FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(`^pwd is a( special)? shell builtin$`)},
-		ExpectedPatternExplanation: `pwd is a shell builtin`,
-		SuccessMessage:             "Received 'pwd is a shell builtin'",
+	testCase := test_cases.CommandResponseTestCase{
+		Command:          "type pwd",
+		ExpectedOutput:   `pwd is a shell builtin`,
+		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(`^pwd is a( special)? shell builtin$`)},
+		SuccessMessage:   "Received 'pwd is a shell builtin'",
 	}
-	if err := testCase.Run(shell, logger); err != nil {
+	if err := testCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
@@ -62,12 +64,13 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		}(exec.Command("sh", "-c", revertCommand))
 	}
 
-	testCase = test_cases.SingleLineExactMatchTestCase{
-		Command:        "pwd",
-		ExpectedOutput: cwd,
-		SuccessMessage: "Received current working directory response",
+	testCase = test_cases.CommandResponseTestCase{
+		Command:          "pwd",
+		ExpectedOutput:   cwd,
+		FallbackPatterns: nil,
+		SuccessMessage:   "Received current working directory response",
 	}
-	if err := testCase.Run(shell, logger); err != nil {
+	if err := testCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
