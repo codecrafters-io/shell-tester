@@ -89,8 +89,11 @@ func (a *LoggedShellAsserter) logAssertionError(err assertions.AssertionError) {
 }
 
 func (a *LoggedShellAsserter) LogRemainingOutput() {
+	// if we ever call this, before logging anything
+	// a.lastLoggedRowIndex would be -1, we want it to be 0
+	startRowIndex := max(0, a.lastLoggedRowIndex)
 	endRowIndex := len(a.Shell.GetScreenState())
-	a.logRows(a.lastLoggedRowIndex, endRowIndex)
+	a.logRows(startRowIndex, endRowIndex)
 }
 
 func (a *LoggedShellAsserter) logRows(startRowIndex int, endRowIndex int) {
