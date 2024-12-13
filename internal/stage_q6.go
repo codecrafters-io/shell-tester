@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
+	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/random"
@@ -16,6 +17,7 @@ import (
 func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
+	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	randomDir, err := getShortRandomDirectory()
 	if err != nil {
@@ -26,7 +28,7 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	currentPath := os.Getenv("PATH")
 	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, currentPath))
 
-	if err := shell.Start(); err != nil {
+	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
 		return err
 	}
 
@@ -69,15 +71,16 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
 	for _, testCaseContent := range testCaseContents {
-		testCase := test_cases.SingleLineExactMatchTestCase{
-			Command:        testCaseContent.Input,
-			ExpectedOutput: testCaseContent.ExpectedOutput,
-			SuccessMessage: "Received expected response",
+		testCase := test_cases.CommandResponseTestCase{
+			Command:          testCaseContent.Input,
+			ExpectedOutput:   testCaseContent.ExpectedOutput,
+			FallbackPatterns: nil,
+			SuccessMessage:   "✓ Received expected response",
 		}
-		if err := testCase.Run(shell, logger); err != nil {
+		if err := testCase.Run(asserter, shell, logger); err != nil {
 			return err
 		}
 	}
 
-	return assertShellIsRunning(shell, logger)
+	return logAndQuit(asserter, nil)
 }

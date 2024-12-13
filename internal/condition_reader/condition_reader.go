@@ -31,16 +31,19 @@ func NewConditionReader(reader io.Reader) ConditionReader {
 	}
 }
 
-func (t *ConditionReader) ReadUntilCondition(condition func([]byte) bool) ([]byte, error) {
+func (t *ConditionReader) ReadUntilCondition(condition func() bool) error {
 	return t.ReadUntilConditionOrTimeout(condition, 2000*time.Millisecond)
 }
 
-func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) bool, timeout time.Duration) ([]byte, error) {
+func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func() bool, timeout time.Duration) error {
 	deadline := time.Now().Add(timeout)
-	var accumulatedReadBytes []byte
+
+	if condition() {
+		return nil
+	}
 
 	for !time.Now().After(deadline) {
-		readBytes, err := t.asyncReader.ReadBytes()
+		readBytes, err := t.asyncReader.Read()
 		if err != nil {
 			if errors.Is(err, async_reader.ErrNoData) {
 				debugLog("condition_reader: No data available")
@@ -51,41 +54,31 @@ func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func([]byte) boo
 				continue
 			} else {
 				debugLog("condition_reader: Error while reading: %v", err)
-				return readBytes, err
+				return err
 			}
 		}
 
 		debugLog("condition_reader: readBytes: %q", string(readBytes))
 
-		// There might be a situation where we read more than the string `S` that satisfies the condition.
-		// For that reason, we'll accumulate byte by byte and make sure we don't overshoot the condition.
-		for i, byte := range readBytes {
-			accumulatedReadBytes = append(accumulatedReadBytes, byte)
-			// If the condition is met, we can return early. Else the loop runs again
-			if condition(accumulatedReadBytes) {
-				// Of the complete string `S`, if S[:i] satisfies the conditon, we can't discard the bytes after `i`
-				// Then our next line's readUntilCondition will miss that starting bytes and fail
-				t.asyncReader.Unread(readBytes[i+1:])
-
-				return accumulatedReadBytes, nil
-			}
+		if condition() {
+			return nil
 		}
 	}
 
-	return accumulatedReadBytes, ErrConditionNotMet
+	return ErrConditionNotMet
 }
 
-func (t *ConditionReader) ReadUntilTimeout(timeout time.Duration) ([]byte, error) {
-	alwaysFalseCondition := func([]byte) bool {
+func (t *ConditionReader) ReadUntilTimeout(timeout time.Duration) error {
+	alwaysFalseCondition := func() bool {
 		return false
 	}
 
-	data, err := t.ReadUntilConditionOrTimeout(alwaysFalseCondition, timeout)
+	err := t.ReadUntilConditionOrTimeout(alwaysFalseCondition, timeout)
 
 	// We expect that the condition is never met, so let's return nil as the error
 	if errors.Is(err, ErrConditionNotMet) {
-		return data, nil
+		return nil
 	}
 
-	return data, err
+	return err
 }

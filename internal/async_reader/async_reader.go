@@ -37,17 +37,11 @@ func New(reader io.Reader) *AsyncReader {
 	return asyncReader
 }
 
-// ReadBytes is the only function that this package exposes. It either reads a byte or returns ErrNoData.
-func (r *AsyncReader) ReadBytes() ([]byte, error) {
+// Read is the only function that this package exposes. It either reads a byte or returns ErrNoData.
+func (r *AsyncReader) Read() ([]byte, error) {
 	select {
 	// We're checking whether a byte is immediately available, so the timeout can be super low
 	case <-time.After(1 * time.Millisecond):
-		if len(r.unreadBuffer) > 0 {
-			readBytes := r.unreadBuffer
-			r.unreadBuffer = []byte{}
-			return readBytes, nil
-		}
-
 		return nil, ErrNoData
 	case readBytes, ok := <-r.data:
 		if !ok {
@@ -61,12 +55,6 @@ func (r *AsyncReader) ReadBytes() ([]byte, error) {
 
 		return readBytes, nil
 	}
-}
-
-// Unread will push the unprocessed bytes into a buffer inside this AsyncReader
-// This buffer content will be returned in the next ReadBytes call
-func (r *AsyncReader) Unread(data []byte) {
-	r.unreadBuffer = append(r.unreadBuffer, data...)
 }
 
 // Keeps reading forever until an error or EOF

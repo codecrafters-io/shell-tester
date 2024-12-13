@@ -1,11 +1,13 @@
-package shell_executable
+package virtual_terminal
 
 import (
+	"strings"
+
 	"github.com/Edgaru089/vterm"
 	"github.com/gookit/color"
 )
 
-const VT_SENTINEL_CHARACTER = "."
+const VT_SENTINEL_CHARACTER = "★"
 
 type VirtualTerminal struct {
 	vt   *vterm.VTerm
@@ -14,7 +16,9 @@ type VirtualTerminal struct {
 }
 
 func NewStandardVT() *VirtualTerminal {
-	return NewCustomVT(12, 80)
+	// ToDo: This affects performance majorly, improve all functions operating on this
+	// Keep a track of when the last row is being written to, panic at that point
+	return NewCustomVT(100, 120)
 }
 
 func NewCustomVT(rows, cols int) *VirtualTerminal {
@@ -42,15 +46,8 @@ func (vt *VirtualTerminal) GetScreenState(retainColors bool) [][]string {
 		screenState[i] = make([]string, vt.cols)
 		for j := 0; j < vt.cols; j++ {
 			c := vt.vt.CellAt(i, j)
-			fr, fg, fb := vt.vt.ConvertRGB(&c.Foreground)
-			br, bg, bb := vt.vt.ConvertRGB(&c.Background)
-			style := getForegroundBackgroundStyleFromRGB(fr, fg, fb, br, bg, bb)
 			if len(c.Chars) > 0 {
-				if retainColors {
-					screenState[i][j] = style.Sprintf("%c", c.Chars[0])
-				} else {
-					screenState[i][j] = string(c.Chars)
-				}
+				screenState[i][j] = string(c.Chars)
 			} else {
 				screenState[i][j] = VT_SENTINEL_CHARACTER
 			}
@@ -108,4 +105,11 @@ func getForegroundBackgroundStyleFromRGB(fr, fg, fb, br, bg, bb uint8) *color.RG
 		color.RGB(br, bg, bb), // Background color
 	)
 	return style
+}
+
+func BuildCleanedRow(row []string) string {
+	result := strings.Join(row, "")
+	result = strings.TrimRight(result, VT_SENTINEL_CHARACTER)
+	result = strings.ReplaceAll(result, VT_SENTINEL_CHARACTER, " ")
+	return result
 }

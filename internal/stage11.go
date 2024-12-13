@@ -5,6 +5,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
@@ -13,8 +14,9 @@ import (
 func testCd2(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
+	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	if err := shell.Start(); err != nil {
+	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
 		return err
 	}
 
@@ -29,7 +31,7 @@ func testCd2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// first 2 dirs, /tmp/foo -> /tmp/foo
 	dir := string(separator) + path.Join(parentDirs[:len(parentDirs)-2]...)
 	testCase1 := test_cases.CDAndPWDTestCase{Directory: dir, Response: dir}
-	err = testCase1.Run(shell, logger)
+	err = testCase1.Run(asserter, shell, logger)
 	if err != nil {
 		return err
 	}
@@ -38,7 +40,7 @@ func testCd2(stageHarness *test_case_harness.TestCaseHarness) error {
 	dir = "." + string(separator) + path.Join(parentDirs[len(parentDirs)-2:]...)
 	absoluteDir := string(separator) + path.Join(parentDirs...)
 	testCase2 := test_cases.CDAndPWDTestCase{Directory: dir, Response: absoluteDir}
-	err = testCase2.Run(shell, logger)
+	err = testCase2.Run(asserter, shell, logger)
 	if err != nil {
 		return err
 	}
@@ -46,9 +48,10 @@ func testCd2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// go back, ../../../ -> /tmp
 	absoluteDir = string(separator) + path.Join(parentDirs[:len(parentDirs)-3]...)
 	testCase3 := test_cases.CDAndPWDTestCase{Directory: "../../../", Response: absoluteDir}
-	err = testCase3.Run(shell, logger)
+	err = testCase3.Run(asserter, shell, logger)
 	if err != nil {
 		return err
 	}
-	return assertShellIsRunning(shell, logger)
+
+	return logAndQuit(asserter, nil)
 }

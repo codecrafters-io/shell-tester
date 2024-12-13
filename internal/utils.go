@@ -6,23 +6,14 @@ import (
 	"path"
 	"strings"
 
+	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
-	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/random"
 )
 
 var SMALL_WORDS = []string{"foo", "bar", "baz", "qux", "quz"}
 var LARGE_WORDS = []string{"hello", "world", "test", "example", "shell", "script"}
-
-func assertShellIsRunning(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	testCase := test_cases.NewSilentPromptTestCase("$ ")
-
-	if err := testCase.Run(shell, logger); err != nil {
-		return fmt.Errorf("Expected shell to print prompt after last command, but it didn't: %v", err)
-	}
-	return nil
-}
 
 // getRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
 // directory is of the form `/tmp/<random-word>/<random-word>/<random-word>`
@@ -74,4 +65,17 @@ func writeFiles(paths []string, contents []string, logger *logger.Logger) error 
 		}
 	}
 	return nil
+}
+
+func logAndQuit(asserter *logged_shell_asserter.LoggedShellAsserter, err error) error {
+	asserter.LogRemainingOutput()
+	return err
+}
+
+func startShellAndAssertPrompt(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable) error {
+	if err := shell.Start(); err != nil {
+		return err
+	}
+
+	return asserter.AssertWithPrompt()
 }
