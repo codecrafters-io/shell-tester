@@ -21,11 +21,8 @@ func testInvalidCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	invalidCommand := getRandomInvalidCommand()
 
-	testCase := test_cases.SingleLineExactMatchTestCase{
-		Command:                    invalidCommand,
-		FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(`^(bash: )?` + invalidCommand + `: (command )?not found$`)},
-		ExpectedPatternExplanation: invalidCommand + ": command not found",
-		SuccessMessage:             "Received command not found message",
+	if err := shell.SendCommand(invalidCommand); err != nil {
+		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
 	commandReflection := fmt.Sprintf("$ %s", invalidCommand)
@@ -40,7 +37,7 @@ func testInvalidCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 		},
 	})
 
-	if err := asserter.AssertWithPrompt(); err != nil {
+	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
 	}
 
