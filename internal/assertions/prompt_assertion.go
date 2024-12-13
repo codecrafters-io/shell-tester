@@ -21,15 +21,6 @@ func (t PromptAssertion) Run(screenState [][]string, startRowIndex int) (process
 	// We don't want to count the processed prompt as a complete row
 	processedRowCount = 0
 
-	// TODO: Move these to assertion collection
-	if len(screenState) == 0 {
-		panic("CodeCrafters internal error: Expected screen state to have at least one row")
-	}
-
-	if startRowIndex >= len(screenState) {
-		panic("CodeCrafters internal error: startRowIndex is larger than screenState rows")
-	}
-
 	rawRow := screenState[startRowIndex] // Could be nil?
 	cleanedRow := utils.BuildCleanedRow(rawRow)
 

@@ -21,15 +21,6 @@ func (a SingleLineAssertion) Inspect() string {
 }
 
 func (a SingleLineAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err *AssertionError) {
-	// TODO: Move these to assertion collection
-	if len(screenState) == 0 {
-		panic("CodeCrafters internal error: expected screen to have at least one row, but it was empty")
-	}
-
-	if startRowIndex >= len(screenState) {
-		panic("CodeCrafters internal error: startRowIndex is larger than screenState rows")
-	}
-
 	if a.ExpectedOutput == "" {
 		panic("CodeCrafters Internal Error: ExpectedOutput must be provided")
 	}
@@ -44,12 +35,11 @@ func (a SingleLineAssertion) Run(screenState [][]string, startRowIndex int) (pro
 	}
 
 	if cleanedRow != a.ExpectedOutput {
-		// TODO: Return colored error message when constructing AssertionError
-		// detailedErrorMessage := BuildColoredErrorMessage(t.expectedPatternExplanation, cleanedRow)
+		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, cleanedRow)
 		return 0, &AssertionError{
 			StartRowIndex: startRowIndex,
 			ErrorRowIndex: startRowIndex,
-			Message:       fmt.Sprintf("Expected %q, got %q", a.ExpectedOutput, cleanedRow),
+			Message:       "Output does not match expected value.\n" + detailedErrorMessage,
 		}
 	} else {
 		return 1, nil

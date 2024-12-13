@@ -19,12 +19,7 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	numberOfCommands := random.RandomInt(3, 6)
 
-	if err := shell.Start(); err != nil {
-		return err
-	}
-
-	// First prompt assertion
-	if err := asserter.Assert(); err != nil {
+	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
 		return err
 	}
 
@@ -47,6 +42,5 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Assert() already makes sure that the prompt is present in the last row
-	asserter.LogRemainingOutput()
-	return nil
+	return logAndQuit(asserter, nil)
 }

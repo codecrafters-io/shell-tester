@@ -35,13 +35,17 @@ func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
 }
 
 func (a *LoggedShellAsserter) Assert() error {
-	assertFn := func() error {
+	assertFn := func() *assertions.AssertionError {
 		return a.AssertionCollection.RunWithPromptAssertion(a.Shell.GetScreenState())
 	}
 
-	if readErr := a.Shell.ReadUntil(utils.AsBool(assertFn)); readErr != nil {
+	conditionFn := func() bool {
+		return assertFn() == nil
+	}
+
+	if readErr := a.Shell.ReadUntil(conditionFn); readErr != nil {
 		if assertionErr := assertFn(); assertionErr != nil {
-			a.logAssertionError(assertionErr)
+			a.logAssertionError(*assertionErr)
 			// TODO: Figure out remaining output in SUCCESS scenario
 			// asserter.LogRemainingOutput()
 
@@ -77,13 +81,23 @@ func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRow
 	a.lastLoggedRowIndex += processedRowCount
 }
 
-func (a *LoggedShellAsserter) logAssertionError(err error) {
-	// TODO: Log all shell output remaining
+func (a *LoggedShellAsserter) logAssertionError(err assertions.AssertionError) {
+	a.logRows(a.lastLoggedRowIndex, err.ErrorRowIndex)
+	l := a.Shell.GetLogger()
+	l.Errorf("%s", err.Message)
+	a.logRows(err.ErrorRowIndex, len(a.Shell.GetScreenState()))
 }
 
 func (a *LoggedShellAsserter) LogRemainingOutput() {
+	// if we ever call this, before logging anything
+	// a.lastLoggedRowIndex would be -1, we want it to be 0
+	startRowIndex := max(0, a.lastLoggedRowIndex)
 	endRowIndex := len(a.Shell.GetScreenState())
-	for i := a.lastLoggedRowIndex + 1; i < endRowIndex; i++ {
+	a.logRows(startRowIndex, endRowIndex)
+}
+
+func (a *LoggedShellAsserter) logRows(startRowIndex int, endRowIndex int) {
+	for i := startRowIndex; i < endRowIndex; i++ {
 		rawRow := a.Shell.GetScreenState()[i]
 		cleanedRow := utils.BuildCleanedRow(rawRow)
 		if len(cleanedRow) > 0 {

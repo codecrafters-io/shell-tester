@@ -185,3 +185,8 @@ func wrapReaderError(readerErr error) error {
 
 	return readerErr
 }
+
+// ToDo: Review and possibly remove
+func (b *ShellExecutable) GetLogger() *logger.Logger {
+	return b.logger
+}

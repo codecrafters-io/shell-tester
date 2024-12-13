@@ -1,12 +1,13 @@
 package utils
 
 import (
+	"strings"
 	"unicode"
 
 	"github.com/fatih/color"
 )
 
-const VT_SENTINEL_CHARACTER = "."
+const VT_SENTINEL_CHARACTER = "★"
 
 func ColorizeString(colorToUse color.Attribute, msg string) string {
 	c := color.New(colorToUse)
@@ -36,15 +37,22 @@ func RemoveNonPrintableCharacters(output string) string {
 }
 
 // TODO: What if there are tabs, will we have SENTINEL_CHAR in the middle of a row?
-// Alternative here would be to TrimRight(SENTINEL_CHAR)
 func BuildCleanedRow(row []string) string {
-	result := ""
+	result := strings.Join(row, "")
+	result = strings.TrimRight(result, VT_SENTINEL_CHARACTER)
+	result = strings.ReplaceAll(result, VT_SENTINEL_CHARACTER, " ")
+	return result
+}
+
+func allCellsAreTheSame(row []string) bool {
+	// Returns true if all cells in the row are the same
+	firstCell := row[0]
 	for _, cell := range row {
-		if cell != VT_SENTINEL_CHARACTER {
-			result += cell
+		if cell != firstCell {
+			return false
 		}
 	}
-	return result
+	return true
 }
 
 func AsBool(T func() error) func() bool {

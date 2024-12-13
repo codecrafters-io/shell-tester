@@ -19,12 +19,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	if err := shell.Start(); err != nil {
-		return err
-	}
-
-	// First prompt assertion
-	if err := asserter.Assert(); err != nil {
+	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
 		return err
 	}
 
@@ -83,5 +78,5 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	logger.Successf("✓ No output after exit command")
 
-	return nil
+	return logAndQuit(asserter, nil)
 }
