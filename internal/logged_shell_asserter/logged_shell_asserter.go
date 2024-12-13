@@ -82,18 +82,19 @@ func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRow
 }
 
 func (a *LoggedShellAsserter) logAssertionError(err assertions.AssertionError) {
-	// ToDo: Log contents UPTO errorrowindex
-	a.LogRemainingOutput()
-
+	a.logRows(a.lastLoggedRowIndex, err.ErrorRowIndex)
 	l := a.Shell.GetLogger()
 	l.Errorf("%s", err.Message)
-
-	// TODO: Log contents AFTER errorrwoindex
+	a.logRows(err.ErrorRowIndex, len(a.Shell.GetScreenState()))
 }
 
 func (a *LoggedShellAsserter) LogRemainingOutput() {
 	endRowIndex := len(a.Shell.GetScreenState())
-	for i := a.lastLoggedRowIndex + 1; i < endRowIndex; i++ {
+	a.logRows(a.lastLoggedRowIndex, endRowIndex)
+}
+
+func (a *LoggedShellAsserter) logRows(startRowIndex int, endRowIndex int) {
+	for i := startRowIndex; i < endRowIndex; i++ {
 		rawRow := a.Shell.GetScreenState()[i]
 		cleanedRow := utils.BuildCleanedRow(rawRow)
 		if len(cleanedRow) > 0 {
