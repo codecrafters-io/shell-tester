@@ -28,7 +28,6 @@ func (c *AssertionCollection) RunWithoutPromptAssertion(screenState [][]string) 
 	return c.runWithExtraAssertions(screenState, nil)
 }
 
-// ToDo: Remove all debug logs
 func (c *AssertionCollection) runWithExtraAssertions(screenState [][]string, extraAssertions []assertions.Assertion) *assertions.AssertionError {
 	allAssertions := append(c.Assertions, extraAssertions...)
 	currentRowIndex := 0

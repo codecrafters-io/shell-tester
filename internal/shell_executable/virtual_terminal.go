@@ -14,12 +14,10 @@ type VirtualTerminal struct {
 }
 
 func NewStandardVT() *VirtualTerminal {
-	// TODO: Check if this affects performance
-	// This affects performance majorly, improve all functions operating on this
+	// ToDo: This affects performance majorly, improve all functions operating on this
+	// Keep a track of when the last row is being written to, panic at that point
 	return NewCustomVT(100, 120)
 }
-
-// ToDo: Add check if last line gets written to and panic then
 
 func NewCustomVT(rows, cols int) *VirtualTerminal {
 	return &VirtualTerminal{

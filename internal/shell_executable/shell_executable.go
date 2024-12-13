@@ -86,8 +86,6 @@ func (b *ShellExecutable) GetScreenState() [][]string {
 	return b.vt.GetScreenState(false)
 }
 
-// TODO: Do tests cases _need_ to decide when to log output and when to not? Can we just always log from within ReadBytes...?
-
 func (b *ShellExecutable) LogOutput(output []byte) {
 	b.programLogger.Plainln(string(output))
 }
