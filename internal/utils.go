@@ -15,15 +15,6 @@ import (
 var SMALL_WORDS = []string{"foo", "bar", "baz", "qux", "quz"}
 var LARGE_WORDS = []string{"hello", "world", "test", "example", "shell", "script"}
 
-func assertShellIsRunning(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	// testCase := test_cases.NewSilentPromptTestCase("$ ")
-
-	// if err := testCase.Run(shell, logger); err != nil {
-	// 	return fmt.Errorf("Expected shell to print prompt after last command, but it didn't: %v", err)
-	// }
-	return nil
-}
-
 // getRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
 // directory is of the form `/tmp/<random-word>/<random-word>/<random-word>`
 func getRandomDirectory() (string, error) {
