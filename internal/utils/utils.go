@@ -7,7 +7,7 @@ import (
 	"github.com/fatih/color"
 )
 
-const VT_SENTINEL_CHARACTER = "."
+const VT_SENTINEL_CHARACTER = "★"
 
 func ColorizeString(colorToUse color.Attribute, msg string) string {
 	c := color.New(colorToUse)
