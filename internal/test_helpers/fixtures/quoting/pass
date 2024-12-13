@@ -62,23 +62,19 @@ Debug = true
 
 [33m[stage-3] [0m[94mRunning tests for Stage #3: le5[0m
 [33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ 
-[33m[stage-3] [0m[94m> echo 'test\\\nworld'[0m
+[33m[your-program] [0m$ echo 'test\\\nworld'
 [33m[your-program] [0mtest\\\nworld
 [33m[stage-3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-3] [0m[94m> echo 'shell\"examplescript\"test'[0m
+[33m[your-program] [0m$ echo 'shell\"examplescript\"test'
 [33m[your-program] [0mshell\"examplescript\"test
 [33m[stage-3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-3] [0m[94m> echo 'script\\nworld'[0m
+[33m[your-program] [0m$ echo 'script\\nworld'
 [33m[your-program] [0mscript\\nworld
 [33m[stage-3] [0m[92m✓ Received expected response[0m
 [33m[stage-3] [0m[94mWriting file "/tmp/quz/'f 24'" with content "orange mango."[0m
 [33m[stage-3] [0m[94mWriting file "/tmp/quz/'f  \46'" with content "blueberry orange."[0m
 [33m[stage-3] [0m[94mWriting file "/tmp/quz/'f \68\'" with content "pineapple strawberry."[0m
-[33m[your-program] [0m$ 
-[33m[stage-3] [0m[94m> cat "/tmp/quz/'f 24'" "/tmp/quz/'f  \46'" "/tmp/quz/'f \68\'"[0m
+[33m[your-program] [0m$ cat "/tmp/quz/'f 24'" "/tmp/quz/'f  \46'" "/tmp/quz/'f \68\'"
 [33m[your-program] [0morange mango.blueberry orange.pineapple strawberry.
 [33m[stage-3] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
