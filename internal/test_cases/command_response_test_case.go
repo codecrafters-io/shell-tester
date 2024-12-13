@@ -38,6 +38,7 @@ func (t CommandResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShell
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
 	})
+
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput:   t.ExpectedOutput,
 		FallbackPatterns: t.FallbackPatterns,
