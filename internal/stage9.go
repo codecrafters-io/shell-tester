@@ -74,5 +74,5 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	return assertShellIsRunning(shell, logger)
+	return logAndQuit(asserter, nil)
 }
