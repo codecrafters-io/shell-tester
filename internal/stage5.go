@@ -30,7 +30,7 @@ func testEcho(stageHarness *test_case_harness.TestCaseHarness) error {
 			Command:          command,
 			ExpectedOutput:   words,
 			FallbackPatterns: nil,
-			SuccessMessage:   "Received expected response",
+			SuccessMessage:   "✓ Received expected response",
 		}
 		if err := testCase.Run(asserter, shell, logger); err != nil {
 			return err

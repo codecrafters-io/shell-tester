@@ -48,7 +48,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 		Command:          strings.Join(command, " "),
 		ExpectedOutput:   fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode),
 		FallbackPatterns: nil,
-		SuccessMessage:   "Received expected response",
+		SuccessMessage:   "✓ Received expected response",
 	}
 	if err := testCase.Run(asserter, shell, logger); err != nil {
 		return err

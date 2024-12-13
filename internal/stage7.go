@@ -59,7 +59,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 			Command:          command,
 			ExpectedOutput:   fmt.Sprintf(`%s is %s`, executable, expectedPath),
 			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^(%s is )?%s$`, executable, expectedPath))},
-			SuccessMessage:   "Received expected response",
+			SuccessMessage:   "✓ Received expected response",
 		}
 		if err := testCase.Run(asserter, shell, logger); err != nil {
 			return err
@@ -74,7 +74,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 			Command:          command,
 			ExpectedOutput:   fmt.Sprintf(`%s: not found`, executable),
 			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^(bash: type: )?%s: not found$`, executable))},
-			SuccessMessage:   "Received expected response",
+			SuccessMessage:   "✓ Received expected response",
 		}
 		if err := testCase.Run(asserter, shell, logger); err != nil {
 			return err

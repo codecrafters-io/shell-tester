@@ -28,7 +28,7 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 			Command:          command,
 			ExpectedOutput:   fmt.Sprintf(`%s is a shell builtin`, builtIn),
 			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^%s is a( special)? shell builtin$`, builtIn))},
-			SuccessMessage:   "Received expected response",
+			SuccessMessage:   "✓ Received expected response",
 		}
 		if err := testCase.Run(asserter, shell, logger); err != nil {
 			return err
@@ -44,7 +44,7 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 			Command:          command,
 			ExpectedOutput:   fmt.Sprintf("%s: not found", invalidCommand),
 			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^(bash: type: )?%s[:]? not found$`, invalidCommand))},
-			SuccessMessage:   "Received expected response",
+			SuccessMessage:   "✓ Received expected response",
 		}
 		if err := testCase.Run(asserter, shell, logger); err != nil {
 			return err

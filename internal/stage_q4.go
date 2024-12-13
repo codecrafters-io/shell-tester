@@ -59,7 +59,7 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 			Command:          testCaseContent.Input,
 			ExpectedOutput:   testCaseContent.ExpectedOutput,
 			FallbackPatterns: nil,
-			SuccessMessage:   "Received expected response",
+			SuccessMessage:   "✓ Received expected response",
 		}
 		if err := testCase.Run(asserter, shell, logger); err != nil {
 			return err
@@ -74,7 +74,7 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 		Command:          testCaseContents[3].Input,
 		ExpectedOutput:   testCaseContents[3].ExpectedOutput,
 		FallbackPatterns: nil,
-		SuccessMessage:   "Received expected response",
+		SuccessMessage:   "✓ Received expected response",
 	}
 	if err := testCase.Run(asserter, shell, logger); err != nil {
 		return err
