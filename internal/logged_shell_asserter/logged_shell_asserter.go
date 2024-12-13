@@ -35,27 +35,24 @@ func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
 }
 
 func (a *LoggedShellAsserter) AssertWithPrompt() error {
-	assertFn := func() *assertions.AssertionError {
-		return a.AssertionCollection.RunWithPromptAssertion(a.Shell.GetScreenState())
-	}
-
-	conditionFn := func() bool {
-		return assertFn() == nil
-	}
-
-	if readErr := a.Shell.ReadUntil(conditionFn); readErr != nil {
-		if assertionErr := assertFn(); assertionErr != nil {
-			a.logAssertionError(*assertionErr)
-			return fmt.Errorf("Assertion failed.")
-		}
-	}
-
-	return nil
+	return a.assert(false)
 }
 
 func (a *LoggedShellAsserter) AssertWithoutPrompt() error {
-	assertFn := func() *assertions.AssertionError {
-		return a.AssertionCollection.RunWithoutPromptAssertion(a.Shell.GetScreenState())
+	return a.assert(true)
+}
+
+func (a *LoggedShellAsserter) assert(withoutPrompt bool) error {
+	var assertFn func() *assertions.AssertionError
+
+	if withoutPrompt {
+		assertFn = func() *assertions.AssertionError {
+			return a.AssertionCollection.RunWithoutPromptAssertion(a.Shell.GetScreenState())
+		}
+	} else {
+		assertFn = func() *assertions.AssertionError {
+			return a.AssertionCollection.RunWithPromptAssertion(a.Shell.GetScreenState())
+		}
 	}
 
 	conditionFn := func() bool {
