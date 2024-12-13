@@ -82,16 +82,14 @@ func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRow
 }
 
 func (a *LoggedShellAsserter) logAssertionError(err assertions.AssertionError) {
-	a.logRows(a.lastLoggedRowIndex, err.ErrorRowIndex)
+	a.logRows(a.lastLoggedRowIndex+1, err.ErrorRowIndex)
 	l := a.Shell.GetLogger()
 	l.Errorf("%s", err.Message)
 	a.logRows(err.ErrorRowIndex, len(a.Shell.GetScreenState()))
 }
 
 func (a *LoggedShellAsserter) LogRemainingOutput() {
-	// if we ever call this, before logging anything
-	// a.lastLoggedRowIndex would be -1, we want it to be 0
-	startRowIndex := max(0, a.lastLoggedRowIndex)
+	startRowIndex := a.lastLoggedRowIndex + 1
 	endRowIndex := len(a.Shell.GetScreenState())
 	a.logRows(startRowIndex, endRowIndex)
 }
