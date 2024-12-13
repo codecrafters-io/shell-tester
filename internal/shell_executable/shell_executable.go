@@ -77,7 +77,6 @@ func (b *ShellExecutable) Start(args ...string) error {
 	b.pty = pty
 	b.vt = NewStandardVT()
 	b.ptyReader = condition_reader.NewConditionReader(io.TeeReader(b.pty, b.vt))
-	// defer b.vt.Close() // ToDo ??
 
 	return nil
 }
