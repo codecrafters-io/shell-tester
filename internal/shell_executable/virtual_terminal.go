@@ -5,7 +5,7 @@ import (
 	"github.com/gookit/color"
 )
 
-const VT_SENTINEL_CHARACTER = "."
+const VT_SENTINEL_CHARACTER = "★"
 
 // TODO: See if we can remove this wrapper entirely, and only add helpers to fetch rows/data from the vterm instance directly
 type VirtualTerminal struct {
@@ -17,8 +17,10 @@ type VirtualTerminal struct {
 func NewStandardVT() *VirtualTerminal {
 	// TODO: Check if this affects performance
 	// This affects performance majorly, improve all functions operating on this
-	return NewCustomVT(100, 100)
+	return NewCustomVT(100, 120)
 }
+
+// ToDo: Add check if last line gets written to and panic then
 
 func NewCustomVT(rows, cols int) *VirtualTerminal {
 	return &VirtualTerminal{
