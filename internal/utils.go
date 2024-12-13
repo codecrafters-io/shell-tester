@@ -77,5 +77,5 @@ func startShellAndAssertPrompt(asserter *logged_shell_asserter.LoggedShellAssert
 		return err
 	}
 
-	return asserter.Assert()
+	return asserter.AssertWithPrompt()
 }

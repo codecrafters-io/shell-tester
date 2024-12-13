@@ -41,6 +41,6 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 	}
 
-	// Assert() already makes sure that the prompt is present in the last row
+	// AssertWithPrompt() already makes sure that the prompt is present in the last row
 	return logAndQuit(asserter, nil)
 }

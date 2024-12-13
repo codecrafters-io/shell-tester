@@ -43,7 +43,7 @@ func (t CommandResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShell
 		FallbackPatterns: t.FallbackPatterns,
 	})
 
-	if err := asserter.Assert(); err != nil {
+	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
 	}
 

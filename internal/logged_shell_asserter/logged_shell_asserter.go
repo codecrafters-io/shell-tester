@@ -34,7 +34,7 @@ func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
 	a.AssertionCollection.AddAssertion(assertion)
 }
 
-func (a *LoggedShellAsserter) Assert() error {
+func (a *LoggedShellAsserter) AssertWithPrompt() error {
 	assertFn := func() *assertions.AssertionError {
 		return a.AssertionCollection.RunWithPromptAssertion(a.Shell.GetScreenState())
 	}
@@ -46,9 +46,25 @@ func (a *LoggedShellAsserter) Assert() error {
 	if readErr := a.Shell.ReadUntil(conditionFn); readErr != nil {
 		if assertionErr := assertFn(); assertionErr != nil {
 			a.logAssertionError(*assertionErr)
-			// TODO: Figure out remaining output in SUCCESS scenario
-			// asserter.LogRemainingOutput()
+			return fmt.Errorf("Assertion failed.")
+		}
+	}
 
+	return nil
+}
+
+func (a *LoggedShellAsserter) AssertWithoutPrompt() error {
+	assertFn := func() *assertions.AssertionError {
+		return a.AssertionCollection.RunWithoutPromptAssertion(a.Shell.GetScreenState())
+	}
+
+	conditionFn := func() bool {
+		return assertFn() == nil
+	}
+
+	if readErr := a.Shell.ReadUntil(conditionFn); readErr != nil {
+		if assertionErr := assertFn(); assertionErr != nil {
+			a.logAssertionError(*assertionErr)
 			return fmt.Errorf("Assertion failed.")
 		}
 	}
