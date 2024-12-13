@@ -29,7 +29,7 @@ func (c *AssertionCollection) RunWithPromptAssertion(screenState [][]string) *as
 	})
 }
 
-func (c *AssertionCollection) RunWithoutPromptAssertion(screenState [][]string) error {
+func (c *AssertionCollection) RunWithoutPromptAssertion(screenState [][]string) *assertions.AssertionError {
 	return c.runWithExtraAssertions(screenState, nil)
 }
 
