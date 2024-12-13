@@ -3,7 +3,6 @@ package condition_reader
 import (
 	"bufio"
 	"errors"
-	"fmt"
 	"io"
 	"time"
 
@@ -11,14 +10,6 @@ import (
 )
 
 var ErrConditionNotMet = errors.New("condition not met")
-
-var debugLogsAreEnabled = false
-
-func debugLog(format string, args ...interface{}) {
-	if debugLogsAreEnabled {
-		fmt.Printf(format+"\n", args...)
-	}
-}
 
 // ConditionReader wraps an io.Reader and provides methods to read until a condition is met
 type ConditionReader struct {
@@ -43,22 +34,16 @@ func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func() bool, tim
 	}
 
 	for !time.Now().After(deadline) {
-		readBytes, err := t.asyncReader.Read()
+		_, err := t.asyncReader.Read()
 		if err != nil {
 			if errors.Is(err, async_reader.ErrNoData) {
-				debugLog("condition_reader: No data available")
-
 				// Since no data was available, let's avoid a busy loop
 				time.Sleep(2 * time.Millisecond)
-
 				continue
 			} else {
-				debugLog("condition_reader: Error while reading: %v", err)
 				return err
 			}
 		}
-
-		debugLog("condition_reader: readBytes: %q", string(readBytes))
 
 		if condition() {
 			return nil
