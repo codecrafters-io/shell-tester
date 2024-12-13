@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
@@ -27,13 +26,12 @@ func (t *CDAndPWDTestCase) Run(asserter *logged_shell_asserter.LoggedShellAssert
 	}
 
 	// And send the cd command, we don't expect any response
-	if err := shell.SendCommand(command); err != nil {
+	tc := CommandReflectionTestCase{
+		Command: command,
+	}
+	if err := tc.Run(asserter, shell, logger, true); err != nil {
 		return err
 	}
-	commandReflection := fmt.Sprintf("$ %s", command)
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: commandReflection,
-	})
 
 	nextCommand := "pwd"
 
