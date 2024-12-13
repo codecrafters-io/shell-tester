@@ -70,24 +70,12 @@ func (a *LoggedShellAsserter) assert(withoutPrompt bool) error {
 }
 
 func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRowCount int) {
-	shouldPrintDebugLogs := assertion_collection.ShouldPrintDebugLogs
-	if shouldPrintDebugLogs {
-		fmt.Printf("debug: onAssertionSuccess called. startRowIndex: %d, processedRowCount: %d, lastLoggedRowIndex: %d\n", startRowIndex, processedRowCount, a.lastLoggedRowIndex)
-	}
-
 	if processedRowCount == 0 || startRowIndex <= a.lastLoggedRowIndex {
 		return
 	}
 
 	for i := 0; i < processedRowCount; i++ {
-		if shouldPrintDebugLogs {
-			fmt.Printf("debug: logging1. i: %d, lastLoggedRowIndex: %d, processedRowCount: %d, currentRowIndex: %d ", i, a.lastLoggedRowIndex, processedRowCount, a.lastLoggedRowIndex+i+1)
-		}
 		row := a.Shell.GetScreenState()[a.lastLoggedRowIndex+i+1]
-
-		if shouldPrintDebugLogs {
-			fmt.Printf("debug: row: %q\n", utils.BuildCleanedRow(row))
-		}
 		a.Shell.LogOutput([]byte(utils.BuildCleanedRow(row)))
 	}
 

@@ -1,13 +1,8 @@
 package assertion_collection
 
 import (
-	"fmt"
-
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
-	"github.com/codecrafters-io/shell-tester/internal/utils"
 )
-
-const ShouldPrintDebugLogs = false
 
 type AssertionCollection struct {
 	Assertions []assertions.Assertion
@@ -38,10 +33,6 @@ func (c *AssertionCollection) runWithExtraAssertions(screenState [][]string, ext
 	allAssertions := append(c.Assertions, extraAssertions...)
 	currentRowIndex := 0
 
-	if ShouldPrintDebugLogs {
-		printScreenState(screenState)
-	}
-
 	for _, assertion := range allAssertions {
 		if len(screenState) == 0 {
 			panic("CodeCrafters internal error: expected screen to have at least one row, but it was empty")
@@ -53,15 +44,7 @@ func (c *AssertionCollection) runWithExtraAssertions(screenState [][]string, ext
 
 		processedRowCount, err := assertion.Run(screenState, currentRowIndex)
 		if err != nil {
-			if ShouldPrintDebugLogs {
-				fmt.Printf("❌ %s\n", assertion.Inspect())
-			}
-
 			return err
-		}
-
-		if ShouldPrintDebugLogs {
-			fmt.Printf("✅ %s (%d rows) currentRowIndex: %d\n", assertion.Inspect(), processedRowCount, currentRowIndex)
 		}
 
 		if c.OnAssertionSuccess != nil {
@@ -72,18 +55,4 @@ func (c *AssertionCollection) runWithExtraAssertions(screenState [][]string, ext
 	}
 
 	return nil
-}
-
-func printScreenState(screenState [][]string) {
-	fmt.Println("--- Screen start ---")
-
-	for _, row := range screenState {
-		cleanedRow := utils.BuildCleanedRow(row)
-
-		if len(cleanedRow) != 0 {
-			fmt.Println(cleanedRow)
-		}
-	}
-
-	fmt.Println("--- Screen end ----")
 }
