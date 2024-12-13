@@ -10,7 +10,7 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-// CommandResponseTestCase
+// CommandResponseTestCase is a test case that:
 // Sends a command to the shell
 // Verifies that command is printed to the screen `$ <COMMAND>` (we expect the prompt to also be present)
 // Reads the output from the shell, and verifies that it matches the expected output

@@ -37,7 +37,7 @@ func New(reader io.Reader) *AsyncReader {
 	return asyncReader
 }
 
-// ReadBytes is the only function that this package exposes. It either reads a byte or returns ErrNoData.
+// Read is the only function that this package exposes. It either reads a byte or returns ErrNoData.
 func (r *AsyncReader) Read() ([]byte, error) {
 	select {
 	// We're checking whether a byte is immediately available, so the timeout can be super low
