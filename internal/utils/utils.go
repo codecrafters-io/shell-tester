@@ -1,13 +1,10 @@
 package utils
 
 import (
-	"strings"
 	"unicode"
 
 	"github.com/fatih/color"
 )
-
-const VT_SENTINEL_CHARACTER = "★"
 
 func ColorizeString(colorToUse color.Attribute, msg string) string {
 	c := color.New(colorToUse)
@@ -33,13 +30,6 @@ func RemoveNonPrintableCharacters(output string) string {
 			result += "�" // U+FFFD
 		}
 	}
-	return result
-}
-
-func BuildCleanedRow(row []string) string {
-	result := strings.Join(row, "")
-	result = strings.TrimRight(result, VT_SENTINEL_CHARACTER)
-	result = strings.ReplaceAll(result, VT_SENTINEL_CHARACTER, " ")
 	return result
 }
 

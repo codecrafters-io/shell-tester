@@ -1,6 +1,8 @@
-package shell_executable
+package virtual_terminal
 
 import (
+	"strings"
+
 	"github.com/Edgaru089/vterm"
 	"github.com/gookit/color"
 )
@@ -103,4 +105,11 @@ func getForegroundBackgroundStyleFromRGB(fr, fg, fb, br, bg, bb uint8) *color.RG
 		color.RGB(br, bg, bb), // Background color
 	)
 	return style
+}
+
+func BuildCleanedRow(row []string) string {
+	result := strings.Join(row, "")
+	result = strings.TrimRight(result, VT_SENTINEL_CHARACTER)
+	result = strings.ReplaceAll(result, VT_SENTINEL_CHARACTER, " ")
+	return result
 }

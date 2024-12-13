@@ -5,6 +5,7 @@ import (
 	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/utils"
+	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 )
 
 // SingleLineAssertion asserts that a single line of output matches a given string or regex pattern(s)
@@ -26,7 +27,7 @@ func (a SingleLineAssertion) Run(screenState [][]string, startRowIndex int) (pro
 	}
 
 	rawRow := screenState[startRowIndex]
-	cleanedRow := utils.BuildCleanedRow(rawRow)
+	cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
 
 	for _, pattern := range a.FallbackPatterns {
 		if pattern.Match([]byte(cleanedRow)) {

@@ -11,6 +11,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/shell-tester/internal/utils"
+	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -48,7 +49,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 		return asserter.AssertionCollection.RunWithPromptAssertion(shell.GetScreenState())
 	}
 	readErr := shell.ReadUntil(utils.AsBool(assertFn))
-	output := utils.BuildCleanedRow(shell.GetScreenState()[asserter.GetLastLoggedRowIndex()+1])
+	output := virtual_terminal.BuildCleanedRow(shell.GetScreenState()[asserter.GetLastLoggedRowIndex()+1])
 
 	// We're expecting EOF since the program should've terminated
 	if !errors.Is(readErr, shell_executable.ErrProgramExited) {

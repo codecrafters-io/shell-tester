@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/condition_reader"
+	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 	"github.com/codecrafters-io/tester-utils/executable"
 	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
@@ -37,7 +38,7 @@ type ShellExecutable struct {
 	cmd       *exec.Cmd
 	pty       *os.File
 	ptyReader condition_reader.ConditionReader
-	vt        *VirtualTerminal
+	vt        *virtual_terminal.VirtualTerminal
 }
 
 func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellExecutable {
@@ -75,7 +76,7 @@ func (b *ShellExecutable) Start(args ...string) error {
 
 	b.cmd = cmd
 	b.pty = pty
-	b.vt = NewStandardVT()
+	b.vt = virtual_terminal.NewStandardVT()
 	b.ptyReader = condition_reader.NewConditionReader(io.TeeReader(b.pty, b.vt))
 
 	return nil

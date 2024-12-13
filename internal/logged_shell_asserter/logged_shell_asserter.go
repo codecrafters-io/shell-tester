@@ -6,7 +6,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/assertion_collection"
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
-	"github.com/codecrafters-io/shell-tester/internal/utils"
+	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 )
 
 type LoggedShellAsserter struct {
@@ -76,7 +76,7 @@ func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRow
 
 	for i := 0; i < processedRowCount; i++ {
 		row := a.Shell.GetScreenState()[a.lastLoggedRowIndex+i+1]
-		a.Shell.LogOutput([]byte(utils.BuildCleanedRow(row)))
+		a.Shell.LogOutput([]byte(virtual_terminal.BuildCleanedRow(row)))
 	}
 
 	a.lastLoggedRowIndex += processedRowCount
@@ -98,7 +98,7 @@ func (a *LoggedShellAsserter) LogRemainingOutput() {
 func (a *LoggedShellAsserter) logRows(startRowIndex int, endRowIndex int) {
 	for i := startRowIndex; i < endRowIndex; i++ {
 		rawRow := a.Shell.GetScreenState()[i]
-		cleanedRow := utils.BuildCleanedRow(rawRow)
+		cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
 		if len(cleanedRow) > 0 {
 			a.Shell.LogOutput([]byte(cleanedRow))
 		}

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/codecrafters-io/shell-tester/internal/utils"
+	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 )
 
 // PromptAssertion verifies a prompt exists, and that there's no extra output after it.
@@ -22,7 +22,7 @@ func (t PromptAssertion) Run(screenState [][]string, startRowIndex int) (process
 	processedRowCount = 0
 
 	rawRow := screenState[startRowIndex] // Could be nil?
-	cleanedRow := utils.BuildCleanedRow(rawRow)
+	cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
 
 	if !strings.EqualFold(cleanedRow, t.ExpectedPrompt) {
 		return processedRowCount, &AssertionError{
