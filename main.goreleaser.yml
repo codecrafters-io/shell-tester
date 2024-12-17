@@ -9,7 +9,7 @@ builds:
     env:
       - CGO_ENABLED=1
       - CC_linux_arm64=aarch64-linux-gnu-gcc
-       - 'CC={{ index .Env (print "CC_" .Os "_" .Arch) }}'
+      - 'CC={{ index .Env (print "CC_" .Os "_" .Arch) }}'
     goarch: [amd64, arm64]
     goos: [linux]
 
