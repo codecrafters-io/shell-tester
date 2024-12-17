@@ -22,6 +22,8 @@ func testInvalidCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	invalidCommand := getRandomInvalidCommand()
 
+	// We are seperating this out because we don't want to assert 
+	// The prompt at the end
 	testCase := test_cases.CommandReflectionTestCase{
 		Command: invalidCommand,
 	}
