@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  publish_tester:
+  publish_tester_linux:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,6 +24,25 @@ jobs:
         uses: goreleaser/goreleaser-action@v5
         with:
           version: v1.22.1
-          args: release -f main.goreleaser.yml --rm-dist
+          args: release -f mainLinux.goreleaser.yml --rm-dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish_tester_macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Unshallow
+        run: git fetch --prune --unshallow
+      - name: Set up Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.22.x
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v5
+        with:
+          version: v1.22.1
+          args: release -f mainDarwin.goreleaser.yml --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
