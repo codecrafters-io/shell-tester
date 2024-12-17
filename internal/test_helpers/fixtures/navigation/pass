@@ -38,7 +38,7 @@ Debug = true
 [33m[stage-10] [0m[92mReceived current working directory response[0m
 [33m[your-program] [0m$ cd /non-existing-directory
 [33m[your-program] [0mbash: cd: /non-existing-directory: No such file or directory
-[33m[stage-10] [0m[92mReceived error message[0m
+[33m[stage-10] [0m[92m✓ Received error message[0m
 [33m[your-program] [0m$ 
 [33m[stage-10] [0m[92mTest passed.[0m
 
@@ -46,10 +46,10 @@ Debug = true
 [33m[stage-9] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ type pwd
 [33m[your-program] [0mpwd is a shell builtin
-[33m[stage-9] [0m[92mReceived 'pwd is a shell builtin'[0m
+[33m[stage-9] [0m[92m✓ Received 'pwd is a shell builtin'[0m
 [33m[your-program] [0m$ pwd
 [33m[your-program] [0m/workspaces/shell-tester/internal
-[33m[stage-9] [0m[92mReceived current working directory response[0m
+[33m[stage-9] [0m[92m✓ Received current working directory response[0m
 [33m[your-program] [0m$ 
 [33m[stage-9] [0m[92mTest passed.[0m
 
@@ -122,7 +122,7 @@ Debug = true
 [33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ invalid_banana_command
 [33m[your-program] [0mbash: invalid_banana_command: command not found
-[33m[stage-4] [0m[92mReceived command not found message[0m
+[33m[stage-4] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ exit 0
 [33m[stage-4] [0m[92m✓ Program exited successfully[0m
 [33m[stage-4] [0m[92m✓ No output after exit command[0m
