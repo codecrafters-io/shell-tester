@@ -1,3 +1,5 @@
+version: 1
+
 builds:
   - main: ./cmd/tester/main.go
     binary: tester
