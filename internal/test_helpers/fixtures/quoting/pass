@@ -17,7 +17,7 @@ Debug = true
 [33m[your-program] [0m$ cat '/tmp/foo/f   30' '/tmp/foo/f   67' '/tmp/foo/f   12'
 [33m[your-program] [0mgrape banana.strawberry apple.blueberry pineapple.
 [33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-6] [0m[92mTest passed.[0m
 
 [33m[stage-5] [0m[94mRunning tests for Stage #5: tg6[0m
@@ -37,7 +37,7 @@ Debug = true
 [33m[your-program] [0m$ cat "/tmp/qux/f 55" "/tmp/qux/f   98" "/tmp/qux/f's68"
 [33m[your-program] [0morange mango.grape pear.raspberry pineapple.
 [33m[stage-5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-5] [0m[92mTest passed.[0m
 
 [33m[stage-4] [0m[94mRunning tests for Stage #4: yt5[0m
@@ -57,7 +57,7 @@ Debug = true
 [33m[your-program] [0m$ cat "/tmp/quz/f\n19" "/tmp/quz/f\42" "/tmp/quz/f'\'39"
 [33m[your-program] [0morange apple.apple grape.raspberry strawberry.
 [33m[stage-4] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-4] [0m[92mTest passed.[0m
 
 [33m[stage-3] [0m[94mRunning tests for Stage #3: le5[0m
@@ -77,7 +77,7 @@ Debug = true
 [33m[your-program] [0m$ cat "/tmp/quz/'f 24'" "/tmp/quz/'f  \46'" "/tmp/quz/'f \68\'"
 [33m[your-program] [0morange mango.blueberry orange.pineapple strawberry.
 [33m[stage-3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-3] [0m[92mTest passed.[0m
 
 [33m[stage-2] [0m[94mRunning tests for Stage #2: gu3[0m
@@ -97,7 +97,7 @@ Debug = true
 [33m[your-program] [0m$ cat '/tmp/qux/"f 74"' '/tmp/qux/"f\32"' '/tmp/qux/f29'
 [33m[your-program] [0mgrape pineapple.pineapple orange.strawberry raspberry.
 [33m[stage-2] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-2] [0m[92mTest passed.[0m
 
 [33m[stage-1] [0m[94mRunning tests for Stage #1: qj0[0m
@@ -122,5 +122,5 @@ Debug = true
 [33m[your-program] [0m$ 'exe with \n newline' /tmp/foo/f4
 [33m[your-program] [0mraspberry mango.
 [33m[stage-1] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-1] [0m[92mTest passed.[0m

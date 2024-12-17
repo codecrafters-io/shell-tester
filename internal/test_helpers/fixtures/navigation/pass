@@ -10,7 +10,7 @@ Debug = true
 [33m[your-program] [0m$ pwd
 [33m[your-program] [0m/tmp/pear/orange/raspberry
 [33m[stage-12] [0m[92mReceived current working directory response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-12] [0m[92mTest passed.[0m
 
 [33m[stage-11] [0m[94mRunning tests for Stage #11: gq9[0m
@@ -27,7 +27,7 @@ Debug = true
 [33m[your-program] [0m$ pwd
 [33m[your-program] [0m/tmp
 [33m[stage-11] [0m[92mReceived current working directory response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-11] [0m[92mTest passed.[0m
 
 [33m[stage-10] [0m[94mRunning tests for Stage #10: ra6[0m
@@ -39,7 +39,7 @@ Debug = true
 [33m[your-program] [0m$ cd /non-existing-directory
 [33m[your-program] [0mbash: cd: /non-existing-directory: No such file or directory
 [33m[stage-10] [0m[92m✓ Received error message[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-10] [0m[92mTest passed.[0m
 
 [33m[stage-9] [0m[94mRunning tests for Stage #9: ei0[0m
@@ -50,7 +50,7 @@ Debug = true
 [33m[your-program] [0m$ pwd
 [33m[your-program] [0m/workspaces/shell-tester/internal
 [33m[stage-9] [0m[92m✓ Received current working directory response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-9] [0m[92mTest passed.[0m
 
 [33m[stage-8] [0m[94mRunning tests for Stage #8: ip1[0m
@@ -58,7 +58,7 @@ Debug = true
 [33m[your-program] [0m$ my_exe James
 [33m[your-program] [0mHello James! The secret code is 1233494766.
 [33m[stage-8] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-8] [0m[92mTest passed.[0m
 
 [33m[stage-7] [0m[94mRunning tests for Stage #7: mg5[0m
@@ -81,7 +81,7 @@ Debug = true
 [33m[your-program] [0m$ type invalid_orange_command
 [33m[your-program] [0mbash: type: invalid_orange_command: not found
 [33m[stage-7] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-7] [0m[92mTest passed.[0m
 
 [33m[stage-6] [0m[94mRunning tests for Stage #6: ez5[0m
@@ -101,7 +101,7 @@ Debug = true
 [33m[your-program] [0m$ type invalid_mango_command
 [33m[your-program] [0mbash: type: invalid_mango_command: not found
 [33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-6] [0m[92mTest passed.[0m
 
 [33m[stage-5] [0m[94mRunning tests for Stage #5: iz3[0m
@@ -115,7 +115,7 @@ Debug = true
 [33m[your-program] [0m$ echo apple strawberry
 [33m[your-program] [0mapple strawberry
 [33m[stage-5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-5] [0m[92mTest passed.[0m
 
 [33m[stage-4] [0m[94mRunning tests for Stage #4: pn5[0m
@@ -143,7 +143,7 @@ Debug = true
 [33m[your-program] [0m$ invalid_command_4
 [33m[your-program] [0mbash: invalid_command_4: command not found
 [33m[stage-3] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-3] [0m[92mTest passed.[0m
 
 [33m[stage-2] [0m[94mRunning tests for Stage #2: cz2[0m
@@ -151,11 +151,11 @@ Debug = true
 [33m[your-program] [0m$ invalid_apple_command
 [33m[your-program] [0mbash: invalid_apple_command: command not found
 [33m[stage-2] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-2] [0m[92mTest passed.[0m
 
 [33m[stage-1] [0m[94mRunning tests for Stage #1: oo8[0m
 [33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m$
 [33m[stage-1] [0m[92m✓ Received prompt[0m
 [33m[stage-1] [0m[92mTest passed.[0m
