@@ -12,3 +12,6 @@ archives:
     files:
       - test.sh
       - custom_executable
+
+checksum:
+  split: true
