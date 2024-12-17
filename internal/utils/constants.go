@@ -1,3 +1,4 @@
 package utils
 
-const PROMPT = "$"
+const PROMPT = "$ "
+const VT_SENTINEL_CHARACTER = "★"
