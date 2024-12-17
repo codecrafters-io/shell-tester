@@ -59,7 +59,7 @@ func (vt *VirtualTerminal) GetScreenState() [][]string {
 	return screenState
 }
 
-func (vt *VirtualTerminal) GetRow(row int, retainColors bool) []string {
+func (vt *VirtualTerminal) GetRow(row int) []string {
 	screenState := make([]string, vt.cols)
 	for j := 0; j < vt.cols; j++ {
 		c := vt.vt.Cell(j, row)
@@ -68,10 +68,10 @@ func (vt *VirtualTerminal) GetRow(row int, retainColors bool) []string {
 	return screenState
 }
 
-func (vt *VirtualTerminal) GetRowsTillEnd(startingRow int, retainColors bool) [][]string {
+func (vt *VirtualTerminal) GetRowsTillEnd(startingRow int) [][]string {
 	screenState := make([][]string, vt.rows)
 	for i := startingRow; i < vt.rows; i++ {
-		screenState[i] = vt.GetRow(i, retainColors)
+		screenState[i] = vt.GetRow(i)
 	}
 	return screenState
 }
