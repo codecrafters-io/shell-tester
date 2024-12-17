@@ -2,6 +2,7 @@ package assertion_collection
 
 import (
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 )
 
 type AssertionCollection struct {
@@ -20,7 +21,7 @@ func (c *AssertionCollection) AddAssertion(assertion assertions.Assertion) {
 
 func (c *AssertionCollection) RunWithPromptAssertion(screenState [][]string) *assertions.AssertionError {
 	return c.runWithExtraAssertions(screenState, []assertions.Assertion{
-		assertions.PromptAssertion{ExpectedPrompt: "$ "},
+		assertions.PromptAssertion{ExpectedPrompt: utils.PROMPT},
 	})
 }
 

@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/condition_reader"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 	"github.com/codecrafters-io/tester-utils/executable"
 	"github.com/codecrafters-io/tester-utils/logger"
@@ -60,7 +61,7 @@ func (b *ShellExecutable) Setenv(key, value string) {
 func (b *ShellExecutable) Start(args ...string) error {
 	b.stageLogger.Infof(b.getInitialLogLine(args...))
 
-	b.Setenv("PS1", "$ ")
+	b.Setenv("PS1", utils.PROMPT)
 	// b.Setenv("TERM", "dumb") // test_all_success works without this too, do we need it?
 
 	cmd := exec.Command(b.executable.Path, args...)
