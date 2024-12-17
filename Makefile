@@ -17,7 +17,7 @@ build:
 test:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/...
 
-test_bash: build
+test_base_w_bash: build
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
 		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#oo8\",\"title\":\"Stage #1: Init\"}, \
@@ -27,7 +27,13 @@ test_bash: build
 		{\"slug\":\"iz3\",\"tester_log_prefix\":\"tester::#iz3\",\"title\":\"Stage #5: Echo\"}, \
 		{\"slug\":\"ez5\",\"tester_log_prefix\":\"tester::#ez5\",\"title\":\"Stage #6: Type built-in\"}, \
 		{\"slug\":\"mg5\",\"tester_log_prefix\":\"tester::#mg5\",\"title\":\"Stage #7: Type for executables\"}, \
-		{\"slug\":\"ip1\",\"tester_log_prefix\":\"tester::#ip1\",\"title\":\"Stage #8: Run a program\"}, \
+		{\"slug\":\"ip1\",\"tester_log_prefix\":\"tester::#ip1\",\"title\":\"Stage #8: Run a program\"} \
+	]" \
+	dist/main.out
+
+test_nav_w_bash: build
+	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
+	CODECRAFTERS_TEST_CASES_JSON="[ \
 		{\"slug\":\"ei0\",\"tester_log_prefix\":\"tester::#ei0\",\"title\":\"Stage #9: PWD\"}, \
 		{\"slug\":\"ra6\",\"tester_log_prefix\":\"tester::#ra6\",\"title\":\"Stage #10: CD-1\"}, \
 		{\"slug\":\"gq9\",\"tester_log_prefix\":\"tester::#gq9\",\"title\":\"Stage #11: CD-2\"}, \
@@ -101,7 +107,7 @@ copy_course_file:
 		| base64 -d \
 		> internal/test_helpers/course_definition.yml
 
-test_quoting: build
+test_quoting_w_bash: build
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
 		{\"slug\":\"ni6\",\"tester_log_prefix\":\"tester::#ni6\",\"title\":\"Stage #1: Quoting with single quotes\"}, \
@@ -116,6 +122,22 @@ test_quoting: build
 test_quoting_minimal: build
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"ni6\",\"tester_log_prefix\":\"tester::#q1\",\"title\":\"Stage #1: Quoting with single quotes\"} \
+		{\"slug\":\"ni6\",\"tester_log_prefix\":\"tester::#ni6\",\"title\":\"Stage #1: Quoting with single quotes\"}, \
+		{\"slug\":\"yt5\",\"tester_log_prefix\":\"tester::#yt5\",\"title\":\"Stage #3: Quoting with backslashes\"} \
+	]" \
+	dist/main.out
+
+test_bash:
+	make test_base_w_bash
+	make test_nav_w_bash
+	make test_quoting_w_bash
+
+
+test_vt: build
+	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
+	CODECRAFTERS_TEST_CASES_JSON="[ \
+		{\"slug\":\"ff0\",\"tester_log_prefix\":\"tester::#ff0\",\"title\":\"Stage #3: REPL\"}, \
+		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#oo8\",\"title\":\"Stage #1: Init\"}, \
+		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#cz2\",\"title\":\"Stage #2: Missing Command\"} \
 	]" \
 	dist/main.out

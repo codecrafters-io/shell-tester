@@ -5,9 +5,11 @@ go 1.22
 toolchain go1.22.3
 
 require (
+	github.com/Edgaru089/vterm v0.0.0-20200817072248-91b02909843c
 	github.com/codecrafters-io/tester-utils v0.2.40
 	github.com/creack/pty v1.1.23
 	github.com/fatih/color v1.18.0
+	github.com/gookit/color v1.5.4
 	go.chromium.org/luci v0.0.0-20240530183920-783ca64715fa
 )
 
@@ -21,6 +23,7 @@ require (
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/testify v1.8.4 // indirect
+	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	golang.org/x/sys v0.28.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect

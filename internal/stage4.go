@@ -5,53 +5,50 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
-	"time"
 
+	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
+	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
 func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
+	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	if err := shell.Start(); err != nil {
+	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
 		return err
 	}
 
 	invalidCommand := getRandomInvalidCommand()
 
-	// We test an invalid command first, just to make sure the logic works in a "loop"
-	testCase := test_cases.SingleLineExactMatchTestCase{
-		Command:                    invalidCommand,
-		FallbackPatterns:           []*regexp.Regexp{regexp.MustCompile(`^(bash: )?` + invalidCommand + `: (command )?not found$`)},
-		ExpectedPatternExplanation: invalidCommand + ": command not found",
-		SuccessMessage:             "Received command not found message",
+	// We test a nonexistent command first, just to make sure the logic works in a "loop"
+	testCase := test_cases.CommandResponseTestCase{
+		Command:          invalidCommand,
+		ExpectedOutput:   invalidCommand + ": command not found",
+		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(`^(bash: )?` + invalidCommand + `: (command )?not found$`)},
+		SuccessMessage:   "✓ Received command not found message",
 	}
 
-	if err := testCase.Run(shell, logger); err != nil {
+	if err := testCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
-	// We can't use SingleLineOutputTestCase for the exit command (no output to match on), so we use lower-level methods instead
-	promptTestCase := test_cases.NewSilentPromptTestCase("$ ")
-
-	if err := promptTestCase.Run(shell, logger); err != nil {
+	refTestCase := test_cases.CommandReflectionTestCase{
+		Command: "exit 0",
+	}
+	if err := refTestCase.Run(asserter, shell, logger, true); err != nil {
 		return err
 	}
 
-	if err := shell.SendCommand("exit 0"); err != nil {
-		return err
+	assertFn := func() error {
+		return asserter.AssertionCollection.RunWithPromptAssertion(shell.GetScreenState())
 	}
-
-	output, readErr := shell.ReadBytesUntilTimeout(1000 * time.Millisecond)
-	sanitizedOutput := shell_executable.StripANSI(output)
-
-	// If anything was printed, log it out before we emit error / success logs
-	if len(sanitizedOutput) > 0 {
-		shell.LogOutput(sanitizedOutput)
-	}
+	readErr := shell.ReadUntil(utils.AsBool(assertFn))
+	output := virtual_terminal.BuildCleanedRow(shell.GetScreenState()[asserter.GetLastLoggedRowIndex()+1])
 
 	// We're expecting EOF since the program should've terminated
 	if !errors.Is(readErr, shell_executable.ErrProgramExited) {
@@ -75,11 +72,11 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Most shells return nothing but bash returns the string "exit" when it exits, we allow both styles
-	if len(sanitizedOutput) > 0 && strings.TrimSpace(string(sanitizedOutput)) != "exit" {
-		return fmt.Errorf("Expected no output after exit command, got %q", string(sanitizedOutput))
+	if len(output) > 0 && strings.TrimSpace(output) != "exit" {
+		return fmt.Errorf("Expected no output after exit command, got %q", output)
 	}
 
 	logger.Successf("✓ No output after exit command")
 
-	return nil
+	return logAndQuit(asserter, nil)
 }

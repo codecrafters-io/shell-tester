@@ -2,23 +2,19 @@ Debug = true
 
 [33m[stage-6] [0m[94mRunning tests for Stage #6: ni6[0m
 [33m[stage-6] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ 
-[33m[stage-6] [0m[94m> echo 'test world'[0m
+[33m[your-program] [0m$ echo 'test world'
 [33m[your-program] [0mtest world
 [33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-6] [0m[94m> echo world     script[0m
+[33m[your-program] [0m$ echo world     script
 [33m[your-program] [0mworld script
 [33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-6] [0m[94m> echo 'shell     example'[0m
+[33m[your-program] [0m$ echo 'shell     example'
 [33m[your-program] [0mshell     example
 [33m[stage-6] [0m[92m✓ Received expected response[0m
 [33m[stage-6] [0m[94mWriting file "/tmp/foo/f   30" with content "grape banana."[0m
 [33m[stage-6] [0m[94mWriting file "/tmp/foo/f   67" with content "strawberry apple."[0m
 [33m[stage-6] [0m[94mWriting file "/tmp/foo/f   12" with content "blueberry pineapple."[0m
-[33m[your-program] [0m$ 
-[33m[stage-6] [0m[94m> cat '/tmp/foo/f   30' '/tmp/foo/f   67' '/tmp/foo/f   12'[0m
+[33m[your-program] [0m$ cat '/tmp/foo/f   30' '/tmp/foo/f   67' '/tmp/foo/f   12'
 [33m[your-program] [0mgrape banana.strawberry apple.blueberry pineapple.
 [33m[stage-6] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -26,23 +22,19 @@ Debug = true
 
 [33m[stage-5] [0m[94mRunning tests for Stage #5: tg6[0m
 [33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ 
-[33m[stage-5] [0m[94m> echo "world shell"[0m
+[33m[your-program] [0m$ echo "world shell"
 [33m[your-program] [0mworld shell
 [33m[stage-5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-5] [0m[94m> echo "shell  script"  "hello"[0m
+[33m[your-program] [0m$ echo "shell  script"  "hello"
 [33m[your-program] [0mshell  script hello
 [33m[stage-5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-5] [0m[94m> echo "hello"  "test's"  "shell"[0m
+[33m[your-program] [0m$ echo "hello"  "test's"  "shell"
 [33m[your-program] [0mhello test's shell
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[stage-5] [0m[94mWriting file "/tmp/qux/f 55" with content "orange mango."[0m
 [33m[stage-5] [0m[94mWriting file "/tmp/qux/f   98" with content "grape pear."[0m
 [33m[stage-5] [0m[94mWriting file "/tmp/qux/f's68" with content "raspberry pineapple."[0m
-[33m[your-program] [0m$ 
-[33m[stage-5] [0m[94m> cat "/tmp/qux/f 55" "/tmp/qux/f   98" "/tmp/qux/f's68"[0m
+[33m[your-program] [0m$ cat "/tmp/qux/f 55" "/tmp/qux/f   98" "/tmp/qux/f's68"
 [33m[your-program] [0morange mango.grape pear.raspberry pineapple.
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -50,23 +42,19 @@ Debug = true
 
 [33m[stage-4] [0m[94mRunning tests for Stage #4: yt5[0m
 [33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ 
-[33m[stage-4] [0m[94m> echo "before\   after"[0m
+[33m[your-program] [0m$ echo "before\   after"
 [33m[your-program] [0mbefore\   after
 [33m[stage-4] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-4] [0m[94m> echo script\ \ \ \ \ \ example[0m
+[33m[your-program] [0m$ echo script\ \ \ \ \ \ example
 [33m[your-program] [0mscript      example
 [33m[stage-4] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-4] [0m[94m> echo world\nhello[0m
+[33m[your-program] [0m$ echo world\nhello
 [33m[your-program] [0mworldnhello
 [33m[stage-4] [0m[92m✓ Received expected response[0m
 [33m[stage-4] [0m[94mWriting file "/tmp/quz/f\n19" with content "orange apple."[0m
 [33m[stage-4] [0m[94mWriting file "/tmp/quz/f\42" with content "apple grape."[0m
 [33m[stage-4] [0m[94mWriting file "/tmp/quz/f'\'39" with content "raspberry strawberry."[0m
-[33m[your-program] [0m$ 
-[33m[stage-4] [0m[94m> cat "/tmp/quz/f\n19" "/tmp/quz/f\42" "/tmp/quz/f'\'39"[0m
+[33m[your-program] [0m$ cat "/tmp/quz/f\n19" "/tmp/quz/f\42" "/tmp/quz/f'\'39"
 [33m[your-program] [0morange apple.apple grape.raspberry strawberry.
 [33m[stage-4] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -74,23 +62,19 @@ Debug = true
 
 [33m[stage-3] [0m[94mRunning tests for Stage #3: le5[0m
 [33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ 
-[33m[stage-3] [0m[94m> echo 'test\\\nworld'[0m
+[33m[your-program] [0m$ echo 'test\\\nworld'
 [33m[your-program] [0mtest\\\nworld
 [33m[stage-3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-3] [0m[94m> echo 'shell\"examplescript\"test'[0m
+[33m[your-program] [0m$ echo 'shell\"examplescript\"test'
 [33m[your-program] [0mshell\"examplescript\"test
 [33m[stage-3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-3] [0m[94m> echo 'script\\nworld'[0m
+[33m[your-program] [0m$ echo 'script\\nworld'
 [33m[your-program] [0mscript\\nworld
 [33m[stage-3] [0m[92m✓ Received expected response[0m
 [33m[stage-3] [0m[94mWriting file "/tmp/quz/'f 24'" with content "orange mango."[0m
 [33m[stage-3] [0m[94mWriting file "/tmp/quz/'f  \46'" with content "blueberry orange."[0m
 [33m[stage-3] [0m[94mWriting file "/tmp/quz/'f \68\'" with content "pineapple strawberry."[0m
-[33m[your-program] [0m$ 
-[33m[stage-3] [0m[94m> cat "/tmp/quz/'f 24'" "/tmp/quz/'f  \46'" "/tmp/quz/'f \68\'"[0m
+[33m[your-program] [0m$ cat "/tmp/quz/'f 24'" "/tmp/quz/'f  \46'" "/tmp/quz/'f \68\'"
 [33m[your-program] [0morange mango.blueberry orange.pineapple strawberry.
 [33m[stage-3] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -98,23 +82,19 @@ Debug = true
 
 [33m[stage-2] [0m[94mRunning tests for Stage #2: gu3[0m
 [33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ 
-[33m[stage-2] [0m[94m> echo "shell'example'\\n'test"[0m
+[33m[your-program] [0m$ echo "shell'example'\\n'test"
 [33m[your-program] [0mshell'example'\n'test
 [33m[stage-2] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-2] [0m[94m> echo "shell\"insidequotes"example\"[0m
+[33m[your-program] [0m$ echo "shell\"insidequotes"example\"
 [33m[your-program] [0mshell"insidequotesexample"
 [33m[stage-2] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-2] [0m[94m> echo "mixed\"quote'world'\\"[0m
+[33m[your-program] [0m$ echo "mixed\"quote'world'\\"
 [33m[your-program] [0mmixed"quote'world'\
 [33m[stage-2] [0m[92m✓ Received expected response[0m
 [33m[stage-2] [0m[94mWriting file "/tmp/qux/"f 74"" with content "grape pineapple."[0m
 [33m[stage-2] [0m[94mWriting file "/tmp/qux/"f\32"" with content "pineapple orange."[0m
 [33m[stage-2] [0m[94mWriting file "/tmp/qux/f29" with content "strawberry raspberry."[0m
-[33m[your-program] [0m$ 
-[33m[stage-2] [0m[94m> cat '/tmp/qux/"f 74"' '/tmp/qux/"f\32"' '/tmp/qux/f29'[0m
+[33m[your-program] [0m$ cat '/tmp/qux/"f 74"' '/tmp/qux/"f\32"' '/tmp/qux/f29'
 [33m[your-program] [0mgrape pineapple.pineapple orange.strawberry raspberry.
 [33m[stage-2] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -130,20 +110,16 @@ Debug = true
 [33m[stage-1] [0m[94mWriting file "/tmp/foo/f2" with content "apple pineapple."[0m
 [33m[stage-1] [0m[94mWriting file "/tmp/foo/f3" with content "strawberry raspberry."[0m
 [33m[stage-1] [0m[94mWriting file "/tmp/foo/f4" with content "raspberry mango."[0m
-[33m[your-program] [0m$ 
-[33m[stage-1] [0m[94m> 'exe  with  space' /tmp/foo/f1[0m
+[33m[your-program] [0m$ 'exe  with  space' /tmp/foo/f1
 [33m[your-program] [0mraspberry blueberry.
 [33m[stage-1] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-1] [0m[94m> 'exe with "quotes"' /tmp/foo/f2[0m
+[33m[your-program] [0m$ 'exe with "quotes"' /tmp/foo/f2
 [33m[your-program] [0mapple pineapple.
 [33m[stage-1] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-1] [0m[94m> "exe with \'single quotes\'" /tmp/foo/f3[0m
+[33m[your-program] [0m$ "exe with \'single quotes\'" /tmp/foo/f3
 [33m[your-program] [0mstrawberry raspberry.
 [33m[stage-1] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
-[33m[stage-1] [0m[94m> 'exe with \n newline' /tmp/foo/f4[0m
+[33m[your-program] [0m$ 'exe with \n newline' /tmp/foo/f4
 [33m[your-program] [0mraspberry mango.
 [33m[stage-1] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
