@@ -1,0 +1,14 @@
+builds:
+  - main: ./cmd/tester/main.go
+    binary: tester
+    env:
+      - CGO_ENABLED=1
+    goarch: [amd64, arm64]
+    goos: [darwin]
+
+archives:
+  - name_template: "{{ .Tag }}_{{ .Os }}_{{ .Arch }}"
+    format: tar.gz
+    files:
+      - test.sh
+      - custom_executable
