@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/x/vt"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 )
 
 type VirtualTerminal struct {
@@ -38,12 +39,21 @@ func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 }
 
 func (vt *VirtualTerminal) GetScreenState() [][]string {
+	cursorPosition := vt.vt.CursorPosition()
+	row, col := cursorPosition.Y, cursorPosition.X
+
+	// For the row where the cursor is present
+	// We intend to keep all characters upto the cursor position
 	screenState := make([][]string, vt.rows)
 	for i := 0; i < vt.rows; i++ {
 		screenState[i] = make([]string, vt.cols)
 		for j := 0; j < vt.cols; j++ {
 			c := vt.vt.Cell(j, i)
-			screenState[i][j] = c.Content
+			if i == row && j < col && c.Content == " " {
+				screenState[i][j] = utils.VT_SENTINEL_CHARACTER
+			} else {
+				screenState[i][j] = c.Content
+			}
 		}
 	}
 	return screenState
@@ -69,5 +79,8 @@ func (vt *VirtualTerminal) GetRowsTillEnd(startingRow int, retainColors bool) []
 func BuildCleanedRow(row []string) string {
 	result := strings.Join(row, "")
 	result = strings.TrimRight(result, " ")
+
+	// VT_SENTINEL_CHARACTER is the representation of " " that we intend to preserve
+	result = strings.ReplaceAll(result, utils.VT_SENTINEL_CHARACTER, " ")
 	return result
 }
