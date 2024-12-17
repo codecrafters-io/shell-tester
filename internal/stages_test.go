@@ -43,7 +43,7 @@ func TestStages(t *testing.T) {
 		"escape_codes_pass": {
 			UntilStageSlug:      "cz2",
 			CodePath:            "./test_helpers/scenarios/escape_codes",
-			ExpectedExitCode:    1,
+			ExpectedExitCode:    0,
 			StdoutFixturePath:   "./test_helpers/fixtures/escape_codes",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
