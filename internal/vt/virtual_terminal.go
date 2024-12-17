@@ -3,14 +3,12 @@ package virtual_terminal
 import (
 	"strings"
 
-	"github.com/Edgaru089/vterm"
-	"github.com/gookit/color"
+	"github.com/charmbracelet/x/vt"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 )
 
-const VT_SENTINEL_CHARACTER = "★"
-
 type VirtualTerminal struct {
-	vt   *vterm.VTerm
+	vt   *vt.Terminal
 	rows int
 	cols int
 }
@@ -23,14 +21,14 @@ func NewStandardVT() *VirtualTerminal {
 
 func NewCustomVT(rows, cols int) *VirtualTerminal {
 	return &VirtualTerminal{
-		vt:   vterm.New(rows, cols),
+		vt:   vt.NewTerminal(cols, rows),
 		rows: rows,
 		cols: cols,
 	}
 }
 
 func (vt *VirtualTerminal) Close() {
-	vt.vt.Free()
+	vt.vt.Close()
 }
 
 func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
@@ -41,75 +39,48 @@ func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 }
 
 func (vt *VirtualTerminal) GetScreenState() [][]string {
+	cursorPosition := vt.vt.CursorPosition()
+	cursorRow, cursorCol := cursorPosition.Y, cursorPosition.X
+
+	// For the row where the cursor is present
+	// We intend to keep all characters upto the cursor position
 	screenState := make([][]string, vt.rows)
 	for i := 0; i < vt.rows; i++ {
 		screenState[i] = make([]string, vt.cols)
 		for j := 0; j < vt.cols; j++ {
-			c := vt.vt.CellAt(i, j)
-			if len(c.Chars) > 0 {
-				screenState[i][j] = string(c.Chars)
+			c := vt.vt.Cell(j, i)
+			if i == cursorRow && j < cursorCol && c.Content == " " {
+				screenState[i][j] = utils.VT_SENTINEL_CHARACTER
 			} else {
-				screenState[i][j] = VT_SENTINEL_CHARACTER
+				screenState[i][j] = c.Content
 			}
 		}
 	}
 	return screenState
 }
 
-func (vt *VirtualTerminal) GetRow(row int, retainColors bool) []string {
+func (vt *VirtualTerminal) GetRow(row int) []string {
 	screenState := make([]string, vt.cols)
 	for j := 0; j < vt.cols; j++ {
-		c := vt.vt.CellAt(row, j)
-		fr, fg, fb := vt.vt.ConvertRGB(&c.Foreground)
-		br, bg, bb := vt.vt.ConvertRGB(&c.Background)
-		style := getForegroundBackgroundStyleFromRGB(fr, fg, fb, br, bg, bb)
-		if len(c.Chars) > 0 {
-			if retainColors {
-				screenState[j] = style.Sprintf("%c", c.Chars[0])
-			} else {
-				screenState[j] = string(c.Chars)
-			}
-		} else {
-			screenState[j] = VT_SENTINEL_CHARACTER
-		}
+		c := vt.vt.Cell(j, row)
+		screenState[j] = string(c.Content)
 	}
 	return screenState
 }
 
-func (vt *VirtualTerminal) GetRowsTillEnd(startingRow int, retainColors bool) [][]string {
+func (vt *VirtualTerminal) GetRowsTillEnd(startingRow int) [][]string {
 	screenState := make([][]string, vt.rows)
 	for i := startingRow; i < vt.rows; i++ {
-		screenState[i] = make([]string, vt.cols)
-		for j := 0; j < vt.cols; j++ {
-			c := vt.vt.CellAt(i, j)
-			fr, fg, fb := vt.vt.ConvertRGB(&c.Foreground)
-			br, bg, bb := vt.vt.ConvertRGB(&c.Background)
-			style := getForegroundBackgroundStyleFromRGB(fr, fg, fb, br, bg, bb)
-			if len(c.Chars) > 0 {
-				if retainColors {
-					screenState[i][j] = style.Sprintf("%c", c.Chars[0])
-				} else {
-					screenState[i][j] = string(c.Chars)
-				}
-			} else {
-				screenState[i][j] = VT_SENTINEL_CHARACTER
-			}
-		}
+		screenState[i] = vt.GetRow(i)
 	}
 	return screenState
-}
-
-func getForegroundBackgroundStyleFromRGB(fr, fg, fb, br, bg, bb uint8) *color.RGBStyle {
-	style := color.NewRGBStyle(
-		color.RGB(fr, fg, fb), // Foreground color
-		color.RGB(br, bg, bb), // Background color
-	)
-	return style
 }
 
 func BuildCleanedRow(row []string) string {
 	result := strings.Join(row, "")
-	result = strings.TrimRight(result, VT_SENTINEL_CHARACTER)
-	result = strings.ReplaceAll(result, VT_SENTINEL_CHARACTER, " ")
+	result = strings.TrimRight(result, " ")
+
+	// VT_SENTINEL_CHARACTER is the representation of " " that we intend to preserve
+	result = strings.ReplaceAll(result, utils.VT_SENTINEL_CHARACTER, " ")
 	return result
 }
