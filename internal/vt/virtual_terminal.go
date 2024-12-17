@@ -40,7 +40,7 @@ func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 
 func (vt *VirtualTerminal) GetScreenState() [][]string {
 	cursorPosition := vt.vt.CursorPosition()
-	row, col := cursorPosition.Y, cursorPosition.X
+	cursorRow, cursorCol := cursorPosition.Y, cursorPosition.X
 
 	// For the row where the cursor is present
 	// We intend to keep all characters upto the cursor position
@@ -49,7 +49,7 @@ func (vt *VirtualTerminal) GetScreenState() [][]string {
 		screenState[i] = make([]string, vt.cols)
 		for j := 0; j < vt.cols; j++ {
 			c := vt.vt.Cell(j, i)
-			if i == row && j < col && c.Content == " " {
+			if i == cursorRow && j < cursorCol && c.Content == " " {
 				screenState[i][j] = utils.VT_SENTINEL_CHARACTER
 			} else {
 				screenState[i][j] = c.Content
