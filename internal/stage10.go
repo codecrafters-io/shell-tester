@@ -39,7 +39,7 @@ func testCd1(stageHarness *test_case_harness.TestCaseHarness) error {
 		FallbackPatterns: []*regexp.Regexp{
 			regexp.MustCompile(fmt.Sprintf(`^(can't cd to %s|((bash: )?cd: )?%s: No such file or directory)$`, directory, directory)),
 		},
-		SuccessMessage: "Received error message",
+		SuccessMessage: "✓ Received error message",
 	}
 
 	if err := failureTestCase.Run(asserter, shell, logger); err != nil {

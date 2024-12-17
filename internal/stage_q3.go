@@ -74,7 +74,7 @@ func testQ3(stageHarness *test_case_harness.TestCaseHarness) error {
 	testCase := test_cases.CommandResponseTestCase{
 		Command:        testCaseContents[3].Input,
 		ExpectedOutput: testCaseContents[3].ExpectedOutput,
-		SuccessMessage: "Received expected response",
+		SuccessMessage: "✓ Received expected response",
 	}
 	if err := testCase.Run(asserter, shell, logger); err != nil {
 		return err

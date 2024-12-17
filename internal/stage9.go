@@ -31,7 +31,7 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		Command:          "type pwd",
 		ExpectedOutput:   `pwd is a shell builtin`,
 		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(`^pwd is a( special)? shell builtin$`)},
-		SuccessMessage:   "Received 'pwd is a shell builtin'",
+		SuccessMessage:   "✓ Received 'pwd is a shell builtin'",
 	}
 	if err := testCase.Run(asserter, shell, logger); err != nil {
 		return err
@@ -68,7 +68,7 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		Command:          "pwd",
 		ExpectedOutput:   cwd,
 		FallbackPatterns: nil,
-		SuccessMessage:   "Received current working directory response",
+		SuccessMessage:   "✓ Received current working directory response",
 	}
 	if err := testCase.Run(asserter, shell, logger); err != nil {
 		return err
