@@ -38,7 +38,8 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	refTestCase := test_cases.CommandReflectionTestCase{
-		Command: "exit 0",
+		Command:             "exit 0",
+		SkipPromptAssertion: true,
 	}
 	if err := refTestCase.Run(asserter, shell, logger, true); err != nil {
 		return err
