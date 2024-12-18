@@ -27,7 +27,8 @@ func (t *CDAndPWDTestCase) Run(asserter *logged_shell_asserter.LoggedShellAssert
 
 	// And send the cd command, we don't expect any response
 	tc := CommandReflectionTestCase{
-		Command: command,
+		Command:             command,
+		SkipPromptAssertion: false,
 	}
 	if err := tc.Run(asserter, shell, logger, true); err != nil {
 		return err
