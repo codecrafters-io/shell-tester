@@ -29,15 +29,17 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	stageDir, lsDir := dirs[0], dirs[1]
 	defer cleanupDirectories(dirs)
 
-	randomWords := random.RandomWords(2)
+	randomWords := random.RandomWords(3)
 	slices.Sort(randomWords)
 	filePaths := []string{
 		path.Join(lsDir, fmt.Sprintf("%s", randomWords[0])),
 		path.Join(lsDir, fmt.Sprintf("%s", randomWords[1])),
+		path.Join(lsDir, fmt.Sprintf("%s", randomWords[2])),
 	}
 	fileContents := []string{
 		randomWords[0] + "\n",
 		randomWords[1] + "\n",
+		randomWords[2] + "\n",
 	}
 	if err := writeFiles(filePaths, fileContents, logger); err != nil {
 		return err
@@ -48,6 +50,10 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	outputFilePath1 := path.Join(stageDir, randomWords2[0]+".md")
 	outputFilePath2 := path.Join(stageDir, randomWords2[1]+".md")
 	outputFilePath3 := path.Join(stageDir, randomWords2[2]+".md")
+
+	// Test1:
+	// ls foo > tmp.md; cat tmp.md
+
 	command1 := fmt.Sprintf("ls %s > %s", lsDir, outputFilePath1)
 	command2 := fmt.Sprintf("cat %s", outputFilePath1)
 
@@ -64,13 +70,15 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received redirected file content",
 	}
-
 	if err := multiLineTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
-	stringContent := "Hello " + getRandomName()
-	command3 := fmt.Sprintf("echo '%s' 1> %s", stringContent, outputFilePath2)
+	// Test2:
+	// echo "Hello Ryan" 1> tmp.md; cat tmp.md
+
+	message := "Hello " + getRandomName()
+	command3 := fmt.Sprintf("echo '%s' 1> %s", message, outputFilePath2)
 	command4 := fmt.Sprintf("cat %s", outputFilePath2)
 
 	err = test_cases.CommandReflectionTestCase{
@@ -82,7 +90,7 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	responseTestCase := test_cases.CommandResponseTestCase{
 		Command:          command4,
-		ExpectedOutput:   stringContent,
+		ExpectedOutput:   message,
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received redirected file content",
 	}
@@ -90,9 +98,12 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	file := filePaths[1]
+	// Test3:
+	// cat exists nonexistent > tmp.md; cat tmp.md
+
+	filePath := filePaths[1]
 	fileContent := randomWords[1]
-	command5 := fmt.Sprintf("cat %s %s 1> %s", file, "nonexistent", outputFilePath3)
+	command5 := fmt.Sprintf("cat %s %s 1> %s", filePath, "nonexistent", outputFilePath3)
 	command6 := fmt.Sprintf("cat %s", outputFilePath3)
 
 	responseTestCase = test_cases.CommandResponseTestCase{
@@ -111,7 +122,6 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received redirected file content",
 	}
-
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
