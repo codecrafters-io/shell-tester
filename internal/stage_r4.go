@@ -54,7 +54,7 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	slices.Sort(randomWords2)
 	outputFilePath := path.Join(stageDir, randomWords2[0]+".md")
 	outputFilePath2 := path.Join(stageDir, randomWords2[1]+".md")
-	// outputFilePath3 := path.Join(stageDir, randomWords2[2]+".md")
+	outputFilePath3 := path.Join(stageDir, randomWords2[2]+".md")
 
 	command1 := fmt.Sprintf("ls %s >> %s", "nonexistent", outputFilePath)
 
@@ -92,6 +92,54 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	// //////
+
+	message := fmt.Sprintf("%s says Error", getRandomName())
+	command5_1 := fmt.Sprintf(`echo "%s" 2>> %s`, message, outputFilePath3)
+	command5_2 := fmt.Sprintf(`cat %s 2>> %s`, "nonexistent", outputFilePath3)
+	command5_3 := fmt.Sprintf("ls %s 2>> %s", "nonexistent", outputFilePath3)
+	command5_4 := fmt.Sprintf("cat %s", outputFilePath3)
+
+	responseTestCase5_1 := test_cases.CommandResponseTestCase{
+		Command:          command5_1,
+		ExpectedOutput:   message,
+		FallbackPatterns: nil,
+		SuccessMessage:   "✓ Received redirected file content",
+	}
+
+	if err := responseTestCase5_1.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	reflectionTestCase5_2 := test_cases.CommandReflectionTestCase{
+		Command: command5_2,
+	}
+	if err := reflectionTestCase5_2.Run(asserter, shell, logger, true); err != nil {
+		return err
+	}
+
+	reflectionTestCase5_3 := test_cases.CommandReflectionTestCase{
+		Command: command5_3,
+	}
+	if err := reflectionTestCase5_3.Run(asserter, shell, logger, true); err != nil {
+		return err
+	}
+
+	errorMessagesInFile := []string{
+		"cat: nonexistent: No such file or directory",
+		"ls: nonexistent: No such file or directory",
+	}
+	responseTestCase5_4 := test_cases.CommandWithMultilineResponseTestCase{
+		Command:          command5_4,
+		ExpectedOutput:   errorMessagesInFile,
+		FallbackPatterns: nil,
+		SuccessMessage:   "✓ Received redirected file content",
+	}
+
+	if err := responseTestCase5_4.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
