@@ -47,9 +47,12 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	randomWords2 := random.RandomWords(3)
+	slices.Sort(randomWords2)
 	stringContent := strings.Join(randomWords, "\n")
-	outputFilePath1 := path.Join(stageDir, random.RandomWord()+".md")
-	outputFilePath2 := path.Join(stageDir, random.RandomWord()+".md")
+	outputFilePath1 := path.Join(stageDir, randomWords2[0]+".md")
+	outputFilePath2 := path.Join(stageDir, randomWords2[1]+".md")
+	outputFilePath3 := path.Join(stageDir, randomWords2[2]+".md")
 
 	command1 := fmt.Sprintf("ls nonexistent 2> %s", outputFilePath1)
 	command2 := fmt.Sprintf("cat %s", outputFilePath1)
@@ -88,20 +91,20 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
-	logger.Successf("✓ File content validation passed")
+	logger.Successf("✓ File: %s passed content validation", outputFilePath2)
 
 	///////
 
 	file := filePaths[0]
 	fileContent := randomWords[0]
-	command5 := fmt.Sprintf("cat %s %s 2> %s", file, "nonexistent", outputFilePath1)
-	command6 := fmt.Sprintf("cat %s", outputFilePath1)
+	command5 := fmt.Sprintf("cat %s %s 2> %s", file, "nonexistent", outputFilePath3)
+	command6 := fmt.Sprintf("cat %s", outputFilePath3)
 
 	responseTestCase2 := test_cases.CommandResponseTestCase{
 		Command:          command5,
 		ExpectedOutput:   fileContent,
 		FallbackPatterns: nil,
-		SuccessMessage:   "✓ Received error message",
+		SuccessMessage:   "✓ Received file content",
 	}
 	if err := responseTestCase2.Run(asserter, shell, logger); err != nil {
 		return err
@@ -111,7 +114,7 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 		Command:          command6,
 		ExpectedOutput:   fmt.Sprintf("cat: %s: No such file or directory", "nonexistent"),
 		FallbackPatterns: nil,
-		SuccessMessage:   "✓ Received redirected file content",
+		SuccessMessage:   "✓ Received redirected error message",
 	}
 
 	if err := responseTestCase3.Run(asserter, shell, logger); err != nil {
