@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"os"
 	"path"
 	"slices"
 
@@ -28,9 +27,7 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	stageDir := dirs[0]
 	lsDir := dirs[1]
-	for _, dir := range dirs {
-		defer os.RemoveAll(dir)
-	}
+	defer cleanupDirectories(dirs)
 
 	randomWords := random.RandomWords(3)
 	slices.Sort(randomWords)
