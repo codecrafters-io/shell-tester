@@ -63,7 +63,7 @@ func (vt *VirtualTerminal) GetRow(row int) []string {
 	screenState := make([]string, vt.cols)
 	for j := 0; j < vt.cols; j++ {
 		c := vt.vt.Cell(j, row)
-		screenState[j] = string(c.Content)
+		screenState[j] = c.Content
 	}
 	return screenState
 }
