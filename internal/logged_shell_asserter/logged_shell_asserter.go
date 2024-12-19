@@ -83,10 +83,9 @@ func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRow
 }
 
 func (a *LoggedShellAsserter) logAssertionError(err assertions.AssertionError) {
-	a.logRows(a.lastLoggedRowIndex+1, err.ErrorRowIndex)
-	l := a.Shell.GetLogger()
-	l.Errorf("%s", err.Message)
-	a.logRows(err.ErrorRowIndex, len(a.Shell.GetScreenState()))
+	a.logRows(a.lastLoggedRowIndex+1, err.ErrorRowIndex+1)
+	a.Shell.GetLogger().Errorf("%s", err.Message)
+	a.logRows(err.ErrorRowIndex+1, len(a.Shell.GetScreenState()))
 }
 
 func (a *LoggedShellAsserter) LogRemainingOutput() {
