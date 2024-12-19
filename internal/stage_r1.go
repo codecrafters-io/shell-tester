@@ -5,7 +5,6 @@ import (
 	"os"
 	"path"
 	"slices"
-	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -27,13 +26,11 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
-	stageDir := dirs[0]
-	lsDir := dirs[1]
+	stageDir, lsDir := dirs[0], dirs[1]
 	defer cleanupDirectories(dirs)
 
 	randomWords := random.RandomWords(2)
 	slices.Sort(randomWords)
-
 	filePaths := []string{
 		path.Join(lsDir, fmt.Sprintf("%s", randomWords[0])),
 		path.Join(lsDir, fmt.Sprintf("%s", randomWords[1])),
@@ -46,22 +43,23 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	stringContent := strings.Join(randomWords, "\n")
-	outputFilePath := path.Join(stageDir, random.RandomWord()+".md")
-	outputFilePath2 := path.Join(stageDir, random.RandomWord()+".md")
-	outputFilePath3 := path.Join(stageDir, random.RandomWord()+".md")
-	command3 := fmt.Sprintf("ls %s > %s", lsDir, outputFilePath)
-	command4 := fmt.Sprintf("cat %s", outputFilePath)
+	randomWords2 := random.RandomWords(3)
+	slices.Sort(randomWords2)
+	outputFilePath1 := path.Join(stageDir, randomWords2[0]+".md")
+	outputFilePath2 := path.Join(stageDir, randomWords2[1]+".md")
+	outputFilePath3 := path.Join(stageDir, randomWords2[2]+".md")
+	command1 := fmt.Sprintf("ls %s > %s", lsDir, outputFilePath1)
+	command2 := fmt.Sprintf("cat %s", outputFilePath1)
 
 	reflectionTestCase := test_cases.CommandReflectionTestCase{
-		Command: command3,
+		Command: command1,
 	}
 	if err := reflectionTestCase.Run(asserter, shell, logger, true); err != nil {
 		return err
 	}
 
 	responseTestCase1 := test_cases.CommandWithMultilineResponseTestCase{
-		Command:          command4,
+		Command:          command2,
 		ExpectedOutput:   randomWords,
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received redirected file content",
@@ -71,24 +69,23 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	stringContent = "Hello " + getRandomName()
-	command1 := fmt.Sprintf("echo '%s' 1> %s", stringContent, outputFilePath2)
-	command2 := fmt.Sprintf("cat %s", outputFilePath2)
+	stringContent := "Hello " + getRandomName()
+	command3 := fmt.Sprintf("echo '%s' 1> %s", stringContent, outputFilePath2)
+	command4 := fmt.Sprintf("cat %s", outputFilePath2)
 
 	reflectionTestCase2 := test_cases.CommandReflectionTestCase{
-		Command: command1,
+		Command: command3,
 	}
 	if err := reflectionTestCase2.Run(asserter, shell, logger, true); err != nil {
 		return err
 	}
 
 	responseTestCase := test_cases.CommandResponseTestCase{
-		Command:          command2,
+		Command:          command4,
 		ExpectedOutput:   stringContent,
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received redirected file content",
 	}
-
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
