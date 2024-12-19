@@ -49,9 +49,12 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	outputFilePath := path.Join(stageDir, random.RandomWord()+".md")
-	outputFilePath2 := path.Join(stageDir, random.RandomWord()+".md")
-	outputFilePath3 := path.Join(stageDir, random.RandomWord()+".md")
+	randomWords2 := random.RandomWords(3)
+	slices.Sort(randomWords2)
+
+	outputFilePath := path.Join(stageDir, randomWords2[0]+".md")
+	outputFilePath2 := path.Join(stageDir, randomWords2[1]+".md")
+	outputFilePath3 := path.Join(stageDir, randomWords2[2]+".md")
 	command1 := fmt.Sprintf("ls %s >> %s", lsDir, outputFilePath)
 	command2 := fmt.Sprintf("cat %s", outputFilePath)
 
