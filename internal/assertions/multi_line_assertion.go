@@ -39,7 +39,7 @@ func (a MultiLineAssertion) Run(screenState [][]string, startRowIndex int) (proc
 
 	for _, pattern := range a.FallbackPatterns {
 		if pattern.Match([]byte(cleanedRowsString)) {
-			return 2, nil
+			return len(a.ExpectedOutput), nil
 		}
 	}
 
@@ -51,6 +51,6 @@ func (a MultiLineAssertion) Run(screenState [][]string, startRowIndex int) (proc
 			Message:       "Output does not match expected value.\n" + detailedErrorMessage,
 		}
 	} else {
-		return 2, nil
+		return len(a.ExpectedOutput), nil
 	}
 }
