@@ -34,17 +34,24 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	randomWords := random.RandomWords(2)
+	slices.Sort(randomWords)
+
 	filePaths := []string{
 		path.Join(lsDir, fmt.Sprintf("%s", randomWords[0])),
 		path.Join(lsDir, fmt.Sprintf("%s", randomWords[1])),
 	}
-	if err := writeFiles(filePaths, randomWords, logger); err != nil {
+	fileContents := []string{
+		randomWords[0] + "\n",
+		randomWords[1] + "\n",
+	}
+	if err := writeFiles(filePaths, fileContents, logger); err != nil {
 		return err
 	}
 
-	slices.Sort(randomWords)
 	stringContent := strings.Join(randomWords, "\n")
 	outputFilePath := path.Join(stageDir, random.RandomWord()+".md")
+	outputFilePath2 := path.Join(stageDir, random.RandomWord()+".md")
+	outputFilePath3 := path.Join(stageDir, random.RandomWord()+".md")
 	command3 := fmt.Sprintf("ls %s > %s", lsDir, outputFilePath)
 	command4 := fmt.Sprintf("cat %s", outputFilePath)
 
@@ -67,9 +74,8 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	stringContent = "Hello " + getRandomName()
-	outputFilePath = path.Join(stageDir, random.RandomWord()+".md")
-	command1 := fmt.Sprintf("echo '%s' 1> %s", stringContent, outputFilePath)
-	command2 := fmt.Sprintf("cat %s", outputFilePath)
+	command1 := fmt.Sprintf("echo '%s' 1> %s", stringContent, outputFilePath2)
+	command2 := fmt.Sprintf("cat %s", outputFilePath2)
 
 	reflectionTestCase2 := test_cases.CommandReflectionTestCase{
 		Command: command1,
@@ -89,13 +95,14 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	outputFilePath2 := path.Join(stageDir, random.RandomWord()+".md")
-	command5 := fmt.Sprintf("cat %s %s 1> %s", outputFilePath, "nonexistent", outputFilePath2)
-	command6 := fmt.Sprintf("cat %s", outputFilePath2)
+	file := filePaths[1]
+	fileContent := randomWords[1]
+	command5 := fmt.Sprintf("cat %s %s 1> %s", file, "nonexistent", outputFilePath3)
+	command6 := fmt.Sprintf("cat %s", outputFilePath3)
 
 	reflectionTestCase3 := test_cases.CommandResponseTestCase{
 		Command:          command5,
-		ExpectedOutput:   "cat: nonexistent: No such file or directory",
+		ExpectedOutput:   fmt.Sprintf("cat: %s: No such file or directory", "nonexistent"),
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received error message",
 	}
@@ -105,7 +112,7 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	responseTestCase3 := test_cases.CommandResponseTestCase{
 		Command:          command6,
-		ExpectedOutput:   stringContent,
+		ExpectedOutput:   fileContent,
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received redirected file content",
 	}
