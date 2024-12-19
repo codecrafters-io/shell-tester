@@ -51,21 +51,21 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	command1 := fmt.Sprintf("ls %s > %s", lsDir, outputFilePath1)
 	command2 := fmt.Sprintf("cat %s", outputFilePath1)
 
-	reflectionTestCase := test_cases.CommandReflectionTestCase{
+	err = test_cases.CommandReflectionTestCase{
 		Command: command1,
-	}
-	if err := reflectionTestCase.Run(asserter, shell, logger, true); err != nil {
+	}.Run(asserter, shell, logger, true)
+	if err != nil {
 		return err
 	}
 
-	responseTestCase1 := test_cases.CommandWithMultilineResponseTestCase{
+	multiLineTestCase := test_cases.CommandWithMultilineResponseTestCase{
 		Command:          command2,
 		ExpectedOutput:   randomWords,
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received redirected file content",
 	}
 
-	if err := responseTestCase1.Run(asserter, shell, logger); err != nil {
+	if err := multiLineTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
@@ -73,10 +73,10 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	command3 := fmt.Sprintf("echo '%s' 1> %s", stringContent, outputFilePath2)
 	command4 := fmt.Sprintf("cat %s", outputFilePath2)
 
-	reflectionTestCase2 := test_cases.CommandReflectionTestCase{
+	err = test_cases.CommandReflectionTestCase{
 		Command: command3,
-	}
-	if err := reflectionTestCase2.Run(asserter, shell, logger, true); err != nil {
+	}.Run(asserter, shell, logger, true)
+	if err != nil {
 		return err
 	}
 
@@ -95,24 +95,24 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	command5 := fmt.Sprintf("cat %s %s 1> %s", file, "nonexistent", outputFilePath3)
 	command6 := fmt.Sprintf("cat %s", outputFilePath3)
 
-	reflectionTestCase3 := test_cases.CommandResponseTestCase{
+	responseTestCase = test_cases.CommandResponseTestCase{
 		Command:          command5,
 		ExpectedOutput:   fmt.Sprintf("cat: %s: No such file or directory", "nonexistent"),
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received error message",
 	}
-	if err := reflectionTestCase3.Run(asserter, shell, logger); err != nil {
+	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
-	responseTestCase3 := test_cases.CommandResponseTestCase{
+	responseTestCase = test_cases.CommandResponseTestCase{
 		Command:          command6,
 		ExpectedOutput:   fileContent,
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received redirected file content",
 	}
 
-	if err := responseTestCase3.Run(asserter, shell, logger); err != nil {
+	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
