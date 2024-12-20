@@ -54,6 +54,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/quoting/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"redirection_pass": {
+			StageSlugs:          []string{"r1", "r2", "r3", "r4"},
+			CodePath:            "./test_helpers/bash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/redirection/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 	}
 
 	testerUtilsTesting.TestTesterOutput(t, testerDefinition, testCases)

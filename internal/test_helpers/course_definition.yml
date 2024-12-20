@@ -752,3 +752,8 @@ stages:
 
     marketing_md: |-
       In this stage, you'll implement support for executing a quoted executable.
+
+  - slug: "r1"
+  - slug: "r2"
+  - slug: "r3"
+  - slug: "r4"
