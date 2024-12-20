@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"path"
 	"slices"
-	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -27,13 +26,11 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
-	stageDir := dirs[0]
-	lsDir := dirs[1]
+	stageDir, lsDir := dirs[0], dirs[1]
 	defer cleanupDirectories(dirs)
 
 	randomWords := random.RandomWords(1)
 	slices.Sort(randomWords)
-
 	filePaths := []string{
 		path.Join(lsDir, fmt.Sprintf("%s", randomWords[0])),
 	}
@@ -44,38 +41,42 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	randomWords2 := random.RandomWords(3)
+	randomWords2 := random.RandomElementsFromArray(SMALL_WORDS, 3)
 	slices.Sort(randomWords2)
-	stringContent := strings.Join(randomWords, "\n")
 	outputFilePath1 := path.Join(stageDir, randomWords2[0]+".md")
 	outputFilePath2 := path.Join(stageDir, randomWords2[1]+".md")
 	outputFilePath3 := path.Join(stageDir, randomWords2[2]+".md")
 
+	// Test1:
+	// ls nonexistent 2> tmp.md; cat tmp.md
+
 	command1 := fmt.Sprintf("ls nonexistent 2> %s", outputFilePath1)
 	command2 := fmt.Sprintf("cat %s", outputFilePath1)
 
-	reflectionTestCase := test_cases.CommandReflectionTestCase{
+	err = test_cases.CommandReflectionTestCase{
 		Command: command1,
-	}
-	if err := reflectionTestCase.Run(asserter, shell, logger, true); err != nil {
+	}.Run(asserter, shell, logger, true)
+	if err != nil {
 		return err
 	}
 
-	responseTestCase1 := test_cases.CommandResponseTestCase{
+	responseTestCase := test_cases.CommandResponseTestCase{
 		Command:          command2,
 		ExpectedOutput:   "ls: nonexistent: No such file or directory",
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received redirected error message",
 	}
-
-	if err := responseTestCase1.Run(asserter, shell, logger); err != nil {
+	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
-	stringContent = fmt.Sprintf("'%ss file not found'", getRandomName())
+	// Test2:
+	// echo 'File not found' 2> tmp.md; cat tmp.md
+
+	stringContent := fmt.Sprintf("'%s file cannot be found'", getRandomName())
 	command3 := fmt.Sprintf("echo %s 2> %s", stringContent, outputFilePath2)
 
-	responseTestCase := test_cases.CommandResponseTestCase{
+	responseTestCase = test_cases.CommandResponseTestCase{
 		Command:          command3,
 		ExpectedOutput:   stringContent[1 : len(stringContent)-1],
 		FallbackPatterns: nil,
@@ -88,33 +89,33 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
-	logger.Successf("✓ File: %s passed content validation", outputFilePath2)
+	logger.Successf("✓ File: %s is empty", outputFilePath2)
 
-	///////
+	// Test3:
+	// cat exists nonexistent 2> tmp.md; cat tmp.md
 
-	file := filePaths[0]
+	filePath := filePaths[0]
 	fileContent := randomWords[0]
-	command5 := fmt.Sprintf("cat %s %s 2> %s", file, "nonexistent", outputFilePath3)
+	command5 := fmt.Sprintf("cat %s %s 2> %s", filePath, "nonexistent", outputFilePath3)
 	command6 := fmt.Sprintf("cat %s", outputFilePath3)
 
-	responseTestCase2 := test_cases.CommandResponseTestCase{
+	responseTestCase = test_cases.CommandResponseTestCase{
 		Command:          command5,
 		ExpectedOutput:   fileContent,
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received file content",
 	}
-	if err := responseTestCase2.Run(asserter, shell, logger); err != nil {
+	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
-	responseTestCase3 := test_cases.CommandResponseTestCase{
+	responseTestCase = test_cases.CommandResponseTestCase{
 		Command:          command6,
 		ExpectedOutput:   fmt.Sprintf("cat: %s: No such file or directory", "nonexistent"),
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received redirected error message",
 	}
-
-	if err := responseTestCase3.Run(asserter, shell, logger); err != nil {
+	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
