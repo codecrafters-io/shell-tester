@@ -73,12 +73,12 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Test2:
 	// echo 'File not found' 2> tmp.md; cat tmp.md
 
-	stringContent := fmt.Sprintf("'%s file cannot be found'", getRandomName())
-	command3 := fmt.Sprintf("echo %s 2> %s", stringContent, outputFilePath2)
+	message := fmt.Sprintf("%s file cannot be found", getRandomName())
+	command3 := fmt.Sprintf("echo %s 2> %s", fmt.Sprintf("'%s'", message), outputFilePath2)
 
 	responseTestCase = test_cases.CommandResponseTestCase{
 		Command:          command3,
-		ExpectedOutput:   stringContent[1 : len(stringContent)-1],
+		ExpectedOutput:   message,
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received redirected error message",
 	}
