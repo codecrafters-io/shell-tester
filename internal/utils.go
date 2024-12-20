@@ -50,6 +50,19 @@ func getShortRandomDirectory() (string, error) {
 	return randomDir, nil
 }
 
+func getShortRandomDirectories(n int) ([]string, error) {
+	directoryNames := random.RandomElementsFromArray(SMALL_WORDS, n)
+	randomDirs := make([]string, n)
+	for i := 0; i < n; i++ {
+		randomDir := path.Join("/tmp", directoryNames[i])
+		if err := os.MkdirAll(randomDir, 0755); err != nil {
+			return nil, fmt.Errorf("CodeCrafters internal error. Error creating directory %s: %v", randomDir, err)
+		}
+		randomDirs[i] = randomDir
+	}
+	return randomDirs, nil
+}
+
 func getRandomString() string {
 	// We will use a random numeric string of length = 6
 	var result string
