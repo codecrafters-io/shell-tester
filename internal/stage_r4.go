@@ -32,9 +32,9 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	randomWords := random.RandomWords(3)
 	slices.Sort(randomWords)
 	filePaths := []string{
-		path.Join(lsDir, fmt.Sprintf("%s", randomWords[0])),
-		path.Join(lsDir, fmt.Sprintf("%s", randomWords[1])),
-		path.Join(lsDir, fmt.Sprintf("%s", randomWords[2])),
+		path.Join(lsDir, randomWords[0]),
+		path.Join(lsDir, randomWords[1]),
+		path.Join(lsDir, randomWords[2]),
 	}
 	fileContents := []string{
 		randomWords[0] + "\n",
