@@ -55,7 +55,7 @@ func TestStages(t *testing.T) {
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"redirection_pass": {
-			StageSlugs:          []string{"r1", "r2", "r3", "r4"},
+			StageSlugs:          []string{"jv1", "vz4", "el9", "un3"},
 			CodePath:            "./test_helpers/bash",
 			ExpectedExitCode:    0,
 			StdoutFixturePath:   "./test_helpers/fixtures/redirection/pass",
