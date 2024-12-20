@@ -45,7 +45,7 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	randomWords2 := random.RandomWords(3)
+	randomWords2 := random.RandomElementsFromArray(SMALL_WORDS, 3)
 	slices.Sort(randomWords2)
 	outputFilePath1 := path.Join(stageDir, randomWords2[0]+".md")
 	outputFilePath2 := path.Join(stageDir, randomWords2[1]+".md")
