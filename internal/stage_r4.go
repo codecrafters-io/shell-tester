@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 	"path"
+	"regexp"
 	"slices"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
@@ -59,7 +60,7 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	responseTestCase := test_cases.CommandResponseTestCase{
 		Command:          command1,
 		ExpectedOutput:   fmt.Sprintf("ls: %s: No such file or directory", "nonexistent"),
-		FallbackPatterns: nil,
+		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile("ls: cannot access 'nonexistent': No such file or directory")},
 		SuccessMessage:   "✓ Received error message",
 	}
 	asserter.AddAssertion(assertions.FileContentAssertion{
@@ -86,7 +87,7 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	responseTestCase = test_cases.CommandResponseTestCase{
 		Command:          command3,
 		ExpectedOutput:   fmt.Sprintf("ls: %s: No such file or directory", "nonexistent"),
-		FallbackPatterns: nil,
+		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile("ls: cannot access 'nonexistent': No such file or directory")},
 		SuccessMessage:   "✓ Received redirected file content",
 	}
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
@@ -130,10 +131,13 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 		"cat: nonexistent: No such file or directory",
 		"ls: nonexistent: No such file or directory",
 	}
+	linuxErrorMessage := "ls: cannot access 'nonexistent': No such file or directory"
+	essorMessagesInFileRegex := []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf("^%s\n%s$", errorMessagesInFile[0], linuxErrorMessage))}
+
 	multiLineResponseTestCase := test_cases.CommandWithMultilineResponseTestCase{
 		Command:          command7,
 		ExpectedOutput:   errorMessagesInFile,
-		FallbackPatterns: nil,
+		FallbackPatterns: essorMessagesInFileRegex,
 		SuccessMessage:   "✓ Received redirected file content",
 	}
 	if err := multiLineResponseTestCase.Run(asserter, shell, logger); err != nil {

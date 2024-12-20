@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 	"path"
+	"regexp"
 	"slices"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
@@ -63,7 +64,7 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 	responseTestCase := test_cases.CommandResponseTestCase{
 		Command:          command2,
 		ExpectedOutput:   "ls: nonexistent: No such file or directory",
-		FallbackPatterns: nil,
+		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile("ls: cannot access 'nonexistent': No such file or directory")},
 		SuccessMessage:   "✓ Received redirected error message",
 	}
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
