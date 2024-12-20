@@ -1,0 +1,98 @@
+Debug = true
+
+[33m[stage-4] [0m[94mRunning tests for Stage #4: r1[0m
+[33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-4] [0m[94mWriting file "/tmp/baz/apple" with content "apple"[0m
+[33m[stage-4] [0m[94mWriting file "/tmp/baz/blueberry" with content "blueberry"[0m
+[33m[stage-4] [0m[94mWriting file "/tmp/baz/grape" with content "grape"[0m
+[33m[your-program] [0m$ ls /tmp/baz > /tmp/foo/baz.md
+[33m[your-program] [0m$ cat /tmp/foo/baz.md
+[33m[your-program] [0mapple
+[33m[your-program] [0mblueberry
+[33m[your-program] [0mgrape
+[33m[stage-4] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ echo 'Hello James' 1> /tmp/foo/foo.md
+[33m[your-program] [0m$ cat /tmp/foo/foo.md
+[33m[your-program] [0mHello James
+[33m[stage-4] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ cat /tmp/baz/blueberry nonexistent 1> /tmp/foo/quz.md
+[33m[your-program] [0mcat: nonexistent: No such file or directory
+[33m[stage-4] [0m[92m✓ Received error message[0m
+[33m[your-program] [0m$ cat /tmp/foo/quz.md
+[33m[your-program] [0mblueberry
+[33m[stage-4] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ 
+[33m[stage-4] [0m[92mTest passed.[0m
+
+[33m[stage-3] [0m[94mRunning tests for Stage #3: r2[0m
+[33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-3] [0m[94mWriting file "/tmp/bar/pear" with content "pear"[0m
+[33m[your-program] [0m$ ls nonexistent 2> /tmp/quz/baz.md
+[33m[your-program] [0m$ cat /tmp/quz/baz.md
+[33m[your-program] [0mls: cannot access 'nonexistent': No such file or directory
+[33m[stage-3] [0m[92m✓ Received redirected error message[0m
+[33m[your-program] [0m$ echo 'Maria file cannot be found' 2> /tmp/quz/foo.md
+[33m[your-program] [0mMaria file cannot be found
+[33m[stage-3] [0m[92m✓ Received redirected error message[0m
+[33m[stage-3] [0m[92m✓ File: /tmp/quz/foo.md is empty[0m
+[33m[your-program] [0m$ cat /tmp/bar/pear nonexistent 2> /tmp/quz/quz.md
+[33m[your-program] [0mpear
+[33m[stage-3] [0m[92m✓ Received file content[0m
+[33m[your-program] [0m$ cat /tmp/quz/quz.md
+[33m[your-program] [0mcat: nonexistent: No such file or directory
+[33m[stage-3] [0m[92m✓ Received redirected error message[0m
+[33m[your-program] [0m$ 
+[33m[stage-3] [0m[92mTest passed.[0m
+
+[33m[stage-2] [0m[94mRunning tests for Stage #2: r3[0m
+[33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-2] [0m[94mWriting file "/tmp/baz/apple" with content "apple"[0m
+[33m[stage-2] [0m[94mWriting file "/tmp/baz/banana" with content "banana"[0m
+[33m[stage-2] [0m[94mWriting file "/tmp/baz/blueberry" with content "blueberry"[0m
+[33m[your-program] [0m$ ls /tmp/baz >> /tmp/bar/bar.md
+[33m[your-program] [0m$ cat /tmp/bar/bar.md
+[33m[your-program] [0mapple
+[33m[your-program] [0mbanana
+[33m[your-program] [0mblueberry
+[33m[stage-2] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ echo 'Hello Emily' 1>> /tmp/bar/baz.md
+[33m[your-program] [0m$ echo 'Hello Maria' 1>> /tmp/bar/baz.md
+[33m[your-program] [0m$ cat /tmp/bar/baz.md
+[33m[your-program] [0mHello Emily
+[33m[your-program] [0mHello Maria
+[33m[stage-2] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ echo "List of files: " > /tmp/bar/qux.md
+[33m[your-program] [0m$ ls /tmp/baz >> /tmp/bar/qux.md
+[33m[your-program] [0m$ cat /tmp/bar/qux.md
+[33m[your-program] [0mList of files:
+[33m[your-program] [0mapple
+[33m[your-program] [0mbanana
+[33m[your-program] [0mblueberry
+[33m[stage-2] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ 
+[33m[stage-2] [0m[92mTest passed.[0m
+
+[33m[stage-1] [0m[94mRunning tests for Stage #1: r4[0m
+[33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-1] [0m[94mWriting file "/tmp/qux/pear" with content "pear"[0m
+[33m[stage-1] [0m[94mWriting file "/tmp/qux/raspberry" with content "raspberry"[0m
+[33m[stage-1] [0m[94mWriting file "/tmp/qux/strawberry" with content "strawberry"[0m
+[33m[your-program] [0m$ ls nonexistent >> /tmp/foo/baz.md
+[33m[your-program] [0mls: cannot access 'nonexistent': No such file or directory
+[33m[stage-1] [0m[92m✓ Received error message[0m
+[33m[stage-1] [0m[92m✓ File: /tmp/foo/baz.md is empty[0m
+[33m[your-program] [0m$ ls nonexistent 2>> /tmp/foo/qux.md
+[33m[your-program] [0m$ cat /tmp/foo/qux.md
+[33m[your-program] [0mls: cannot access 'nonexistent': No such file or directory
+[33m[stage-1] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ echo "James says Error" 2>> /tmp/foo/quz.md
+[33m[your-program] [0mJames says Error
+[33m[stage-1] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ cat nonexistent 2>> /tmp/foo/quz.md
+[33m[your-program] [0m$ ls nonexistent 2>> /tmp/foo/quz.md
+[33m[your-program] [0m$ cat /tmp/foo/quz.md
+[33m[your-program] [0mcat: nonexistent: No such file or directory
+[33m[your-program] [0mls: cannot access 'nonexistent': No such file or directory
+[33m[stage-1] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ 
+[33m[stage-1] [0m[92mTest passed.[0m
