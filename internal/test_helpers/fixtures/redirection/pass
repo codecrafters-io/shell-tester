@@ -1,6 +1,6 @@
 Debug = true
 
-[33m[stage-4] [0m[94mRunning tests for Stage #4: r1[0m
+[33m[stage-4] [0m[94mRunning tests for Stage #4: jv1[0m
 [33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-4] [0m[94mWriting file "/tmp/baz/apple" with content "apple"[0m
 [33m[stage-4] [0m[94mWriting file "/tmp/baz/blueberry" with content "blueberry"[0m
@@ -24,7 +24,7 @@ Debug = true
 [33m[your-program] [0m$ 
 [33m[stage-4] [0m[92mTest passed.[0m
 
-[33m[stage-3] [0m[94mRunning tests for Stage #3: r2[0m
+[33m[stage-3] [0m[94mRunning tests for Stage #3: vz4[0m
 [33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-3] [0m[94mWriting file "/tmp/bar/pear" with content "pear"[0m
 [33m[your-program] [0m$ ls nonexistent 2> /tmp/quz/baz.md
@@ -44,7 +44,7 @@ Debug = true
 [33m[your-program] [0m$ 
 [33m[stage-3] [0m[92mTest passed.[0m
 
-[33m[stage-2] [0m[94mRunning tests for Stage #2: r3[0m
+[33m[stage-2] [0m[94mRunning tests for Stage #2: el9[0m
 [33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-2] [0m[94mWriting file "/tmp/baz/apple" with content "apple"[0m
 [33m[stage-2] [0m[94mWriting file "/tmp/baz/banana" with content "banana"[0m
@@ -72,7 +72,7 @@ Debug = true
 [33m[your-program] [0m$ 
 [33m[stage-2] [0m[92mTest passed.[0m
 
-[33m[stage-1] [0m[94mRunning tests for Stage #1: r4[0m
+[33m[stage-1] [0m[94mRunning tests for Stage #1: un3[0m
 [33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-1] [0m[94mWriting file "/tmp/qux/pear" with content "pear"[0m
 [33m[stage-1] [0m[94mWriting file "/tmp/qux/raspberry" with content "raspberry"[0m
