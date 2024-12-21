@@ -113,7 +113,7 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 	responseTestCase = test_cases.CommandResponseTestCase{
 		Command:          command6,
 		ExpectedOutput:   fmt.Sprintf("cat: %s: No such file or directory", "nonexistent"),
-		FallbackPatterns: nil,
+		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf("cat: can't open '%s': No such file or directory", "nonexistent"))},
 		SuccessMessage:   "✓ Received redirected error message",
 	}
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {

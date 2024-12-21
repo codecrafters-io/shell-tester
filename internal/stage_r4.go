@@ -131,9 +131,12 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 		"cat: nonexistent: No such file or directory",
 		"ls: nonexistent: No such file or directory",
 	}
-	linuxErrorMessage := "ls: cannot access 'nonexistent': No such file or directory"
-	essorMessagesInFileRegex := []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf("^%s\n%s$", errorMessagesInFile[0], linuxErrorMessage))}
-
+	linuxLSErrorMessage := "ls: cannot access 'nonexistent': No such file or directory"
+	alpineCatErrorMessage := "cat: can't open 'nonexistent': No such file or directory"
+	essorMessagesInFileRegex := []*regexp.Regexp{
+		regexp.MustCompile(fmt.Sprintf("^%s\n%s$", errorMessagesInFile[0], linuxLSErrorMessage)),
+		regexp.MustCompile(fmt.Sprintf("^%s\n%s$", alpineCatErrorMessage, errorMessagesInFile[1])),
+	}
 	multiLineResponseTestCase := test_cases.CommandWithMultilineResponseTestCase{
 		Command:          command7,
 		ExpectedOutput:   errorMessagesInFile,
