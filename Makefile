@@ -133,11 +133,12 @@ test_bash:
 	make test_quoting_w_bash
 
 
-test_vt: build
+test_redirection_w_bash: build
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"ff0\",\"tester_log_prefix\":\"tester::#ff0\",\"title\":\"Stage #3: REPL\"}, \
-		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#oo8\",\"title\":\"Stage #1: Init\"}, \
-		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#cz2\",\"title\":\"Stage #2: Missing Command\"} \
+		{\"slug\":\"jv1\",\"tester_log_prefix\":\"tester::#jv1\",\"title\":\"Stage #13: Redirect stdout\"}, \
+		{\"slug\":\"vz4\",\"tester_log_prefix\":\"tester::#vz4\",\"title\":\"Stage #14: Redirect stderr\"}, \
+		{\"slug\":\"el9\",\"tester_log_prefix\":\"tester::#el9\",\"title\":\"Stage #15: Append stdout\"}, \
+		{\"slug\":\"un3\",\"tester_log_prefix\":\"tester::#un3\",\"title\":\"Stage #16: Append stderr\"} \
 	]" \
 	dist/main.out
