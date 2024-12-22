@@ -34,13 +34,16 @@ jobs:
   test-alpine:
     runs-on: ubuntu-latest
     steps:
-      - uses: jirutka/setup-alpine@v1
+      - name: Setup Alpine
+        uses: jirutka/setup-alpine@v1
         with:
           branch: latest-stable
-          packages: make gcc musl-dev go~=1.22 python3 bash git
 
-      - run: cat /etc/alpine-release
-        shell: alpine.sh {0}
+      - name: Setup alpine dependencies
+        run: |
+          cat /etc/alpine-release
+          apk add git go make bash
+        shell: alpine.sh --root {0}
 
       - name: Checkout
         uses: actions/checkout@v2
