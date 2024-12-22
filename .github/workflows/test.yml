@@ -49,4 +49,4 @@ jobs:
         uses: actions/checkout@v2
 
       - run: make test_bash
-        shell: alpine.sh {0}
+        shell: alpine.sh --root {0}
