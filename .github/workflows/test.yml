@@ -39,7 +39,7 @@ jobs:
         with:
           branch: latest-stable
 
-      - name: Setup alpine dependencies
+      - name: Setup Alpine dependencies
         run: |
           cat /etc/alpine-release
           apk add git go make bash binutils-gold
@@ -48,7 +48,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - run: |
+      - name: Run tests against bash on alpine
+        run: |
           git config --global --add safe.directory /home/runner/work/shell-tester/shell-tester 
+          # repo is owned by user and we intend to execute as root
           make test_bash
         shell: alpine.sh --root {0}
