@@ -48,5 +48,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - run: make test_bash
+      - run: |
+          make test_bash
+          git config --global --add safe.directory /home/runner/work/shell-tester/shell-tester 
         shell: alpine.sh --root {0}
