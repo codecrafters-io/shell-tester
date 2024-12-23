@@ -5,6 +5,9 @@ on:
     types:
       - labeled
 
+permissions:
+  contents: write
+
 jobs:
   trigger_pipeline:
     if: github.event.label.name == 'regenerate-fixtures'
