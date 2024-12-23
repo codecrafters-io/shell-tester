@@ -36,7 +36,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           body: |
-            Triggered a [Github Actions](https://github.com/${{github.repository}}/commit/${{github.sha}}/checks/${{github.run_id}}) job to update fixtures.
+            Triggered a [Github Actions](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) job to update fixtures.
 
       - uses: actions-ecosystem/action-remove-labels@v1
         with:
