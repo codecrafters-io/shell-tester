@@ -52,5 +52,5 @@ jobs:
         run: |
           git config --global --add safe.directory /home/runner/work/shell-tester/shell-tester 
           # repo is owned by user and we intend to execute as root
-          make test_bash
+          make test
         shell: alpine.sh --root {0}
