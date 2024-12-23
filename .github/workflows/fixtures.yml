@@ -25,6 +25,13 @@ jobs:
       - name: Regenerate Fixtures
         run: CODECRAFTERS_RECORD_FIXTURES=true make test 
 
+      - name: Update Fixtures
+          run: |
+            git config --global user.email "ryan-gg@outlook.com"
+            git config --global user.name "Ryan Gang"
+            git remote set-url origin https://ryan-gang:${{ secrets.GITHUB_TOKEN }}@github.com/codecrafters-io/shell-tester.git
+            git diff --quiet || (git add . && git commit -m "ci: add regenerated fixtures" && git push)
+
       - uses: actions-ecosystem/action-create-comment@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
