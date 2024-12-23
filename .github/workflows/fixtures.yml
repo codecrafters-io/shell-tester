@@ -1,0 +1,37 @@
+name: Trigger Fixture Regeneration
+
+on:
+  pull_request:
+    types:
+      - labeled
+
+jobs:
+  trigger_pipeline:
+    if: github.event.label.name == 'regenerate-fixtures'
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.22.x
+
+      - name: Regenerate Fixtures
+        run: CODECRAFTERS_RECORD_FIXTURES=true make test 
+
+      - uses: actions-ecosystem/action-create-comment@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            Triggered [a CircleCI job](${{ steps.trigger_circleci_pipeline.outputs.pipeline_url }}) to update fixtures.
+
+      - uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: regenerate-fixtures
