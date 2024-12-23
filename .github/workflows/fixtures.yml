@@ -30,6 +30,7 @@ jobs:
           git config --global user.email "ryan-gg@outlook.com"
           git config --global user.name "Ryan Gang"
           git remote set-url origin https://ryan-gang:${{ secrets.GITHUB_TOKEN }}@github.com/codecrafters-io/shell-tester.git
+          git fetch origin ${{ github.head_ref }}
           git checkout ${{ github.head_ref }}
           git diff --quiet || (git add . && git commit -m "ci: add regenerated fixtures" && git push)
 
