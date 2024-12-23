@@ -25,6 +25,17 @@ jobs:
         with:
           go-version: 1.22.x
 
+      - uses: actions-ecosystem/action-create-comment@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            Triggered a [Github Actions](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) job to update fixtures.
+
+      - uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: regenerate-fixtures
+
       - name: Regenerate Fixtures
         run: CODECRAFTERS_RECORD_FIXTURES=true make test 
 
@@ -36,14 +47,3 @@ jobs:
           git fetch origin ${{ github.head_ref }}
           git checkout ${{ github.head_ref }}
           git diff --quiet || (git add . && git commit -m "ci: add regenerated fixtures" && git push)
-
-      - uses: actions-ecosystem/action-create-comment@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          body: |
-            Triggered a [Github Actions](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) job to update fixtures.
-
-      - uses: actions-ecosystem/action-remove-labels@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          labels: regenerate-fixtures
