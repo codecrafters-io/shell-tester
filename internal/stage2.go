@@ -19,7 +19,7 @@ func testInvalidCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 	testCase := test_cases.InvalidCommandTestCase{
 		Command: getRandomInvalidCommand(),
 	}
-	if err := testCase.RunAndTestReflection(asserter, shell, logger); err != nil {
+	if err := testCase.RunWithoutNextPromptAssertion(asserter, shell, logger); err != nil {
 		return err
 	}
 

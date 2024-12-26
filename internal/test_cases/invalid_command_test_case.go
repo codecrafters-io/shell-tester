@@ -14,7 +14,22 @@ type InvalidCommandTestCase struct {
 	Command string
 }
 
-func (t *InvalidCommandTestCase) RunAndTestReflection(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
+func (t *InvalidCommandTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
+	testCase := CommandResponseTestCase{
+		Command:          t.Command,
+		ExpectedOutput:   t.getExpectedOutput(),
+		FallbackPatterns: t.getFallbackPatterns(),
+		SuccessMessage:   "✓ Received command not found message",
+	}
+
+	if err := testCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (t *InvalidCommandTestCase) RunWithoutNextPromptAssertion(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	testCase := CommandReflectionTestCase{
 		Command:             t.Command,
 		SkipPromptAssertion: true,
@@ -29,21 +44,6 @@ func (t *InvalidCommandTestCase) RunAndTestReflection(asserter *logged_shell_ass
 	})
 
 	if err := asserter.AssertWithoutPrompt(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (t *InvalidCommandTestCase) RunAndTestResponse(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	testCase := CommandResponseTestCase{
-		Command:          t.Command,
-		ExpectedOutput:   t.getExpectedOutput(),
-		FallbackPatterns: t.getFallbackPatterns(),
-		SuccessMessage:   "✓ Received command not found message",
-	}
-
-	if err := testCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 

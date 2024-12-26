@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"regexp"
 	"runtime"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -27,13 +26,11 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		return fmt.Errorf("CodeCrafters internal error. Error getting cwd: %v", err)
 	}
 
-	testCase := test_cases.CommandResponseTestCase{
-		Command:          "type pwd",
-		ExpectedOutput:   `pwd is a shell builtin`,
-		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(`^pwd is a( special)? shell builtin$`)},
-		SuccessMessage:   "✓ Received 'pwd is a shell builtin'",
+	typeOfPwdTestCase := test_cases.TypeOfCommandTestCase{
+		Command:        "pwd",
+		SuccessMessage: "✓ Received 'pwd is a shell builtin'",
 	}
-	if err := testCase.Run(asserter, shell, logger); err != nil {
+	if err := typeOfPwdTestCase.RunForBuiltin(asserter, shell, logger); err != nil {
 		return err
 	}
 
@@ -64,13 +61,13 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 		}(exec.Command("sh", "-c", revertCommand))
 	}
 
-	testCase = test_cases.CommandResponseTestCase{
+	pwdTestCase := test_cases.CommandResponseTestCase{
 		Command:          "pwd",
 		ExpectedOutput:   cwd,
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received current working directory response",
 	}
-	if err := testCase.Run(asserter, shell, logger); err != nil {
+	if err := pwdTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 

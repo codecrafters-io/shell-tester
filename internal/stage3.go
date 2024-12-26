@@ -25,7 +25,7 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 		testCase := test_cases.InvalidCommandTestCase{
 			Command: "invalid_command_" + strconv.Itoa(i+1),
 		}
-		if err := testCase.RunAndTestResponse(asserter, shell, logger); err != nil {
+		if err := testCase.Run(asserter, shell, logger); err != nil {
 			return err
 		}
 	}
