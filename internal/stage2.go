@@ -1,10 +1,6 @@
 package internal
 
 import (
-	"fmt"
-	"regexp"
-
-	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -20,27 +16,10 @@ func testInvalidCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	invalidCommand := getRandomInvalidCommand()
-
-	// We are seperating this out because we don't want to assert
-	// The prompt at the end
-	testCase := test_cases.CommandReflectionTestCase{
-		Command:             invalidCommand,
-		SkipPromptAssertion: true,
+	testCase := test_cases.InvalidCommandTestCase{
+		Command: getRandomInvalidCommand(),
 	}
-	if err := testCase.Run(asserter, shell, logger, true); err != nil {
-		return err
-	}
-
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: fmt.Sprintf("%s: command not found", invalidCommand),
-		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(fmt.Sprintf(`^bash: %s: command not found$`, invalidCommand)),
-			regexp.MustCompile(fmt.Sprintf(`^%s: command not found$`, invalidCommand)),
-		},
-	})
-
-	if err := asserter.AssertWithoutPrompt(); err != nil {
+	if err := testCase.RunAndTestReflection(asserter, shell, logger); err != nil {
 		return err
 	}
 

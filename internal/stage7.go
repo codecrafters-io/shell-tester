@@ -66,15 +66,11 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 	}
 
-	nonAvailableExecutables := getRandomInvalidCommands(2)
+	invalidCommands := getRandomInvalidCommands(2)
 
-	for _, executable := range nonAvailableExecutables {
-		command := fmt.Sprintf("type %s", executable)
-		testCase := test_cases.CommandResponseTestCase{
-			Command:          command,
-			ExpectedOutput:   fmt.Sprintf(`%s: not found`, executable),
-			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^(bash: type: )?%s: not found$`, executable))},
-			SuccessMessage:   "✓ Received expected response",
+	for _, command := range invalidCommands {
+		testCase := test_cases.InvalidCommandTypeTestCase{
+			Command: command,
 		}
 		if err := testCase.Run(asserter, shell, logger); err != nil {
 			return err
