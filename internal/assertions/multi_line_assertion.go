@@ -20,8 +20,6 @@ func NewMultiLineAssertion(expectedOutput []string) MultiLineAssertion {
 		})
 	}
 
-	fmt.Println(singleLineAssertions)
-
 	return MultiLineAssertion{
 		SingleLineAssertions: singleLineAssertions,
 	}

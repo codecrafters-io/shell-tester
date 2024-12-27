@@ -66,8 +66,6 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	fmt.Println(randomWords)
-
 	multiLineTestCase := test_cases.CommandWithMultilineResponseTestCase{
 		Command:            command2,
 		MultiLineAssertion: assertions.NewMultiLineAssertion(randomWords),
