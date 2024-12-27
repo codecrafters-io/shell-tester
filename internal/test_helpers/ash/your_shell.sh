@@ -9,13 +9,17 @@ while true; do
     if [ "$cmd" = "exit" ] || [ "$cmd" = "exit 0" ]; then
         exit 0
     fi
-    # Handle line continuation in single quotes by escaping backslashes
-    if echo "$cmd" | grep -q "echo.*'\''.*\\\\\\\\n.*'\''"; then
-        # Double the backslashes to prevent line continuation
-        modified_cmd=$(echo "$cmd" | sed "s/\\\\\\\\/\\\\\\\\\\\\\\\\/g")
-        eval "$modified_cmd"
+    # Split command and arguments while preserving quotes
+    set -- $cmd
+    command="$1"
+    shift
+    # Handle line continuation in single quotes for echo
+    if [ "$command" = "echo" ] && echo "$*" | grep -q "'\''.*\\\\\\\\n.*'\''"; then
+        # Execute echo with preserved quotes
+        echo "$*"
     else
-        eval "$cmd"
+        # Execute command with arguments
+        command "$@" 2>&1 || echo "$command: command not found"
     fi
 done
 '
