@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"regexp"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -56,14 +57,33 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
 	for _, testCaseContent := range testCaseContents[:3] {
-		testCase := test_cases.CommandResponseTestCase{
-			Command:          testCaseContent.Input,
-			ExpectedOutput:   testCaseContent.ExpectedOutput,
-			FallbackPatterns: nil,
-			SuccessMessage:   "✓ Received expected response",
-		}
-		if err := testCase.Run(asserter, shell, logger); err != nil {
-			return err
+		// For single-quoted strings with line continuation
+		if strings.Contains(testCaseContent.Input, `\\\n`) {
+			parts := strings.Split(testCaseContent.ExpectedOutput, `\\\n`)
+			if len(parts) == 2 {
+				firstPart := parts[0]
+				secondPart := parts[1]
+				
+				// Use MultiLineAssertion for line continuation
+				multiLineAssertion := assertions.MultiLineAssertion{
+					ExpectedOutput: []string{firstPart + `\`, secondPart},
+					FallbackPatterns: []*regexp.Regexp{
+						// Pattern for bash-style single line output
+						regexp.MustCompile(`^` + regexp.QuoteMeta(testCaseContent.ExpectedOutput) + `$`),
+					},
+				}
+				asserter.AddAssertion(multiLineAssertion)
+			}
+		} else {
+			// Use SingleLineAssertion for regular output
+			testCase := test_cases.CommandResponseTestCase{
+				Command:        testCaseContent.Input,
+				ExpectedOutput: testCaseContent.ExpectedOutput,
+				SuccessMessage: "✓ Received expected response",
+			}
+			if err := testCase.Run(asserter, shell, logger); err != nil {
+				return err
+			}
 		}
 	}
 

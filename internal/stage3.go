@@ -32,6 +32,7 @@ func testREPL(stageHarness *test_case_harness.TestCaseHarness) error {
 			FallbackPatterns: []*regexp.Regexp{
 				regexp.MustCompile(fmt.Sprintf(`^bash: %s: command not found$`, command)),
 				regexp.MustCompile(fmt.Sprintf(`^%s: command not found$`, command)),
+				regexp.MustCompile(fmt.Sprintf(`^ash: \d+: %s: not found$`, command)),
 			},
 			SuccessMessage: "✓ Received command not found message",
 		}
