@@ -42,14 +42,14 @@ func testQ3(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	L := random.RandomElementsFromArray(LARGE_WORDS, 5)
 	inputs := []string{
-		`echo "before\   after"`,
 		fmt.Sprintf(`echo %s\ \ \ \ \ \ %s`, L[0], L[1]),
+		fmt.Sprintf(`echo \'\"%s %s\"\'`, L[1], L[2]),
 		fmt.Sprintf(`echo %s\n%s`, L[2], L[3]),
 		fmt.Sprintf(`cat "%s" "%s" "%s"`, filePaths[0], filePaths[1], filePaths[2]),
 	}
 	expectedOutputs := []string{
-		`before\   after`,
 		fmt.Sprintf("%s      %s", L[0], L[1]),
+		fmt.Sprintf(`'"%s %s"'`, L[1], L[2]),
 		fmt.Sprintf("%sn%s", L[2], L[3]),
 		fileContents[0] + fileContents[1] + strings.TrimRight(fileContents[2], "\n"),
 	}
