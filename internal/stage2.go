@@ -37,6 +37,7 @@ func testInvalidCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 		FallbackPatterns: []*regexp.Regexp{
 			regexp.MustCompile(fmt.Sprintf(`^bash: %s: command not found$`, invalidCommand)),
 			regexp.MustCompile(fmt.Sprintf(`^%s: command not found$`, invalidCommand)),
+			regexp.MustCompile(fmt.Sprintf(`^ash: \d+: %s: not found$`, invalidCommand)),
 		},
 	})
 

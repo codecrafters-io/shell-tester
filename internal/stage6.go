@@ -27,7 +27,10 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 		testCase := test_cases.CommandResponseTestCase{
 			Command:          command,
 			ExpectedOutput:   fmt.Sprintf(`%s is a shell builtin`, builtIn),
-			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^%s is a( special)? shell builtin$`, builtIn))},
+			FallbackPatterns: []*regexp.Regexp{
+				regexp.MustCompile(fmt.Sprintf(`^%s is a( special)? shell builtin$`, builtIn)),
+				regexp.MustCompile(fmt.Sprintf(`^%s is a shell builtin$`, builtIn)),
+			},
 			SuccessMessage:   "✓ Received expected response",
 		}
 		if err := testCase.Run(asserter, shell, logger); err != nil {
@@ -43,7 +46,10 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 		testCase := test_cases.CommandResponseTestCase{
 			Command:          command,
 			ExpectedOutput:   fmt.Sprintf("%s: not found", invalidCommand),
-			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^(bash: type: )?%s[:]? not found$`, invalidCommand))},
+			FallbackPatterns: []*regexp.Regexp{
+				regexp.MustCompile(fmt.Sprintf(`^(bash: type: )?%s[:]? not found$`, invalidCommand)),
+				regexp.MustCompile(fmt.Sprintf(`^ash: \d+: type: %s: not found$`, invalidCommand)),
+			},
 			SuccessMessage:   "✓ Received expected response",
 		}
 		if err := testCase.Run(asserter, shell, logger); err != nil {

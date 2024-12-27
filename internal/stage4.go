@@ -29,7 +29,10 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	testCase := test_cases.CommandResponseTestCase{
 		Command:          invalidCommand,
 		ExpectedOutput:   invalidCommand + ": command not found",
-		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(`^(bash: )?` + invalidCommand + `: (command )?not found$`)},
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(`^(bash: )?` + invalidCommand + `: (command )?not found$`),
+			regexp.MustCompile(fmt.Sprintf(`^ash: \d+: %s: not found$`, invalidCommand)),
+		},
 		SuccessMessage:   "✓ Received command not found message",
 	}
 
