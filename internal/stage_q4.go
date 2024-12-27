@@ -75,7 +75,7 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 					// Pattern for bash-style single line output
 					regexp.MustCompile(`^` + regexp.QuoteMeta(testCaseContent.ExpectedOutput) + `$`),
 					// Pattern for ash's line-split format
-					regexp.MustCompile(`^` + regexp.QuoteMeta(firstPart) + `\\[\r\n]+` + regexp.QuoteMeta(secondPart) + `$`),
+					regexp.MustCompile(`(?s)^` + regexp.QuoteMeta(firstPart) + `\\[\r\n]+` + regexp.QuoteMeta(secondPart)),
 				}
 			}
 		}
