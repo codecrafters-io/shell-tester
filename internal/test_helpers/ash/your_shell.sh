@@ -1,7 +1,7 @@
 #!/bin/sh
 exec ash -c '
 while true; do
-    printf "[your-program] $ "
+    printf "$ "
     read -r cmd
     if [ -z "$cmd" ]; then
         continue
