@@ -42,11 +42,11 @@ Debug = true
 
 [33m[stage-4] [0m[94mRunning tests for Stage #4: yt5[0m
 [33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo "before\   after"
-[33m[your-program] [0mbefore\   after
-[33m[stage-4] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ echo script\ \ \ \ \ \ example
 [33m[your-program] [0mscript      example
+[33m[stage-4] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m$ echo \'\"example world\"\'
+[33m[your-program] [0m'"example world"'
 [33m[stage-4] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ echo world\nhello
 [33m[your-program] [0mworldnhello
