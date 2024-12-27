@@ -42,7 +42,13 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		testCase := test_cases.TypeOfCommandTestCase{
 			Command: executable,
 		}
-		if err := testCase.RunForExecutable(asserter, shell, logger, customExecutablePath); err != nil {
+
+		var expectedPath = ""
+		if executable == "my_exe" {
+			expectedPath = customExecutablePath
+		}
+
+		if err := testCase.RunForExecutable(asserter, shell, logger, expectedPath); err != nil {
 			return err
 		}
 	}

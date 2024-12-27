@@ -11,20 +11,15 @@ import (
 )
 
 type TypeOfCommandTestCase struct {
-	Command        string
-	SuccessMessage string
+	Command string
 }
 
 func (t *TypeOfCommandTestCase) RunForBuiltin(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	if t.SuccessMessage == "" {
-		t.SuccessMessage = "✓ Received expected response"
-	}
-
 	testCase := CommandResponseTestCase{
 		Command:          fmt.Sprintf("type %s", t.Command),
 		ExpectedOutput:   fmt.Sprintf(`%s is a shell builtin`, t.Command),
 		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^%s is a( special)? shell builtin$`, t.Command))},
-		SuccessMessage:   t.SuccessMessage,
+		SuccessMessage:   "✓ Received expected response",
 	}
 
 	if err := testCase.Run(asserter, shell, logger); err != nil {
@@ -34,12 +29,8 @@ func (t *TypeOfCommandTestCase) RunForBuiltin(asserter *logged_shell_asserter.Lo
 	return nil
 }
 
-func (t *TypeOfCommandTestCase) RunForExecutable(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, customExecutablePath string) error {
-	var expectedPath string
-
-	if t.Command == "my_exe" {
-		expectedPath = customExecutablePath
-	} else {
+func (t *TypeOfCommandTestCase) RunForExecutable(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, expectedPath string) error {
+	if expectedPath == "" {
 		path, err := exec.LookPath(t.Command)
 		if err != nil {
 			return fmt.Errorf("CodeCrafters internal error. Error finding %s in PATH", t.Command)

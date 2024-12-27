@@ -27,8 +27,7 @@ func testpwd(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	typeOfPwdTestCase := test_cases.TypeOfCommandTestCase{
-		Command:        "pwd",
-		SuccessMessage: "✓ Received 'pwd is a shell builtin'",
+		Command: "pwd",
 	}
 	if err := typeOfPwdTestCase.RunForBuiltin(asserter, shell, logger); err != nil {
 		return err
