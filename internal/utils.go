@@ -12,7 +12,7 @@ import (
 	"github.com/codecrafters-io/tester-utils/random"
 )
 
-var SMALL_WORDS = []string{"foo", "bar", "baz", "qux", "quz"}
+var SMALL_WORDS = []string{"foo", "bar", "baz", "qux", "quz", "ipsum", "lorem", "dolor", "sit", "amet"}
 var LARGE_WORDS = []string{"hello", "world", "test", "example", "shell", "script"}
 
 // getRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
