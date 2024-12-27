@@ -18,8 +18,12 @@ while true; do
         # Execute echo with preserved quotes
         echo "$*"
     else
-        # Execute command with arguments
-        command "$@" 2>&1 || echo "$command: command not found"
+        # Try to execute command and handle errors
+        if ! command -v "$command" >/dev/null 2>&1; then
+            echo "$command: command not found"
+        else
+            "$command" "$@" 2>&1
+        fi
     fi
 done
 '
