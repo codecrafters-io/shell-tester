@@ -67,15 +67,19 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 		if strings.Contains(testCaseContent.Input, `\\\n`) {
 			parts := strings.Split(testCaseContent.ExpectedOutput, `\\\n`)
 			if len(parts) == 2 {
-				firstPart := parts[0]
-				secondPart := parts[1]
-
-				// Add fallback patterns for both bash and ash output formats
-				testCase.FallbackPatterns = []*regexp.Regexp{
-					// Pattern for bash-style single line output
-					regexp.MustCompile(`^` + regexp.QuoteMeta(testCaseContent.ExpectedOutput) + `$`),
-					// Pattern for ash's line-split format
-					regexp.MustCompile(`(?s)^` + regexp.QuoteMeta(firstPart) + `\\[\r\n]+` + regexp.QuoteMeta(secondPart)),
+				// Create a test case that handles both bash and ash output formats
+				testCase = test_cases.CommandResponseTestCase{
+					Command:        testCaseContent.Input,
+					ExpectedOutput: testCaseContent.ExpectedOutput,
+					SuccessMessage: "✓ Received expected response",
+					FallbackPatterns: []*regexp.Regexp{
+						// Pattern for exact match (bash style)
+						regexp.MustCompile(`^` + regexp.QuoteMeta(testCaseContent.ExpectedOutput) + `$`),
+						// Pattern for ash's line continuation format (first line)
+						regexp.MustCompile(`^` + regexp.QuoteMeta(parts[0]) + `\\$`),
+						// Pattern for ash's line continuation format (second line)
+						regexp.MustCompile(`^` + regexp.QuoteMeta(parts[1]) + `$`),
+					},
 				}
 			}
 		}
