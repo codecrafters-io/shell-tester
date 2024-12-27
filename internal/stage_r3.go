@@ -5,6 +5,7 @@ import (
 	"path"
 	"slices"
 
+	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -64,10 +65,9 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	responseTestCase := test_cases.CommandWithMultilineResponseTestCase{
-		Command:          command2,
-		ExpectedOutput:   randomWords,
-		FallbackPatterns: nil,
-		SuccessMessage:   "✓ Received redirected file content",
+		Command:            command2,
+		MultiLineAssertion: assertions.NewMultiLineAssertion(randomWords),
+		SuccessMessage:     "✓ Received redirected file content",
 	}
 
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
@@ -98,10 +98,9 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	responseTestCase = test_cases.CommandWithMultilineResponseTestCase{
-		Command:          command6,
-		ExpectedOutput:   []string{message1, message2},
-		FallbackPatterns: nil,
-		SuccessMessage:   "✓ Received redirected file content",
+		Command:            command6,
+		MultiLineAssertion: assertions.NewMultiLineAssertion([]string{message1, message2}),
+		SuccessMessage:     "✓ Received redirected file content",
 	}
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
 		return err
@@ -129,10 +128,9 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	responseTestCase = test_cases.CommandWithMultilineResponseTestCase{
-		Command:          command9,
-		ExpectedOutput:   append([]string{"List of files:"}, randomWords...),
-		FallbackPatterns: nil,
-		SuccessMessage:   "✓ Received redirected file content",
+		Command:            command9,
+		MultiLineAssertion: assertions.NewMultiLineAssertion(append([]string{"List of files:"}, randomWords...)),
+		SuccessMessage:     "✓ Received redirected file content",
 	}
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
 		return err
