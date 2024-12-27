@@ -46,7 +46,7 @@ Debug = true
 [33m[stage-9] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ type pwd
 [33m[your-program] [0mpwd is a shell builtin
-[33m[stage-9] [0m[92m✓ Received 'pwd is a shell builtin'[0m
+[33m[stage-9] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ pwd
 [33m[your-program] [0m/workspaces/shell-tester/internal
 [33m[stage-9] [0m[92m✓ Received current working directory response[0m

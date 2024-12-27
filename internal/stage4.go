@@ -3,7 +3,6 @@ package internal
 import (
 	"errors"
 	"fmt"
-	"regexp"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -23,16 +22,9 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	invalidCommand := getRandomInvalidCommand()
-
-	// We test a nonexistent command first, just to make sure the logic works in a "loop"
-	testCase := test_cases.CommandResponseTestCase{
-		Command:          invalidCommand,
-		ExpectedOutput:   invalidCommand + ": command not found",
-		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(`^(bash: )?` + invalidCommand + `: (command )?not found$`)},
-		SuccessMessage:   "✓ Received command not found message",
+	testCase := test_cases.InvalidCommandTestCase{
+		Command: getRandomInvalidCommand(),
 	}
-
 	if err := testCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}

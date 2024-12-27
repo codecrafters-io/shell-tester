@@ -3,9 +3,7 @@ package internal
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
-	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -41,42 +39,27 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	availableExecutables := []string{"cat", "cp", "mkdir", "my_exe"}
 
 	for _, executable := range availableExecutables {
-		command := fmt.Sprintf("type %s", executable)
+		testCase := test_cases.TypeOfCommandTestCase{
+			Command: executable,
+		}
 
-		var expectedPath string
+		var expectedPath = ""
 		if executable == "my_exe" {
 			expectedPath = customExecutablePath
-		} else {
-			path, err := exec.LookPath(executable)
-			if err != nil {
-				return fmt.Errorf("CodeCrafters internal error. Error finding %s in PATH", executable)
-			}
-
-			expectedPath = path
 		}
 
-		testCase := test_cases.CommandResponseTestCase{
-			Command:          command,
-			ExpectedOutput:   fmt.Sprintf(`%s is %s`, executable, expectedPath),
-			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^(%s is )?%s$`, executable, expectedPath))},
-			SuccessMessage:   "✓ Received expected response",
-		}
-		if err := testCase.Run(asserter, shell, logger); err != nil {
+		if err := testCase.RunForExecutable(asserter, shell, logger, expectedPath); err != nil {
 			return err
 		}
 	}
 
-	nonAvailableExecutables := getRandomInvalidCommands(2)
+	invalidCommands := getRandomInvalidCommands(2)
 
-	for _, executable := range nonAvailableExecutables {
-		command := fmt.Sprintf("type %s", executable)
-		testCase := test_cases.CommandResponseTestCase{
-			Command:          command,
-			ExpectedOutput:   fmt.Sprintf(`%s: not found`, executable),
-			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^(bash: type: )?%s: not found$`, executable))},
-			SuccessMessage:   "✓ Received expected response",
+	for _, invalidCommand := range invalidCommands {
+		testCase := test_cases.TypeOfCommandTestCase{
+			Command: invalidCommand,
 		}
-		if err := testCase.Run(asserter, shell, logger); err != nil {
+		if err := testCase.RunForInvalidCommand(asserter, shell, logger); err != nil {
 			return err
 		}
 	}
