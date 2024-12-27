@@ -43,6 +43,6 @@ func (t CommandWithMultilineResponseTestCase) Run(asserter *logged_shell_asserte
 		return err
 	}
 
-	logger.Successf(t.SuccessMessage)
+	logger.Successf("%s", t.SuccessMessage)
 	return nil
 }
