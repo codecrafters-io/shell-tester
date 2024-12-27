@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -57,33 +58,32 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
 	for _, testCaseContent := range testCaseContents[:3] {
+		testCase := test_cases.CommandResponseTestCase{
+			Command:        testCaseContent.Input,
+			ExpectedOutput: testCaseContent.ExpectedOutput,
+			SuccessMessage: "✓ Received expected response",
+		}
+
 		// For single-quoted strings with line continuation
 		if strings.Contains(testCaseContent.Input, `\\\n`) {
 			parts := strings.Split(testCaseContent.ExpectedOutput, `\\\n`)
 			if len(parts) == 2 {
 				firstPart := parts[0]
 				secondPart := parts[1]
-				
-				// Use MultiLineAssertion for line continuation
-				multiLineAssertion := assertions.MultiLineAssertion{
-					ExpectedOutput: []string{firstPart + `\`, secondPart},
-					FallbackPatterns: []*regexp.Regexp{
-						// Pattern for bash-style single line output
-						regexp.MustCompile(`^` + regexp.QuoteMeta(testCaseContent.ExpectedOutput) + `$`),
-					},
+
+				// Add fallback patterns for both bash and ash output formats
+				testCase.FallbackPatterns = []*regexp.Regexp{
+					// Pattern for bash-style single line output
+					regexp.MustCompile(`^` + regexp.QuoteMeta(testCaseContent.ExpectedOutput) + `$`),
+					// Pattern for ash's line-split format
+					regexp.MustCompile(`^` + regexp.QuoteMeta(firstPart) + `\\$`),
+					regexp.MustCompile(`^` + regexp.QuoteMeta(secondPart) + `$`),
 				}
-				asserter.AddAssertion(multiLineAssertion)
 			}
-		} else {
-			// Use SingleLineAssertion for regular output
-			testCase := test_cases.CommandResponseTestCase{
-				Command:        testCaseContent.Input,
-				ExpectedOutput: testCaseContent.ExpectedOutput,
-				SuccessMessage: "✓ Received expected response",
-			}
-			if err := testCase.Run(asserter, shell, logger); err != nil {
-				return err
-			}
+		}
+
+		if err := testCase.Run(asserter, shell, logger); err != nil {
+			return err
 		}
 	}
 
