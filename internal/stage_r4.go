@@ -131,17 +131,20 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 		"cat: nonexistent: No such file or directory",
 		"ls: nonexistent: No such file or directory",
 	}
+
 	linuxLSErrorMessage := "ls: cannot access 'nonexistent': No such file or directory"
+	linuxLSErrorMessageRegex := []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf("^%s$", linuxLSErrorMessage))}
 	alpineCatErrorMessage := "cat: can't open 'nonexistent': No such file or directory"
-	essorMessagesInFileRegex := []*regexp.Regexp{
-		regexp.MustCompile(fmt.Sprintf("^%s\n%s$", errorMessagesInFile[0], linuxLSErrorMessage)),
-		regexp.MustCompile(fmt.Sprintf("^%s\n%s$", alpineCatErrorMessage, errorMessagesInFile[1])),
-	}
+	alpineCatErrorMessageRegex := []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf("^%s$", alpineCatErrorMessage))}
+
+	multiLineAssertion := assertions.NewEmptyMultiLineAssertion()
+	multiLineAssertion.AddSingleLineAssertion(errorMessagesInFile[0], alpineCatErrorMessageRegex)
+	multiLineAssertion.AddSingleLineAssertion(errorMessagesInFile[1], linuxLSErrorMessageRegex)
+
 	multiLineResponseTestCase := test_cases.CommandWithMultilineResponseTestCase{
-		Command:          command7,
-		ExpectedOutput:   errorMessagesInFile,
-		FallbackPatterns: essorMessagesInFileRegex,
-		SuccessMessage:   "✓ Received redirected file content",
+		Command:            command7,
+		MultiLineAssertion: multiLineAssertion,
+		SuccessMessage:     "✓ Received redirected file content",
 	}
 	if err := multiLineResponseTestCase.Run(asserter, shell, logger); err != nil {
 		return err
