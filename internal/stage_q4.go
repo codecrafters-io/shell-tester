@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path"
-	"regexp"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -43,47 +42,26 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	inputs := []string{
-		fmt.Sprintf(`echo '%s\\\n%s'`, L[0], L[1]),
+		fmt.Sprintf(`echo '%s\\n%s'`, L[0], L[1]),
 		fmt.Sprintf(`echo '%s\"%s%s\"%s'`, L[2], L[3], L[4], L[0]),
 		fmt.Sprintf(`echo '%s\\n%s'`, L[4], L[1]),
 		fmt.Sprintf(`cat "%s" "%s" "%s"`, filePaths[0], filePaths[1], filePaths[2]),
 	}
 	expectedOutputs := []string{
-		fmt.Sprintf(`%s\\\n%s`, L[0], L[1]),
+		fmt.Sprintf(`%s\n%s`, L[0], L[1]),
 		fmt.Sprintf(`%s\"%s%s\"%s`, L[2], L[3], L[4], L[0]),
-		fmt.Sprintf(`%s\\n%s`, L[4], L[1]),
+		fmt.Sprintf(`%s\n%s`, L[4], L[1]),
 		fileContents[0] + fileContents[1] + strings.TrimRight(fileContents[2], "\n"),
 	}
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
 	for _, testCaseContent := range testCaseContents[:3] {
 		testCase := test_cases.CommandResponseTestCase{
-			Command:        testCaseContent.Input,
-			ExpectedOutput: testCaseContent.ExpectedOutput,
-			SuccessMessage: "✓ Received expected response",
+			Command:          testCaseContent.Input,
+			ExpectedOutput:   testCaseContent.ExpectedOutput,
+			FallbackPatterns: nil,
+			SuccessMessage:   "✓ Received expected response",
 		}
-
-		// For single-quoted strings with line continuation
-		if strings.Contains(testCaseContent.Input, `\\\n`) {
-			parts := strings.Split(testCaseContent.ExpectedOutput, `\\\n`)
-			if len(parts) == 2 {
-				// Create a test case that handles both bash and ash output formats
-				testCase = test_cases.CommandResponseTestCase{
-					Command:        testCaseContent.Input,
-					ExpectedOutput: testCaseContent.ExpectedOutput,
-					SuccessMessage: "✓ Received expected response",
-					FallbackPatterns: []*regexp.Regexp{
-						// Pattern for exact match (bash style)
-						regexp.MustCompile(`^` + regexp.QuoteMeta(testCaseContent.ExpectedOutput) + `$`),
-						// Pattern for ash's line continuation format (first line)
-						regexp.MustCompile(`^` + regexp.QuoteMeta(parts[0]) + `\\$`),
-						// Pattern for ash's line continuation format (second line)
-						regexp.MustCompile(`^` + regexp.QuoteMeta(parts[1]) + `$`),
-					},
-				}
-			}
-		}
-
 		if err := testCase.Run(asserter, shell, logger); err != nil {
 			return err
 		}

@@ -42,7 +42,7 @@ func testQ5(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	L := random.RandomElementsFromArray(LARGE_WORDS, 5)
 	inputs := []string{
-		fmt.Sprintf(`echo "%s'%s'\\n'%s"`, L[0], L[1], L[2]),
+		fmt.Sprintf(`echo "%s'%s'\\\n'%s"`, L[0], L[1], L[2]),
 		fmt.Sprintf(`echo "%s\"insidequotes"%s\"`, L[0], L[1]),
 		fmt.Sprintf(`echo "mixed\"quote'%s'\\"`, L[4]),
 		fmt.Sprintf(`cat '%s' '%s' '%s'`, filePaths[0], filePaths[1], filePaths[2]),
