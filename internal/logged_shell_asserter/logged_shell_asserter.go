@@ -43,14 +43,18 @@ func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
 }
 
 func (a *LoggedShellAsserter) AssertWithPrompt() error {
-	return a.assert(false)
+	return a.assert(false, false)
 }
 
 func (a *LoggedShellAsserter) AssertWithoutPrompt() error {
-	return a.assert(true)
+	return a.assert(true, false)
 }
 
-func (a *LoggedShellAsserter) assert(withoutPrompt bool) error {
+func (a *LoggedShellAsserter) AssertWithPromptAndLongerTimeout() error {
+	return a.assert(false, true)
+}
+
+func (a *LoggedShellAsserter) assert(withoutPrompt bool, useLongerTimeout bool) error {
 	var assertFn func() *assertions.AssertionError
 
 	if withoutPrompt {
@@ -67,7 +71,7 @@ func (a *LoggedShellAsserter) assert(withoutPrompt bool) error {
 		return assertFn() == nil
 	}
 
-	if readErr := a.Shell.ReadUntil(conditionFn); readErr != nil {
+	if readErr := a.Shell.ReadUntil(conditionFn, useLongerTimeout); readErr != nil {
 		if assertionErr := assertFn(); assertionErr != nil {
 			a.logAssertionError(*assertionErr)
 			return fmt.Errorf("Assertion failed.")
