@@ -58,6 +58,8 @@ func (b *ShellExecutable) Setenv(key, value string) {
 	b.env.Set(key, value)
 }
 
+// Start starts the shell executable and returns an error if it fails
+// If args[0] is "setLongerReadTimeout", the read timeout will be set to 5000ms
 func (b *ShellExecutable) Start(args ...string) error {
 	b.stageLogger.Infof(b.getInitialLogLine(args...))
 
@@ -75,7 +77,12 @@ func (b *ShellExecutable) Start(args ...string) error {
 	b.cmd = cmd
 	b.pty = pty
 	b.vt = virtual_terminal.NewStandardVT()
-	b.ptyReader = condition_reader.NewConditionReader(io.TeeReader(b.pty, b.vt))
+
+	readTimeout := 2000 * time.Millisecond
+	if len(args) > 0 && args[0] == "setLongerReadTimeout" {
+		readTimeout = 5000 * time.Millisecond
+	}
+	b.ptyReader = condition_reader.NewConditionReader(io.TeeReader(b.pty, b.vt), readTimeout)
 
 	return nil
 }
