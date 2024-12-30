@@ -23,7 +23,12 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 	// ensures that we never accept starter code that wouldn't work in those stages.
 	shell.Setenv("HOME", randomDir)
 
-	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
+	// Sets a longer read timeout for the shell: 5000ms instead of 2000ms
+	if err := shell.Start("setLongerReadTimeout"); err != nil {
+		return err
+	}
+
+	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
 	}
 
