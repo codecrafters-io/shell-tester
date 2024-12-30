@@ -65,6 +65,11 @@ func (b *ShellExecutable) Start(args ...string) error {
 
 	b.Setenv("PS1", utils.PROMPT)
 	// b.Setenv("TERM", "dumb") // test_all_success works without this too, do we need it?
+	readTimeout := 2000 * time.Millisecond
+	if len(args) > 0 && args[0] == "setLongerReadTimeout" {
+		readTimeout = 5000 * time.Millisecond
+		args = args[1:]
+	}
 
 	cmd := exec.Command(b.executable.Path, args...)
 	cmd.Env = b.env.Sorted()
@@ -77,12 +82,6 @@ func (b *ShellExecutable) Start(args ...string) error {
 	b.cmd = cmd
 	b.pty = pty
 	b.vt = virtual_terminal.NewStandardVT()
-
-	readTimeout := 2000 * time.Millisecond
-	if len(args) > 0 && args[0] == "setLongerReadTimeout" {
-		readTimeout = 5000 * time.Millisecond
-		args = args[1:]
-	}
 	b.ptyReader = condition_reader.NewConditionReader(io.TeeReader(b.pty, b.vt), readTimeout)
 
 	return nil
