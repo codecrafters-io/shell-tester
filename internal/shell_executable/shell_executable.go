@@ -81,6 +81,7 @@ func (b *ShellExecutable) Start(args ...string) error {
 	readTimeout := 2000 * time.Millisecond
 	if len(args) > 0 && args[0] == "setLongerReadTimeout" {
 		readTimeout = 5000 * time.Millisecond
+		args = args[1:]
 	}
 	b.ptyReader = condition_reader.NewConditionReader(io.TeeReader(b.pty, b.vt), readTimeout)
 
