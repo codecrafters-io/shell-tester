@@ -2,7 +2,6 @@ package test_cases
 
 import (
 	"fmt"
-	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -14,11 +13,8 @@ type CommandWithMultilineResponseTestCase struct {
 	// Command is the command to send to the shell
 	Command string
 
-	// ExpectedOutput is the expected output string to match against
-	ExpectedOutput []string
-
-	// FallbackPatterns is a list of regex patterns to match against
-	FallbackPatterns []*regexp.Regexp
+	// MultiLineAssertion is the assertion to run
+	MultiLineAssertion assertions.MultiLineAssertion
 
 	// SuccessMessage is the message to log in case of success
 	SuccessMessage string
@@ -34,15 +30,12 @@ func (t CommandWithMultilineResponseTestCase) Run(asserter *logged_shell_asserte
 		ExpectedOutput: commandReflection,
 	})
 
-	asserter.AddAssertion(assertions.MultiLineAssertion{
-		ExpectedOutput:   t.ExpectedOutput,
-		FallbackPatterns: t.FallbackPatterns,
-	})
+	asserter.AddAssertion(&t.MultiLineAssertion)
 
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
 	}
 
-	logger.Successf(t.SuccessMessage)
+	logger.Successf("%s", t.SuccessMessage)
 	return nil
 }

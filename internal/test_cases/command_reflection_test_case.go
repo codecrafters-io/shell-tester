@@ -46,7 +46,7 @@ func (t CommandReflectionTestCase) Run(asserter *logged_shell_asserter.LoggedShe
 	}
 
 	if !skipSuccessMessage {
-		logger.Successf(t.SuccessMessage)
+		logger.Successf("%s", t.SuccessMessage)
 	}
 	return nil
 }

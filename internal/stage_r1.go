@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"slices"
 
+	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -66,10 +67,9 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	multiLineTestCase := test_cases.CommandWithMultilineResponseTestCase{
-		Command:          command2,
-		ExpectedOutput:   randomWords,
-		FallbackPatterns: nil,
-		SuccessMessage:   "✓ Received redirected file content",
+		Command:            command2,
+		MultiLineAssertion: assertions.NewMultiLineAssertion(randomWords),
+		SuccessMessage:     "✓ Received redirected file content",
 	}
 	if err := multiLineTestCase.Run(asserter, shell, logger); err != nil {
 		return err
