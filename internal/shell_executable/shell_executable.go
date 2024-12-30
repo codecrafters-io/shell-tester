@@ -61,15 +61,16 @@ func (b *ShellExecutable) Setenv(key, value string) {
 // Start starts the shell executable and returns an error if it fails
 // If args[0] is "setLongerReadTimeout", the read timeout will be set to 5000ms
 func (b *ShellExecutable) Start(args ...string) error {
-	b.stageLogger.Infof(b.getInitialLogLine(args...))
-
 	b.Setenv("PS1", utils.PROMPT)
 	// b.Setenv("TERM", "dumb") // test_all_success works without this too, do we need it?
+
 	readTimeout := 2000 * time.Millisecond
 	if len(args) > 0 && args[0] == "setLongerReadTimeout" {
 		readTimeout = 5000 * time.Millisecond
 		args = args[1:]
 	}
+
+	b.stageLogger.Infof(b.getInitialLogLine(args...))
 
 	cmd := exec.Command(b.executable.Path, args...)
 	cmd.Env = b.env.Sorted()
