@@ -108,10 +108,13 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	command6 := fmt.Sprintf("cat %s", outputFilePath3)
 
 	responseTestCase = test_cases.CommandResponseTestCase{
-		Command:          command5,
-		ExpectedOutput:   fmt.Sprintf("cat: %s: No such file or directory", "nonexistent"),
-		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf("cat: can't open '%s': No such file or directory", "nonexistent"))},
-		SuccessMessage:   "✓ Received error message",
+		Command:        command5,
+		ExpectedOutput: fmt.Sprintf("cat: %s: No such file or directory", "nonexistent"),
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(fmt.Sprintf("cat: can't open '%s': No such file or directory", "nonexistent")),
+			regexp.MustCompile(fmt.Sprintf("(/[a-z]+/?)*cat: %s: No such file or directory", "nonexistent")),
+		},
+		SuccessMessage: "✓ Received error message",
 	}
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
 		return err
