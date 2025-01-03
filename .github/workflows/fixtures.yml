@@ -1,49 +1,16 @@
 name: Trigger Fixture Regeneration
 
+permissions:
+  contents: write
+  pull-requests: write
+
 on:
   pull_request:
     types:
       - labeled
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
-  trigger_pipeline:
+  regenerate_fixtures:
     if: github.event.label.name == 'regenerate-fixtures'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.RYAN_FIXTURE_GEN_PAT }}
-
-      - name: Set up Go
-        uses: actions/setup-go@v1
-        with:
-          go-version: 1.22.x
-
-      - uses: actions-ecosystem/action-create-comment@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          body: |
-            Triggered a [Github Actions](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) job to update fixtures.
-
-      - uses: actions-ecosystem/action-remove-labels@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          labels: regenerate-fixtures
-
-      - name: Regenerate Fixtures
-        run: CODECRAFTERS_RECORD_FIXTURES=true make test 
-
-      - name: Update Fixtures
-        run: |
-          git config --global user.email "ryan-gg@outlook.com"
-          git config --global user.name "Ryan Gang"
-          git remote set-url origin https://ryan-gang:${{ secrets.RYAN_FIXTURE_GEN_PAT }}@github.com/codecrafters-io/shell-tester.git
-          git fetch origin ${{ github.head_ref }}
-          git checkout ${{ github.head_ref }}
-          git diff --quiet || (git add . && git commit -m "ci: add regenerated fixtures" && git push)
+    uses: codecrafters-io/tester-utils/.github/workflows/fixtures.yml@fixture-gen-action
+    secrets: inherit
