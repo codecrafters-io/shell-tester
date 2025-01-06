@@ -2,12 +2,18 @@ package logged_shell_asserter
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertion_collection"
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 )
+
+// INITIAL_READ_TIMEOUT is used for the first prompt read, where we want
+// to be more lenient, and allow user's shells to start up properly
+const INITIAL_READ_TIMEOUT = 5000 * time.Millisecond
+const SUBSEQUENT_READ_TIMEOUT = 2000 * time.Millisecond
 
 type LoggedShellAsserter struct {
 	Shell               *shell_executable.ShellExecutable
@@ -35,7 +41,7 @@ func (a *LoggedShellAsserter) StartShellAndAssertPrompt() error {
 		return err
 	}
 
-	return a.AssertWithPrompt()
+	return a.AssertWithPromptAndLongerTimeout()
 }
 
 func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
@@ -43,14 +49,18 @@ func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
 }
 
 func (a *LoggedShellAsserter) AssertWithPrompt() error {
-	return a.assert(false)
+	return a.assert(false, SUBSEQUENT_READ_TIMEOUT)
 }
 
 func (a *LoggedShellAsserter) AssertWithoutPrompt() error {
-	return a.assert(true)
+	return a.assert(true, SUBSEQUENT_READ_TIMEOUT)
 }
 
-func (a *LoggedShellAsserter) assert(withoutPrompt bool) error {
+func (a *LoggedShellAsserter) AssertWithPromptAndLongerTimeout() error {
+	return a.assert(false, INITIAL_READ_TIMEOUT)
+}
+
+func (a *LoggedShellAsserter) assert(withoutPrompt bool, readTimeout time.Duration) error {
 	var assertFn func() *assertions.AssertionError
 
 	if withoutPrompt {
@@ -67,7 +77,7 @@ func (a *LoggedShellAsserter) assert(withoutPrompt bool) error {
 		return assertFn() == nil
 	}
 
-	if readErr := a.Shell.ReadUntil(conditionFn); readErr != nil {
+	if readErr := a.Shell.ReadUntilConditionOrTimeout(conditionFn, readTimeout); readErr != nil {
 		if assertionErr := assertFn(); assertionErr != nil {
 			a.logAssertionError(*assertionErr)
 			return fmt.Errorf("Assertion failed.")

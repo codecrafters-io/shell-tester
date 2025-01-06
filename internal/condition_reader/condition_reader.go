@@ -22,10 +22,6 @@ func NewConditionReader(reader io.Reader) ConditionReader {
 	}
 }
 
-func (t *ConditionReader) ReadUntilCondition(condition func() bool) error {
-	return t.ReadUntilConditionOrTimeout(condition, 2000*time.Millisecond)
-}
-
 func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func() bool, timeout time.Duration) error {
 	deadline := time.Now().Add(timeout)
 
@@ -51,19 +47,4 @@ func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func() bool, tim
 	}
 
 	return ErrConditionNotMet
-}
-
-func (t *ConditionReader) ReadUntilTimeout(timeout time.Duration) error {
-	alwaysFalseCondition := func() bool {
-		return false
-	}
-
-	err := t.ReadUntilConditionOrTimeout(alwaysFalseCondition, timeout)
-
-	// We expect that the condition is never met, so let's return nil as the error
-	if errors.Is(err, ErrConditionNotMet) {
-		return nil
-	}
-
-	return err
 }
