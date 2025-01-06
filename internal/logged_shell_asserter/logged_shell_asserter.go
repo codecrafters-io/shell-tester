@@ -2,6 +2,7 @@ package logged_shell_asserter
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertion_collection"
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
@@ -43,18 +44,14 @@ func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
 }
 
 func (a *LoggedShellAsserter) AssertWithPrompt() error {
-	return a.assert(false, false)
+	return a.assert(false)
 }
 
 func (a *LoggedShellAsserter) AssertWithoutPrompt() error {
-	return a.assert(true, false)
+	return a.assert(true)
 }
 
-func (a *LoggedShellAsserter) AssertWithPromptAndLongerTimeout() error {
-	return a.assert(false, true)
-}
-
-func (a *LoggedShellAsserter) assert(withoutPrompt bool, useLongerTimeout bool) error {
+func (a *LoggedShellAsserter) assert(withoutPrompt bool) error {
 	var assertFn func() *assertions.AssertionError
 
 	if withoutPrompt {
@@ -71,7 +68,7 @@ func (a *LoggedShellAsserter) assert(withoutPrompt bool, useLongerTimeout bool) 
 		return assertFn() == nil
 	}
 
-	if readErr := a.Shell.ReadUntil(conditionFn, useLongerTimeout); readErr != nil {
+	if readErr := a.Shell.ReadUntilConditionOrTimeout(conditionFn, 2000*time.Millisecond); readErr != nil {
 		if assertionErr := assertFn(); assertionErr != nil {
 			a.logAssertionError(*assertionErr)
 			return fmt.Errorf("Assertion failed.")

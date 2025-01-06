@@ -88,8 +88,8 @@ func (b *ShellExecutable) LogOutput(output []byte) {
 	b.programLogger.Plainln(string(output))
 }
 
-func (b *ShellExecutable) ReadUntil(condition func() bool, useLongerTimeout bool) error {
-	err := b.ptyReader.ReadUntilCondition(condition, useLongerTimeout)
+func (b *ShellExecutable) ReadUntilConditionOrTimeout(condition func() bool, timeout time.Duration) error {
+	err := b.ptyReader.ReadUntilConditionOrTimeout(condition, timeout)
 	if err != nil {
 		return wrapReaderError(err)
 	}
