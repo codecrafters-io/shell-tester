@@ -5,6 +5,9 @@ Debug = true
 [33m[your-program] [0m$ my_exe James
 [33m[your-program] [0mHello James! The secret code is 5998595441.
 [33m[stage-8] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m$ my_exe
+[33m[your-program] [0mmy_exe: Expected exactly one command line argument, got 0
+[33m[stage-8] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-8] [0m[92mTest passed.[0m
 
