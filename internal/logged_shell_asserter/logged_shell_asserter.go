@@ -41,8 +41,7 @@ func (a *LoggedShellAsserter) StartShellAndAssertPrompt() error {
 		return err
 	}
 
-	err := a.AssertWithPromptAndLongerTimeout()
-	if err != nil {
+	if err := a.AssertWithPromptAndLongerTimeout(); err != nil {
 		return err
 	}
 
