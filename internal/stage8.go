@@ -6,6 +6,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -44,23 +45,19 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 		"my_exe", randomName,
 	}
 
-	testCase := test_cases.CommandResponseTestCase{
-		Command:          strings.Join(command, " "),
-		ExpectedOutput:   fmt.Sprintf("Hello %s! The secret code is %s.", randomName, randomCode),
-		FallbackPatterns: nil,
-		SuccessMessage:   "✓ Received expected response",
-	}
-	if err := testCase.Run(asserter, shell, logger); err != nil {
-		return err
+	expectedOutput := []string{
+		fmt.Sprintf("Program was passed %d args (including program name).", len(command)),
+		fmt.Sprintf("Arg #0 (program name): %s", command[0]),
+		fmt.Sprintf("Arg #1: %s", command[1]),
+		fmt.Sprintf("Program Signature: %s", randomCode),
 	}
 
-	errorTestCase := test_cases.CommandResponseTestCase{
-		Command:          "my_exe",
-		ExpectedOutput:   "my_exe: Expected exactly one command line argument, got 0",
-		FallbackPatterns: nil,
-		SuccessMessage:   "✓ Received expected response",
+	testCase := test_cases.CommandWithMultilineResponseTestCase{
+		Command:            strings.Join(command, " "),
+		MultiLineAssertion: assertions.NewMultiLineAssertion(expectedOutput),
+		SuccessMessage:     "✓ Received expected response",
 	}
-	if err := errorTestCase.Run(asserter, shell, logger); err != nil {
+	if err := testCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
