@@ -18,7 +18,7 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
+	if err := asserter.StartShellAndAssertPrompt(); err != nil {
 		return err
 	}
 

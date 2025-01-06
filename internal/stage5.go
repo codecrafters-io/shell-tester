@@ -18,7 +18,7 @@ func testEcho(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	numberOfCommands := random.RandomInt(2, 4)
 
-	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
+	if err := asserter.StartShellAndAssertPrompt(); err != nil {
 		return err
 	}
 
