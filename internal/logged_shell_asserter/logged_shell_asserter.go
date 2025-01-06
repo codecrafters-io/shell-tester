@@ -10,8 +10,9 @@ import (
 	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 )
 
-const DEFAULT_READ_TIMEOUT = 2000 * time.Millisecond
-const LONGER_READ_TIMEOUT = 5000 * time.Millisecond
+// We use a longer read timeout for the first prompt read
+const INITIAL_READ_TIMEOUT = 5000 * time.Millisecond
+const SUBSEQUENT_READ_TIMEOUT = 2000 * time.Millisecond
 
 type LoggedShellAsserter struct {
 	Shell               *shell_executable.ShellExecutable
@@ -47,15 +48,15 @@ func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
 }
 
 func (a *LoggedShellAsserter) AssertWithPrompt() error {
-	return a.assert(false, DEFAULT_READ_TIMEOUT)
+	return a.assert(false, SUBSEQUENT_READ_TIMEOUT)
 }
 
 func (a *LoggedShellAsserter) AssertWithoutPrompt() error {
-	return a.assert(true, DEFAULT_READ_TIMEOUT)
+	return a.assert(true, SUBSEQUENT_READ_TIMEOUT)
 }
 
 func (a *LoggedShellAsserter) AssertWithPromptAndLongerTimeout() error {
-	return a.assert(false, LONGER_READ_TIMEOUT)
+	return a.assert(false, INITIAL_READ_TIMEOUT)
 }
 
 func (a *LoggedShellAsserter) assert(withoutPrompt bool, readTimeout time.Duration) error {
