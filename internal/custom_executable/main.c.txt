@@ -12,13 +12,15 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    char *param = argv[1];
+    char *randomCode = argv[1];
 
     // Random string placeholder
     const char *secretCode = "<<RANDOM>>";
 
-    // Print the random string and the command line parameter
-    printf("Hello %s! The secret code is %s.\n", param, secretCode);
+    printf("Program was passed %d args (including program name).\n", argc);
+    printf("Arg #0 (program name): %s\n", argv[0]);
+    printf("Arg #1: %s\n", randomCode);
+    printf("Program Signature: %s\n", secretCode);
 
     return 0;
 }
