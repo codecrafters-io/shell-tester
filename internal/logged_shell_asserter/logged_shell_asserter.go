@@ -10,6 +10,9 @@ import (
 	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 )
 
+const DEFAULT_READ_TIMEOUT = 2000 * time.Millisecond
+const LONGER_READ_TIMEOUT = 5000 * time.Millisecond
+
 type LoggedShellAsserter struct {
 	Shell               *shell_executable.ShellExecutable
 	AssertionCollection *assertion_collection.AssertionCollection
@@ -44,14 +47,18 @@ func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
 }
 
 func (a *LoggedShellAsserter) AssertWithPrompt() error {
-	return a.assert(false)
+	return a.assert(false, DEFAULT_READ_TIMEOUT)
 }
 
 func (a *LoggedShellAsserter) AssertWithoutPrompt() error {
-	return a.assert(true)
+	return a.assert(true, DEFAULT_READ_TIMEOUT)
 }
 
-func (a *LoggedShellAsserter) assert(withoutPrompt bool) error {
+func (a *LoggedShellAsserter) AssertWithPromptAndLongerTimeout() error {
+	return a.assert(false, LONGER_READ_TIMEOUT)
+}
+
+func (a *LoggedShellAsserter) assert(withoutPrompt bool, readTimeout time.Duration) error {
 	var assertFn func() *assertions.AssertionError
 
 	if withoutPrompt {
@@ -68,7 +75,7 @@ func (a *LoggedShellAsserter) assert(withoutPrompt bool) error {
 		return assertFn() == nil
 	}
 
-	if readErr := a.Shell.ReadUntilConditionOrTimeout(conditionFn, 2000*time.Millisecond); readErr != nil {
+	if readErr := a.Shell.ReadUntilConditionOrTimeout(conditionFn, readTimeout); readErr != nil {
 		if assertionErr := assertFn(); assertionErr != nil {
 			a.logAssertionError(*assertionErr)
 			return fmt.Errorf("Assertion failed.")
