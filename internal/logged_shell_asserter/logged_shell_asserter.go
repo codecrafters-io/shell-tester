@@ -40,7 +40,7 @@ func (a *LoggedShellAsserter) StartShellAndAssertPrompt() error {
 		return err
 	}
 
-	return a.AssertWithPrompt()
+	return a.AssertWithPromptAndLongerTimeout()
 }
 
 func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
