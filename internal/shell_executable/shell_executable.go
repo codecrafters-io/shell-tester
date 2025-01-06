@@ -97,15 +97,6 @@ func (b *ShellExecutable) ReadUntilConditionOrTimeout(condition func() bool, tim
 	return nil
 }
 
-func (b *ShellExecutable) ReadUntilTimeout(timeout time.Duration) error {
-	err := b.ptyReader.ReadUntilTimeout(timeout)
-	if err != nil {
-		return wrapReaderError(err)
-	}
-
-	return nil
-}
-
 func (b *ShellExecutable) SendCommand(command string) error {
 	// b.logger.Infof("> %s", command)
 
