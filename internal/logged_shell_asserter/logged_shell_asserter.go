@@ -30,6 +30,14 @@ func NewLoggedShellAsserter(shell *shell_executable.ShellExecutable) *LoggedShel
 	return asserter
 }
 
+func (a *LoggedShellAsserter) StartShellAndAssertPrompt() error {
+	if err := a.Shell.Start(); err != nil {
+		return err
+	}
+
+	return a.AssertWithPrompt()
+}
+
 func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
 	a.AssertionCollection.AddAssertion(assertion)
 }
