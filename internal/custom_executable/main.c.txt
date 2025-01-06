@@ -5,9 +5,9 @@
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         if (argc < 2) {
-            printf("Expected exactly one command line argument, got 0\n");
+            printf("%s: Expected exactly one command line argument, got 0\n", argv[0]);
         } else {
-            printf("Expected exactly one command line argument, got %d\n", argc - 1);
+            printf("%s: Expected exactly one command line argument, got %d\n", argv[0], argc - 1);
         }
         return 1;
     }
