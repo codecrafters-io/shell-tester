@@ -41,7 +41,15 @@ func (a *LoggedShellAsserter) StartShellAndAssertPrompt() error {
 		return err
 	}
 
-	return a.AssertWithPromptAndLongerTimeout()
+	err := a.AssertWithPromptAndLongerTimeout()
+	if err != nil {
+		return err
+	}
+
+	// .NET ReadLine() method seems to have a bug where it prints the command twice
+	// in certain cases. This sleep is a workaround for that. Refer to: CC-1576
+	time.Sleep(10 * time.Millisecond)
+	return nil
 }
 
 func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
