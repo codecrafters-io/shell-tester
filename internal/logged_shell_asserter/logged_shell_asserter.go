@@ -10,7 +10,8 @@ import (
 	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 )
 
-// We use a longer read timeout for the first prompt read
+// INITIAL_READ_TIMEOUT is used for the first prompt read, where we want
+// to be more lenient, and allow user's shells to start up properly
 const INITIAL_READ_TIMEOUT = 5000 * time.Millisecond
 const SUBSEQUENT_READ_TIMEOUT = 2000 * time.Millisecond
 
