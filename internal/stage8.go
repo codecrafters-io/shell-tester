@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strconv"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
@@ -11,6 +12,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -34,7 +36,8 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	randomCode := getRandomString()
 	randomName := getRandomName()
-	exePath := path.Join(randomDir, "my_exe")
+	randomExecutableName := "custom_exe_" + strconv.Itoa(random.RandomInt(1000, 9999))
+	exePath := path.Join(randomDir, randomExecutableName)
 
 	err = custom_executable.CreateExecutable(randomCode, exePath)
 	if err != nil {
@@ -42,7 +45,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	command := []string{
-		"my_exe", randomName,
+		randomExecutableName, randomName,
 	}
 
 	testCase := test_cases.CommandWithMultilineResponseTestCase{
