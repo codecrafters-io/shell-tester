@@ -5,6 +5,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/tester-utils/logger"
@@ -13,6 +14,9 @@ import (
 
 var SMALL_WORDS = []string{"foo", "bar", "baz", "qux", "quz"}
 var LARGE_WORDS = []string{"hello", "world", "test", "example", "shell", "script"}
+
+const DEFAULT_READ_TIMEOUT = 2000 * time.Millisecond
+const LONGER_READ_TIMEOUT = 5000 * time.Millisecond
 
 // getRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
 // directory is of the form `/tmp/<random-word>/<random-word>/<random-word>`

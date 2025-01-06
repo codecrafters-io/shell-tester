@@ -40,7 +40,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	assertFn := func() error {
 		return asserter.AssertionCollection.RunWithPromptAssertion(shell.GetScreenState())
 	}
-	readErr := shell.ReadUntil(utils.AsBool(assertFn), false)
+	readErr := shell.ReadUntilConditionOrTimeout(utils.AsBool(assertFn), DEFAULT_READ_TIMEOUT)
 	output := virtual_terminal.BuildCleanedRow(shell.GetScreenState()[asserter.GetLastLoggedRowIndex()+1])
 
 	// We're expecting EOF since the program should've terminated
