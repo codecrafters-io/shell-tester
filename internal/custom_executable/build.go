@@ -31,7 +31,7 @@ func ReplaceAndBuild(outputPath, randomString string) error {
 
 	// Replace the placeholder with the random string
 	// We can run the executable now, it will work as expected
-	command = fmt.Sprintf("echo -n \"%s\" | dd of=%s bs=1 seek=$((0x95070 + 4)) conv=notrunc", randomString, outputPath)
+	command = fmt.Sprintf("echo -n \"%s\" | dd of=%s bs=1 seek=$((0x95070 + 8)) conv=notrunc", randomString, outputPath)
 	buildCmd := exec.Command("sh", "-c", command)
 	buildCmd.Stdout = io.Discard
 	buildCmd.Stderr = io.Discard
