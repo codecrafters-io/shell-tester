@@ -45,17 +45,15 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 		"my_exe", randomName,
 	}
 
-	expectedOutput := []string{
-		fmt.Sprintf("Program was passed %d args (including program name).", len(command)),
-		fmt.Sprintf("Arg #0 (program name): %s", command[0]),
-		fmt.Sprintf("Arg #1: %s", command[1]),
-		fmt.Sprintf("Program Signature: %s", randomCode),
-	}
-
 	testCase := test_cases.CommandWithMultilineResponseTestCase{
-		Command:            strings.Join(command, " "),
-		MultiLineAssertion: assertions.NewMultiLineAssertion(expectedOutput),
-		SuccessMessage:     "✓ Received expected response",
+		Command: strings.Join(command, " "),
+		MultiLineAssertion: assertions.NewMultiLineAssertion([]string{
+			fmt.Sprintf("Program was passed %d args (including program name).", len(command)),
+			fmt.Sprintf("Arg #0 (program name): %s", command[0]),
+			fmt.Sprintf("Arg #1: %s", command[1]),
+			fmt.Sprintf("Program Signature: %s", randomCode),
+		}),
+		SuccessMessage: "✓ Received expected response",
 	}
 	if err := testCase.Run(asserter, shell, logger); err != nil {
 		return err
