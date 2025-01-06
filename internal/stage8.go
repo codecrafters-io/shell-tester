@@ -54,5 +54,15 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	errorTestCase := test_cases.CommandResponseTestCase{
+		Command:          "my_exe",
+		ExpectedOutput:   "my_exe: Expected exactly one command line argument, got 0",
+		FallbackPatterns: nil,
+		SuccessMessage:   "✓ Received expected response",
+	}
+	if err := errorTestCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
 	return logAndQuit(asserter, nil)
 }
