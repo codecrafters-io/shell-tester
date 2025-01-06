@@ -22,15 +22,6 @@ func NewConditionReader(reader io.Reader) ConditionReader {
 	}
 }
 
-func (t *ConditionReader) ReadUntilCondition(condition func() bool, useLongerTimeout bool) error {
-	timeout := 2000 * time.Millisecond
-	if useLongerTimeout {
-		timeout = 5000 * time.Millisecond
-	}
-
-	return t.ReadUntilConditionOrTimeout(condition, timeout)
-}
-
 func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func() bool, timeout time.Duration) error {
 	deadline := time.Now().Add(timeout)
 
