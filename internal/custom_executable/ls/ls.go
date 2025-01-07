@@ -28,18 +28,23 @@ func main() {
 
 	// If multiple directories are provided, ls sorts them
 	sort.Strings(dirArgs)
-	multipleDirsPresent := len(dirArgs) > 1
-	for i, dir := range dirArgs {
+	dirsWhichExist := []string{}
+	for _, dir := range dirArgs {
 		if !checkIfDirectoryExists(dir) {
 			fmt.Printf("ls: %s: No such file or directory\n", dir)
 			continue
 		}
+		dirsWhichExist = append(dirsWhichExist, dir)
+	}
+
+	multipleDirsPresent := len(dirsWhichExist) > 1
+	for i, dir := range dirsWhichExist {
 		if multipleDirsPresent {
 			fmt.Printf("%s:\n", dir)
 		}
 		listOnePerLine(dir)
 		// New line between each directory's entries
-		if multipleDirsPresent && i < len(dirArgs)-1 {
+		if multipleDirsPresent && i < len(dirsWhichExist)-1 {
 			fmt.Println()
 		}
 	}

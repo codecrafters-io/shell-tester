@@ -41,7 +41,12 @@ func runLs(t *testing.T, args ...string) (string, error) {
 	var executable string
 	switch runtime.GOOS {
 	case "darwin":
-		executable = "./ls_darwin_arm64"
+		switch runtime.GOARCH {
+		case "arm64":
+			executable = "./ls_darwin_arm64"
+		case "amd64":
+			executable = "./ls_darwin_amd64"
+		}
 	case "linux":
 		executable = "./ls_linux_amd64"
 	default:
@@ -223,6 +228,33 @@ func TestLsNonExistentDirectory3(t *testing.T) {
 
 	if !strings.Contains(output, expectedError) {
 		t.Errorf("Expected error message containing %q, got %q", expectedError, output)
+	}
+}
+
+func TestLsMultipleDirectoriesWithNonExistent(t *testing.T) {
+	// Create temporary directories for testing
+	tmpDir1, err := os.MkdirTemp("", "ls-test1-*")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(tmpDir1)
+
+	// Create test files using the utility function
+	createTestFiles(t, tmpDir1, []testFile{
+		{name: "file1.txt", content: []byte("test"), mode: 0644},
+	})
+
+	// Run ls and get output
+	// Output should also be sorted
+	output, err := runLs(t, tmpDir1, "xenon", tmpDir1, "non", tmpDir1, "bon")
+	if err != nil {
+		t.Fatalf("Expected no error, got: %v", err)
+	}
+
+	// Verify output
+	expected := tmpDir1 + ":\nfile1.txt\n\n" + tmpDir1 + ":\nfile2.txt\n"
+	if output != expected {
+		t.Errorf("Expected output %q, got %q", expected, output)
 	}
 }
 
