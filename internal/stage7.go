@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
+	custom_executable "github.com/codecrafters-io/shell-tester/internal/custom_executable/build"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
