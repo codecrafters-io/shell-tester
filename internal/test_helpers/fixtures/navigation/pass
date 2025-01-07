@@ -55,8 +55,11 @@ Debug = true
 
 [33m[stage-8] [0m[94mRunning tests for Stage #8: ip1[0m
 [33m[stage-8] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ my_exe James
-[33m[your-program] [0mHello James! The secret code is 1233494766.
+[33m[your-program] [0m$ custom_exe_4384 James
+[33m[your-program] [0mProgram was passed 2 args (including program name).
+[33m[your-program] [0mArg #0 (program name): custom_exe_4384
+[33m[your-program] [0mArg #1: James
+[33m[your-program] [0mProgram Signature: 1233494766
 [33m[stage-8] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-8] [0m[92mTest passed.[0m
@@ -73,13 +76,13 @@ Debug = true
 [33m[your-program] [0mmkdir is /usr/bin/mkdir
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type my_exe
-[33m[your-program] [0mmy_exe is /tmp/banana/pineapple/raspberry/my_exe
-[33m[stage-7] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type invalid_apple_command
-[33m[your-program] [0mbash: type: invalid_apple_command: not found
+[33m[your-program] [0mmy_exe is /tmp/pineapple/raspberry/apple/my_exe
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type invalid_orange_command
 [33m[your-program] [0mbash: type: invalid_orange_command: not found
+[33m[stage-7] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m$ type invalid_blueberry_command
+[33m[your-program] [0mbash: type: invalid_blueberry_command: not found
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-7] [0m[92mTest passed.[0m
@@ -95,33 +98,30 @@ Debug = true
 [33m[your-program] [0m$ type type
 [33m[your-program] [0mtype is a shell builtin
 [33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type invalid_raspberry_command
-[33m[your-program] [0mbash: type: invalid_raspberry_command: not found
+[33m[your-program] [0m$ type invalid_grape_command
+[33m[your-program] [0mbash: type: invalid_grape_command: not found
 [33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type invalid_mango_command
-[33m[your-program] [0mbash: type: invalid_mango_command: not found
+[33m[your-program] [0m$ type invalid_pineapple_command
+[33m[your-program] [0mbash: type: invalid_pineapple_command: not found
 [33m[stage-6] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-6] [0m[92mTest passed.[0m
 
 [33m[stage-5] [0m[94mRunning tests for Stage #5: iz3[0m
 [33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo blueberry pear
-[33m[your-program] [0mblueberry pear
+[33m[your-program] [0m$ echo orange mango
+[33m[your-program] [0morange mango
 [33m[stage-5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo grape pear blueberry
-[33m[your-program] [0mgrape pear blueberry
-[33m[stage-5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo apple strawberry
-[33m[your-program] [0mapple strawberry
+[33m[your-program] [0m$ echo blueberry grape
+[33m[your-program] [0mblueberry grape
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-5] [0m[92mTest passed.[0m
 
 [33m[stage-4] [0m[94mRunning tests for Stage #4: pn5[0m
 [33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ invalid_banana_command
-[33m[your-program] [0mbash: invalid_banana_command: command not found
+[33m[your-program] [0m$ invalid_blueberry_command
+[33m[your-program] [0mbash: invalid_blueberry_command: command not found
 [33m[stage-4] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ exit 0
 [33m[stage-4] [0m[92m✓ Program exited successfully[0m

@@ -95,22 +95,22 @@ test_nav_w_bash: build
 test_quoting_w_bash: build
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"ni6\",\"tester_log_prefix\":\"tester::#ni6\",\"title\":\"Stage #1: Quoting with single quotes\"}, \
-		{\"slug\":\"tg6\",\"tester_log_prefix\":\"tester::#tg6\",\"title\":\"Stage #2: Quoting with double quotes\"}, \
-		{\"slug\":\"yt5\",\"tester_log_prefix\":\"tester::#yt5\",\"title\":\"Stage #3: Quoting with backslashes\"}, \
-		{\"slug\":\"le5\",\"tester_log_prefix\":\"tester::#le5\",\"title\":\"Stage #4: Quoting with single and double quotes\"}, \
-		{\"slug\":\"gu3\",\"tester_log_prefix\":\"tester::#gu3\",\"title\":\"Stage #5: Quoting with mixed quotes\"}, \
-		{\"slug\":\"qj0\",\"tester_log_prefix\":\"tester::#qj0\",\"title\":\"Stage #6: Quoting program names\"} \
+		{\"slug\":\"ni6\",\"tester_log_prefix\":\"tester::#ni6\",\"title\":\"Stage #13: Quoting with single quotes\"}, \
+		{\"slug\":\"tg6\",\"tester_log_prefix\":\"tester::#tg6\",\"title\":\"Stage #14: Quoting with double quotes\"}, \
+		{\"slug\":\"yt5\",\"tester_log_prefix\":\"tester::#yt5\",\"title\":\"Stage #15: Quoting with backslashes\"}, \
+		{\"slug\":\"le5\",\"tester_log_prefix\":\"tester::#le5\",\"title\":\"Stage #16: Quoting with single and double quotes\"}, \
+		{\"slug\":\"gu3\",\"tester_log_prefix\":\"tester::#gu3\",\"title\":\"Stage #17: Quoting with mixed quotes\"}, \
+		{\"slug\":\"qj0\",\"tester_log_prefix\":\"tester::#qj0\",\"title\":\"Stage #18: Quoting program names\"} \
 	]" \
 	dist/main.out
 
 test_redirection_w_bash: build
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"jv1\",\"tester_log_prefix\":\"tester::#jv1\",\"title\":\"Stage #13: Redirect stdout\"}, \
-		{\"slug\":\"vz4\",\"tester_log_prefix\":\"tester::#vz4\",\"title\":\"Stage #14: Redirect stderr\"}, \
-		{\"slug\":\"el9\",\"tester_log_prefix\":\"tester::#el9\",\"title\":\"Stage #15: Append stdout\"}, \
-		{\"slug\":\"un3\",\"tester_log_prefix\":\"tester::#un3\",\"title\":\"Stage #16: Append stderr\"} \
+		{\"slug\":\"jv1\",\"tester_log_prefix\":\"tester::#jv1\",\"title\":\"Stage #19: Redirect stdout\"}, \
+		{\"slug\":\"vz4\",\"tester_log_prefix\":\"tester::#vz4\",\"title\":\"Stage #20: Redirect stderr\"}, \
+		{\"slug\":\"el9\",\"tester_log_prefix\":\"tester::#el9\",\"title\":\"Stage #21: Append stdout\"}, \
+		{\"slug\":\"un3\",\"tester_log_prefix\":\"tester::#un3\",\"title\":\"Stage #22: Append stderr\"} \
 	]" \
 	dist/main.out
 
@@ -148,22 +148,22 @@ test_nav_w_ash: build
 test_quoting_w_ash: build
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/ash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"ni6\",\"tester_log_prefix\":\"tester::#ni6\",\"title\":\"Stage #1: Quoting with single quotes\"}, \
-		{\"slug\":\"tg6\",\"tester_log_prefix\":\"tester::#tg6\",\"title\":\"Stage #2: Quoting with double quotes\"}, \
-		{\"slug\":\"yt5\",\"tester_log_prefix\":\"tester::#yt5\",\"title\":\"Stage #3: Quoting with backslashes\"}, \
-		{\"slug\":\"le5\",\"tester_log_prefix\":\"tester::#le5\",\"title\":\"Stage #4: Quoting with single and double quotes\"}, \
-		{\"slug\":\"gu3\",\"tester_log_prefix\":\"tester::#gu3\",\"title\":\"Stage #5: Quoting with mixed quotes\"}, \
-		{\"slug\":\"qj0\",\"tester_log_prefix\":\"tester::#qj0\",\"title\":\"Stage #6: Quoting program names\"} \
+		{\"slug\":\"ni6\",\"tester_log_prefix\":\"tester::#ni6\",\"title\":\"Stage #13: Quoting with single quotes\"}, \
+		{\"slug\":\"tg6\",\"tester_log_prefix\":\"tester::#tg6\",\"title\":\"Stage #14: Quoting with double quotes\"}, \
+		{\"slug\":\"yt5\",\"tester_log_prefix\":\"tester::#yt5\",\"title\":\"Stage #15: Quoting with backslashes\"}, \
+		{\"slug\":\"le5\",\"tester_log_prefix\":\"tester::#le5\",\"title\":\"Stage #16: Quoting with single and double quotes\"}, \
+		{\"slug\":\"gu3\",\"tester_log_prefix\":\"tester::#gu3\",\"title\":\"Stage #17: Quoting with mixed quotes\"}, \
+		{\"slug\":\"qj0\",\"tester_log_prefix\":\"tester::#qj0\",\"title\":\"Stage #18: Quoting program names\"} \
 	]" \
 	dist/main.out
 
 test_redirection_w_ash: build
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/ash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"jv1\",\"tester_log_prefix\":\"tester::#jv1\",\"title\":\"Stage #13: Redirect stdout\"}, \
-		{\"slug\":\"vz4\",\"tester_log_prefix\":\"tester::#vz4\",\"title\":\"Stage #14: Redirect stderr\"}, \
-		{\"slug\":\"el9\",\"tester_log_prefix\":\"tester::#el9\",\"title\":\"Stage #15: Append stdout\"}, \
-		{\"slug\":\"un3\",\"tester_log_prefix\":\"tester::#un3\",\"title\":\"Stage #16: Append stderr\"} \
+		{\"slug\":\"jv1\",\"tester_log_prefix\":\"tester::#jv1\",\"title\":\"Stage #19: Redirect stdout\"}, \
+		{\"slug\":\"vz4\",\"tester_log_prefix\":\"tester::#vz4\",\"title\":\"Stage #20: Redirect stderr\"}, \
+		{\"slug\":\"el9\",\"tester_log_prefix\":\"tester::#el9\",\"title\":\"Stage #21: Append stdout\"}, \
+		{\"slug\":\"un3\",\"tester_log_prefix\":\"tester::#un3\",\"title\":\"Stage #22: Append stderr\"} \
 	]" \
 	dist/main.out
 

@@ -28,7 +28,7 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	currentPath := os.Getenv("PATH")
 	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, currentPath))
 
-	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
+	if err := asserter.StartShellAndAssertPrompt(); err != nil {
 		return err
 	}
 

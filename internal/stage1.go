@@ -23,7 +23,7 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 	// ensures that we never accept starter code that wouldn't work in those stages.
 	shell.Setenv("HOME", randomDir)
 
-	if err := startShellAndAssertPrompt(asserter, shell); err != nil {
+	if err := asserter.StartShellAndAssertPrompt(); err != nil {
 		return err
 	}
 

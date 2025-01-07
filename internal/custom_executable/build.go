@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strings"
 
 	"github.com/codecrafters-io/tester-utils/logger"
 )
@@ -31,12 +32,9 @@ func ReplaceAndBuild(outputPath, randomString string) error {
 
 	// Replace the placeholder with the random string
 	// We can run the executable now, it will work as expected
-	command = fmt.Sprintf("echo -n \"%s\" | dd of=%s bs=1 seek=$((0x95070 + 4)) conv=notrunc", randomString, outputPath)
-	buildCmd := exec.Command("sh", "-c", command)
-	buildCmd.Stdout = io.Discard
-	buildCmd.Stderr = io.Discard
-	if err := buildCmd.Run(); err != nil {
-		return fmt.Errorf("CodeCrafters Internal Error: dd replace failed: %w", err)
+	err := addSecretCodeToExecutable(outputPath, randomString)
+	if err != nil {
+		return fmt.Errorf("CodeCrafters Internal Error: adding secret code to executable failed: %w", err)
 	}
 
 	return nil
@@ -67,4 +65,24 @@ func CopyExecutableToMultiplePaths(sourcePath string, destinationPaths []string,
 func CreateExecutable(randomString, outputPath string) error {
 	// Call the replaceAndBuild function
 	return ReplaceAndBuild(outputPath, randomString)
+}
+
+func addSecretCodeToExecutable(filePath, randomString string) error {
+	LENGTH := 10
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		return fmt.Errorf("CodeCrafters Internal Error: read file failed: %w", err)
+	}
+	placeholderIndex := strings.Index(string(data), "<<RANDOM>>")
+	if placeholderIndex == -1 {
+		return fmt.Errorf("CodeCrafters Internal Error: <<RANDOM>> not found in file")
+	}
+	bytes := copy(data[placeholderIndex:placeholderIndex+LENGTH], []byte(randomString))
+	if bytes != LENGTH {
+		return fmt.Errorf("CodeCrafters Internal Error: copy failed")
+	}
+	if err := os.WriteFile(filePath, data, 0644); err != nil {
+		return fmt.Errorf("CodeCrafters Internal Error: write file failed: %w", err)
+	}
+	return nil
 }
