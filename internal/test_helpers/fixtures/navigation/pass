@@ -48,7 +48,7 @@ Debug = true
 [33m[your-program] [0mpwd is a shell builtin
 [33m[stage-9] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ pwd
-[33m[your-program] [0m/workspaces/shell-tester/internal
+[33m[your-program] [0m/home/runner/work/shell-tester/shell-tester/internal
 [33m[stage-9] [0m[92m✓ Received current working directory response[0m
 [33m[your-program] [0m$ 
 [33m[stage-9] [0m[92mTest passed.[0m
@@ -148,8 +148,8 @@ Debug = true
 
 [33m[stage-2] [0m[94mRunning tests for Stage #2: cz2[0m
 [33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ invalid_apple_command
-[33m[your-program] [0mbash: invalid_apple_command: command not found
+[33m[your-program] [0m$ invalid
+[33m[your-program] [0mbash: invalid: command not found
 [33m[stage-2] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ 
 [33m[stage-2] [0m[92mTest passed.[0m
