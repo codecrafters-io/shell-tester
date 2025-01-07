@@ -30,6 +30,10 @@ func main() {
 	sort.Strings(dirArgs)
 	multipleDirsPresent := len(dirArgs) > 1
 	for i, dir := range dirArgs {
+		if !checkIfDirectoryExists(dir) {
+			fmt.Printf("ls: %s: No such file or directory\n", dir)
+			continue
+		}
 		if multipleDirsPresent {
 			fmt.Printf("%s:\n", dir)
 		}
@@ -39,6 +43,11 @@ func main() {
 			fmt.Println()
 		}
 	}
+}
+
+func checkIfDirectoryExists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
 }
 
 func listOnePerLine(path string) {
