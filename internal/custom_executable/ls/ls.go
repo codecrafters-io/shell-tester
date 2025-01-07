@@ -11,12 +11,12 @@ import (
 // If no directory is provided, it lists the current directory
 // Supports the -1 flag to list one file per line (default behavior)
 func main() {
-	flagSet := flag.NewFlagSet("ls", flag.ExitOnError)
+	flagSet := flag.NewFlagSet("ls", flag.ContinueOnError)
 	// ls -1 is the default behavior
 	_ = flagSet.Bool("1", false, "list one file per line")
 	// Parse flags, would return error if any other flags are provided
 	if err := flagSet.Parse(os.Args[1:]); err != nil {
-		fmt.Println(err)
+		panic("CodeCrafters Internal Error: " + err.Error())
 	}
 
 	dirArgs := flagSet.Args()
@@ -44,7 +44,7 @@ func main() {
 func listOnePerLine(path string) {
 	files, err := os.ReadDir(path)
 	if err != nil {
-		fmt.Println("Error reading directory:", err)
+		fmt.Printf("ls: %s: No such file or directory\n", path)
 		return
 	}
 
