@@ -53,9 +53,9 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	outputFilePath3 := path.Join(stageDir, randomWords2[2]+".md")
 
 	// Test1:
-	// ls nonexistent >> tmp.md
+	// ls -1 nonexistent >> tmp.md
 
-	command1 := fmt.Sprintf("ls %s >> %s", "nonexistent", outputFilePath1)
+	command1 := fmt.Sprintf("ls -1 %s >> %s", "nonexistent", outputFilePath1)
 
 	responseTestCase := test_cases.CommandResponseTestCase{
 		Command:          command1,
@@ -73,9 +73,9 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger.Successf("✓ File: %s is empty", outputFilePath1)
 
 	// Test2:
-	// ls nonexistent 2>> tmp.md
+	// ls -1 nonexistent 2>> tmp.md
 
-	command2 := fmt.Sprintf("ls %s 2>> %s", "nonexistent", outputFilePath2)
+	command2 := fmt.Sprintf("ls -1 %s 2>> %s", "nonexistent", outputFilePath2)
 	command3 := fmt.Sprintf("cat %s", outputFilePath2)
 
 	err = test_cases.CommandReflectionTestCase{
@@ -97,13 +97,13 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Test3:
 	// echo "Error" 2>> tmp.md
 	// cat nonexistent 2>> tmp.md
-	// ls nonexistent 2>> tmp.md
+	// ls -1 nonexistent 2>> tmp.md
 	// cat tmp.md
 
 	message := fmt.Sprintf("%s says Error", getRandomName())
 	command4 := fmt.Sprintf(`echo "%s" 2>> %s`, message, outputFilePath3)
 	command5 := fmt.Sprintf(`cat %s 2>> %s`, "nonexistent", outputFilePath3)
-	command6 := fmt.Sprintf("ls %s 2>> %s", "nonexistent", outputFilePath3)
+	command6 := fmt.Sprintf("ls -1 %s 2>> %s", "nonexistent", outputFilePath3)
 	command7 := fmt.Sprintf("cat %s", outputFilePath3)
 
 	responseTestCase = test_cases.CommandResponseTestCase{

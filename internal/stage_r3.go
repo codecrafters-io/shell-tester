@@ -52,9 +52,9 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	outputFilePath3 := path.Join(stageDir, randomWords2[2]+".md")
 
 	// Test1:
-	// ls foo >> tmp.md; cat tmp.md
+	// ls -1 foo >> tmp.md; cat tmp.md
 
-	command1 := fmt.Sprintf("ls %s >> %s", lsDir, outputFilePath)
+	command1 := fmt.Sprintf("ls -1 %s >> %s", lsDir, outputFilePath)
 	command2 := fmt.Sprintf("cat %s", outputFilePath)
 
 	err = test_cases.CommandReflectionTestCase{
@@ -107,10 +107,10 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Test3:
-	// echo "List of files: " > tmp.md; ls foo >> tmp.md; cat tmp.md
+	// echo "List of files: " > tmp.md; ls -1 foo >> tmp.md; cat tmp.md
 
 	command7 := fmt.Sprintf(`echo "List of files: " > %s`, outputFilePath3)
-	command8 := fmt.Sprintf("ls %s >> %s", lsDir, outputFilePath3)
+	command8 := fmt.Sprintf("ls -1 %s >> %s", lsDir, outputFilePath3)
 	command9 := fmt.Sprintf("cat %s", outputFilePath3)
 
 	err = test_cases.CommandReflectionTestCase{
