@@ -13,4 +13,6 @@ jobs:
   regenerate_fixtures:
     if: github.event.label.name == 'regenerate-fixtures'
     uses: codecrafters-io/tester-utils/.github/workflows/fixtures.yml@fixture-gen-action
+    with:
+      tester_repo: shell-tester
     secrets: inherit
