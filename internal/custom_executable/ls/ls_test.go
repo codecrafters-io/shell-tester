@@ -140,7 +140,8 @@ func TestLsCurrentDirectory(t *testing.T) {
 	}
 
 	// Verify output
-	files := []string{"dir1", "file1.txt", "file2.txt", ls_executable}
+	files := []string{"dir1", "file1.txt", "file2.txt", ls_executable[2:]}
+	// file_name is like ./ls (but in output ./ will not be present)
 	sort.Strings(files)
 	expected := strings.Join(files, "\n") + "\n"
 	if output != expected {
