@@ -38,7 +38,7 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 	stageDir, lsDir := dirs[0], dirs[1]
-	defer cleanupDirectories(dirs)
+	defer cleanupDirectories(append(dirs, randomDir))
 
 	randomWords := random.RandomWords(1)
 	slices.Sort(randomWords)

@@ -21,9 +21,6 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
-	defer func() {
-		_ = os.RemoveAll(randomDir)
-	}()
 
 	pathEnvVar := os.Getenv("PATH")
 	logger := stageHarness.Logger
@@ -40,7 +37,7 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 	stageDir, lsDir := dirs[0], dirs[1]
-	defer cleanupDirectories(dirs)
+	defer cleanupDirectories(append(dirs, randomDir))
 
 	randomWords := random.RandomWords(3)
 	slices.Sort(randomWords)
