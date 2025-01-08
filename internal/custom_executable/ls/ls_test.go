@@ -125,8 +125,9 @@ func TestLsCurrentDirectory(t *testing.T) {
 	}
 	defer os.Chdir(oldWd)
 
+	ls_executable := getLsExecutable(t)
 	// Copy ls executable to temp directory
-	copyLsToDir(t, getLsExecutable(t), tmpDir)
+	copyLsToDir(t, ls_executable, tmpDir)
 
 	if err := os.Chdir(tmpDir); err != nil {
 		t.Fatal(err)
@@ -139,7 +140,7 @@ func TestLsCurrentDirectory(t *testing.T) {
 	}
 
 	// Verify output
-	files := []string{"dir1", "file1.txt", "file2.txt", "ls_darwin_arm64"}
+	files := []string{"dir1", "file1.txt", "file2.txt", ls_executable}
 	sort.Strings(files)
 	expected := strings.Join(files, "\n") + "\n"
 	if output != expected {
