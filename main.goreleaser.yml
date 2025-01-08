@@ -11,8 +11,8 @@ archives:
     format: tar.gz
     files:
       - test.sh
-      - ./internal/custom_executable/signature_printer/signature_printer
-      - ./internal/custom_executable/ls/ls_darwin_amd64
-      - ./internal/custom_executable/ls/ls_darwin_arm64
-      - ./internal/custom_executable/ls/ls_linux_amd64
-      - ./internal/custom_executable/ls/ls_linux_arm64
+      - signature_printer
+      - ls_darwin_amd64
+      - ls_darwin_arm64
+      - ls_linux_amd64
+      - ls_linux_arm64
