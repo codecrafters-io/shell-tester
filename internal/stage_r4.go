@@ -17,14 +17,14 @@ import (
 
 func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Add the random directory to PATH (where the cls file is created)
-	randomDir, err := getRandomDirectory()
+	executableDir, err := getRandomDirectory()
 	if err != nil {
 		return err
 	}
 
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	shell.AddToPath(randomDir)
+	shell.AddToPath(executableDir)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	if err := asserter.StartShellAndAssertPrompt(); err != nil {
@@ -37,7 +37,7 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	stageDir, lsDir := dirs[0], dirs[1]
 	// TODO Use cleanupDirectories across the entire codebase
-	defer cleanupDirectories(append(dirs, randomDir))
+	defer cleanupDirectories(append(dirs, executableDir))
 
 	randomWords := random.RandomWords(3)
 	slices.Sort(randomWords)
@@ -65,7 +65,7 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	// cls -1 nonexistent >> tmp.md
 
 	customLsName := "cls"
-	customLsPath := path.Join(randomDir, customLsName)
+	customLsPath := path.Join(executableDir, customLsName)
 	err = custom_executable.CreateLsExecutable(customLsPath)
 	if err != nil {
 		return err
