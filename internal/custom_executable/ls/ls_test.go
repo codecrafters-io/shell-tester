@@ -44,6 +44,7 @@ func createTestFiles(t *testing.T, dir string, files []testFile) {
 }
 
 func getLsExecutable(t *testing.T) string {
+	topLevelDir := os.Getenv("TESTER_DIR")
 	if *useSystemLs {
 		return "ls"
 	}
@@ -52,16 +53,16 @@ func getLsExecutable(t *testing.T) string {
 	case "darwin":
 		switch runtime.GOARCH {
 		case "arm64":
-			return "./ls_darwin_arm64"
+			return filepath.Join(topLevelDir, "ls_darwin_arm64")
 		case "amd64":
-			return "./ls_darwin_amd64"
+			return filepath.Join(topLevelDir, "ls_darwin_amd64")
 		}
 	case "linux":
 		switch runtime.GOARCH {
 		case "amd64":
-			return "./ls_linux_amd64"
+			return filepath.Join(topLevelDir, "ls_linux_amd64")
 		case "arm64":
-			return "./ls_linux_arm64"
+			return filepath.Join(topLevelDir, "ls_linux_arm64")
 		}
 	}
 	t.Fatalf("Unsupported OS: %s", runtime.GOOS)
@@ -94,12 +95,14 @@ func prettyPrintCommand(args []string) {
 	fmt.Println(out)
 }
 
-func copyLsToDir(t *testing.T, ls_file, newDir string) {
-	exeData, err := os.ReadFile(ls_file)
+func copyLsToDir(t *testing.T, ls_filepath, newDir string) {
+	exeData, err := os.ReadFile(ls_filepath)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := os.WriteFile(filepath.Join(newDir, ls_file), exeData, 0755); err != nil {
+
+	ls_filename := filepath.Base(ls_filepath)
+	if err := os.WriteFile(filepath.Join(newDir, ls_filename), exeData, 0755); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -145,7 +148,8 @@ func TestLsCurrentDirectory(t *testing.T) {
 	}
 
 	// Verify output
-	files := []string{"dir1", "file1.txt", "file2.txt", ls_executable[2:]}
+	ls_executable_name := filepath.Base(ls_executable)
+	files := []string{"dir1", "file1.txt", "file2.txt", ls_executable_name}
 	// file_name is like ./ls (but in output ./ will not be present)
 	sort.Strings(files)
 	expected := strings.Join(files, "\n") + "\n"
