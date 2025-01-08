@@ -126,7 +126,7 @@ func TestLsCurrentDirectory(t *testing.T) {
 	defer os.Chdir(oldWd)
 
 	// Copy ls executable to temp directory
-	copyLsToDir(t, "ls_darwin_arm64", tmpDir)
+	copyLsToDir(t, getLsExecutable(t), tmpDir)
 
 	if err := os.Chdir(tmpDir); err != nil {
 		t.Fatal(err)
