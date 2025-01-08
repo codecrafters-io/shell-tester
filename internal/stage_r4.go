@@ -17,7 +17,7 @@ import (
 func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	executableDir, err := SetUpCustomLS(shell)
+	executableDir, err := SetUpCustomCommands(shell, []string{"ls", "cat"})
 	if err != nil {
 		return err
 	}
@@ -81,7 +81,7 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	// cls -1 nonexistent 2>> tmp.md
 
 	command2 := fmt.Sprintf("%s -1 %s 2>> %s", CUSTOM_LS_COMMAND, "nonexistent", outputFilePath2)
-	command3 := fmt.Sprintf("cat %s", outputFilePath2)
+	command3 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath2)
 
 	err = test_cases.CommandReflectionTestCase{
 		Command: command2,
@@ -101,15 +101,15 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Test3:
 	// echo "Error" 2>> tmp.md
-	// cat nonexistent 2>> tmp.md
+	// ccat nonexistent 2>> tmp.md
 	// cls -1 nonexistent 2>> tmp.md
-	// cat tmp.md
+	// ccat tmp.md
 
 	message := fmt.Sprintf("%s says Error", getRandomName())
 	command4 := fmt.Sprintf(`echo "%s" 2>> %s`, message, outputFilePath3)
-	command5 := fmt.Sprintf(`cat %s 2>> %s`, "nonexistent", outputFilePath3)
+	command5 := fmt.Sprintf(`%s %s 2>> %s`, CUSTOM_CAT_COMMAND, "nonexistent", outputFilePath3)
 	command6 := fmt.Sprintf("%s -1 %s 2>> %s", CUSTOM_LS_COMMAND, "nonexistent", outputFilePath3)
-	command7 := fmt.Sprintf("cat %s", outputFilePath3)
+	command7 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath3)
 
 	responseTestCase = test_cases.CommandResponseTestCase{
 		Command:          command4,

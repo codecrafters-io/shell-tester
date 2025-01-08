@@ -16,7 +16,7 @@ import (
 func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	executableDir, err := SetUpCustomLS(shell)
+	executableDir, err := SetUpCustomCommands(shell, []string{"ls", "cat"})
 	if err != nil {
 		return err
 	}
@@ -56,10 +56,10 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	outputFilePath3 := path.Join(stageDir, randomWords2[2]+".md")
 
 	// Test1:
-	// cls -1 foo >> tmp.md; cat tmp.md
+	// cls -1 foo >> tmp.md; ccat tmp.md
 
 	command1 := fmt.Sprintf("%s -1 %s >> %s", CUSTOM_LS_COMMAND, lsDir, outputFilePath)
-	command2 := fmt.Sprintf("cat %s", outputFilePath)
+	command2 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath)
 
 	err = test_cases.CommandReflectionTestCase{
 		Command: command1,
@@ -79,13 +79,13 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Test2:
-	// echo 'Hello' 1>> tmp.md; echo 'Hello' 1>> tmp.md; cat tmp.md
+	// echo 'Hello' 1>> tmp.md; echo 'Hello' 1>> tmp.md; ccat tmp.md
 
 	message1 := "Hello " + getRandomName()
 	message2 := "Hello " + getRandomName()
 	command4 := fmt.Sprintf("echo '%s' 1>> %s", message1, outputFilePath2)
 	command5 := fmt.Sprintf("echo '%s' 1>> %s", message2, outputFilePath2)
-	command6 := fmt.Sprintf("cat %s", outputFilePath2)
+	command6 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath2)
 
 	err = test_cases.CommandReflectionTestCase{
 		Command: command4,
@@ -111,11 +111,11 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Test3:
-	// echo "List of files: " > tmp.md; cls -1 foo >> tmp.md; cat tmp.md
+	// echo "List of files: " > tmp.md; cls -1 foo >> tmp.md; ccat tmp.md
 
 	command7 := fmt.Sprintf(`echo "List of files: " > %s`, outputFilePath3)
 	command8 := fmt.Sprintf("%s -1 %s >> %s", CUSTOM_LS_COMMAND, lsDir, outputFilePath3)
-	command9 := fmt.Sprintf("cat %s", outputFilePath3)
+	command9 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath3)
 
 	err = test_cases.CommandReflectionTestCase{
 		Command: command7,

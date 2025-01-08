@@ -16,7 +16,7 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-func SetUpCustomLS(shell *shell_executable.ShellExecutable) (string, error) {
+func SetUpCustomCommands(shell *shell_executable.ShellExecutable, commands []string) (string, error) {
 	// Add the random directory to PATH (where the cls file is created)
 	executableDir, err := getRandomDirectory()
 	if err != nil {
@@ -24,21 +24,33 @@ func SetUpCustomLS(shell *shell_executable.ShellExecutable) (string, error) {
 	}
 	shell.AddToPath(executableDir)
 
-	customLsPath := path.Join(executableDir, CUSTOM_LS_COMMAND)
-	err = custom_executable.CreateLsExecutable(customLsPath)
-	if err != nil {
-		return "", err
+	for _, command := range commands {
+		switch command {
+		case "ls":
+			customLsPath := path.Join(executableDir, CUSTOM_LS_COMMAND)
+			err = custom_executable.CreateLsExecutable(customLsPath)
+			if err != nil {
+				return "", err
+			}
+		case "cat":
+			customCatPath := path.Join(executableDir, CUSTOM_CAT_COMMAND)
+			err = custom_executable.CreateCatExecutable(customCatPath)
+			if err != nil {
+				return "", err
+			}
+		}
 	}
 
 	return executableDir, nil
 }
 
 const CUSTOM_LS_COMMAND = "cls"
+const CUSTOM_CAT_COMMAND = "ccat"
 
 func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	executableDir, err := SetUpCustomLS(shell)
+	executableDir, err := SetUpCustomCommands(shell, []string{"ls", "cat"})
 	if err != nil {
 		return err
 	}
@@ -78,10 +90,10 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	outputFilePath3 := path.Join(stageDir, randomWords2[2]+".md")
 
 	// Test1:
-	// cls -1 foo > tmp.md; cat tmp.md
+	// cls -1 foo > tmp.md; ccat tmp.md
 
 	command1 := fmt.Sprintf("%s -1 %s > %s", CUSTOM_LS_COMMAND, lsDir, outputFilePath1)
-	command2 := fmt.Sprintf("cat %s", outputFilePath1)
+	command2 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath1)
 
 	err = test_cases.CommandReflectionTestCase{
 		Command: command1,
@@ -100,11 +112,11 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Test2:
-	// echo "Hello Ryan" 1> tmp.md; cat tmp.md
+	// echo "Hello Ryan" 1> tmp.md; ccat tmp.md
 
 	message := "Hello " + getRandomName()
 	command3 := fmt.Sprintf("echo '%s' 1> %s", message, outputFilePath2)
-	command4 := fmt.Sprintf("cat %s", outputFilePath2)
+	command4 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath2)
 
 	err = test_cases.CommandReflectionTestCase{
 		Command: command3,
@@ -124,12 +136,12 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Test3:
-	// cat exists nonexistent > tmp.md; cat tmp.md
+	// cat exists nonexistent > tmp.md; ccat tmp.md
 
 	filePath := filePaths[1]
 	fileContent := randomWords[1]
-	command5 := fmt.Sprintf("cat %s %s 1> %s", filePath, "nonexistent", outputFilePath3)
-	command6 := fmt.Sprintf("cat %s", outputFilePath3)
+	command5 := fmt.Sprintf("%s %s %s 1> %s", CUSTOM_CAT_COMMAND, filePath, "nonexistent", outputFilePath3)
+	command6 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath3)
 
 	responseTestCase = test_cases.CommandResponseTestCase{
 		Command:          command5,
