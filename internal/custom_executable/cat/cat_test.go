@@ -36,7 +36,6 @@ func createTestFiles(t *testing.T, dir string, files []testFile) {
 }
 
 func getCatExecutable(t *testing.T) string {
-	os.Setenv("TESTER_DIR", "/Users/ryang/Developer/work/course-testers/shell-tester")
 	topLevelDir := os.Getenv("TESTER_DIR")
 	if *useSystemCat {
 		return "cat"
