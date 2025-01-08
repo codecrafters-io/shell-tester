@@ -38,6 +38,7 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 	stageDir, lsDir := dirs[0], dirs[1]
+	// TODO Use cleanupDirectories across the entire codebase
 	defer cleanupDirectories(append(dirs, randomDir))
 
 	randomWords := random.RandomWords(3)
