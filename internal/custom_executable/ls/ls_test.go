@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"os/exec"
@@ -10,6 +11,10 @@ import (
 	"strings"
 	"testing"
 )
+
+// Pass the -system flag to use system ls instead of custom implementation
+// go test ./... -system
+var useSystemLs = flag.Bool("system", false, "Use system ls instead of custom implementation")
 
 // testFile represents a file or directory to be created for testing
 type testFile struct {
@@ -37,6 +42,10 @@ func createTestFiles(t *testing.T, dir string, files []testFile) {
 }
 
 func getLsExecutable(t *testing.T) string {
+	if *useSystemLs {
+		return "ls"
+	}
+
 	switch runtime.GOOS {
 	case "darwin":
 		switch runtime.GOARCH {
@@ -301,6 +310,9 @@ func TestLsWithDashOneFlag(t *testing.T) {
 }
 
 func TestLsWithUnsupportedFlag(t *testing.T) {
+	if *useSystemLs {
+		t.Skip("Skipping test because system ls is used")
+	}
 	// Create a temporary directory for testing
 	tmpDir, err := os.MkdirTemp("", "ls-test-*")
 	if err != nil {
@@ -323,6 +335,10 @@ func TestLsWithUnsupportedFlag(t *testing.T) {
 }
 
 func TestLsWithUnsupportedFlag2(t *testing.T) {
+	if *useSystemLs {
+		t.Skip("Skipping test because system ls is used")
+	}
+
 	// Run ls and get output
 	output, err := runLs(t, "-n")
 	if err == nil {
@@ -339,6 +355,10 @@ func TestLsWithUnsupportedFlag2(t *testing.T) {
 }
 
 func TestLsWithUnsupportedFlag3(t *testing.T) {
+	if *useSystemLs {
+		t.Skip("Skipping test because system ls is used")
+	}
+
 	// Run ls and get output
 	output, err := runLs(t, "-l -a")
 	if err == nil {
