@@ -7,7 +7,6 @@ import (
 	"slices"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
-	custom_executable "github.com/codecrafters-io/shell-tester/internal/custom_executable/build"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -16,15 +15,12 @@ import (
 )
 
 func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
-	// Add the random directory to PATH (where the cls file is created)
-	executableDir, err := getShortRandomDirectory()
+	logger := stageHarness.Logger
+	shell := shell_executable.NewShellExecutable(stageHarness)
+	executableDir, err := SetUpCustomLS(shell)
 	if err != nil {
 		return err
 	}
-
-	logger := stageHarness.Logger
-	shell := shell_executable.NewShellExecutable(stageHarness)
-	shell.AddToPath(executableDir)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	if err := asserter.StartShellAndAssertPrompt(); err != nil {
@@ -59,14 +55,7 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Test1:
 	// cls -1 nonexistent 2> tmp.md; cat tmp.md
 
-	customLsName := "cls"
-	customLsPath := path.Join(executableDir, customLsName)
-	err = custom_executable.CreateLsExecutable(customLsPath)
-	if err != nil {
-		return err
-	}
-
-	command1 := fmt.Sprintf("%s -1 nonexistent 2> %s", customLsName, outputFilePath1)
+	command1 := fmt.Sprintf("%s -1 nonexistent 2> %s", CUSTOM_LS_COMMAND, outputFilePath1)
 	command2 := fmt.Sprintf("cat %s", outputFilePath1)
 
 	err = test_cases.CommandReflectionTestCase{

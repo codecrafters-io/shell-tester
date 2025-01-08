@@ -6,7 +6,6 @@ import (
 	"slices"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
-	custom_executable "github.com/codecrafters-io/shell-tester/internal/custom_executable/build"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -15,15 +14,12 @@ import (
 )
 
 func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
-	// Add the random directory to PATH (where the cls file is created)
-	executableDir, err := getRandomDirectory()
+	logger := stageHarness.Logger
+	shell := shell_executable.NewShellExecutable(stageHarness)
+	executableDir, err := SetUpCustomLS(shell)
 	if err != nil {
 		return err
 	}
-
-	logger := stageHarness.Logger
-	shell := shell_executable.NewShellExecutable(stageHarness)
-	shell.AddToPath(executableDir)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	if err := asserter.StartShellAndAssertPrompt(); err != nil {
@@ -62,14 +58,7 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Test1:
 	// cls -1 foo >> tmp.md; cat tmp.md
 
-	customLsName := "cls"
-	customLsPath := path.Join(executableDir, customLsName)
-	err = custom_executable.CreateLsExecutable(customLsPath)
-	if err != nil {
-		return err
-	}
-
-	command1 := fmt.Sprintf("%s -1 %s >> %s", customLsName, lsDir, outputFilePath)
+	command1 := fmt.Sprintf("%s -1 %s >> %s", CUSTOM_LS_COMMAND, lsDir, outputFilePath)
 	command2 := fmt.Sprintf("cat %s", outputFilePath)
 
 	err = test_cases.CommandReflectionTestCase{
@@ -125,7 +114,7 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	// echo "List of files: " > tmp.md; cls -1 foo >> tmp.md; cat tmp.md
 
 	command7 := fmt.Sprintf(`echo "List of files: " > %s`, outputFilePath3)
-	command8 := fmt.Sprintf("%s -1 %s >> %s", customLsName, lsDir, outputFilePath3)
+	command8 := fmt.Sprintf("%s -1 %s >> %s", CUSTOM_LS_COMMAND, lsDir, outputFilePath3)
 	command9 := fmt.Sprintf("cat %s", outputFilePath3)
 
 	err = test_cases.CommandReflectionTestCase{
