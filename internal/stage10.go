@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"os"
 	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -24,9 +23,7 @@ func testCd1(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
-	defer func() {
-		_ = os.RemoveAll(directory)
-	}()
+	defer cleanupDirectories([]string{directory})
 
 	testCase := test_cases.CDAndPWDTestCase{Directory: directory, Response: directory}
 	err = testCase.Run(asserter, shell, logger)

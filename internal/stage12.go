@@ -1,8 +1,6 @@
 package internal
 
 import (
-	"os"
-
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -18,9 +16,6 @@ func testCd3(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
-	defer func() {
-		_ = os.RemoveAll(tmpHomeDir)
-	}()
 	shell.Setenv("HOME", tmpHomeDir)
 
 	if err := asserter.StartShellAndAssertPrompt(); err != nil {
@@ -31,9 +26,7 @@ func testCd3(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
-	defer func() {
-		_ = os.RemoveAll(directory)
-	}()
+	defer cleanupDirectories([]string{tmpHomeDir, directory})
 
 	testCase1 := test_cases.CDAndPWDTestCase{Directory: directory, Response: directory}
 	err = testCase1.Run(asserter, shell, logger)

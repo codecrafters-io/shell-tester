@@ -1,8 +1,6 @@
 package internal
 
 import (
-	"os"
-
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
@@ -17,9 +15,7 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
-	defer func() {
-		_ = os.RemoveAll(randomDir)
-	}()
+	defer cleanupDirectories([]string{randomDir})
 
 	// Let's set HOME to a random dir in stage 1 so that CI catches starter code
 	// that relies on $HOME being set to a specific dir.

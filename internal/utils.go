@@ -132,3 +132,11 @@ func SetUpCustomCommands(shell *shell_executable.ShellExecutable, commands []str
 
 	return executableDir, nil
 }
+
+func cleanupDirectories(dirs []string) {
+	for _, dir := range dirs {
+		if err := os.RemoveAll(dir); err != nil {
+			panic(fmt.Sprintf("CodeCrafters internal error: Failed to cleanup directories: %s", err))
+		}
+	}
+}

@@ -25,9 +25,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
-	defer func() {
-		_ = os.RemoveAll(randomDir)
-	}()
+	defer cleanupDirectories([]string{randomDir})
 
 	// Add randomDir to PATH (That is where the my_exe file is created)
 	currentPath := os.Getenv("PATH")

@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"os"
 	"path"
 	"slices"
 
@@ -131,12 +130,4 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	return logAndQuit(asserter, nil)
-}
-
-func cleanupDirectories(dirs []string) {
-	for _, dir := range dirs {
-		if err := os.RemoveAll(dir); err != nil {
-			panic(fmt.Sprintf("CodeCrafters internal error: Failed to cleanup directories: %s", err))
-		}
-	}
 }

@@ -18,9 +18,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
-	defer func() {
-		_ = os.RemoveAll(randomDir)
-	}()
+	defer cleanupDirectories([]string{randomDir})
 
 	path := os.Getenv("PATH")
 	logger := stageHarness.Logger
