@@ -17,13 +17,17 @@ import (
 func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
+	executableDir, err := SetUpCustomCommands(shell, []string{"cat"})
+	if err != nil {
+		return err
+	}
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	randomDir, err := getShortRandomDirectory()
 	if err != nil {
 		return err
 	}
-	defer os.RemoveAll(randomDir)
+	defer cleanupDirectories([]string{randomDir, executableDir})
 
 	currentPath := os.Getenv("PATH")
 	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, currentPath))
@@ -97,6 +101,7 @@ func createExecutableFile(path string, contents string) error {
 
 func createExecutableCallingCat(path string) error {
 	content := `#!/bin/sh
-exec cat "$@"`
+exec CUSTOM_CAT_COMMAND "$@"`
+	content = strings.Replace(content, "CUSTOM_CAT_COMMAND", CUSTOM_CAT_COMMAND, 1)
 	return createExecutableFile(path, content)
 }
