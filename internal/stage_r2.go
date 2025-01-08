@@ -49,9 +49,9 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 	outputFilePath3 := path.Join(stageDir, randomWords2[2]+".md")
 
 	// Test1:
-	// ls nonexistent 2> tmp.md; cat tmp.md
+	// ls -1 nonexistent 2> tmp.md; cat tmp.md
 
-	command1 := fmt.Sprintf("ls nonexistent 2> %s", outputFilePath1)
+	command1 := fmt.Sprintf("ls -1 nonexistent 2> %s", outputFilePath1)
 	command2 := fmt.Sprintf("cat %s", outputFilePath1)
 
 	err = test_cases.CommandReflectionTestCase{
