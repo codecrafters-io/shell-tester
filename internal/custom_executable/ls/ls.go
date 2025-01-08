@@ -31,7 +31,7 @@ func main() {
 	dirsWhichExist := []string{}
 	for _, dir := range dirArgs {
 		if !checkIfDirectoryExists(dir) {
-			fmt.Printf("ls: %s: No such file or directory\n", dir)
+			fmt.Fprintf(os.Stderr, "ls: %s: No such file or directory\n", dir)
 			continue
 		}
 		dirsWhichExist = append(dirsWhichExist, dir)
@@ -58,7 +58,7 @@ func checkIfDirectoryExists(path string) bool {
 func listOnePerLine(path string) {
 	files, err := os.ReadDir(path)
 	if err != nil {
-		fmt.Printf("ls: %s: No such file or directory\n", path)
+		fmt.Fprintf(os.Stderr, "ls: %s: No such file or directory\n", path)
 		return
 	}
 
