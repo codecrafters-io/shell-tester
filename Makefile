@@ -174,5 +174,10 @@ test_ash:
 	make test_redirection_w_ash
 
 build_executables:
-	GOOS=darwin GOARCH=arm64 go build -o ./internal/custom_executable/ls/ls_darwin_arm64 ./internal/custom_executable/ls/ls.go
-	GOOS=linux GOARCH=amd64 go build -o ./internal/custom_executable/ls/ls_linux_amd64 ./internal/custom_executable/ls/ls.go
+	oses="darwin linux" ; \
+	arches="arm64 amd64" ; \
+	for os in $$oses; do \
+		for arch in $$arches; do \
+		GOOS="$$os" GOARCH="$$arch" go build -o "./internal/custom_executable/ls/ls_$${os}_$${arch}" ./internal/custom_executable/ls/ls.go; \
+		done; \
+	done
