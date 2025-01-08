@@ -55,5 +55,8 @@ func (t *InvalidCommandTestCase) getExpectedOutput() string {
 }
 
 func (t *InvalidCommandTestCase) getFallbackPatterns() []*regexp.Regexp {
-	return []*regexp.Regexp{regexp.MustCompile(`^(bash: )?` + t.Command + `: (command )?not found$`)}
+	return []*regexp.Regexp{
+		regexp.MustCompile(`^(bash: )?` + t.Command + `: (command )?not found$`),
+		regexp.MustCompile(`ash: ` + t.Command + `: not found$`),
+	}
 }
