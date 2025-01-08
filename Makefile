@@ -181,6 +181,6 @@ build_executables:
 	arches="arm64 amd64" ; \
 	for os in $$oses; do \
 		for arch in $$arches; do \
-		GOOS="$$os" GOARCH="$$arch" go build -o "./internal/custom_executable/ls/ls_$${os}_$${arch}" ./internal/custom_executable/ls/ls.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o "ls_$${os}_$${arch}" ./internal/custom_executable/ls/ls.go; \
 		done; \
 	done
