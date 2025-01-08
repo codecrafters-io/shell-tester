@@ -36,27 +36,35 @@ func createTestFiles(t *testing.T, dir string, files []testFile) {
 	}
 }
 
-// runLs runs the ls executable with given arguments and returns its output and error if any
-func runLs(t *testing.T, args ...string) (string, error) {
-	var executable string
+func getLsExecutable(t *testing.T) string {
 	switch runtime.GOOS {
 	case "darwin":
 		switch runtime.GOARCH {
 		case "arm64":
-			executable = "./ls_darwin_arm64"
+			return "./ls_darwin_arm64"
 		case "amd64":
-			executable = "./ls_darwin_amd64"
+			return "./ls_darwin_amd64"
 		}
 	case "linux":
-		executable = "./ls_linux_amd64"
-	default:
-		t.Fatalf("Unsupported OS: %s", runtime.GOOS)
+		switch runtime.GOARCH {
+		case "amd64":
+			return "./ls_linux_amd64"
+		case "arm64":
+			return "./ls_linux_arm64"
+		}
 	}
+	t.Fatalf("Unsupported OS: %s", runtime.GOOS)
+	return ""
+}
+
+// runLs runs the ls executable with given arguments and returns its output and error if any
+func runLs(t *testing.T, args ...string) (string, error) {
+	// executable := "ls"
+	executable := getLsExecutable(t)
 
 	t.Helper()
 	prettyPrintCommand(args)
 	cmd := exec.Command(executable, args...)
-	// fmt.Println(cmd.String())
 	output, err := cmd.CombinedOutput()
 	return string(output), err
 }
@@ -246,15 +254,19 @@ func TestLsMultipleDirectoriesWithNonExistent(t *testing.T) {
 
 	// Run ls and get output
 	// Output should also be sorted
-	output, err := runLs(t, tmpDir1, "xenon", tmpDir1, "non", tmpDir1, "bon")
-	if err != nil {
-		t.Fatalf("Expected no error, got: %v", err)
-	}
+	output, _ := runLs(t, tmpDir1, "xenon", tmpDir1, "non", tmpDir1, "bon")
 
 	// Verify output
-	expected := tmpDir1 + ":\nfile1.txt\n\n" + tmpDir1 + ":\nfile2.txt\n"
-	if output != expected {
-		t.Errorf("Expected output %q, got %q", expected, output)
+	expectedOutput := []string{
+		"ls: bon: No such file or directory\n",
+		"ls: non: No such file or directory\n",
+		"ls: xenon: No such file or directory\n",
+		tmpDir1 + ":\nfile1.txt\n\n",
+		tmpDir1 + ":\nfile1.txt\n\n",
+		tmpDir1 + ":\nfile1.txt\n",
+	}
+	if output != strings.Join(expectedOutput, "") {
+		t.Errorf("Expected output %q, got %q", strings.Join(expectedOutput, ""), output)
 	}
 }
 
