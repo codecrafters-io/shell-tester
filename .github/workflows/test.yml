@@ -42,7 +42,7 @@ jobs:
       - name: Setup Alpine dependencies
         run: |
           cat /etc/alpine-release
-          apk add git go make bash binutils-gold
+          apk add git go make bash binutils-gold python3
         shell: alpine.sh --root {0}
 
       - name: Checkout
