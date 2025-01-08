@@ -50,7 +50,7 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 		panic("CodeCrafters Internal Error: Cannot create executable")
 	}
 
-	err = custom_executable.CopyExecutableToMultiplePaths(originalExecutablePath, []string{path.Join(randomDir, executableName1), path.Join(randomDir, executableName2), path.Join(randomDir, executableName3), path.Join(randomDir, executableName4)}, logger)
+	err = custom_executable.CopyFileToMultiplePaths(originalExecutablePath, []string{path.Join(randomDir, executableName1), path.Join(randomDir, executableName2), path.Join(randomDir, executableName3), path.Join(randomDir, executableName4)}, logger)
 	if err != nil {
 		panic("CodeCrafters Internal Error: Cannot copy executable")
 	}

@@ -39,7 +39,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	randomExecutableName := "custom_exe_" + strconv.Itoa(random.RandomInt(1000, 9999))
 	exePath := path.Join(randomDir, randomExecutableName)
 
-	err = custom_executable.CreateExecutable(randomCode, exePath)
+	err = custom_executable.CreateSignaturePrinterExecutable(randomCode, exePath)
 	if err != nil {
 		return err
 	}

@@ -27,7 +27,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	customExecutablePath := filepath.Join(randomDir, "my_exe")
-	err = custom_executable.CreateExecutable(getRandomString(), customExecutablePath)
+	err = custom_executable.CreateSignaturePrinterExecutable(getRandomString(), customExecutablePath)
 	if err != nil {
 		return err
 	}
