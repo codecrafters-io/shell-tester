@@ -33,7 +33,7 @@ func CopyFileToMultiplePaths(sourcePath string, destinationPaths []string, logge
 	return nil
 }
 
-func FetchCustomExecutable(fileName string) string {
+func fetchCustomExecutableForOSAndArch(fileName string) string {
 	switch runtime.GOOS {
 	case "darwin":
 		switch runtime.GOARCH {
@@ -53,7 +53,7 @@ func FetchCustomExecutable(fileName string) string {
 	panic(fmt.Sprintf("CodeCrafters Internal Error: Unsupported OS:ARCH: %s:%s", runtime.GOOS, runtime.GOARCH))
 }
 
-func CopyExecutable(executableName, outputPath string) error {
+func copyExecutable(executableName, outputPath string) error {
 	// Copy the custom_executable to the output path
 	command := fmt.Sprintf("cp %s %s", path.Join(os.Getenv("TESTER_DIR"), executableName), outputPath)
 	copyCmd := exec.Command("sh", "-c", command)
