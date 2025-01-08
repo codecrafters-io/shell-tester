@@ -22,6 +22,9 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
+	defer func() {
+		_ = os.RemoveAll(randomDir)
+	}()
 
 	pathEnvVar := os.Getenv("PATH")
 	logger := stageHarness.Logger

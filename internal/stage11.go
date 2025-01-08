@@ -24,6 +24,9 @@ func testCd2(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
+	defer func() {
+		_ = os.RemoveAll(directory)
+	}()
 
 	separator := os.PathSeparator
 	parentDirs := strings.Split(directory, string(separator))
