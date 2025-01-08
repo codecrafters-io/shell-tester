@@ -16,6 +16,7 @@ build:
 
 test:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/...
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/... -system
 
 record_fixtures:
 	CODECRAFTERS_RECORD_FIXTURES=true make test
