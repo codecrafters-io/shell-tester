@@ -14,6 +14,8 @@ import (
 
 // Pass the -system flag to use system ls instead of custom implementation
 // go test ./... -system
+// Tests only pass against BSD implementation of ls, not GNU implementation
+// Run on darwin only
 var useSystemLs = flag.Bool("system", false, "Use system ls instead of custom implementation")
 
 // testFile represents a file or directory to be created for testing
@@ -103,6 +105,9 @@ func copyLsToDir(t *testing.T, ls_file, newDir string) {
 }
 
 func TestLsCurrentDirectory(t *testing.T) {
+	if *useSystemLs {
+		t.Skip("Skipping test because macOS won't allowing copying coreutils")
+	}
 	// Create a temporary directory for testing
 	tmpDir, err := os.MkdirTemp("", "ls-test-*")
 	if err != nil {

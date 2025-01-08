@@ -16,6 +16,8 @@ build:
 
 test:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/...
+
+test_ls_against_bsd_ls:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/... -system
 
 record_fixtures:
