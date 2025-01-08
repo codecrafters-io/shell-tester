@@ -77,7 +77,7 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	responseTestCase := test_cases.CommandResponseTestCase{
 		Command:          command1,
 		ExpectedOutput:   fmt.Sprintf("ls: %s: No such file or directory", "nonexistent"),
-		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile("ls: cannot access 'nonexistent': No such file or directory")},
+		FallbackPatterns: []*regexp.Regexp{},
 		SuccessMessage:   "✓ Received error message",
 	}
 	asserter.AddAssertion(assertions.FileContentAssertion{
@@ -104,7 +104,7 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	responseTestCase = test_cases.CommandResponseTestCase{
 		Command:          command3,
 		ExpectedOutput:   fmt.Sprintf("ls: %s: No such file or directory", "nonexistent"),
-		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile("ls: cannot access 'nonexistent': No such file or directory")},
+		FallbackPatterns: []*regexp.Regexp{},
 		SuccessMessage:   "✓ Received redirected file content",
 	}
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
@@ -149,11 +149,12 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 		"ls: nonexistent: No such file or directory",
 	}
 
-	linuxLSErrorMessage := "ls: cannot access 'nonexistent': No such file or directory"
+	linuxLSErrorMessage := errorMessagesInFile[1]
 	linuxLSErrorMessageRegex := []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf("^%s$", linuxLSErrorMessage))}
 	alpineCatErrorMessage := "cat: can't open 'nonexistent': No such file or directory"
 	alpineCatErrorMessageRegex := []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf("^%s$", alpineCatErrorMessage))}
 
+	// TODO: Simplify this after writing custom cat
 	multiLineAssertion := assertions.NewEmptyMultiLineAssertion()
 	multiLineAssertion.AddSingleLineAssertion(errorMessagesInFile[0], alpineCatErrorMessageRegex)
 	multiLineAssertion.AddSingleLineAssertion(errorMessagesInFile[1], linuxLSErrorMessageRegex)

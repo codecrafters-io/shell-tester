@@ -81,7 +81,7 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 	responseTestCase := test_cases.CommandResponseTestCase{
 		Command:          command2,
 		ExpectedOutput:   "ls: nonexistent: No such file or directory",
-		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile("ls: cannot access 'nonexistent': No such file or directory")},
+		FallbackPatterns: []*regexp.Regexp{},
 		SuccessMessage:   "✓ Received redirected error message",
 	}
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
