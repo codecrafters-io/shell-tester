@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"os"
 	"path"
 	"slices"
 
@@ -22,10 +21,9 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	pathEnvVar := os.Getenv("PATH")
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, pathEnvVar))
+	shell.AddToPath(randomDir)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	if err := asserter.StartShellAndAssertPrompt(); err != nil {
