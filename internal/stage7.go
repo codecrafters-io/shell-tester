@@ -14,7 +14,6 @@ import (
 
 func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Add the random directory to PATH (where the my_exe file is created)
-
 	randomDir, err := getRandomDirectory()
 	if err != nil {
 		return err
