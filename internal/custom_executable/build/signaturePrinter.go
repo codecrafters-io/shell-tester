@@ -1,7 +1,6 @@
 package custom_executable
 
 import (
-	_ "embed"
 	"fmt"
 	"os"
 	"strings"
@@ -37,7 +36,7 @@ func CreateSignaturePrinterExecutable(randomString, outputPath string) error {
 	}
 
 	// Copy the base executable from archive location to user's executable path
-	err := CopyExecutable("signature_printer", outputPath)
+	err := copyExecutable("signature_printer", outputPath)
 	if err != nil {
 		return fmt.Errorf("CodeCrafters Internal Error: copying executable failed: %w", err)
 	}
