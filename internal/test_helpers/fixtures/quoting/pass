@@ -14,7 +14,7 @@ Debug = true
 [33m[stage-6] [0m[94mWriting file "/tmp/foo/f   24" with content "pineapple grape."[0m
 [33m[stage-6] [0m[94mWriting file "/tmp/foo/f   61" with content "pineapple orange."[0m
 [33m[stage-6] [0m[94mWriting file "/tmp/foo/f   80" with content "blueberry strawberry."[0m
-[33m[your-program] [0m$ ccat '/tmp/foo/f   24' '/tmp/foo/f   61' '/tmp/foo/f   80'
+[33m[your-program] [0m$ cat '/tmp/foo/f   24' '/tmp/foo/f   61' '/tmp/foo/f   80'
 [33m[your-program] [0mpineapple grape.pineapple orange.blueberry strawberry.
 [33m[stage-6] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -34,7 +34,7 @@ Debug = true
 [33m[stage-5] [0m[94mWriting file "/tmp/bar/f 58" with content "orange blueberry."[0m
 [33m[stage-5] [0m[94mWriting file "/tmp/bar/f   73" with content "grape pineapple."[0m
 [33m[stage-5] [0m[94mWriting file "/tmp/bar/f's38" with content "raspberry mango."[0m
-[33m[your-program] [0m$ ccat "/tmp/bar/f 58" "/tmp/bar/f   73" "/tmp/bar/f's38"
+[33m[your-program] [0m$ cat "/tmp/bar/f 58" "/tmp/bar/f   73" "/tmp/bar/f's38"
 [33m[your-program] [0morange blueberry.grape pineapple.raspberry mango.
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -54,7 +54,7 @@ Debug = true
 [33m[stage-4] [0m[94mWriting file "/tmp/baz/f\n31" with content "mango pear."[0m
 [33m[stage-4] [0m[94mWriting file "/tmp/baz/f\64" with content "apple pear."[0m
 [33m[stage-4] [0m[94mWriting file "/tmp/baz/f'\'72" with content "pineapple apple."[0m
-[33m[your-program] [0m$ ccat "/tmp/baz/f\n31" "/tmp/baz/f\64" "/tmp/baz/f'\'72"
+[33m[your-program] [0m$ cat "/tmp/baz/f\n31" "/tmp/baz/f\64" "/tmp/baz/f'\'72"
 [33m[your-program] [0mmango pear.apple pear.pineapple apple.
 [33m[stage-4] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -74,7 +74,7 @@ Debug = true
 [33m[stage-3] [0m[94mWriting file "/tmp/qux/'f 87'" with content "strawberry apple."[0m
 [33m[stage-3] [0m[94mWriting file "/tmp/qux/'f  \52'" with content "raspberry orange."[0m
 [33m[stage-3] [0m[94mWriting file "/tmp/qux/'f \6\'" with content "banana pineapple."[0m
-[33m[your-program] [0m$ ccat "/tmp/qux/'f 87'" "/tmp/qux/'f  \52'" "/tmp/qux/'f \6\'"
+[33m[your-program] [0m$ cat "/tmp/qux/'f 87'" "/tmp/qux/'f  \52'" "/tmp/qux/'f \6\'"
 [33m[your-program] [0mstrawberry apple.raspberry orange.banana pineapple.
 [33m[stage-3] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -94,7 +94,7 @@ Debug = true
 [33m[stage-2] [0m[94mWriting file "/tmp/quz/"f 30"" with content "grape strawberry."[0m
 [33m[stage-2] [0m[94mWriting file "/tmp/quz/"f\57"" with content "mango strawberry."[0m
 [33m[stage-2] [0m[94mWriting file "/tmp/quz/f97" with content "strawberry blueberry."[0m
-[33m[your-program] [0m$ ccat '/tmp/quz/"f 30"' '/tmp/quz/"f\57"' '/tmp/quz/f97'
+[33m[your-program] [0m$ cat '/tmp/quz/"f 30"' '/tmp/quz/"f\57"' '/tmp/quz/f97'
 [33m[your-program] [0mgrape strawberry.mango strawberry.strawberry blueberry.
 [33m[stage-2] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
