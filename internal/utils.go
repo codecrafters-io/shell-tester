@@ -105,11 +105,12 @@ func logAndQuit(asserter *logged_shell_asserter.LoggedShellAsserter, err error) 
 }
 
 func SetUpCustomCommands(shell *shell_executable.ShellExecutable, commands []string) (string, error) {
-	// Add the random directory to PATH (where the ls file is created)
 	executableDir, err := getRandomDirectory()
 	if err != nil {
 		return "", err
 	}
+	// Add the random directory to PATH
+	// (where the custom executable is copied to)
 	shell.AddToPath(executableDir)
 
 	for _, command := range commands {
