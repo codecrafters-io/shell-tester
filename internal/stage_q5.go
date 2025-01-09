@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"os"
 	"path"
 	"strings"
 
@@ -16,13 +15,17 @@ import (
 func testQ5(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
+	executableDir, err := SetUpCustomCommands(shell, []string{"cat"})
+	if err != nil {
+		return err
+	}
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	randomDir, err := getShortRandomDirectory()
 	if err != nil {
 		return err
 	}
-	defer os.RemoveAll(randomDir)
+	defer cleanupDirectories([]string{randomDir, executableDir})
 
 	randomUniqueFileNames := random.RandomInts(1, 100, 3)
 	filePaths := []string{
@@ -45,7 +48,7 @@ func testQ5(stageHarness *test_case_harness.TestCaseHarness) error {
 		fmt.Sprintf(`echo "%s'%s'\\n'%s"`, L[0], L[1], L[2]),
 		fmt.Sprintf(`echo "%s\"insidequotes"%s\"`, L[0], L[1]),
 		fmt.Sprintf(`echo "mixed\"quote'%s'\\"`, L[4]),
-		fmt.Sprintf(`cat '%s' '%s' '%s'`, filePaths[0], filePaths[1], filePaths[2]),
+		fmt.Sprintf(`%s '%s' '%s' '%s'`, CUSTOM_CAT_COMMAND, filePaths[0], filePaths[1], filePaths[2]),
 	}
 	expectedOutputs := []string{
 		fmt.Sprintf(`%s'%s'\n'%s`, L[0], L[1], L[2]),

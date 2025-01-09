@@ -18,7 +18,10 @@ test:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/...
 
 test_ls_against_bsd_ls:
-	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/... -system
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/ls/... -system
+
+test_cat_against_bsd_cat:
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/cat/... -system
 
 record_fixtures:
 	CODECRAFTERS_RECORD_FIXTURES=true make test
@@ -182,5 +185,6 @@ build_executables:
 	for os in $$oses; do \
 		for arch in $$arches; do \
 		GOOS="$$os" GOARCH="$$arch" go build -o "ls_$${os}_$${arch}" ./internal/custom_executable/ls/ls.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o "cat_$${os}_$${arch}" ./internal/custom_executable/cat/cat.go; \
 		done; \
 	done

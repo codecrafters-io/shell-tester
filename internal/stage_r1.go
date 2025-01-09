@@ -8,7 +8,6 @@ import (
 	"slices"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
-	custom_executable "github.com/codecrafters-io/shell-tester/internal/custom_executable/build"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -17,19 +16,12 @@ import (
 )
 
 func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
-	// Add the random directory to PATH (where the cls file is created)
-	randomDir, err := getRandomDirectory()
+	logger := stageHarness.Logger
+	shell := shell_executable.NewShellExecutable(stageHarness)
+	executableDir, err := SetUpCustomCommands(shell, []string{"ls", "cat"})
 	if err != nil {
 		return err
 	}
-	defer func() {
-		_ = os.RemoveAll(randomDir)
-	}()
-
-	pathEnvVar := os.Getenv("PATH")
-	logger := stageHarness.Logger
-	shell := shell_executable.NewShellExecutable(stageHarness)
-	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, pathEnvVar))
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	if err := asserter.StartShellAndAssertPrompt(); err != nil {
@@ -41,7 +33,7 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 	stageDir, lsDir := dirs[0], dirs[1]
-	defer cleanupDirectories(dirs)
+	defer cleanupDirectories(append(dirs, executableDir))
 
 	randomWords := random.RandomWords(3)
 	slices.Sort(randomWords)
@@ -66,17 +58,10 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	outputFilePath3 := path.Join(stageDir, randomWords2[2]+".md")
 
 	// Test1:
-	// cls -1 foo > tmp.md; cat tmp.md
+	// cls -1 foo > tmp.md; ccat tmp.md
 
-	customLsName := "cls"
-	customLsPath := path.Join(randomDir, customLsName)
-	err = custom_executable.CreateLsExecutable(customLsPath)
-	if err != nil {
-		return err
-	}
-
-	command1 := fmt.Sprintf("%s -1 %s > %s", customLsName, lsDir, outputFilePath1)
-	command2 := fmt.Sprintf("cat %s", outputFilePath1)
+	command1 := fmt.Sprintf("%s -1 %s > %s", CUSTOM_LS_COMMAND, lsDir, outputFilePath1)
+	command2 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath1)
 
 	err = test_cases.CommandReflectionTestCase{
 		Command: command1,
@@ -95,11 +80,11 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Test2:
-	// echo "Hello Ryan" 1> tmp.md; cat tmp.md
+	// echo "Hello Ryan" 1> tmp.md; ccat tmp.md
 
 	message := "Hello " + getRandomName()
 	command3 := fmt.Sprintf("echo '%s' 1> %s", message, outputFilePath2)
-	command4 := fmt.Sprintf("cat %s", outputFilePath2)
+	command4 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath2)
 
 	err = test_cases.CommandReflectionTestCase{
 		Command: command3,
@@ -119,12 +104,12 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Test3:
-	// cat exists nonexistent > tmp.md; cat tmp.md
+	// cat exists nonexistent > tmp.md; ccat tmp.md
 
 	filePath := filePaths[1]
 	fileContent := randomWords[1]
-	command5 := fmt.Sprintf("cat %s %s 1> %s", filePath, "nonexistent", outputFilePath3)
-	command6 := fmt.Sprintf("cat %s", outputFilePath3)
+	command5 := fmt.Sprintf("%s %s %s 1> %s", CUSTOM_CAT_COMMAND, filePath, "nonexistent", outputFilePath3)
+	command6 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath3)
 
 	responseTestCase = test_cases.CommandResponseTestCase{
 		Command:          command5,

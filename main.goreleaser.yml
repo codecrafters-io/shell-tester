@@ -16,3 +16,7 @@ archives:
       - ls_darwin_arm64
       - ls_linux_amd64
       - ls_linux_arm64
+      - cat_darwin_amd64
+      - cat_darwin_arm64
+      - cat_linux_amd64
+      - cat_linux_arm64
