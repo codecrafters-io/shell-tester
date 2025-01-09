@@ -105,7 +105,7 @@ func logAndQuit(asserter *logged_shell_asserter.LoggedShellAsserter, err error) 
 }
 
 func SetUpCustomCommands(shell *shell_executable.ShellExecutable, commands []string) (string, error) {
-	// Add the random directory to PATH (where the cls file is created)
+	// Add the random directory to PATH (where the ls file is created)
 	executableDir, err := getRandomDirectory()
 	if err != nil {
 		return "", err

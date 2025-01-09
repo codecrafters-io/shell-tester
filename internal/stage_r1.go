@@ -57,7 +57,7 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	outputFilePath3 := path.Join(stageDir, randomWords2[2]+".md")
 
 	// Test1:
-	// cls -1 foo > tmp.md; cat tmp.md
+	// ls -1 foo > tmp.md; cat tmp.md
 
 	command1 := fmt.Sprintf("%s -1 %s > %s", CUSTOM_LS_COMMAND, lsDir, outputFilePath1)
 	command2 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath1)
