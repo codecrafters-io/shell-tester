@@ -92,11 +92,9 @@ func createExecutableFile(path string, contents string) error {
 	return os.WriteFile(path, []byte(contents), 0o755)
 }
 
-// ccat is present on $PATH, shell should be able to execute this script
 func createExecutableCallingCat(path string) error {
 	content := `#!/bin/sh
-exec CUSTOM_CAT_COMMAND "$@"`
-	content = strings.Replace(content, "CUSTOM_CAT_COMMAND", CUSTOM_CAT_COMMAND, 1)
+exec cat "$@"`
 
 	return createExecutableFile(path, content)
 }

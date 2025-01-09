@@ -58,7 +58,7 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	outputFilePath3 := path.Join(stageDir, randomWords2[2]+".md")
 
 	// Test1:
-	// cls -1 foo > tmp.md; ccat tmp.md
+	// cls -1 foo > tmp.md; cat tmp.md
 
 	command1 := fmt.Sprintf("%s -1 %s > %s", CUSTOM_LS_COMMAND, lsDir, outputFilePath1)
 	command2 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath1)
@@ -80,7 +80,7 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Test2:
-	// echo "Hello Ryan" 1> tmp.md; ccat tmp.md
+	// echo "Hello Ryan" 1> tmp.md; cat tmp.md
 
 	message := "Hello " + getRandomName()
 	command3 := fmt.Sprintf("echo '%s' 1> %s", message, outputFilePath2)
@@ -104,7 +104,7 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Test3:
-	// cat exists nonexistent > tmp.md; ccat tmp.md
+	// cat exists nonexistent > tmp.md; cat tmp.md
 
 	filePath := filePaths[1]
 	fileContent := randomWords[1]
