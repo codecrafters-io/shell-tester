@@ -8,44 +8,12 @@ import (
 	"slices"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
-	custom_executable "github.com/codecrafters-io/shell-tester/internal/custom_executable/build"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
-
-func SetUpCustomCommands(shell *shell_executable.ShellExecutable, commands []string) (string, error) {
-	// Add the random directory to PATH (where the cls file is created)
-	executableDir, err := getRandomDirectory()
-	if err != nil {
-		return "", err
-	}
-	shell.AddToPath(executableDir)
-
-	for _, command := range commands {
-		switch command {
-		case "ls":
-			customLsPath := path.Join(executableDir, CUSTOM_LS_COMMAND)
-			err = custom_executable.CreateLsExecutable(customLsPath)
-			if err != nil {
-				return "", err
-			}
-		case "cat":
-			customCatPath := path.Join(executableDir, CUSTOM_CAT_COMMAND)
-			err = custom_executable.CreateCatExecutable(customCatPath)
-			if err != nil {
-				return "", err
-			}
-		}
-	}
-
-	return executableDir, nil
-}
-
-const CUSTOM_LS_COMMAND = "cls"
-const CUSTOM_CAT_COMMAND = "ccat"
 
 func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger

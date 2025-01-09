@@ -6,13 +6,18 @@ import (
 	"path"
 	"strings"
 
+	custom_executable "github.com/codecrafters-io/shell-tester/internal/custom_executable/build"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
+	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/random"
 )
 
 var SMALL_WORDS = []string{"foo", "bar", "baz", "qux", "quz"}
 var LARGE_WORDS = []string{"hello", "world", "test", "example", "shell", "script"}
+
+const CUSTOM_LS_COMMAND = "ls"
+const CUSTOM_CAT_COMMAND = "cat"
 
 // getRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
 // directory is of the form `/tmp/<random-word>/<random-word>/<random-word>`
@@ -97,4 +102,32 @@ func writeFiles(paths []string, contents []string, logger *logger.Logger) error 
 func logAndQuit(asserter *logged_shell_asserter.LoggedShellAsserter, err error) error {
 	asserter.LogRemainingOutput()
 	return err
+}
+
+func SetUpCustomCommands(shell *shell_executable.ShellExecutable, commands []string) (string, error) {
+	// Add the random directory to PATH (where the cls file is created)
+	executableDir, err := getRandomDirectory()
+	if err != nil {
+		return "", err
+	}
+	shell.AddToPath(executableDir)
+
+	for _, command := range commands {
+		switch command {
+		case "ls":
+			customLsPath := path.Join(executableDir, CUSTOM_LS_COMMAND)
+			err = custom_executable.CreateLsExecutable(customLsPath)
+			if err != nil {
+				return "", err
+			}
+		case "cat":
+			customCatPath := path.Join(executableDir, CUSTOM_CAT_COMMAND)
+			err = custom_executable.CreateCatExecutable(customCatPath)
+			if err != nil {
+				return "", err
+			}
+		}
+	}
+
+	return executableDir, nil
 }
