@@ -3,12 +3,9 @@ package custom_executable
 import "fmt"
 
 func CreateCatExecutable(outputPath string) error {
-	fileName := fetchCustomExecutableForOSAndArch("cat")
-
-	// Copy the base executable from archive location to user's executable path
-	err := copyExecutable(fileName, outputPath)
+	err := createExecutableForOSAndArch("cat", outputPath)
 	if err != nil {
-		return fmt.Errorf("CodeCrafters Internal Error: copying executable %s failed: %w", fileName, err)
+		return fmt.Errorf("CodeCrafters Internal Error: creating executable %s failed: %w", "cat", err)
 	}
 
 	return nil

@@ -33,6 +33,10 @@ func CopyFileToMultiplePaths(sourcePath string, destinationPaths []string, logge
 	return nil
 }
 
+// fetchCustomExecutableForOSAndArch is a helper function to
+// fetch the correct custom executable for the current OS and architecture
+// It just returns the name of the executable, without the path
+// Path is added in the caller, which is expected to be the top level directory
 func fetchCustomExecutableForOSAndArch(fileName string) string {
 	switch runtime.GOOS {
 	case "darwin":
@@ -53,6 +57,7 @@ func fetchCustomExecutableForOSAndArch(fileName string) string {
 	panic(fmt.Sprintf("CodeCrafters Internal Error: Unsupported OS:ARCH: %s:%s", runtime.GOOS, runtime.GOARCH))
 }
 
+// TODO: Use copyFile internally with a param to turn logs ON/OFF
 func copyExecutable(executableName, outputPath string) error {
 	// Copy the custom_executable to the output path
 	command := fmt.Sprintf("cp %s %s", path.Join(os.Getenv("TESTER_DIR"), executableName), outputPath)
@@ -61,6 +66,21 @@ func copyExecutable(executableName, outputPath string) error {
 	copyCmd.Stderr = io.Discard
 	if err := copyCmd.Run(); err != nil {
 		return fmt.Errorf("CodeCrafters Internal Error: cp failed: %w", err)
+	}
+
+	return nil
+}
+
+// createExecutableForOSAndArch is a helper function to
+// fetch the correct custom executable for the current OS and architecture
+// and places it in the outputPath
+func createExecutableForOSAndArch(executableName, outputPath string) error {
+	fileName := fetchCustomExecutableForOSAndArch(executableName)
+
+	// Copy the base executable from archive location to user's executable path
+	err := copyExecutable(fileName, outputPath)
+	if err != nil {
+		return fmt.Errorf("CodeCrafters Internal Error: copying executable %s failed: %w", fileName, err)
 	}
 
 	return nil
