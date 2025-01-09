@@ -3,7 +3,6 @@ package internal
 import (
 	"fmt"
 	"path"
-	"regexp"
 	"slices"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
@@ -65,7 +64,7 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	responseTestCase := test_cases.CommandResponseTestCase{
 		Command:          command1,
 		ExpectedOutput:   fmt.Sprintf("ls: %s: No such file or directory", "nonexistent"),
-		FallbackPatterns: []*regexp.Regexp{},
+		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received error message",
 	}
 	asserter.AddAssertion(assertions.FileContentAssertion{
@@ -92,7 +91,7 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	responseTestCase = test_cases.CommandResponseTestCase{
 		Command:          command3,
 		ExpectedOutput:   fmt.Sprintf("ls: %s: No such file or directory", "nonexistent"),
-		FallbackPatterns: []*regexp.Regexp{},
+		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received redirected file content",
 	}
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
@@ -137,19 +136,9 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 		"ls: nonexistent: No such file or directory",
 	}
 
-	linuxLSErrorMessage := errorMessagesInFile[1]
-	linuxLSErrorMessageRegex := []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf("^%s$", linuxLSErrorMessage))}
-	alpineCatErrorMessage := "cat: can't open 'nonexistent': No such file or directory"
-	alpineCatErrorMessageRegex := []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf("^%s$", alpineCatErrorMessage))}
-
-	// TODO: Simplify this after writing custom cat
-	multiLineAssertion := assertions.NewEmptyMultiLineAssertion()
-	multiLineAssertion.AddSingleLineAssertion(errorMessagesInFile[0], alpineCatErrorMessageRegex)
-	multiLineAssertion.AddSingleLineAssertion(errorMessagesInFile[1], linuxLSErrorMessageRegex)
-
 	multiLineResponseTestCase := test_cases.CommandWithMultilineResponseTestCase{
 		Command:            command7,
-		MultiLineAssertion: multiLineAssertion,
+		MultiLineAssertion: assertions.NewMultiLineAssertion(errorMessagesInFile),
 		SuccessMessage:     "✓ Received redirected file content",
 	}
 	if err := multiLineResponseTestCase.Run(asserter, shell, logger); err != nil {
