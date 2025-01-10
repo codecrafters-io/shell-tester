@@ -336,7 +336,7 @@ func TestLsWithUnsupportedFlag(t *testing.T) {
 		t.Error("Expected error for unsupported flag, got none")
 	}
 
-	if !strings.Contains(output, "CodeCrafters Internal Error") {
+	if !strings.Contains(output, "ls: invalid option") {
 		t.Errorf("Expected internal error notification")
 	}
 	// Verify error message
@@ -356,7 +356,7 @@ func TestLsWithUnsupportedFlag2(t *testing.T) {
 		t.Error("Expected error for unsupported flag, got none")
 	}
 
-	if !strings.Contains(output, "CodeCrafters Internal Error") {
+	if !strings.Contains(output, "ls: invalid option") {
 		t.Errorf("Expected internal error notification")
 	}
 	// Verify error message
@@ -376,7 +376,7 @@ func TestLsWithUnsupportedFlag3(t *testing.T) {
 		t.Error("Expected error for unsupported flag, got none")
 	}
 
-	if !strings.Contains(output, "CodeCrafters Internal Error") {
+	if !strings.Contains(output, "ls: invalid option") {
 		t.Errorf("Expected internal error notification")
 	}
 	// Verify error message
