@@ -8,15 +8,8 @@ builds:
 
 archives:
   - name_template: "{{ .Tag }}_{{ .Os }}_{{ .Arch }}"
+    strip_binary_directory: true
     format: tar.gz
     files:
       - test.sh
-      - signature_printer
-      - ls_darwin_amd64
-      - ls_darwin_arm64
-      - ls_linux_amd64
-      - ls_linux_arm64
-      - cat_darwin_amd64
-      - cat_darwin_arm64
-      - cat_linux_amd64
-      - cat_linux_arm64
+      - built_executables/*
