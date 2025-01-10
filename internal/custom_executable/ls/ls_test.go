@@ -44,7 +44,7 @@ func createTestFiles(t *testing.T, dir string, files []testFile) {
 }
 
 func getLsExecutable(t *testing.T) string {
-	topLevelDir := os.Getenv("TESTER_DIR")
+	topLevelDir := filepath.Join(os.Getenv("TESTER_DIR"), "built_executables")
 	if *useSystemLs {
 		return "ls"
 	}

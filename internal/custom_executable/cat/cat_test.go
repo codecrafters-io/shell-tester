@@ -36,7 +36,7 @@ func createTestFiles(t *testing.T, dir string, files []testFile) {
 }
 
 func getCatExecutable(t *testing.T) string {
-	topLevelDir := os.Getenv("TESTER_DIR")
+	topLevelDir := filepath.Join(os.Getenv("TESTER_DIR"), "built_executables")
 	if *useSystemCat {
 		return "cat"
 	}

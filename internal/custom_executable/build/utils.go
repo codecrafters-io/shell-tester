@@ -60,7 +60,7 @@ func fetchCustomExecutableForOSAndArch(fileName string) string {
 // TODO: Use copyFile internally with a param to turn logs ON/OFF
 func copyExecutable(executableName, outputPath string) error {
 	// Copy the custom_executable to the output path
-	command := fmt.Sprintf("cp %s %s", path.Join(os.Getenv("TESTER_DIR"), executableName), outputPath)
+	command := fmt.Sprintf("cp %s %s", path.Join(os.Getenv("TESTER_DIR"), "built_executables", executableName), outputPath)
 	copyCmd := exec.Command("sh", "-c", command)
 	copyCmd.Stdout = io.Discard
 	copyCmd.Stderr = io.Discard
