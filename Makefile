@@ -179,16 +179,17 @@ test_ash:
 	make test_quoting_w_ash
 	make test_redirection_w_ash
 
+TEST_TARGET ?= test_bash
+RUNS ?= 100
 test_flakiness:
-	@$(foreach i,$(shell seq 1 100), \
-		echo "Running iteration $(i)" ; \
-		make test_bash > /tmp/test ; \
+	@$(foreach i,$(shell seq 1 $(RUNS)), \
+		echo "Running iteration $(i)/$(RUNS) of $(TEST_TARGET)" ; \
+		make $(TEST_TARGET) > /tmp/test ; \
 		if [ "$$?" -ne 0 ]; then \
 			echo "Test failed on iteration $(i)" ; \
 			exit 1 ; \
 		fi ;\
 	)
-
 
 build_executables:
 	oses="darwin linux" ; \
