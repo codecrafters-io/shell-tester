@@ -11,6 +11,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/random"
+	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
 var SMALL_WORDS = []string{"foo", "bar", "baz", "qux", "quz"}
@@ -21,11 +22,17 @@ const CUSTOM_CAT_COMMAND = "cat"
 
 // getRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
 // directory is of the form `/tmp/<random-word>/<random-word>/<random-word>`
-func getRandomDirectory() (string, error) {
+func getRandomDirectory(stageHarness *test_case_harness.TestCaseHarness) (string, error) {
 	randomDir := path.Join("/tmp", random.RandomWord(), random.RandomWord(), random.RandomWord())
 	if err := os.MkdirAll(randomDir, 0755); err != nil {
 		return "", fmt.Errorf("CodeCrafters internal error. Error creating directory %s: %v", randomDir, err)
 	}
+
+	// Automatically cleanup the directory when the test is completed
+	stageHarness.RegisterTeardownFunc(func() {
+		cleanupDirectories([]string{randomDir})
+	})
+
 	return randomDir, nil
 }
 

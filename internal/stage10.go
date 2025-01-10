@@ -19,11 +19,10 @@ func testCd1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	directory, err := getRandomDirectory()
+	directory, err := getRandomDirectory(stageHarness)
 	if err != nil {
 		return err
 	}
-	defer cleanupDirectories([]string{directory})
 
 	testCase := test_cases.CDAndPWDTestCase{Directory: directory, Response: directory}
 	err = testCase.Run(asserter, shell, logger)

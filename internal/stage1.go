@@ -11,11 +11,10 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	randomDir, err := getRandomDirectory()
+	randomDir, err := getRandomDirectory(stageHarness)
 	if err != nil {
 		return err
 	}
-	defer cleanupDirectories([]string{randomDir})
 
 	// Let's set HOME to a random dir in stage 1 so that CI catches starter code
 	// that relies on $HOME being set to a specific dir.

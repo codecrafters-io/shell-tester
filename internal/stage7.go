@@ -14,11 +14,10 @@ import (
 
 func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Add the random directory to PATH (where the my_exe file is created)
-	randomDir, err := getRandomDirectory()
+	randomDir, err := getRandomDirectory(stageHarness)
 	if err != nil {
 		return err
 	}
-	defer cleanupDirectories([]string{randomDir})
 
 	path := os.Getenv("PATH")
 	logger := stageHarness.Logger

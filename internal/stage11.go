@@ -20,11 +20,10 @@ func testCd2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	directory, err := getRandomDirectory()
+	directory, err := getRandomDirectory(stageHarness)
 	if err != nil {
 		return err
 	}
-	defer cleanupDirectories([]string{directory})
 
 	separator := os.PathSeparator
 	parentDirs := strings.Split(directory, string(separator))

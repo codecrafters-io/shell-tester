@@ -21,11 +21,10 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	randomDir, err := getRandomDirectory()
+	randomDir, err := getRandomDirectory(stageHarness)
 	if err != nil {
 		return err
 	}
-	defer cleanupDirectories([]string{randomDir})
 
 	// Add randomDir to PATH (That is where the my_exe file is created)
 	currentPath := os.Getenv("PATH")
