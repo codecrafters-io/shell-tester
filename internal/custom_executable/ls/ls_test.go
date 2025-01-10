@@ -44,7 +44,7 @@ func createTestFiles(t *testing.T, dir string, files []testFile) {
 }
 
 func getLsExecutable(t *testing.T) string {
-	topLevelDir := filepath.Join(os.Getenv("TESTER_DIR"), "built_executables")
+	testerDir := filepath.Join(os.Getenv("TESTER_DIR"), "built_executables")
 	if *useSystemLs {
 		return "ls"
 	}
@@ -53,16 +53,16 @@ func getLsExecutable(t *testing.T) string {
 	case "darwin":
 		switch runtime.GOARCH {
 		case "arm64":
-			return filepath.Join(topLevelDir, "ls_darwin_arm64")
+			return filepath.Join(testerDir, "ls_darwin_arm64")
 		case "amd64":
-			return filepath.Join(topLevelDir, "ls_darwin_amd64")
+			return filepath.Join(testerDir, "ls_darwin_amd64")
 		}
 	case "linux":
 		switch runtime.GOARCH {
 		case "amd64":
-			return filepath.Join(topLevelDir, "ls_linux_amd64")
+			return filepath.Join(testerDir, "ls_linux_amd64")
 		case "arm64":
-			return filepath.Join(topLevelDir, "ls_linux_arm64")
+			return filepath.Join(testerDir, "ls_linux_arm64")
 		}
 	}
 	t.Fatalf("Unsupported OS: %s", runtime.GOOS)

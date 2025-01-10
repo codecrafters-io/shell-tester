@@ -36,7 +36,7 @@ func createTestFiles(t *testing.T, dir string, files []testFile) {
 }
 
 func getCatExecutable(t *testing.T) string {
-	topLevelDir := filepath.Join(os.Getenv("TESTER_DIR"), "built_executables")
+	testerDir := filepath.Join(os.Getenv("TESTER_DIR"), "built_executables")
 	if *useSystemCat {
 		return "cat"
 	}
@@ -45,16 +45,16 @@ func getCatExecutable(t *testing.T) string {
 	case "darwin":
 		switch runtime.GOARCH {
 		case "arm64":
-			return filepath.Join(topLevelDir, "cat_darwin_arm64")
+			return filepath.Join(testerDir, "cat_darwin_arm64")
 		case "amd64":
-			return filepath.Join(topLevelDir, "cat_darwin_amd64")
+			return filepath.Join(testerDir, "cat_darwin_amd64")
 		}
 	case "linux":
 		switch runtime.GOARCH {
 		case "amd64":
-			return filepath.Join(topLevelDir, "cat_linux_amd64")
+			return filepath.Join(testerDir, "cat_linux_amd64")
 		case "arm64":
-			return filepath.Join(topLevelDir, "cat_linux_arm64")
+			return filepath.Join(testerDir, "cat_linux_arm64")
 		}
 	}
 	t.Fatalf("Unsupported OS: %s", runtime.GOOS)
