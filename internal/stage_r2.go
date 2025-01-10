@@ -16,7 +16,7 @@ import (
 func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	executableDir, err := SetUpCustomCommands(shell, []string{"ls", "cat"})
+	executableDir, err := SetUpCustomCommands(stageHarness, shell, []string{"ls", "cat"})
 	if err != nil {
 		return err
 	}

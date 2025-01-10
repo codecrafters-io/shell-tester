@@ -111,8 +111,8 @@ func logAndQuit(asserter *logged_shell_asserter.LoggedShellAsserter, err error) 
 	return err
 }
 
-func SetUpCustomCommands(shell *shell_executable.ShellExecutable, commands []string) (string, error) {
-	executableDir, err := getRandomDirectory()
+func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, commands []string) (string, error) {
+	executableDir, err := getRandomDirectory(stageHarness)
 	if err != nil {
 		return "", err
 	}

@@ -15,7 +15,9 @@ import (
 func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	executableDir, err := SetUpCustomCommands(shell, []string{"cat"})
+	// TODO: Define this function on the shell executable
+	// TODO: See if we can add the signature printer too to this function
+	executableDir, err := SetUpCustomCommands(stageHarness, shell, []string{"cat"})
 	if err != nil {
 		return err
 	}
