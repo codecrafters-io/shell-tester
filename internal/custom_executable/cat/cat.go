@@ -12,7 +12,7 @@ import (
 func main() {
 	flagSet := flag.NewFlagSet("cat", flag.ContinueOnError)
 	if err := flagSet.Parse(os.Args[1:]); err != nil {
-		panic("CodeCrafters Internal Error: " + err.Error())
+		panic("cat: invalid option: " + err.Error())
 	}
 
 	fileArgs := flagSet.Args()

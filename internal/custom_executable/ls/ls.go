@@ -16,7 +16,7 @@ func main() {
 	_ = flagSet.Bool("1", false, "list one file per line")
 	// Parse flags, would return error if any other flags are provided
 	if err := flagSet.Parse(os.Args[1:]); err != nil {
-		panic("CodeCrafters Internal Error: " + err.Error())
+		panic("ls: invalid option: " + err.Error())
 	}
 
 	dirArgs := flagSet.Args()
