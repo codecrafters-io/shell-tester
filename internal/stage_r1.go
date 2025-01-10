@@ -16,7 +16,7 @@ import (
 func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	executableDir, err := SetUpCustomCommands(stageHarness, shell, []string{"ls", "cat"})
+	_, err := SetUpCustomCommands(stageHarness, shell, []string{"ls", "cat"})
 	if err != nil {
 		return err
 	}
@@ -26,12 +26,11 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	dirs, err := getShortRandomDirectories(2)
+	dirs, err := getShortRandomDirectories(stageHarness, 2)
 	if err != nil {
 		return err
 	}
 	stageDir, lsDir := dirs[0], dirs[1]
-	defer cleanupDirectories(append(dirs, executableDir))
 
 	randomWords := random.RandomWords(3)
 	slices.Sort(randomWords)

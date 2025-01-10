@@ -15,7 +15,7 @@ import (
 func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	executableDir, err := SetUpCustomCommands(stageHarness, shell, []string{"cat"})
+	_, err := SetUpCustomCommands(stageHarness, shell, []string{"cat"})
 	if err != nil {
 		return err
 	}
@@ -25,11 +25,10 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	randomDir, err := getShortRandomDirectory()
+	randomDir, err := getShortRandomDirectory(stageHarness)
 	if err != nil {
 		return err
 	}
-	defer cleanupDirectories([]string{randomDir, executableDir})
 
 	randomUniqueFileNames := random.RandomInts(1, 100, 3)
 	L := random.RandomElementsFromArray(LARGE_WORDS, 6)

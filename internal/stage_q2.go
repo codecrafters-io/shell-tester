@@ -17,17 +17,16 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	// TODO: Define this function on the shell executable
 	// TODO: See if we can add the signature printer too to this function
-	executableDir, err := SetUpCustomCommands(stageHarness, shell, []string{"cat"})
+	_, err := SetUpCustomCommands(stageHarness, shell, []string{"cat"})
 	if err != nil {
 		return err
 	}
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	randomDir, err := getShortRandomDirectory()
+	randomDir, err := getShortRandomDirectory(stageHarness)
 	if err != nil {
 		return err
 	}
-	defer cleanupDirectories([]string{randomDir, executableDir})
 
 	randomUniqueFileNames := random.RandomInts(1, 100, 3)
 	filePaths := []string{
