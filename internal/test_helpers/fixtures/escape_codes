@@ -5,7 +5,6 @@ Debug = true
 [33m[your-program] [0m$ invalid_pear_command
 [33m[your-program] [0minvalid_pear_command: command not found
 [33m[stage-2] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ 
 [33m[stage-2] [0m[92mTest passed.[0m
 
 [33m[stage-1] [0m[94mRunning tests for Stage #1: oo8[0m

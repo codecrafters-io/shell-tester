@@ -8,7 +8,8 @@ builds:
 
 archives:
   - name_template: "{{ .Tag }}_{{ .Os }}_{{ .Arch }}"
+    strip_binary_directory: true
     format: tar.gz
     files:
       - test.sh
-      - custom_executable
+      - built_executables/*

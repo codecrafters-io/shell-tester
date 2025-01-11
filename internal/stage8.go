@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
-	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
+	custom_executable "github.com/codecrafters-io/shell-tester/internal/custom_executable/build"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -21,7 +21,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	randomDir, err := getRandomDirectory()
+	randomDir, err := getRandomDirectory(stageHarness)
 	if err != nil {
 		return err
 	}
@@ -39,7 +39,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	randomExecutableName := "custom_exe_" + strconv.Itoa(random.RandomInt(1000, 9999))
 	exePath := path.Join(randomDir, randomExecutableName)
 
-	err = custom_executable.CreateExecutable(randomCode, exePath)
+	err = custom_executable.CreateSignaturePrinterExecutable(randomCode, exePath)
 	if err != nil {
 		return err
 	}

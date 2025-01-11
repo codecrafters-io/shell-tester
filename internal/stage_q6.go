@@ -6,7 +6,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/codecrafters-io/shell-tester/internal/custom_executable"
+	custom_executable "github.com/codecrafters-io/shell-tester/internal/custom_executable/build"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -17,16 +17,13 @@ import (
 func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
-
-	randomDir, err := getShortRandomDirectory()
+	executableDir, err := SetUpCustomCommands(stageHarness, shell, []string{"cat"})
 	if err != nil {
 		return err
 	}
-	defer os.RemoveAll(randomDir)
+	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	currentPath := os.Getenv("PATH")
-	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, currentPath))
+	defer cleanupDirectories([]string{executableDir})
 
 	if err := asserter.StartShellAndAssertPrompt(); err != nil {
 		return err
@@ -50,23 +47,23 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 		panic("CodeCrafters Internal Error: Cannot create executable")
 	}
 
-	err = custom_executable.CopyExecutableToMultiplePaths(originalExecutablePath, []string{path.Join(randomDir, executableName1), path.Join(randomDir, executableName2), path.Join(randomDir, executableName3), path.Join(randomDir, executableName4)}, logger)
+	err = custom_executable.CopyFileToMultiplePaths(originalExecutablePath, []string{path.Join(executableDir, executableName1), path.Join(executableDir, executableName2), path.Join(executableDir, executableName3), path.Join(executableDir, executableName4)}, logger)
 	if err != nil {
 		panic("CodeCrafters Internal Error: Cannot copy executable")
 	}
 
 	writeFiles([]string{
-		path.Join(randomDir, "f1"),
-		path.Join(randomDir, "f2"),
-		path.Join(randomDir, "f3"),
-		path.Join(randomDir, "f4"),
+		path.Join(executableDir, "f1"),
+		path.Join(executableDir, "f2"),
+		path.Join(executableDir, "f3"),
+		path.Join(executableDir, "f4"),
 	}, []string{fileContents[0] + "\n", fileContents[1] + "\n", fileContents[2] + "\n", fileContents[3] + "\n"}, logger)
 
 	inputs := []string{
-		fmt.Sprintf(`%s %s/f1`, executableName1, randomDir),
-		fmt.Sprintf(`%s %s/f2`, executableName2, randomDir),
-		fmt.Sprintf(`%s %s/f3`, executableName3, randomDir),
-		fmt.Sprintf(`%s %s/f4`, executableName4, randomDir),
+		fmt.Sprintf(`%s %s/f1`, executableName1, executableDir),
+		fmt.Sprintf(`%s %s/f2`, executableName2, executableDir),
+		fmt.Sprintf(`%s %s/f3`, executableName3, executableDir),
+		fmt.Sprintf(`%s %s/f4`, executableName4, executableDir),
 	}
 	expectedOutputs := []string{
 		fileContents[0],
@@ -98,5 +95,6 @@ func createExecutableFile(path string, contents string) error {
 func createExecutableCallingCat(path string) error {
 	content := `#!/bin/sh
 exec cat "$@"`
+
 	return createExecutableFile(path, content)
 }
