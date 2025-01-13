@@ -1,9 +1,6 @@
 package test_cases
 
 import (
-	"fmt"
-
-	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
@@ -25,28 +22,10 @@ type CommandReflectionTestCase struct {
 }
 
 func (t CommandReflectionTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, skipSuccessMessage bool) error {
-	if err := shell.SendCommand(t.Command); err != nil {
-		return fmt.Errorf("Error sending command to shell: %v", err)
-	}
-
-	commandReflection := fmt.Sprintf("$ %s", t.Command)
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: commandReflection,
-	})
-
-	var assertFuncToRun func() error
-	if t.SkipPromptAssertion {
-		assertFuncToRun = asserter.AssertWithoutPrompt
-	} else {
-		assertFuncToRun = asserter.AssertWithPrompt
-	}
-
-	if err := assertFuncToRun(); err != nil {
-		return err
-	}
-
-	if !skipSuccessMessage {
-		logger.Successf("%s", t.SuccessMessage)
-	}
-	return nil
+	return CommandWithCustomReflectionTestCase{
+		RawCommand:          t.Command + "\n",
+		ExpectedReflection:  t.Command,
+		SuccessMessage:      t.SuccessMessage,
+		SkipPromptAssertion: t.SkipPromptAssertion,
+	}.Run(asserter, shell, logger, skipSuccessMessage, true)
 }
