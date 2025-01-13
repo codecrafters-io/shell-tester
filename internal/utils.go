@@ -62,8 +62,7 @@ func getShortRandomDirectory(stageHarness *test_case_harness.TestCaseHarness) (s
 
 	// Automatically cleanup the directory when the test is completed
 	stageHarness.RegisterTeardownFunc(func() {
-		parentDir := (path.Dir(randomDir))
-		cleanupDirectories([]string{parentDir})
+		cleanupDirectories([]string{randomDir})
 	})
 
 	return randomDir, nil
@@ -72,10 +71,8 @@ func getShortRandomDirectory(stageHarness *test_case_harness.TestCaseHarness) (s
 func getShortRandomDirectories(stageHarness *test_case_harness.TestCaseHarness, n int) ([]string, error) {
 	directoryNames := random.RandomElementsFromArray(SMALL_WORDS, n)
 	randomDirs := make([]string, n)
-	parentDirs := make([]string, n)
 	for i := 0; i < n; i++ {
 		randomDir := path.Join("/tmp", directoryNames[i])
-		parentDirs[i] = path.Dir(randomDir)
 		if err := os.MkdirAll(randomDir, 0755); err != nil {
 			return nil, fmt.Errorf("CodeCrafters internal error. Error creating directory %s: %v", randomDir, err)
 		}
@@ -84,7 +81,7 @@ func getShortRandomDirectories(stageHarness *test_case_harness.TestCaseHarness, 
 
 	// Automatically cleanup the directories when the test is completed
 	stageHarness.RegisterTeardownFunc(func() {
-		cleanupDirectories(parentDirs)
+		cleanupDirectories(randomDirs)
 	})
 
 	return randomDirs, nil
