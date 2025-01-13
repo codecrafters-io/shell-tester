@@ -2,9 +2,7 @@ package internal
 
 import (
 	"fmt"
-	"os"
 	"path"
-	"regexp"
 	"slices"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
@@ -18,18 +16,21 @@ import (
 func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
+	_, err := SetUpCustomCommands(stageHarness, shell, []string{"ls", "cat"})
+	if err != nil {
+		return err
+	}
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	if err := asserter.StartShellAndAssertPrompt(); err != nil {
 		return err
 	}
 
-	dirs, err := getShortRandomDirectories(2)
+	dirs, err := getShortRandomDirectories(stageHarness, 2)
 	if err != nil {
 		return err
 	}
 	stageDir, lsDir := dirs[0], dirs[1]
-	defer cleanupDirectories(dirs)
 
 	randomWords := random.RandomWords(3)
 	slices.Sort(randomWords)
@@ -56,8 +57,8 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Test1:
 	// ls -1 foo > tmp.md; cat tmp.md
 
-	command1 := fmt.Sprintf("ls -1 %s > %s", lsDir, outputFilePath1)
-	command2 := fmt.Sprintf("cat %s", outputFilePath1)
+	command1 := fmt.Sprintf("%s -1 %s > %s", CUSTOM_LS_COMMAND, lsDir, outputFilePath1)
+	command2 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath1)
 
 	err = test_cases.CommandReflectionTestCase{
 		Command: command1,
@@ -80,7 +81,7 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	message := "Hello " + getRandomName()
 	command3 := fmt.Sprintf("echo '%s' 1> %s", message, outputFilePath2)
-	command4 := fmt.Sprintf("cat %s", outputFilePath2)
+	command4 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath2)
 
 	err = test_cases.CommandReflectionTestCase{
 		Command: command3,
@@ -104,13 +105,13 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	filePath := filePaths[1]
 	fileContent := randomWords[1]
-	command5 := fmt.Sprintf("cat %s %s 1> %s", filePath, "nonexistent", outputFilePath3)
-	command6 := fmt.Sprintf("cat %s", outputFilePath3)
+	command5 := fmt.Sprintf("%s %s %s 1> %s", CUSTOM_CAT_COMMAND, filePath, "nonexistent", outputFilePath3)
+	command6 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath3)
 
 	responseTestCase = test_cases.CommandResponseTestCase{
 		Command:          command5,
 		ExpectedOutput:   fmt.Sprintf("cat: %s: No such file or directory", "nonexistent"),
-		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf("cat: can't open '%s': No such file or directory", "nonexistent"))},
+		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received error message",
 	}
 	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
@@ -128,12 +129,4 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	return logAndQuit(asserter, nil)
-}
-
-func cleanupDirectories(dirs []string) {
-	for _, dir := range dirs {
-		if err := os.RemoveAll(dir); err != nil {
-			panic(fmt.Sprintf("CodeCrafters internal error: Failed to cleanup directories: %s", err))
-		}
-	}
 }

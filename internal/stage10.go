@@ -19,7 +19,7 @@ func testCd1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	directory, err := getRandomDirectory()
+	directory, err := getRandomDirectory(stageHarness)
 	if err != nil {
 		return err
 	}
@@ -38,6 +38,7 @@ func testCd1(stageHarness *test_case_harness.TestCaseHarness) error {
 		ExpectedOutput: fmt.Sprintf(`cd: %s: No such file or directory`, directory),
 		FallbackPatterns: []*regexp.Regexp{
 			regexp.MustCompile(fmt.Sprintf(`^(can't cd to %s|((bash: )?cd: )?%s: No such file or directory)$`, directory, directory)),
+			regexp.MustCompile(`^ash: cd: can't cd to ` + directory + `: No such file or directory$`),
 		},
 		SuccessMessage: "✓ Received error message",
 	}

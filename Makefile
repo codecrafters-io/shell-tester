@@ -17,6 +17,12 @@ build:
 test:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/...
 
+test_ls_against_bsd_ls:
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/ls/... -system
+
+test_cat_against_bsd_cat:
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/cat/... -system
+
 record_fixtures:
 	CODECRAFTERS_RECORD_FIXTURES=true make test
 
@@ -172,3 +178,25 @@ test_ash:
 	make test_nav_w_ash
 	make test_quoting_w_ash
 	make test_redirection_w_ash
+
+TEST_TARGET ?= test_bash
+RUNS ?= 100
+test_flakiness:
+	@$(foreach i,$(shell seq 1 $(RUNS)), \
+		echo "Running iteration $(i)/$(RUNS) of $(TEST_TARGET)" ; \
+		make $(TEST_TARGET) > /tmp/test ; \
+		if [ "$$?" -ne 0 ]; then \
+			echo "Test failed on iteration $(i)" ; \
+			exit 1 ; \
+		fi ;\
+	)
+
+build_executables:
+	oses="darwin linux" ; \
+	arches="arm64 amd64" ; \
+	for os in $$oses; do \
+		for arch in $$arches; do \
+		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/ls_$${os}_$${arch} ./internal/custom_executable/ls/ls.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/cat_$${os}_$${arch} ./internal/custom_executable/cat/cat.go; \
+		done; \
+	done

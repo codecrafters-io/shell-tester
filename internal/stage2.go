@@ -25,5 +25,6 @@ func testInvalidCommand(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	logger.Successf("✓ Received command not found message")
 
-	return logAndQuit(asserter, nil)
+	// TODO: Printing this prompt makes fixture tests flaky
+	return nil
 }

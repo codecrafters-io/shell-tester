@@ -16,18 +16,21 @@ import (
 func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
+	_, err := SetUpCustomCommands(stageHarness, shell, []string{"ls", "cat"})
+	if err != nil {
+		return err
+	}
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	if err := asserter.StartShellAndAssertPrompt(); err != nil {
 		return err
 	}
 
-	dirs, err := getShortRandomDirectories(2)
+	dirs, err := getShortRandomDirectories(stageHarness, 2)
 	if err != nil {
 		return err
 	}
 	stageDir, lsDir := dirs[0], dirs[1]
-	defer cleanupDirectories(dirs)
 
 	randomWords := random.RandomWords(3)
 	slices.Sort(randomWords)
@@ -54,8 +57,8 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Test1:
 	// ls -1 foo >> tmp.md; cat tmp.md
 
-	command1 := fmt.Sprintf("ls -1 %s >> %s", lsDir, outputFilePath)
-	command2 := fmt.Sprintf("cat %s", outputFilePath)
+	command1 := fmt.Sprintf("%s -1 %s >> %s", CUSTOM_LS_COMMAND, lsDir, outputFilePath)
+	command2 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath)
 
 	err = test_cases.CommandReflectionTestCase{
 		Command: command1,
@@ -81,7 +84,7 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	message2 := "Hello " + getRandomName()
 	command4 := fmt.Sprintf("echo '%s' 1>> %s", message1, outputFilePath2)
 	command5 := fmt.Sprintf("echo '%s' 1>> %s", message2, outputFilePath2)
-	command6 := fmt.Sprintf("cat %s", outputFilePath2)
+	command6 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath2)
 
 	err = test_cases.CommandReflectionTestCase{
 		Command: command4,
@@ -110,8 +113,8 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	// echo "List of files: " > tmp.md; ls -1 foo >> tmp.md; cat tmp.md
 
 	command7 := fmt.Sprintf(`echo "List of files: " > %s`, outputFilePath3)
-	command8 := fmt.Sprintf("ls -1 %s >> %s", lsDir, outputFilePath3)
-	command9 := fmt.Sprintf("cat %s", outputFilePath3)
+	command8 := fmt.Sprintf("%s -1 %s >> %s", CUSTOM_LS_COMMAND, lsDir, outputFilePath3)
+	command9 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath3)
 
 	err = test_cases.CommandReflectionTestCase{
 		Command: command7,

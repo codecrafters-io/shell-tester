@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"os"
 	"path"
 	"strings"
 
@@ -16,17 +15,20 @@ import (
 func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
+	_, err := SetUpCustomCommands(stageHarness, shell, []string{"cat"})
+	if err != nil {
+		return err
+	}
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	if err := asserter.StartShellAndAssertPrompt(); err != nil {
 		return err
 	}
 
-	randomDir, err := getShortRandomDirectory()
+	randomDir, err := getShortRandomDirectory(stageHarness)
 	if err != nil {
 		return err
 	}
-	defer os.RemoveAll(randomDir)
 
 	randomUniqueFileNames := random.RandomInts(1, 100, 3)
 	L := random.RandomElementsFromArray(LARGE_WORDS, 6)
@@ -45,7 +47,7 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 		fmt.Sprintf(`echo '%s\\\n%s'`, L[0], L[1]),
 		fmt.Sprintf(`echo '%s\"%s%s\"%s'`, L[2], L[3], L[4], L[0]),
 		fmt.Sprintf(`echo '%s\\n%s'`, L[4], L[1]),
-		fmt.Sprintf(`cat "%s" "%s" "%s"`, filePaths[0], filePaths[1], filePaths[2]),
+		fmt.Sprintf(`%s "%s" "%s" "%s"`, CUSTOM_CAT_COMMAND, filePaths[0], filePaths[1], filePaths[2]),
 	}
 	expectedOutputs := []string{
 		fmt.Sprintf(`%s\\\n%s`, L[0], L[1]),
