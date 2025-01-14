@@ -147,7 +147,7 @@ func LogCommandBeforeSending(logger *logger.Logger, command string, expectedRefl
 
 	logger.Infof("Typed %q", nonWhitespaceChars)
 	for range tabs {
-		logger.Infof("Pressed %q", "<TAB>")
+		logger.Infof("Pressed %q (expecting autocomplete to %q)", "<TAB>", expectedReflection)
 	}
 }
 
