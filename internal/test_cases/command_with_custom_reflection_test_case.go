@@ -2,7 +2,6 @@ package test_cases
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -31,8 +30,14 @@ type CommandWithCustomReflectionTestCase struct {
 }
 
 func (t CommandWithCustomReflectionTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, skipSuccessMessage bool, skipCommandLogging bool) error {
+	hasEnterKey := t.RawCommand[len(t.RawCommand)-1] == '\n'
+	rawCommand := t.RawCommand
+	if hasEnterKey {
+		rawCommand = t.RawCommand[:len(t.RawCommand)-1]
+	}
+
 	if !skipCommandLogging {
-		LogCommandBeforeSending(logger, t.RawCommand)
+		LogCommandBeforeSending(logger, rawCommand, t.ExpectedReflection)
 	}
 	if err := shell.SendCommandRaw(t.RawCommand); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
@@ -58,11 +63,4 @@ func (t CommandWithCustomReflectionTestCase) Run(asserter *logged_shell_asserter
 		logger.Successf("%s", t.SuccessMessage)
 	}
 	return nil
-}
-
-func LogCommandBeforeSending(logger *logger.Logger, command string) {
-	command = strings.ReplaceAll(command, " ", "·")
-	command = strings.ReplaceAll(command, "\t", "⇥ ") // →
-	command = strings.ReplaceAll(command, "\n", "⏎")
-	logger.Infof("[setup] %s", command)
 }
