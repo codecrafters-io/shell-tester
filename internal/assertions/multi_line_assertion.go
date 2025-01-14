@@ -42,7 +42,7 @@ func (a *MultiLineAssertion) AddSingleLineAssertion(expectedOutput string, fallb
 }
 
 func (a *MultiLineAssertion) Inspect() string {
-	return fmt.Sprintf("MultiLineAssertion (%q)", a.SingleLineAssertions)
+	return fmt.Sprintf("MultiLineAssertion (%v)", a.SingleLineAssertions)
 }
 
 func (a *MultiLineAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err *AssertionError) {
