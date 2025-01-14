@@ -13,7 +13,10 @@ import (
 
 func copyFile(sourcePath, destinationPath string, logger *logger.Logger) error {
 	// Copy the source executable to the destination path
-	logger.Infof("Copying %s to %s", sourcePath, destinationPath)
+	logger.UpdateSecondaryPrefix("Setup")
+	logger.Infof("cp %s %s", sourcePath, destinationPath)
+	logger.ResetSecondaryPrefix()
+
 	command := fmt.Sprintf("cp %s %s", sourcePath, destinationPath)
 	copyCmd := exec.Command("sh", "-c", command)
 	copyCmd.Stdout = io.Discard
