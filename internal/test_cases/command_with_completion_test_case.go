@@ -47,7 +47,13 @@ type CommandWithAttemptedCompletionTestCase struct {
 }
 
 func (t CommandWithAttemptedCompletionTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, skipCommandLogging bool) error {
-	// TODO: Possibly panic if no tabs & newlines ?
+	if len(t.RawCommand) == len(strings.TrimSpace(t.RawCommand)) {
+		panic("No tabs or newlines found in the command, please use other Command TestCases")
+	}
+
+	if strings.Contains(strings.TrimSpace(t.RawCommand), "\t") {
+		panic("Tabs found in the middle of the command, this is not supported")
+	}
 
 	// Seperate the command into chars & tabs, newline
 	hasEnterKey := t.RawCommand[len(t.RawCommand)-1] == '\n'
