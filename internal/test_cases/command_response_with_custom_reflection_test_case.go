@@ -40,6 +40,7 @@ type CommandResponseWithCustomReflectionTestCase struct {
 
 func (t CommandResponseWithCustomReflectionTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, skipCommandLogging bool) error {
 	hasEnterKey := t.RawCommand[len(t.RawCommand)-1] == '\n'
+	hasTabKey := strings.Contains(t.RawCommand, "\t")
 	rawCommand := t.RawCommand
 	if hasEnterKey {
 		rawCommand = t.RawCommand[:len(t.RawCommand)-1]
@@ -54,10 +55,23 @@ func (t CommandResponseWithCustomReflectionTestCase) Run(asserter *logged_shell_
 	}
 
 	commandReflection := fmt.Sprintf("$ %s", t.ExpectedReflection)
+	// Space after autocomplete
+	if hasTabKey {
+		commandReflection = fmt.Sprintf("$ %s ", t.ExpectedReflection)
+	}
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
 		StayOnSameLine: true,
 	})
+
+	if err := asserter.AssertWithoutPrompt(); err != nil {
+		return err
+	}
+	fmt.Println(hasTabKey)
+	if hasTabKey {
+		logger.Successf("✓ Prompt line matches %q", t.ExpectedReflection)
+	}
+	asserter.PopAssertion()
 
 	if hasEnterKey {
 		if err := shell.SendCommandRaw("\n"); err != nil {
@@ -89,24 +103,4 @@ func (t CommandResponseWithCustomReflectionTestCase) Run(asserter *logged_shell_
 
 	logger.Successf("%s", t.SuccessMessage)
 	return nil
-}
-
-func LogCommandBeforeSending(logger *logger.Logger, command string, expectedReflection string) {
-	nonWhitespaceChars := ""
-	tabs := ""
-	for i := len(command) - 1; i >= 0; i-- {
-		if command[i] == '\t' {
-			tabs = string(command[i]) + tabs
-		} else {
-			nonWhitespaceChars = string(command[i]) + nonWhitespaceChars
-		}
-	}
-
-	logger.Infof("Typed %q", nonWhitespaceChars)
-	stringRepresentationOfTabs := strings.Repeat("<TAB> ", len(tabs))
-	logger.Infof("Pressed %q", stringRepresentationOfTabs)
-}
-
-func LogNewLine(logger *logger.Logger) {
-	logger.Infof("Pressed %q", "<ENTER>")
 }
