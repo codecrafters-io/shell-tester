@@ -140,7 +140,7 @@ func LogCommandBeforeSending(logger *logger.Logger, command string, expectedRefl
 	}
 
 	logger.Infof("Typed %q", nonWhitespaceChars)
-	for _ = range tabs {
+	for range tabs {
 		logger.Infof("Pressed %q", "<TAB>")
 	}
 }
