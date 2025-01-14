@@ -124,6 +124,31 @@ func logAndQuit(asserter *logged_shell_asserter.LoggedShellAsserter, err error) 
 	return err
 }
 
+// type CommandMetaData struct {
+// 	CommandType     string
+// 	CommandName     string
+// 	CommandMetadata string
+// }
+
+func SetUpSignaturePrinter(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, randomCode string, randomExecutableName string) (string, error) {
+	executableDir, err := getRandomDirectory(stageHarness)
+	if err != nil {
+		return "", err
+	}
+	// Add the random directory to PATH
+	// (where the custom executable is copied to)
+	shell.AddToPath(executableDir)
+
+	// case "signature_printer":
+	exePath := path.Join(executableDir, randomExecutableName)
+	err = custom_executable.CreateSignaturePrinterExecutable(randomCode, exePath)
+	if err != nil {
+		return "", err
+	}
+
+	return executableDir, nil
+}
+
 func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, commands []string) (string, error) {
 	executableDir, err := getRandomDirectory(stageHarness)
 	if err != nil {
