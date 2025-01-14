@@ -55,6 +55,10 @@ func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
 	a.AssertionCollection.AddAssertion(assertion)
 }
 
+func (a *LoggedShellAsserter) PopAssertion() assertions.Assertion {
+	return a.AssertionCollection.PopAssertion()
+}
+
 func (a *LoggedShellAsserter) AssertWithPrompt() error {
 	return a.assert(false, SUBSEQUENT_READ_TIMEOUT)
 }
