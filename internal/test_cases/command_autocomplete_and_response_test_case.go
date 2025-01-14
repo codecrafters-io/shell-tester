@@ -2,6 +2,8 @@ package test_cases
 
 import (
 	"fmt"
+	"regexp"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -9,13 +11,15 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-// CommandAutocompleteTestCase is a test case that:
+// CommandAutocompleteAndResponseTestCase is a test case that:
 // Sends a command to the shell
 // Asserts that the prompt line reflects the command
 // Sends TAB
 // Asserts that the expected reflection is printed to the screen (with a space after it)
+// Sends ENTER
+// Asserts that the expected reflection is still present (with no space after it)
 // If any error occurs returns the error from the corresponding assertion
-type CommandAutocompleteTestCase struct {
+type CommandAutocompleteAndResponseTestCase struct {
 	// RawCommand is the command to send to the shell
 	RawCommand string
 
@@ -26,6 +30,16 @@ type CommandAutocompleteTestCase struct {
 	// the expected reflection should have no space after it
 	ExpectedAutocompletedReflectionHasNoSpace bool
 
+	// Args is a list of arguments to pass to the command
+	// Joins the args with spaces to form the expected output
+	Args []string
+
+	// ExpectedOutput is the expected output string to match against
+	ExpectedOutput string
+
+	// FallbackPatterns is a list of regex patterns to match against
+	FallbackPatterns []*regexp.Regexp
+
 	// SuccessMessage is the message to log in case of success
 	SuccessMessage string
 
@@ -33,7 +47,7 @@ type CommandAutocompleteTestCase struct {
 	SkipPromptAssertion bool
 }
 
-func (t CommandAutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, skipCommandLogging bool) error {
+func (t CommandAutocompleteAndResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, skipCommandLogging bool) error {
 	// Log the details of the command before sending it
 	logCommand(logger, t.RawCommand)
 
@@ -85,6 +99,31 @@ func (t CommandAutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	// The space at the end of the reflection won't be present, so replace that assertion
 	asserter.PopAssertion()
 
+	// Send ENTER
+	logNewLine(logger)
+	nextCommandToSend := "\n"
+	if t.Args != nil {
+		nextCommandToSend = strings.Join(t.Args, " ") + "\n"
+	}
+	if err := shell.SendCommandRaw(nextCommandToSend); err != nil {
+		return fmt.Errorf("Error sending command to shell: %v", err)
+	}
+
+	// Assert the reflection again, after sending the enter key
+	// This time, there won't be a space after the reflection
+	commandReflection = fmt.Sprintf("$ %s %s", t.ExpectedReflection, strings.TrimSpace(nextCommandToSend))
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: commandReflection,
+	})
+
+	// If ExpectedOutput is provided, assert that the output matches
+	if t.ExpectedOutput != "" {
+		asserter.AddAssertion(assertions.SingleLineAssertion{
+			ExpectedOutput:   t.ExpectedOutput,
+			FallbackPatterns: t.FallbackPatterns,
+		})
+	}
+
 	var assertFuncToRun func() error
 	if t.SkipPromptAssertion {
 		assertFuncToRun = asserter.AssertWithoutPrompt
@@ -98,16 +137,4 @@ func (t CommandAutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedS
 
 	logger.Successf("%s", t.SuccessMessage)
 	return nil
-}
-
-func logNewLine(logger *logger.Logger) {
-	logger.Infof("Pressed %q", "<ENTER>")
-}
-
-func logTab(logger *logger.Logger, expectedReflection string) {
-	logger.Infof("Pressed %q (expecting autocomplete to %q)", "<TAB>", expectedReflection)
-}
-
-func logCommand(logger *logger.Logger, command string) {
-	logger.Infof("Typed %q", command)
 }
