@@ -59,9 +59,8 @@ func testA1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	command3 := fmt.Sprintf("cd %s", grandParentDirectory)
 	err = test_cases.CommandReflectionTestCase{
-		Command:             command3,
-		SuccessMessage:      fmt.Sprintf("Changed directory to %s", grandParentDirectory),
-		SkipPromptAssertion: true,
+		Command:        command3,
+		SuccessMessage: fmt.Sprintf("Changed directory to %s", grandParentDirectory),
 	}.Run(asserter, shell, logger, false)
 	if err != nil {
 		return err
@@ -69,19 +68,19 @@ func testA1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	command4 := "ls"
 	err = test_cases.CommandResponseTestCase{
-		Command:          command4,
-		ExpectedOutput:   filepath.Base(parentDirectory),
-		FallbackPatterns: nil,
-		SuccessMessage:   fmt.Sprintf("Listed the contents of %s", grandParentDirectory),
+		Command:        command4,
+		ExpectedOutput: filepath.Base(parentDirectory),
+		SuccessMessage: fmt.Sprintf("Listed the contents of %s", grandParentDirectory),
 	}.Run(asserter, shell, logger)
 	if err != nil {
 		return err
 	}
 
 	command5 := "cd " + "\t" + "\t" + "\n"
+	autocompleted := fmt.Sprintf("cd %s/%s/", filepath.Base(parentDirectory), filepath.Base(randomDirectory))
 	err = test_cases.CommandWithAttemptedCompletionTestCase{
 		RawCommand:         command5,
-		ExpectedReflection: fmt.Sprintf("cd %s/%s/", filepath.Base(parentDirectory), filepath.Base(randomDirectory)),
+		ExpectedReflection: autocompleted,
 		ExpectedAutocompletedReflectionHasNoSpace: true,
 		SuccessMessage: fmt.Sprintf("Changed directory to %s", filepath.Base(parentDirectory)),
 	}.Run(asserter, shell, logger, false)
@@ -93,8 +92,8 @@ func testA1(stageHarness *test_case_harness.TestCaseHarness) error {
 	err = test_cases.CommandWithAttemptedCompletionTestCase{
 		RawCommand:         command6,
 		ExpectedReflection: "ec",
-		ExpectedOutput:     "echo  ecpg",
 		ExpectedAutocompletedReflectionHasNoSpace: true,
+		ExpectedOutput:      "echo  ecpg",
 		SuccessMessage:      "Received the contents of xyz/file",
 		SkipPromptAssertion: true,
 	}.Run(asserter, shell, logger, false)
