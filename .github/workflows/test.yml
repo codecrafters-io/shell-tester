@@ -59,3 +59,16 @@ jobs:
         run: |
           make test
         shell: alpine.sh --root {0}
+
+  test-flakiness:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.22.x
+
+      - run: TEST_TARGET=test_bash RUNS=25 make test_flakiness
