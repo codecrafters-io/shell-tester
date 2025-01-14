@@ -3,6 +3,7 @@ package test_cases
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -38,15 +39,34 @@ type CommandResponseWithCustomReflectionTestCase struct {
 }
 
 func (t CommandResponseWithCustomReflectionTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, skipCommandLogging bool) error {
-	if !skipCommandLogging {
-		LogCommandBeforeSending(logger, t.RawCommand)
+	hasEnterKey := t.RawCommand[len(t.RawCommand)-1] == '\n'
+	rawCommand := t.RawCommand
+	if hasEnterKey {
+		rawCommand = t.RawCommand[:len(t.RawCommand)-1]
 	}
 
-	if err := shell.SendCommandRaw(t.RawCommand); err != nil {
+	if !skipCommandLogging {
+		LogCommandBeforeSending(logger, rawCommand, t.ExpectedReflection)
+	}
+
+	if err := shell.SendCommandRaw(rawCommand); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
 	commandReflection := fmt.Sprintf("$ %s", t.ExpectedReflection)
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: commandReflection,
+		StayOnSameLine: true,
+	})
+
+	if hasEnterKey {
+		if err := shell.SendCommandRaw("\n"); err != nil {
+			return fmt.Errorf("Error sending command to shell: %v", err)
+		}
+	}
+	LogNewLine(logger)
+
+	commandReflection = fmt.Sprintf("$ %s", t.ExpectedReflection)
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
 	})
@@ -69,4 +89,24 @@ func (t CommandResponseWithCustomReflectionTestCase) Run(asserter *logged_shell_
 
 	logger.Successf("%s", t.SuccessMessage)
 	return nil
+}
+
+func LogCommandBeforeSending(logger *logger.Logger, command string, expectedReflection string) {
+	nonWhitespaceChars := ""
+	tabs := ""
+	for i := len(command) - 1; i >= 0; i-- {
+		if command[i] == '\t' {
+			tabs = string(command[i]) + tabs
+		} else {
+			nonWhitespaceChars = string(command[i]) + nonWhitespaceChars
+		}
+	}
+
+	logger.Infof("Typed %q", nonWhitespaceChars)
+	stringRepresentationOfTabs := strings.Repeat("<TAB> ", len(tabs))
+	logger.Infof("Pressed %q", stringRepresentationOfTabs)
+}
+
+func LogNewLine(logger *logger.Logger) {
+	logger.Infof("Pressed %q", "<ENTER>")
 }
