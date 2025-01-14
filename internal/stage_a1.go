@@ -19,13 +19,13 @@ type inputAndCompletion struct {
 func testA1(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 
-	inputAndCompletion := []inputAndCompletion{
+	inputAndCompletions := []inputAndCompletion{
 		{Input: "typ", Completion: "type", CompletionEndsWithNoSpace: true},
 		{Input: "ech", Completion: "echo", CompletionEndsWithNoSpace: false},
 		{Input: "exi", Completion: "exit", CompletionEndsWithNoSpace: false},
 	}
 
-	for _, inputAndCompletion := range inputAndCompletion {
+	for _, inputAndCompletion := range inputAndCompletions {
 		err := a1Helper(stageHarness, logger, inputAndCompletion.Input, inputAndCompletion.Completion, inputAndCompletion.CompletionEndsWithNoSpace)
 		if err != nil {
 			return err
