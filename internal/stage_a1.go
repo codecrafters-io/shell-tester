@@ -8,6 +8,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -27,16 +28,18 @@ func testA1(stageHarness *test_case_harness.TestCaseHarness) error {
 	directory := "xyz"
 	command1 := fmt.Sprintf("cd %s"+"\t"+"\n", directory[:1])
 
-	err = test_cases.CommandWithCustomReflectionTestCase{
+	err = test_cases.CommandWithAttemptedCompletionTestCase{
 		RawCommand:         command1,
 		ExpectedReflection: fmt.Sprintf("cd %s/", directory),
-	}.Run(asserter, shell, logger, true, false)
+		ExpectedAutocompletedReflectionHasNoSpace: true,
+		SuccessMessage: fmt.Sprintf("Changed directory to %s", directory),
+	}.Run(asserter, shell, logger, false)
 	if err != nil {
 		return err
 	}
 
 	command2 := fmt.Sprintf("cat " + "\t" + "\n")
-	err = test_cases.CommandResponseWithCustomReflectionTestCase{
+	err = test_cases.CommandWithAttemptedCompletionTestCase{
 		RawCommand:         command2,
 		ExpectedReflection: "cat file",
 		ExpectedOutput:     "Hello World!",
@@ -76,13 +79,38 @@ func testA1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	command5 := "cd " + "\t" + "\t" + "\n"
-	err = test_cases.CommandWithCustomReflectionTestCase{
+	err = test_cases.CommandWithAttemptedCompletionTestCase{
 		RawCommand:         command5,
 		ExpectedReflection: fmt.Sprintf("cd %s/%s/", filepath.Base(parentDirectory), filepath.Base(randomDirectory)),
-	}.Run(asserter, shell, logger, true, false)
+		ExpectedAutocompletedReflectionHasNoSpace: true,
+		SuccessMessage: fmt.Sprintf("Changed directory to %s", filepath.Base(parentDirectory)),
+	}.Run(asserter, shell, logger, false)
+	if err != nil {
+		return err
+	}
+
+	command6 := "ec" + "\t" + "\t"
+	err = test_cases.CommandWithAttemptedCompletionTestCase{
+		RawCommand:         command6,
+		ExpectedReflection: "ec",
+		ExpectedOutput:     "echo  ecpg",
+		ExpectedAutocompletedReflectionHasNoSpace: true,
+		SuccessMessage:      "Received the contents of xyz/file",
+		SkipPromptAssertion: true,
+	}.Run(asserter, shell, logger, false)
 	if err != nil {
 		return err
 	}
 
 	return logAndQuit(asserter, nil)
+}
+
+func logScreenState(shell *shell_executable.ShellExecutable) {
+	screenState := shell.GetScreenState()
+	for _, row := range screenState {
+		cleanedRow := virtual_terminal.BuildCleanedRow(row)
+		if len(cleanedRow) > 0 {
+			fmt.Println(cleanedRow)
+		}
+	}
 }

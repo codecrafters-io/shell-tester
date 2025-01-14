@@ -67,7 +67,6 @@ func (t CommandResponseWithCustomReflectionTestCase) Run(asserter *logged_shell_
 	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
 	}
-	fmt.Println(hasTabKey)
 	if hasTabKey {
 		logger.Successf("✓ Prompt line matches %q", t.ExpectedReflection)
 	}
