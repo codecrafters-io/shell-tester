@@ -20,7 +20,7 @@ func testAX(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	if err := asserter.StartShellAndAssertPrompt(); err != nil {
+	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}
 

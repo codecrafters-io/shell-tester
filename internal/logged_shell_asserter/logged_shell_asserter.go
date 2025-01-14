@@ -36,7 +36,7 @@ func NewLoggedShellAsserter(shell *shell_executable.ShellExecutable) *LoggedShel
 	return asserter
 }
 
-func (a *LoggedShellAsserter) StartShellAndAssertPrompt() error {
+func (a *LoggedShellAsserter) StartShellAndAssertPrompt(skipSuccessMessage bool) error {
 	if err := a.Shell.Start(); err != nil {
 		return err
 	}
@@ -45,7 +45,9 @@ func (a *LoggedShellAsserter) StartShellAndAssertPrompt() error {
 		return err
 	}
 
-	a.Shell.GetLogger().Successf("✓ Received prompt ($ )")
+	if !skipSuccessMessage {
+		a.Shell.GetLogger().Successf("✓ Received prompt ($ )")
+	}
 
 	// .NET ReadLine() method seems to have a bug where it prints the command twice
 	// in certain cases. This sleep is a workaround for that. Refer to: CC-1576

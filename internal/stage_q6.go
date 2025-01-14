@@ -25,7 +25,7 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	defer cleanupDirectories([]string{executableDir})
 
-	if err := asserter.StartShellAndAssertPrompt(); err != nil {
+	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}
 

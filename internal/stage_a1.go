@@ -39,7 +39,7 @@ func a1Helper(stageHarness *test_case_harness.TestCaseHarness, logger *logger.Lo
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	if err := asserter.StartShellAndAssertPrompt(); err != nil {
+	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err
 	}
 

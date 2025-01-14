@@ -40,7 +40,7 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 		strings.Join(random.RandomWords(2), " ") + "." + "\n",
 	}
 
-	if err := asserter.StartShellAndAssertPrompt(); err != nil {
+	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}
 

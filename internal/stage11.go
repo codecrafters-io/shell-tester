@@ -16,7 +16,7 @@ func testCd2(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	if err := asserter.StartShellAndAssertPrompt(); err != nil {
+	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}
 
