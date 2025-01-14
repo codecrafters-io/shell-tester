@@ -29,6 +29,10 @@ type CommandWithAttemptedCompletionTestCase struct {
 	// ExpectedReflection is the custom reflection to use
 	ExpectedReflection string
 
+	// ExpectedAutocompletedReflectionHasNoSpace is true if
+	// the expected reflection should have no space after it
+	ExpectedAutocompletedReflectionHasNoSpace bool
+
 	// ExpectedOutput is the expected output string to match against
 	ExpectedOutput string
 
@@ -67,7 +71,7 @@ func (t CommandWithAttemptedCompletionTestCase) Run(asserter *logged_shell_asser
 
 	commandReflection := fmt.Sprintf("$ %s", t.ExpectedReflection)
 	// Space after autocomplete
-	if hasTabKey {
+	if hasTabKey && !t.ExpectedAutocompletedReflectionHasNoSpace {
 		commandReflection = fmt.Sprintf("$ %s ", t.ExpectedReflection)
 	}
 	// Assert auto-completion
