@@ -32,6 +32,9 @@ type CommandResponseWithCustomReflectionTestCase struct {
 
 	// SuccessMessage is the message to log in case of success
 	SuccessMessage string
+
+	// SkipPromptAssertion is a flag to skip the final prompt assertion
+	SkipPromptAssertion bool
 }
 
 func (t CommandResponseWithCustomReflectionTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, skipCommandLogging bool) error {
@@ -53,7 +56,14 @@ func (t CommandResponseWithCustomReflectionTestCase) Run(asserter *logged_shell_
 		FallbackPatterns: t.FallbackPatterns,
 	})
 
-	if err := asserter.AssertWithPrompt(); err != nil {
+	var assertFuncToRun func() error
+	if t.SkipPromptAssertion {
+		assertFuncToRun = asserter.AssertWithoutPrompt
+	} else {
+		assertFuncToRun = asserter.AssertWithPrompt
+	}
+
+	if err := assertFuncToRun(); err != nil {
 		return err
 	}
 
