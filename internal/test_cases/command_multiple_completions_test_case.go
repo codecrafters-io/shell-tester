@@ -84,7 +84,6 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 		commandReflection = fmt.Sprintf("%s ", t.ExpectedReflection)
 	}
 
-	// fmt.Printf("%q\n", commandReflection)
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
