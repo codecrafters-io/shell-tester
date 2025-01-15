@@ -92,6 +92,10 @@ func (b *ShellExecutable) LogOutput(output []byte) {
 	b.programLogger.Plainln(string(output))
 }
 
+func (b *ShellExecutable) VTBellChannel() chan bool {
+	return b.vt.BellChannel()
+}
+
 func (b *ShellExecutable) ReadUntilConditionOrTimeout(condition func() bool, timeout time.Duration) error {
 	err := b.ptyReader.ReadUntilConditionOrTimeout(condition, timeout)
 	if err != nil {
