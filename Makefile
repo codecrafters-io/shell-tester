@@ -200,3 +200,15 @@ build_executables:
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/cat_$${os}_$${arch} ./internal/custom_executable/cat/cat.go; \
 		done; \
 	done
+
+test_completions: build
+	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
+	CODECRAFTERS_TEST_CASES_JSON="[ \
+		{\"slug\":\"ac1\",\"tester_log_prefix\":\"tester::#ac1\",\"title\":\"Stage #1: builtins completion\"}, \
+		{\"slug\":\"ac2\",\"tester_log_prefix\":\"tester::#ac2\",\"title\":\"Stage #2: completion with args\"}, \
+		{\"slug\":\"ac3\",\"tester_log_prefix\":\"tester::#ac3\",\"title\":\"Stage #3: completion with invalid command\"}, \
+		{\"slug\":\"ac4\",\"tester_log_prefix\":\"tester::#ac4\",\"title\":\"Stage #4: completion with valid command\"}, \
+		{\"slug\":\"ac5\",\"tester_log_prefix\":\"tester::#ac5\",\"title\":\"Stage #5: completion with multiple executables\"} \
+	]" \
+	dist/main.out
+

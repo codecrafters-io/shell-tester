@@ -130,5 +130,20 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testA2,
 			Timeout:  15 * time.Second,
 		},
+		{
+			Slug:     "ac3",
+			TestFunc: testA3,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "ac4",
+			TestFunc: testA4,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "ac5",
+			TestFunc: testA5,
+			Timeout:  15 * time.Second,
+		},
 	},
 }
