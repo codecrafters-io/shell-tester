@@ -1,0 +1,96 @@
+Debug = true
+
+[33m[stage-5] [0m[94mRunning tests for Stage #5: ac1[0m
+[33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-5] [0m[92m✓ Received prompt ($ )[0m
+[33m[stage-5] [0m[94mTyped "typ"[0m
+[33m[stage-5] [0m[92m✓ Prompt line matches "$ typ"[0m
+[33m[stage-5] [0m[94mPressed "<TAB>" (expecting autocomplete to "type")[0m
+[33m[stage-5] [0m[92m✓ Prompt line matches "type"[0m
+[33m[stage-5] [0m[92mReceived completion for "typ"[0m
+[33m[stage-5] [0m[94mTearing down shell[0m
+[33m[your-program] [0m$ type
+[33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-5] [0m[92m✓ Received prompt ($ )[0m
+[33m[stage-5] [0m[94mTyped "ech"[0m
+[33m[stage-5] [0m[92m✓ Prompt line matches "$ ech"[0m
+[33m[stage-5] [0m[94mPressed "<TAB>" (expecting autocomplete to "echo")[0m
+[33m[stage-5] [0m[92m✓ Prompt line matches "echo"[0m
+[33m[stage-5] [0m[92mReceived completion for "ech"[0m
+[33m[stage-5] [0m[94mTearing down shell[0m
+[33m[your-program] [0m$ echo 
+[33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-5] [0m[92m✓ Received prompt ($ )[0m
+[33m[stage-5] [0m[94mTyped "exi"[0m
+[33m[stage-5] [0m[92m✓ Prompt line matches "$ exi"[0m
+[33m[stage-5] [0m[94mPressed "<TAB>" (expecting autocomplete to "exit")[0m
+[33m[stage-5] [0m[92m✓ Prompt line matches "exit"[0m
+[33m[stage-5] [0m[92mReceived completion for "exi"[0m
+[33m[stage-5] [0m[94mTearing down shell[0m
+[33m[your-program] [0m$ exit 
+[33m[stage-5] [0m[92mTest passed.[0m
+
+[33m[stage-4] [0m[94mRunning tests for Stage #4: ac2[0m
+[33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-4] [0m[92m✓ Received prompt ($ )[0m
+[33m[stage-4] [0m[94mTyped "ech"[0m
+[33m[stage-4] [0m[92m✓ Prompt line matches "$ ech"[0m
+[33m[stage-4] [0m[94mPressed "<TAB>" (expecting autocomplete to "echo")[0m
+[33m[stage-4] [0m[92m✓ Prompt line matches "echo"[0m
+[33m[stage-4] [0m[94mPressed "<ENTER>"[0m
+[33m[your-program] [0m$ echo hello
+[33m[your-program] [0mhello
+[33m[stage-4] [0m[92mReceived completion for "ech"[0m
+[33m[stage-4] [0m[94mTearing down shell[0m
+[33m[your-program] [0m$ 
+[33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-4] [0m[92m✓ Received prompt ($ )[0m
+[33m[stage-4] [0m[94mTyped "typ"[0m
+[33m[stage-4] [0m[92m✓ Prompt line matches "$ typ"[0m
+[33m[stage-4] [0m[94mPressed "<TAB>" (expecting autocomplete to "type")[0m
+[33m[stage-4] [0m[92m✓ Prompt line matches "type"[0m
+[33m[stage-4] [0m[94mPressed "<ENTER>"[0m
+[33m[your-program] [0m$ type type
+[33m[your-program] [0mtype is a shell builtin
+[33m[stage-4] [0m[92mReceived completion for "typ"[0m
+[33m[stage-4] [0m[94mTearing down shell[0m
+[33m[your-program] [0m$ 
+[33m[stage-4] [0m[92mTest passed.[0m
+
+[33m[stage-3] [0m[94mRunning tests for Stage #3: ac3[0m
+[33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-3] [0m[92m✓ Received prompt ($ )[0m
+[33m[stage-3] [0m[94mTyped "xyz"[0m
+[33m[stage-3] [0m[92m✓ Prompt line matches "$ xyz"[0m
+[33m[stage-3] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz")[0m
+[33m[stage-3] [0m[92m✓ Prompt line matches "xyz"[0m
+[33m[stage-3] [0m[92m✓ Received bell[0m
+[33m[stage-3] [0m[92mReceived completion for "xyz"[0m
+[33m[your-program] [0m$ xyz
+[33m[stage-3] [0m[92mTest passed.[0m
+
+[33m[stage-2] [0m[94mRunning tests for Stage #2: ac4[0m
+[33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-2] [0m[92m✓ Received prompt ($ )[0m
+[33m[stage-2] [0m[94mTyped "custom"[0m
+[33m[stage-2] [0m[92m✓ Prompt line matches "$ custom"[0m
+[33m[stage-2] [0m[94mPressed "<TAB>" (expecting autocomplete to "custom_exe_1357")[0m
+[33m[stage-2] [0m[92m✓ Prompt line matches "custom_exe_1357"[0m
+[33m[stage-2] [0m[92mReceived completion for "custom"[0m
+[33m[your-program] [0m$ custom_exe_1357 
+[33m[stage-2] [0m[92mTest passed.[0m
+
+[33m[stage-1] [0m[94mRunning tests for Stage #1: ac5[0m
+[33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-1] [0m[92m✓ Received prompt ($ )[0m
+[33m[stage-1] [0m[94mTyped "xyz_"[0m
+[33m[your-program] [0m$ xyz_
+[33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_"[0m
+[33m[stage-1] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_foo  xyz_qux  xyz_quz")[0m
+[33m[stage-1] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_foo  xyz_qux  xyz_quz")[0m
+[33m[stage-1] [0m[92m✓ Received bell[0m
+[33m[your-program] [0mxyz_foo  xyz_qux  xyz_quz
+[33m[stage-1] [0m[92m✓ Prompt line matches "xyz_foo  xyz_qux  xyz_quz"[0m
+[33m[stage-1] [0m[92mReceived completion for "xyz_"[0m
+[33m[your-program] [0m$ xyz_
+[33m[stage-1] [0m[92mTest passed.[0m
