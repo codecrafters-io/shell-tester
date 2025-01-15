@@ -26,16 +26,24 @@ func main() {
 	}
 
 	// Process each file
+	exitWithError := false
 	for _, file := range fileArgs {
 		if !checkIfFileExists(file) {
 			fmt.Fprintf(os.Stderr, "cat: %s: No such file or directory\n", file)
+			exitWithError = true
 			continue
 		}
 		if err := processFile(file); err != nil {
 			fmt.Fprintf(os.Stderr, "cat: %s: %v\n", file, err)
+			exitWithError = true
 			continue
 		}
 	}
+
+	if exitWithError {
+		os.Exit(1)
+	}
+	os.Exit(0)
 }
 
 func processFile(path string) error {

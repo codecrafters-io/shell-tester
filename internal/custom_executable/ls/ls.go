@@ -26,12 +26,14 @@ func main() {
 		dirArgs = []string{"."}
 	}
 
+	exitWithError := false
 	// If multiple directories are provided, ls sorts them
 	sort.Strings(dirArgs)
 	dirsWhichExist := []string{}
 	for _, dir := range dirArgs {
 		if !checkIfDirectoryExists(dir) {
 			fmt.Fprintf(os.Stderr, "ls: %s: No such file or directory\n", dir)
+			exitWithError = true
 			continue
 		}
 		dirsWhichExist = append(dirsWhichExist, dir)
@@ -48,6 +50,11 @@ func main() {
 			fmt.Println()
 		}
 	}
+
+	if exitWithError {
+		os.Exit(1)
+	}
+	os.Exit(0)
 }
 
 func checkIfDirectoryExists(path string) bool {
