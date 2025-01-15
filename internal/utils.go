@@ -131,7 +131,7 @@ func logAndQuit(asserter *logged_shell_asserter.LoggedShellAsserter, err error) 
 // }
 
 func SetUpSignaturePrinter(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, randomCode string, randomExecutableName string) (string, error) {
-	executableDir, err := getRandomDirectory(stageHarness)
+	executableDir, err := getShortRandomDirectory(stageHarness)
 	if err != nil {
 		return "", err
 	}
