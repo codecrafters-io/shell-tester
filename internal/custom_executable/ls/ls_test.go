@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -70,7 +71,7 @@ func getLsExecutable(t *testing.T) string {
 }
 
 // runLs runs the ls executable with given arguments and returns its output and error if any
-func runLs(t *testing.T, args ...string) (string, error) {
+func runLs(t *testing.T, args ...string) (string, int, error) {
 	// executable := "ls"
 	executable := getLsExecutable(t)
 
@@ -78,7 +79,14 @@ func runLs(t *testing.T, args ...string) (string, error) {
 	prettyPrintCommand(args)
 	cmd := exec.Command(executable, args...)
 	output, err := cmd.CombinedOutput()
-	return string(output), err
+	exitCode := 0
+	if err != nil {
+		var exitError *exec.ExitError
+		if errors.As(err, &exitError) {
+			exitCode = exitError.ExitCode()
+		}
+	}
+	return string(output), exitCode, err
 }
 
 func prettyPrintCommand(args []string) {
@@ -147,9 +155,12 @@ func TestLsCurrentDirectory(t *testing.T) {
 	}
 
 	// Run ls and get output
-	output, err := runLs(t)
+	output, exitCode, err := runLs(t)
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
+	}
+	if exitCode != 0 {
+		t.Fatalf("Expected exit code 0, got: %d", exitCode)
 	}
 
 	// Verify output
@@ -180,9 +191,12 @@ func TestLsSpecificDirectory(t *testing.T) {
 	createTestFiles(t, tmpDir, testFiles)
 
 	// Run ls and get output
-	output, err := runLs(t, tmpDir)
+	output, exitCode, err := runLs(t, tmpDir)
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
+	}
+	if exitCode != 0 {
+		t.Fatalf("Expected exit code 0, got: %d", exitCode)
 	}
 
 	// Verify output
@@ -216,9 +230,12 @@ func TestLsMultipleDirectories(t *testing.T) {
 	})
 
 	// Run ls and get sorted output
-	output, err := runLs(t, tmpDir2, tmpDir1)
+	output, exitCode, err := runLs(t, tmpDir2, tmpDir1)
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
+	}
+	if exitCode != 0 {
+		t.Fatalf("Expected exit code 0, got: %d", exitCode)
 	}
 
 	// Verify output
@@ -230,7 +247,13 @@ func TestLsMultipleDirectories(t *testing.T) {
 
 func TestLsNonExistentDirectory(t *testing.T) {
 	// Run ls and get output
-	output, _ := runLs(t, "nonexistent")
+	output, exitCode, err := runLs(t, "nonexistent")
+	if err == nil {
+		t.Fatalf("Expected error, got nil")
+	}
+	if exitCode != 1 {
+		t.Fatalf("Expected exit code 1, got: %d", exitCode)
+	}
 
 	// Verify output contains error message
 	expectedError := "ls: nonexistent: No such file or directory\n"
@@ -241,7 +264,13 @@ func TestLsNonExistentDirectory(t *testing.T) {
 
 func TestLsNonExistentDirectory2(t *testing.T) {
 	// Run ls and get output
-	output, _ := runLs(t, "-1", "nonexistent")
+	output, exitCode, err := runLs(t, "-1", "nonexistent")
+	if err == nil {
+		t.Fatalf("Expected error, got nil")
+	}
+	if exitCode != 1 {
+		t.Fatalf("Expected exit code 1, got: %d", exitCode)
+	}
 
 	// Verify output contains error message
 	expectedError := "ls: nonexistent: No such file or directory\n"
@@ -252,7 +281,13 @@ func TestLsNonExistentDirectory2(t *testing.T) {
 
 func TestLsNonExistentDirectory3(t *testing.T) {
 	// Run ls and get output
-	output, _ := runLs(t, "nonexistent", "nonexistent")
+	output, exitCode, err := runLs(t, "nonexistent", "nonexistent")
+	if err == nil {
+		t.Fatalf("Expected error, got nil")
+	}
+	if exitCode != 1 {
+		t.Fatalf("Expected exit code 1, got: %d", exitCode)
+	}
 
 	// Verify output contains error message
 	expectedError := "ls: nonexistent: No such file or directory\nls: nonexistent: No such file or directory\n"
@@ -276,7 +311,13 @@ func TestLsMultipleDirectoriesWithNonExistent(t *testing.T) {
 	})
 
 	// Run ls and get sorted output
-	output, _ := runLs(t, tmpDir, "xenon", tmpDir, "non", tmpDir, "bon")
+	output, exitCode, err := runLs(t, tmpDir, "xenon", tmpDir, "non", tmpDir, "bon")
+	if err == nil {
+		t.Fatalf("Expected error, got nil")
+	}
+	if exitCode != 1 {
+		t.Fatalf("Expected exit code 1, got: %d", exitCode)
+	}
 
 	// Verify output
 	expectedOutput := []string{
@@ -308,9 +349,12 @@ func TestLsWithDashOneFlag(t *testing.T) {
 	createTestFiles(t, tmpDir, testFiles)
 
 	// Run ls and get output
-	output, err := runLs(t, "-1", tmpDir)
+	output, exitCode, err := runLs(t, "-1", tmpDir)
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
+	}
+	if exitCode != 0 {
+		t.Fatalf("Expected exit code 0, got: %d", exitCode)
 	}
 
 	// Verify output (should be one file per line)
@@ -333,9 +377,12 @@ func TestLsWithUnsupportedFlag(t *testing.T) {
 	}
 	defer cleanupDirectories([]string{tmpDir})
 
-	output, err := runLs(t, "-n", tmpDir)
+	output, exitCode, err := runLs(t, "-n", tmpDir)
 	if err == nil {
 		t.Error("Expected error for unsupported flag, got none")
+	}
+	if exitCode != 2 {
+		t.Fatalf("Expected exit code 1, got: %d", exitCode)
 	}
 
 	if !strings.Contains(output, "ls: invalid option") {
@@ -353,9 +400,12 @@ func TestLsWithUnsupportedFlag2(t *testing.T) {
 	}
 
 	// Run ls and get output
-	output, err := runLs(t, "-n")
+	output, exitCode, err := runLs(t, "-n")
 	if err == nil {
 		t.Error("Expected error for unsupported flag, got none")
+	}
+	if exitCode != 2 {
+		t.Fatalf("Expected exit code 1, got: %d", exitCode)
 	}
 
 	if !strings.Contains(output, "ls: invalid option") {
@@ -373,9 +423,12 @@ func TestLsWithUnsupportedFlag3(t *testing.T) {
 	}
 
 	// Run ls and get output
-	output, err := runLs(t, "-l -a")
+	output, exitCode, err := runLs(t, "-l -a")
 	if err == nil {
 		t.Error("Expected error for unsupported flag, got none")
+	}
+	if exitCode != 2 {
+		t.Fatalf("Expected exit code 1, got: %d", exitCode)
 	}
 
 	if !strings.Contains(output, "ls: invalid option") {
