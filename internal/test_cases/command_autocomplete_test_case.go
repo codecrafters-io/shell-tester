@@ -2,6 +2,7 @@ package test_cases
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -25,6 +26,9 @@ type CommandAutocompleteTestCase struct {
 	// ExpectedAutocompletedReflectionHasNoSpace is true if
 	// the expected reflection should have no space after it
 	ExpectedAutocompletedReflectionHasNoSpace bool
+
+	// CheckForBell is true if we should check for a bell
+	CheckForBell bool
 
 	// SuccessMessage is the message to log in case of success
 	SuccessMessage string
@@ -82,6 +86,12 @@ func (t CommandAutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	// Only if we attempted to autocomplete, print the success message
 	logger.Successf("✓ Prompt line matches %q", t.ExpectedReflection)
 
+	if t.CheckForBell {
+		if err := RunBellAssertion(shell, logger); err != nil {
+			return err
+		}
+	}
+
 	// The space at the end of the reflection won't be present, so replace that assertion
 	asserter.PopAssertion()
 
@@ -110,4 +120,21 @@ func logTab(logger *logger.Logger, expectedReflection string) {
 
 func logCommand(logger *logger.Logger, command string) {
 	logger.Infof("Typed %q", command)
+}
+
+func RunBellAssertion(shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
+	if !checkIfBellReceived(shell) {
+		return fmt.Errorf("Expected bell to ring, but it didn't")
+	}
+	logger.Successf("✓ Received bell")
+	return nil
+}
+
+func checkIfBellReceived(shell *shell_executable.ShellExecutable) bool {
+	select {
+	case <-shell.VTBellChannel():
+		return true
+	case <-time.After(10 * time.Millisecond): // Add reasonable timeout
+		return false
+	}
 }
