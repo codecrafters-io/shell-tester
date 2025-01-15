@@ -26,7 +26,8 @@ func testA3(stageHarness *test_case_harness.TestCaseHarness) error {
 		ExpectedReflection: completion,
 		SuccessMessage:     fmt.Sprintf("Received completion for %q", command),
 		ExpectedAutocompletedReflectionHasNoSpace: completionEndsWithNoSpace,
-		SkipPromptAssertion:                       true,
+		CheckForBell:        true,
+		SkipPromptAssertion: true,
 	}.Run(asserter, shell, logger, false)
 	if err != nil {
 		return err
