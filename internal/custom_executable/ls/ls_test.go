@@ -95,14 +95,14 @@ func prettyPrintCommand(args []string) {
 	fmt.Println(out)
 }
 
-func copyLsToDir(t *testing.T, ls_filepath, newDir string) {
-	exeData, err := os.ReadFile(ls_filepath)
+func copyLsToDir(t *testing.T, lsFilepath, newDir string) {
+	exeData, err := os.ReadFile(lsFilepath)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	ls_filename := filepath.Base(ls_filepath)
-	if err := os.WriteFile(filepath.Join(newDir, ls_filename), exeData, 0755); err != nil {
+	lsFilename := filepath.Base(lsFilepath)
+	if err := os.WriteFile(filepath.Join(newDir, lsFilename), exeData, 0755); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -116,7 +116,7 @@ func TestLsCurrentDirectory(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.RemoveAll(tmpDir)
+	defer cleanupDirectories([]string{tmpDir})
 
 	// Create test files using the utility function
 	testFiles := []testFile{
@@ -131,11 +131,16 @@ func TestLsCurrentDirectory(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.Chdir(oldWd)
+	defer func(dir string) {
+		err := os.Chdir(dir)
+		if err != nil {
+			t.Fatal(err)
+		}
+	}(oldWd)
 
-	ls_executable := getLsExecutable(t)
+	lsExecutable := getLsExecutable(t)
 	// Copy ls executable to temp directory
-	copyLsToDir(t, ls_executable, tmpDir)
+	copyLsToDir(t, lsExecutable, tmpDir)
 
 	if err := os.Chdir(tmpDir); err != nil {
 		t.Fatal(err)
@@ -148,8 +153,8 @@ func TestLsCurrentDirectory(t *testing.T) {
 	}
 
 	// Verify output
-	ls_executable_name := filepath.Base(ls_executable)
-	files := []string{"dir1", "file1.txt", "file2.txt", ls_executable_name}
+	lsExecutableName := filepath.Base(lsExecutable)
+	files := []string{"dir1", "file1.txt", "file2.txt", lsExecutableName}
 	// file_name is like ./ls (but in output ./ will not be present)
 	sort.Strings(files)
 	expected := strings.Join(files, "\n") + "\n"
@@ -164,7 +169,7 @@ func TestLsSpecificDirectory(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.RemoveAll(tmpDir)
+	defer cleanupDirectories([]string{tmpDir})
 
 	// Create test files using the utility function
 	testFiles := []testFile{
@@ -195,13 +200,12 @@ func TestLsMultipleDirectories(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.RemoveAll(tmpDir1)
 
 	tmpDir2, err := os.MkdirTemp("", "ls-test2-*")
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.RemoveAll(tmpDir2)
+	defer cleanupDirectories([]string{tmpDir1, tmpDir2})
 
 	// Create test files using the utility function
 	createTestFiles(t, tmpDir1, []testFile{
@@ -211,8 +215,7 @@ func TestLsMultipleDirectories(t *testing.T) {
 		{name: "file2.txt", content: []byte("test"), mode: 0644},
 	})
 
-	// Run ls and get output
-	// Output should also be sorted
+	// Run ls and get sorted output
 	output, err := runLs(t, tmpDir2, tmpDir1)
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
@@ -261,29 +264,28 @@ func TestLsNonExistentDirectory3(t *testing.T) {
 
 func TestLsMultipleDirectoriesWithNonExistent(t *testing.T) {
 	// Create temporary directories for testing
-	tmpDir1, err := os.MkdirTemp("", "ls-test1-*")
+	tmpDir, err := os.MkdirTemp("", "ls-test1-*")
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.RemoveAll(tmpDir1)
+	defer cleanupDirectories([]string{tmpDir})
 
 	// Create test files using the utility function
-	createTestFiles(t, tmpDir1, []testFile{
+	createTestFiles(t, tmpDir, []testFile{
 		{name: "file1.txt", content: []byte("test"), mode: 0644},
 	})
 
-	// Run ls and get output
-	// Output should also be sorted
-	output, _ := runLs(t, tmpDir1, "xenon", tmpDir1, "non", tmpDir1, "bon")
+	// Run ls and get sorted output
+	output, _ := runLs(t, tmpDir, "xenon", tmpDir, "non", tmpDir, "bon")
 
 	// Verify output
 	expectedOutput := []string{
 		"ls: bon: No such file or directory\n",
 		"ls: non: No such file or directory\n",
 		"ls: xenon: No such file or directory\n",
-		tmpDir1 + ":\nfile1.txt\n\n",
-		tmpDir1 + ":\nfile1.txt\n\n",
-		tmpDir1 + ":\nfile1.txt\n",
+		tmpDir + ":\nfile1.txt\n\n",
+		tmpDir + ":\nfile1.txt\n\n",
+		tmpDir + ":\nfile1.txt\n",
 	}
 	if output != strings.Join(expectedOutput, "") {
 		t.Errorf("Expected output %q, got %q", strings.Join(expectedOutput, ""), output)
@@ -296,7 +298,7 @@ func TestLsWithDashOneFlag(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.RemoveAll(tmpDir)
+	defer cleanupDirectories([]string{tmpDir})
 
 	// Create test files using the utility function
 	testFiles := []testFile{
@@ -329,7 +331,7 @@ func TestLsWithUnsupportedFlag(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.RemoveAll(tmpDir)
+	defer cleanupDirectories([]string{tmpDir})
 
 	output, err := runLs(t, "-n", tmpDir)
 	if err == nil {
@@ -382,5 +384,13 @@ func TestLsWithUnsupportedFlag3(t *testing.T) {
 	// Verify error message
 	if !strings.Contains(output, "flag provided but not defined: -l -a") {
 		t.Errorf("Expected error about undefined flag, got: %q", output)
+	}
+}
+
+func cleanupDirectories(dirs []string) {
+	for _, dir := range dirs {
+		if err := os.RemoveAll(dir); err != nil {
+			panic(fmt.Sprintf("CodeCrafters internal error: Failed to cleanup directories: %s", err))
+		}
 	}
 }
