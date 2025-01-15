@@ -11,6 +11,9 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
+// TODO: Remove this function
+//
+//lint:ignore U1000 Ignore unused function warning for testAX
 func testAX(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
