@@ -26,6 +26,9 @@ type CommandMultipleCompletionsTestCase struct {
 	// the expected reflection should have no space after it
 	ExpectedAutocompletedReflectionHasNoSpace bool
 
+	// CheckForBell is true if we should check for a bell
+	CheckForBell bool
+
 	// SuccessMessage is the message to log in case of success
 	SuccessMessage string
 
@@ -66,6 +69,12 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 		logTab(logger, t.ExpectedReflection)
 		if err := shell.SendCommandRaw("\t"); err != nil {
 			return fmt.Errorf("Error sending command to shell: %v", err)
+		}
+	}
+
+	if t.CheckForBell {
+		if err := RunBellAssertion(shell, logger); err != nil {
+			return err
 		}
 	}
 
