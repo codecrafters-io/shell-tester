@@ -1,6 +1,7 @@
 package virtual_terminal
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/charmbracelet/x/vt"
@@ -8,9 +9,10 @@ import (
 )
 
 type VirtualTerminal struct {
-	vt   *vt.Terminal
-	rows int
-	cols int
+	vt       *vt.Terminal
+	rows     int
+	cols     int
+	bellChan chan bool
 }
 
 func NewStandardVT() *VirtualTerminal {
@@ -20,11 +22,27 @@ func NewStandardVT() *VirtualTerminal {
 }
 
 func NewCustomVT(rows, cols int) *VirtualTerminal {
-	return &VirtualTerminal{
-		vt:   vt.NewTerminal(cols, rows),
-		rows: rows,
-		cols: cols,
+	vt := &VirtualTerminal{
+		vt:       vt.NewTerminal(cols, rows),
+		rows:     rows,
+		cols:     cols,
+		bellChan: make(chan bool, 1),
 	}
+
+	vt.vt.Callbacks.Bell = func() {
+		fmt.Println("🔔 RECEIVED BELL 🔔")
+		// Non-blocking send to channel
+		select {
+		case vt.bellChan <- true:
+		default:
+		}
+	}
+
+	return vt
+}
+
+func (vt *VirtualTerminal) BellChannel() chan bool {
+	return vt.bellChan
 }
 
 func (vt *VirtualTerminal) Close() {
