@@ -29,9 +29,6 @@ type CommandAutocompleteTestCase struct {
 	// SuccessMessage is the message to log in case of success
 	SuccessMessage string
 
-	// tabCount is the number of tabs to send after the command
-	TabCount int
-
 	// SkipPromptAssertion is a flag to skip the final prompt assertion
 	SkipPromptAssertion bool
 }
@@ -62,11 +59,9 @@ func (t CommandAutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	asserter.PopAssertion()
 
 	// Send TAB
-	for i := 0; i < t.TabCount; i++ {
-		logTab(logger, t.ExpectedReflection)
-		if err := shell.SendCommandRaw("\t"); err != nil {
-			return fmt.Errorf("Error sending command to shell: %v", err)
-		}
+	logTab(logger, t.ExpectedReflection)
+	if err := shell.SendCommandRaw("\t"); err != nil {
+		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
 	commandReflection := fmt.Sprintf("$ %s", t.ExpectedReflection)

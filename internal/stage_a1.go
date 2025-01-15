@@ -45,7 +45,6 @@ func a1Helper(stageHarness *test_case_harness.TestCaseHarness, logger *logger.Lo
 
 	err := test_cases.CommandAutocompleteTestCase{
 		RawCommand:         command,
-		TabCount:           1,
 		ExpectedReflection: completion,
 		SuccessMessage:     fmt.Sprintf("Received completion for %q", command),
 		ExpectedAutocompletedReflectionHasNoSpace: completionEndsWithNoSpace,
