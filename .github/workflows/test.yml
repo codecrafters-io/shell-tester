@@ -12,7 +12,11 @@ jobs:
         uses: actions/setup-go@v1
         with:
           go-version: 1.22.x
-
+      - name: test
+        run: |
+          bash --version
+          uname -a
+  
       - run: make test
 
   lint:
