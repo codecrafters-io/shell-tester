@@ -61,6 +61,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/redirection/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"autocomplete_pass": {
+			StageSlugs:          []string{"ac1", "ac2", "ac3", "ac4", "ac5"},
+			CodePath:            "./test_helpers/bash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/autocomplete/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 	}
 
 	testerUtilsTesting.TestTesterOutput(t, testerDefinition, testCases)

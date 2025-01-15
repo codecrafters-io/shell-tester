@@ -1,7 +1,6 @@
 package virtual_terminal
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/charmbracelet/x/vt"
@@ -30,7 +29,7 @@ func NewCustomVT(rows, cols int) *VirtualTerminal {
 	}
 
 	vt.vt.Callbacks.Bell = func() {
-		fmt.Println("🔔 RECEIVED BELL 🔔")
+		// fmt.Println("🔔 RECEIVED BELL 🔔")
 		// Non-blocking send to channel
 		select {
 		case vt.bellChan <- true:
