@@ -62,14 +62,20 @@ func getCatExecutable(t *testing.T) string {
 }
 
 // runCat runs the cat executable with given arguments and returns its output and error if any
-func runCat(t *testing.T, args ...string) (string, error) {
+func runCat(t *testing.T, args ...string) (string, error, int) {
 	executable := getCatExecutable(t)
 
 	t.Helper()
 	prettyPrintCommand(args)
 	cmd := exec.Command(executable, args...)
 	output, err := cmd.CombinedOutput()
-	return string(output), err
+	exitCode := 0
+	if err != nil {
+		if exitError, ok := err.(*exec.ExitError); ok {
+			exitCode = exitError.ExitCode()
+		}
+	}
+	return string(output), err, exitCode
 }
 
 func prettyPrintCommand(args []string) {
@@ -100,13 +106,17 @@ func TestCatSingleFile(t *testing.T) {
 	createTestFiles(t, tmpDir, testFiles)
 
 	// Run cat and get output
-	output, err := runCat(t, filepath.Join(tmpDir, "test.txt"))
+	output, err, exitCode := runCat(t, filepath.Join(tmpDir, "test.txt"))
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
 
 	if output != content {
 		t.Errorf("Expected output %q, got %q", content, output)
+	}
+
+	if exitCode != 0 {
+		t.Errorf("Expected exit code 0, got %d", exitCode)
 	}
 }
 
@@ -123,7 +133,7 @@ func TestCatMultipleFiles(t *testing.T) {
 	}
 	createTestFiles(t, tmpDir, testFiles)
 
-	output, err := runCat(t,
+	output, err, exitCode := runCat(t,
 		filepath.Join(tmpDir, "file1.txt"),
 		filepath.Join(tmpDir, "file2.txt"))
 	if err != nil {
@@ -134,14 +144,21 @@ func TestCatMultipleFiles(t *testing.T) {
 	if output != expected {
 		t.Errorf("Expected output %q, got %q", expected, output)
 	}
+
+	if exitCode != 0 {
+		t.Errorf("Expected exit code 0, got %d", exitCode)
+	}
 }
 
 func TestCatNonExistentFile(t *testing.T) {
-	output, _ := runCat(t, "nonexistent.txt")
-
+	output, _, exitCode := runCat(t, "nonexistent.txt")
 	expectedError := "cat: nonexistent.txt: No such file or directory\n"
 	if output != expectedError {
 		t.Errorf("Expected error message %q, got %q", expectedError, output)
+	}
+
+	if exitCode != 1 {
+		t.Errorf("Expected exit code 1, got %d", exitCode)
 	}
 }
 
@@ -178,7 +195,7 @@ func TestCatMixedExistingAndNonExisting(t *testing.T) {
 	}
 	createTestFiles(t, tmpDir, testFiles)
 
-	output, _ := runCat(t,
+	output, _, exitCode := runCat(t,
 		filepath.Join(tmpDir, "exists.txt"),
 		"nonexistent.txt",
 		filepath.Join(tmpDir, "exists.txt"),
@@ -193,5 +210,9 @@ func TestCatMixedExistingAndNonExisting(t *testing.T) {
 
 	if output != expected {
 		t.Errorf("Expected output %q, got %q", expected, output)
+	}
+
+	if exitCode != 1 {
+		t.Errorf("Expected exit code 1, got %d", exitCode)
 	}
 }
