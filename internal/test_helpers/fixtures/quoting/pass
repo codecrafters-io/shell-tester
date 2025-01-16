@@ -1,6 +1,7 @@
 Debug = true
 
 [33m[stage-6] [0m[94mRunning tests for Stage #6: ni6[0m
+[33m[stage-6] [setup] [0m[94mexport PATH=/tmp/pear/orange/raspberry:$PATH[0m
 [33m[stage-6] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo 'script example'
 [33m[your-program] [0mscript example
@@ -21,6 +22,7 @@ Debug = true
 [33m[stage-6] [0m[92mTest passed.[0m
 
 [33m[stage-5] [0m[94mRunning tests for Stage #5: tg6[0m
+[33m[stage-5] [setup] [0m[94mexport PATH=/tmp/raspberry/banana/blueberry:$PATH[0m
 [33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo "shell world"
 [33m[your-program] [0mshell world
@@ -41,6 +43,7 @@ Debug = true
 [33m[stage-5] [0m[92mTest passed.[0m
 
 [33m[stage-4] [0m[94mRunning tests for Stage #4: yt5[0m
+[33m[stage-4] [setup] [0m[94mexport PATH=/tmp/banana/blueberry/grape:$PATH[0m
 [33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo example\ \ \ \ \ \ shell
 [33m[your-program] [0mexample      shell
@@ -61,6 +64,7 @@ Debug = true
 [33m[stage-4] [0m[92mTest passed.[0m
 
 [33m[stage-3] [0m[94mRunning tests for Stage #3: le5[0m
+[33m[stage-3] [setup] [0m[94mexport PATH=/tmp/pear/banana/pear:$PATH[0m
 [33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo 'world\\\nscript'
 [33m[your-program] [0mworld\\\nscript
@@ -81,6 +85,7 @@ Debug = true
 [33m[stage-3] [0m[92mTest passed.[0m
 
 [33m[stage-2] [0m[94mRunning tests for Stage #2: gu3[0m
+[33m[stage-2] [setup] [0m[94mexport PATH=/tmp/pineapple/strawberry/strawberry:$PATH[0m
 [33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo "world'example'\\n'hello"
 [33m[your-program] [0mworld'example'\n'hello
@@ -101,6 +106,7 @@ Debug = true
 [33m[stage-2] [0m[92mTest passed.[0m
 
 [33m[stage-1] [0m[94mRunning tests for Stage #1: qj0[0m
+[33m[stage-1] [setup] [0m[94mexport PATH=/tmp/grape/orange/grape:$PATH[0m
 [33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-1] [0m[94mCopying /tmp/custom_cat_executable to /tmp/grape/orange/grape/'exe  with  space'[0m
 [33m[stage-1] [0m[94mCopying /tmp/custom_cat_executable to /tmp/grape/orange/grape/'exe with "quotes"'[0m
