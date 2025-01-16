@@ -1,8 +1,11 @@
 package internal
 
 import (
+	"fmt"
+
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -13,6 +16,7 @@ func testA6(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	prefix := "xyz_"
+	initialPrefix := prefix
 	randomWords := random.RandomElementsFromArray(SMALL_WORDS, 3)
 	executableNames := []string{}
 	logger.UpdateSecondaryPrefix("setup")
@@ -37,25 +41,16 @@ func testA6(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	panic("stop")
-
-	// command := prefix
-	// sort.Strings(executableNames)
-	// completions := strings.Join(executableNames, "  ")
-	// completionEndsWithNoSpace := true
-
-	// err := test_cases.CommandMultipleCompletionsTestCase{
-	// 	RawCommand:         command,
-	// 	TabCount:           2,
-	// 	ExpectedReflection: completions,
-	// 	SuccessMessage:     fmt.Sprintf("Received completion for %q", command),
-	// 	ExpectedAutocompletedReflectionHasNoSpace: completionEndsWithNoSpace,
-	// 	CheckForBell:        true,
-	// 	SkipPromptAssertion: true,
-	// }.Run(asserter, shell, logger, false)
-	// if err != nil {
-	// 	return err
-	// }
+	err := test_cases.CommandPartialCompletionsTestCase{
+		RawCommand:          initialPrefix,
+		SubsequentInputs:    []string{"_", "_"},
+		ExpectedReflections: executableNames,
+		SuccessMessage:      fmt.Sprintf("Received all partial completions for %q", initialPrefix),
+		SkipPromptAssertion: true,
+	}.Run(asserter, shell, logger, false)
+	if err != nil {
+		return err
+	}
 
 	return logAndQuit(asserter, nil)
 }

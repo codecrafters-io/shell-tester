@@ -1,0 +1,109 @@
+package test_cases
+
+import (
+	"fmt"
+
+	"github.com/codecrafters-io/shell-tester/internal/assertions"
+	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
+	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	"github.com/codecrafters-io/tester-utils/logger"
+)
+
+// CommandPartialCompletionsTestCase is a test case that:
+// Sends a command to the shell
+// Asserts that the prompt line reflects the command
+// Sends TAB
+// Asserts that the expected reflection is printed to the screen (with a space after it)
+// If any error occurs returns the error from the corresponding assertion
+type CommandPartialCompletionsTestCase struct {
+	// RawCommand is the command to send to the shell
+	RawCommand string
+
+	// SubsequentInputs is the list of subsequent inputs to send to the shell
+	SubsequentInputs []string
+
+	// ExpectedReflections is the list of expected reflections to use
+	ExpectedReflections []string
+
+	// SuccessMessage is the message to log in case of success
+	SuccessMessage string
+
+	// SkipPromptAssertion is a flag to skip the final prompt assertion
+	SkipPromptAssertion bool
+}
+
+func (t CommandPartialCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, skipCommandLogging bool) error {
+	// Log the details of the command before sending it
+	logCommand(logger, t.RawCommand)
+
+	// Send the command to the shell
+	if err := shell.SendCommandRaw(t.RawCommand); err != nil {
+		return fmt.Errorf("Error sending command to shell: %v", err)
+	}
+
+	inputReflection := fmt.Sprintf("$ %s", t.RawCommand)
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: inputReflection,
+		StayOnSameLine: true,
+	})
+	// Run the assertion, before sending the enter key
+	if err := asserter.AssertWithoutPrompt(); err != nil {
+		return err
+	}
+
+	// Only if we attempted to autocomplete, print the success message
+	logger.Successf("✓ Prompt line matches %q", inputReflection)
+	asserter.PopAssertion()
+
+	for idx := 0; idx < len(t.ExpectedReflections); idx++ {
+		// Send TAB
+		logTab(logger, t.ExpectedReflections[idx])
+		if err := shell.SendCommandRaw("\t"); err != nil {
+			return fmt.Errorf("Error sending command to shell: %v", err)
+		}
+
+		commandReflection := fmt.Sprintf("$ %s", t.ExpectedReflections[idx])
+		if idx == len(t.ExpectedReflections)-1 {
+			commandReflection = fmt.Sprintf("$ %s ", t.ExpectedReflections[idx])
+		}
+
+		// Assert auto-completion
+		asserter.AddAssertion(assertions.SingleLineAssertion{
+			ExpectedOutput: commandReflection,
+			StayOnSameLine: true,
+		})
+		// Run the assertion, before sending the enter key
+		if err := asserter.AssertWithoutPrompt(); err != nil {
+			return err
+		}
+
+		// Only if we attempted to autocomplete, print the success message
+		logger.Successf("✓ Prompt line matches %q", commandReflection)
+
+		if idx < len(t.SubsequentInputs) {
+			asserter.PopAssertion()
+
+			// Log the details of the command before sending it
+			logCommand(logger, t.SubsequentInputs[idx])
+
+			// Send the command to the shell
+			if err := shell.SendCommandRaw(t.SubsequentInputs[idx]); err != nil {
+				return fmt.Errorf("Error sending command to shell: %v", err)
+			}
+		}
+	}
+
+	var assertFuncToRun func() error
+	if t.SkipPromptAssertion {
+		assertFuncToRun = asserter.AssertWithoutPrompt
+	} else {
+		assertFuncToRun = asserter.AssertWithPrompt
+	}
+
+	if err := assertFuncToRun(); err != nil {
+		return err
+	}
+
+	logger.Successf("%s", t.SuccessMessage)
+	return nil
+}
