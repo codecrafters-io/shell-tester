@@ -66,6 +66,8 @@ func (t CommandPartialCompletionsTestCase) Run(asserter *logged_shell_asserter.L
 		}
 		asserter.PopAssertion()
 
+		logger.Successf("✓ Prompt line matches %q", inputReflection)
+
 		// Send TAB
 		logTab(logger, t.ExpectedReflections[idx])
 		if err := shell.SendCommandRaw("\t"); err != nil {
