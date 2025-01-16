@@ -20,6 +20,15 @@ func testA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	prefix := "xyz_"
 	randomWords := random.RandomElementsFromArray(SMALL_WORDS, 3)
 	executableNames := []string{}
+	logger.UpdateSecondaryPrefix("setup")
+	logger.Infof("Available executables:")
+	// TODO: Not supposed to be here but can't think of how to do this cleanly
+	for _, word := range randomWords {
+		executableName := prefix + word
+		logger.Infof("- %s", executableName)
+	}
+	logger.ResetSecondaryPrefix()
+
 	for _, word := range randomWords {
 		executableName := prefix + word
 		executableNames = append(executableNames, executableName)
