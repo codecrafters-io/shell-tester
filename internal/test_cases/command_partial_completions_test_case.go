@@ -12,8 +12,10 @@ import (
 // CommandPartialCompletionsTestCase is a test case that:
 // Sends a command to the shell
 // Asserts that the prompt line reflects the command
+// for each partial auto-completion:
 // Sends TAB
-// Asserts that the expected reflection is printed to the screen (with a space after it)
+// Asserts that the expected reflection is printed to the screen
+// And sends the subsequent input
 // If any error occurs returns the error from the corresponding assertion
 type CommandPartialCompletionsTestCase struct {
 	// RawCommand is the command to send to the shell
@@ -62,7 +64,9 @@ func (t CommandPartialCompletionsTestCase) Run(asserter *logged_shell_asserter.L
 			return fmt.Errorf("Error sending command to shell: %v", err)
 		}
 
+		// For all partial auto-completions, we expect *NO* space at the end
 		commandReflection := fmt.Sprintf("$ %s", t.ExpectedReflections[idx])
+		// For the last auto-completion, we expect a space at the end
 		if idx == len(t.ExpectedReflections)-1 {
 			commandReflection = fmt.Sprintf("$ %s ", t.ExpectedReflections[idx])
 		}
@@ -72,7 +76,7 @@ func (t CommandPartialCompletionsTestCase) Run(asserter *logged_shell_asserter.L
 			ExpectedOutput: commandReflection,
 			StayOnSameLine: true,
 		})
-		// Run the assertion, before sending the enter key
+		// Run the assertion, before sending the next tab key
 		if err := asserter.AssertWithoutPrompt(); err != nil {
 			return err
 		}
@@ -81,6 +85,10 @@ func (t CommandPartialCompletionsTestCase) Run(asserter *logged_shell_asserter.L
 		logger.Successf("✓ Prompt line matches %q", commandReflection)
 
 		if idx < len(t.SubsequentInputs) {
+			// Unless this is the last leg of the partial auto-completion,
+			// We pop the last partial auto-completion assertion
+			// And send the subsequent input
+
 			asserter.PopAssertion()
 
 			// Log the details of the command before sending it
