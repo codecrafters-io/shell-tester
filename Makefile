@@ -188,6 +188,7 @@ test_flakiness:
 		make $(TEST_TARGET) > /tmp/test ; \
 		if [ "$$?" -ne 0 ]; then \
 			echo "Test failed on iteration $(i)" ; \
+			cat /tmp/test ; \
 			exit 1 ; \
 		fi ;\
 	)
