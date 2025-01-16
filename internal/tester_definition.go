@@ -145,5 +145,10 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testA5,
 			Timeout:  15 * time.Second,
 		},
+		{
+			Slug:     "ac6",
+			TestFunc: testA6,
+			Timeout:  15 * time.Second,
+		},
 	},
 }
