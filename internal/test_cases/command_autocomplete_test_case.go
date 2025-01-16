@@ -134,7 +134,7 @@ func checkIfBellReceived(shell *shell_executable.ShellExecutable) bool {
 	select {
 	case <-shell.VTBellChannel():
 		return true
-	case <-time.After(10 * time.Millisecond): // Add reasonable timeout
+	case <-time.After(50 * time.Millisecond): // Add reasonable timeout
 		return false
 	}
 }
