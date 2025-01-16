@@ -130,9 +130,9 @@ func logAndQuit(asserter *logged_shell_asserter.LoggedShellAsserter, err error) 
 // 	CommandName     string
 // 	CommandMetadata string
 // }
-
 // TODO: Logging is currently in stages, but it should be here
 // TODO: How to log when multiple executables are set up?
+
 func SetUpSignaturePrinter(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, randomCode string, randomExecutableName string) (string, error) {
 	executableDir, err := getShortRandomDirectory(stageHarness)
 	if err != nil {
