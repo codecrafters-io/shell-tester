@@ -56,6 +56,9 @@ func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 }
 
 func (vt *VirtualTerminal) GetScreenState() [][]string {
+	if vt == nil {
+		return [][]string{}
+	}
 	cursorPosition := vt.vt.CursorPosition()
 	cursorRow, cursorCol := cursorPosition.Y, cursorPosition.X
 
