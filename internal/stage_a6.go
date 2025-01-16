@@ -42,12 +42,11 @@ func testA6(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	err := test_cases.CommandPartialCompletionsTestCase{
-		RawCommand:          initialPrefix,
-		SubsequentInputs:    []string{"_", "_"},
+		Inputs:              []string{initialPrefix, "_", "_"},
 		ExpectedReflections: executableNames,
-		SuccessMessage:      fmt.Sprintf("Received all partial completions for %q", initialPrefix),
+		SuccessMessage:      fmt.Sprintf("Received all partial completions for %q", executableNames[len(executableNames)-1]),
 		SkipPromptAssertion: true,
-	}.Run(asserter, shell, logger, false)
+	}.Run(asserter, shell, logger)
 	if err != nil {
 		return err
 	}
