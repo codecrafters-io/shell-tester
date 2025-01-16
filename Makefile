@@ -125,6 +125,7 @@ test_bash:
 	make test_nav_w_bash
 	make test_quoting_w_bash
 	make test_redirection_w_bash
+	make test_completions_w_bash
 
 
 test_base_w_ash: build
@@ -201,7 +202,7 @@ build_executables:
 		done; \
 	done
 
-test_completions: build
+test_completions_w_bash: build
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
 	CODECRAFTERS_TEST_CASES_JSON="[ \
 		{\"slug\":\"ac1\",\"tester_log_prefix\":\"tester::#ac1\",\"title\":\"Stage #1: builtins completion\"}, \
