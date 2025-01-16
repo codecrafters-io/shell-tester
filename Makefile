@@ -179,6 +179,7 @@ test_ash:
 	make test_nav_w_ash
 	make test_quoting_w_ash
 	make test_redirection_w_ash
+	make test_completions_w_ash
 
 TEST_TARGET ?= test_bash
 RUNS ?= 100
@@ -202,6 +203,18 @@ build_executables:
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/cat_$${os}_$${arch} ./internal/custom_executable/cat/cat.go; \
 		done; \
 	done
+
+test_completions_w_ash: build
+	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/ash \
+	CODECRAFTERS_TEST_CASES_JSON="[ \
+		{\"slug\":\"ac1\",\"tester_log_prefix\":\"tester::#ac1\",\"title\":\"Stage #1: builtins completion\"}, \
+		{\"slug\":\"ac2\",\"tester_log_prefix\":\"tester::#ac2\",\"title\":\"Stage #2: completion with args\"}, \
+		{\"slug\":\"ac3\",\"tester_log_prefix\":\"tester::#ac3\",\"title\":\"Stage #3: completion with invalid command\"}, \
+		{\"slug\":\"ac4\",\"tester_log_prefix\":\"tester::#ac4\",\"title\":\"Stage #4: completion with valid command\"}, \
+		{\"slug\":\"ac5\",\"tester_log_prefix\":\"tester::#ac5\",\"title\":\"Stage #5: completion with multiple executables\"}, \
+		{\"slug\":\"ac6\",\"tester_log_prefix\":\"tester::#ac6\",\"title\":\"Stage #6: partial completions\"} \
+	]" \
+	dist/main.out
 
 test_completions_w_bash: build
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/bash \
