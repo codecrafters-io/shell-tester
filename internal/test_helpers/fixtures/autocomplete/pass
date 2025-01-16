@@ -120,11 +120,13 @@ Debug = true
 [33m[stage-1] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_quz")[0m
 [33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_quz"[0m
 [33m[stage-1] [0m[94mTyped "_"[0m
+[33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_quz_"[0m
 [33m[stage-1] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_quz_qux")[0m
 [33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_quz_qux"[0m
 [33m[stage-1] [0m[94mTyped "_"[0m
+[33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_quz_qux_"[0m
 [33m[stage-1] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_quz_qux_foo")[0m
 [33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_quz_qux_foo "[0m
-[33m[stage-1] [0m[92mReceived all partial completions for "xyz_"[0m
+[33m[stage-1] [0m[92mReceived all partial completions for "xyz_quz_qux_foo"[0m
 [33m[your-program] [0m$ xyz_quz_qux_foo 
 [33m[stage-1] [0m[92mTest passed.[0m
