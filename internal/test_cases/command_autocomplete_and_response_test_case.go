@@ -47,7 +47,7 @@ type CommandAutocompleteAndResponseTestCase struct {
 	SkipPromptAssertion bool
 }
 
-func (t CommandAutocompleteAndResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, skipCommandLogging bool) error {
+func (t CommandAutocompleteAndResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	// Log the details of the command before sending it
 	logCommand(logger, t.RawCommand)
 

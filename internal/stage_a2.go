@@ -19,7 +19,7 @@ type inputArgsAndCompletion struct {
 }
 
 func testA2(stageHarness *test_case_harness.TestCaseHarness) error {
-	logger := stageHarness.Logger
+	stageLogger := stageHarness.Logger
 
 	inputArgsAndCompletion := []inputArgsAndCompletion{
 		{Input: "ech", Completion: "echo", CompletionEndsWithNoSpace: false, Args: []string{"hello"}, Response: "hello"},
@@ -27,7 +27,7 @@ func testA2(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	for _, inputArgsAndCompletion := range inputArgsAndCompletion {
-		err := a2Helper(stageHarness, logger, inputArgsAndCompletion.Input, inputArgsAndCompletion.Completion, inputArgsAndCompletion.CompletionEndsWithNoSpace, inputArgsAndCompletion.Args, inputArgsAndCompletion.Response)
+		err := a2Helper(stageHarness, stageLogger, inputArgsAndCompletion.Input, inputArgsAndCompletion.Completion, inputArgsAndCompletion.CompletionEndsWithNoSpace, inputArgsAndCompletion.Args, inputArgsAndCompletion.Response)
 		if err != nil {
 			return err
 		}
@@ -52,7 +52,7 @@ func a2Helper(stageHarness *test_case_harness.TestCaseHarness, logger *logger.Lo
 		ExpectedOutput:      response,
 		SuccessMessage:      fmt.Sprintf("Received completion for %q", command),
 		SkipPromptAssertion: true,
-	}.Run(asserter, shell, logger, false)
+	}.Run(asserter, shell, logger)
 	if err != nil {
 		return err
 	}

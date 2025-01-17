@@ -17,15 +17,13 @@ func testA4(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	executableName := "custom_exe_" + strconv.Itoa(random.RandomInt(1000, 9999))
-	logger.UpdateSecondaryPrefix("setup")
-	logger.Infof("Available executables:\n- %s", executableName)
-	logger.ResetSecondaryPrefix()
 	_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
 		{CommandType: "signature_printer", CommandName: executableName, CommandMetadata: getRandomString()},
 	}, true)
 	if err != nil {
 		return err
 	}
+	logAvailableExecutables(logger, []string{executableName})
 
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err
@@ -33,15 +31,14 @@ func testA4(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	command := "custom"
 	completion := executableName
-	completionEndsWithNoSpace := false
 
 	err = test_cases.CommandAutocompleteTestCase{
 		RawCommand:         command,
 		ExpectedReflection: completion,
 		SuccessMessage:     fmt.Sprintf("Received completion for %q", command),
-		ExpectedAutocompletedReflectionHasNoSpace: completionEndsWithNoSpace,
+		ExpectedAutocompletedReflectionHasNoSpace: false,
 		SkipPromptAssertion:                       true,
-	}.Run(asserter, shell, logger, false)
+	}.Run(asserter, shell, logger)
 	if err != nil {
 		return err
 	}

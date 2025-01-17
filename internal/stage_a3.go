@@ -20,15 +20,15 @@ func testA3(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	command := "xyz"
 	completion := "xyz"
-	completionEndsWithNoSpace := true
+
 	err := test_cases.CommandAutocompleteTestCase{
 		RawCommand:         command,
 		ExpectedReflection: completion,
 		SuccessMessage:     fmt.Sprintf("Received completion for %q", command),
-		ExpectedAutocompletedReflectionHasNoSpace: completionEndsWithNoSpace,
+		ExpectedAutocompletedReflectionHasNoSpace: true,
 		CheckForBell:        true,
 		SkipPromptAssertion: true,
-	}.Run(asserter, shell, logger, false)
+	}.Run(asserter, shell, logger)
 	if err != nil {
 		return err
 	}

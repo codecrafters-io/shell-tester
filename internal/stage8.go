@@ -25,6 +25,7 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
+	logAvailableExecutables(logger, []string{randomExecutableName})
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
