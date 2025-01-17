@@ -17,7 +17,9 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	// TODO: Define this function on the shell executable
 	// TODO: See if we can add the signature printer too to this function
-	_, err := SetUpCustomCommands(stageHarness, shell, []string{"cat"})
+	_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
+		{CommandType: "cat", CommandName: CUSTOM_CAT_COMMAND, CommandMetadata: ""},
+	}, false)
 	if err != nil {
 		return err
 	}

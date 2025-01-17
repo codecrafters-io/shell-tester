@@ -17,7 +17,9 @@ import (
 func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	executableDir, err := SetUpCustomCommands(stageHarness, shell, []string{"cat"})
+	executableDir, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
+		{CommandType: "cat", CommandName: CUSTOM_CAT_COMMAND, CommandMetadata: ""},
+	}, false)
 	if err != nil {
 		return err
 	}
