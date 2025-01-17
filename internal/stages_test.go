@@ -62,7 +62,7 @@ func TestStages(t *testing.T) {
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"autocomplete_pass": {
-			StageSlugs:          []string{"ac1", "ac2", "ac3", "ac4", "ac5", "ac6"},
+			StageSlugs:          []string{"qp2", "gm9", "qm8", "gy5", "wh6", "wt6"},
 			CodePath:            "./test_helpers/bash",
 			ExpectedExitCode:    0,
 			StdoutFixturePath:   "./test_helpers/fixtures/autocomplete/pass",
