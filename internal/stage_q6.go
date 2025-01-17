@@ -2,11 +2,9 @@ package internal
 
 import (
 	"fmt"
-	"os"
 	"path"
 	"strings"
 
-	custom_executable "github.com/codecrafters-io/shell-tester/internal/custom_executable/build"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -17,9 +15,17 @@ import (
 func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
+	executableName1 := `'exe  with  space'`
+	executableName2 := `'exe with "quotes"'`
+	executableName3 := `"exe with \'single quotes\'"`
+	executableName4 := `'exe with \n newline'`
 	executableDir, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
 		{CommandType: "cat", CommandName: CUSTOM_CAT_COMMAND, CommandMetadata: ""},
-	}, false)
+		{CommandType: "cat", CommandName: executableName1, CommandMetadata: ""},
+		{CommandType: "cat", CommandName: executableName2, CommandMetadata: ""},
+		{CommandType: "cat", CommandName: executableName3, CommandMetadata: ""},
+		{CommandType: "cat", CommandName: executableName4, CommandMetadata: ""},
+	}, true)
 	if err != nil {
 		return err
 	}
@@ -38,25 +44,9 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 		strings.Join(random.RandomWords(2), " ") + ".",
 	}
 
-	executableName1 := `'exe  with  space'`
-	executableName2 := `'exe with "quotes"'`
-	executableName3 := `"exe with \'single quotes\'"`
-	executableName4 := `'exe with \n newline'`
-
-	// TODO: Why not use our cat directly here ?
-	originalExecutablePath := "/tmp/custom_cat_executable"
-	err = createExecutableCallingCat(originalExecutablePath)
-	if err != nil {
-		panic("CodeCrafters Internal Error: Cannot create executable")
-	}
-
-	err = custom_executable.CopyFileToMultiplePaths(originalExecutablePath, []string{path.Join(executableDir, executableName1), path.Join(executableDir, executableName2), path.Join(executableDir, executableName3), path.Join(executableDir, executableName4)}, logger)
-	if err != nil {
-		panic("CodeCrafters Internal Error: Cannot copy executable")
-	}
-
 	logger.UpdateSecondaryPrefix("setup")
 	logger.Infof("Available executables:")
+	// TODO: Log path not name
 	for _, executableName := range []string{executableName1, executableName2, executableName3, executableName4} {
 		logger.Infof("- %s", executableName)
 	}
@@ -98,15 +88,4 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	return logAndQuit(asserter, nil)
-}
-
-func createExecutableFile(path string, contents string) error {
-	return os.WriteFile(path, []byte(contents), 0o755)
-}
-
-func createExecutableCallingCat(path string) error {
-	content := `#!/bin/sh
-exec cat "$@"`
-
-	return createExecutableFile(path, content)
 }
