@@ -9,27 +9,6 @@ import (
 	"runtime"
 )
 
-func copyFile(sourcePath, destinationPath string) error {
-	// Copy the source executable to the destination path
-	command := fmt.Sprintf("cp %s %s", sourcePath, destinationPath)
-	copyCmd := exec.Command("sh", "-c", command)
-	copyCmd.Stdout = io.Discard
-	copyCmd.Stderr = io.Discard
-	if err := copyCmd.Run(); err != nil {
-		return fmt.Errorf("CodeCrafters Internal Error: cp failed: %w", err)
-	}
-	return nil
-}
-
-func CopyFileToMultiplePaths(sourcePath string, destinationPaths []string) error {
-	for _, destinationPath := range destinationPaths {
-		if err := copyFile(sourcePath, destinationPath); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // fetchCustomExecutableForOSAndArch is a helper function to
 // fetch the correct custom executable for the current OS and architecture
 // It just returns the name of the executable, without the path
@@ -54,7 +33,6 @@ func fetchCustomExecutableForOSAndArch(fileName string) string {
 	panic(fmt.Sprintf("CodeCrafters Internal Error: Unsupported OS:ARCH: %s:%s", runtime.GOOS, runtime.GOARCH))
 }
 
-// TODO: Use copyFile internally with a param to turn logs ON/OFF
 func copyExecutable(executableName, outputPath string) error {
 	// Copy the custom_executable to the output path
 	command := fmt.Sprintf("cp %s %s", path.Join(os.Getenv("TESTER_DIR"), "built_executables", executableName), outputPath)
