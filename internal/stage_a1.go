@@ -29,6 +29,7 @@ func testA1(stageHarness *test_case_harness.TestCaseHarness) error {
 		if err != nil {
 			return err
 		}
+		stageLogger.Infof("Tearing down shell")
 	}
 
 	return nil
@@ -37,11 +38,11 @@ func testA1(stageHarness *test_case_harness.TestCaseHarness) error {
 func a1Helper(stageHarness *test_case_harness.TestCaseHarness, logger *logger.Logger, command string, completion string, completionEndsWithNoSpace bool) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
-	logScreenState(shell)
+
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err
 	}
-	logScreenState(shell)
+
 	err := test_cases.CommandAutocompleteTestCase{
 		RawCommand:         command,
 		ExpectedReflection: completion,
@@ -50,10 +51,8 @@ func a1Helper(stageHarness *test_case_harness.TestCaseHarness, logger *logger.Lo
 		SkipPromptAssertion:                       true,
 	}.Run(asserter, shell, logger)
 	if err != nil {
-		logScreenState(shell)
 		return err
 	}
 
-	logger.Infof("Tearing down shell")
 	return logAndQuit(asserter, nil)
 }

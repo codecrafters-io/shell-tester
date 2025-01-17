@@ -23,7 +23,7 @@ func testA2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	inputArgsAndCompletion := []inputArgsAndCompletion{
 		{Input: "ech", Completion: "echo", CompletionEndsWithNoSpace: false, Args: []string{"hello"}, Response: "hello"},
-		{Input: "typ", Completion: "type", CompletionEndsWithNoSpace: true, Args: []string{" type"}, Response: "type is a shell builtin"},
+		{Input: "exi", Completion: "exit", CompletionEndsWithNoSpace: false, Args: []string{"0"}, Response: ""},
 	}
 
 	for _, inputArgsAndCompletion := range inputArgsAndCompletion {
@@ -31,6 +31,7 @@ func testA2(stageHarness *test_case_harness.TestCaseHarness) error {
 		if err != nil {
 			return err
 		}
+		stageLogger.Infof("Tearing down shell")
 	}
 
 	return nil
@@ -57,6 +58,5 @@ func a2Helper(stageHarness *test_case_harness.TestCaseHarness, logger *logger.Lo
 		return err
 	}
 
-	logger.Infof("Tearing down shell")
 	return logAndQuit(asserter, nil)
 }
