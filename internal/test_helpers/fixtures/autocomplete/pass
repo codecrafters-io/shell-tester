@@ -61,9 +61,9 @@ Debug = true
 [33m[stage-4] [0m[92mTest passed.[0m
 
 [33m[stage-3] [0m[94mRunning tests for Stage #3: ac4[0m
+[33m[stage-3] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
 [33m[stage-3] [setup] [0m[94mAvailable executables:[0m
 [33m[stage-3] [setup] [0m[94m- custom_exe_1357[0m
-[33m[stage-3] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
 [33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-3] [0m[92m✓ Received prompt ($ )[0m
 [33m[stage-3] [0m[94mTyped "custom"[0m
@@ -75,13 +75,13 @@ Debug = true
 [33m[stage-3] [0m[92mTest passed.[0m
 
 [33m[stage-2] [0m[94mRunning tests for Stage #2: ac5[0m
+[33m[stage-2] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
+[33m[stage-2] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
+[33m[stage-2] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
 [33m[stage-2] [setup] [0m[94mAvailable executables:[0m
 [33m[stage-2] [setup] [0m[94m- xyz_bar[0m
 [33m[stage-2] [setup] [0m[94m- xyz_quz[0m
 [33m[stage-2] [setup] [0m[94m- xyz_qux[0m
-[33m[stage-2] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
-[33m[stage-2] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
-[33m[stage-2] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
 [33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-2] [0m[92m✓ Received prompt ($ )[0m
 [33m[stage-2] [0m[94mTyped "xyz_"[0m
@@ -97,13 +97,13 @@ Debug = true
 [33m[stage-2] [0m[92mTest passed.[0m
 
 [33m[stage-1] [0m[94mRunning tests for Stage #1: ac6[0m
+[33m[stage-1] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
+[33m[stage-1] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
+[33m[stage-1] [setup] [0m[94mexport PATH=/tmp/qux:$PATH[0m
 [33m[stage-1] [setup] [0m[94mAvailable executables:[0m
 [33m[stage-1] [setup] [0m[94m- xyz_quz[0m
 [33m[stage-1] [setup] [0m[94m- xyz_quz_qux[0m
 [33m[stage-1] [setup] [0m[94m- xyz_quz_qux_foo[0m
-[33m[stage-1] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
-[33m[stage-1] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
-[33m[stage-1] [setup] [0m[94mexport PATH=/tmp/qux:$PATH[0m
 [33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-1] [0m[92m✓ Received prompt ($ )[0m
 [33m[stage-1] [0m[94mTyped "xyz_"[0m

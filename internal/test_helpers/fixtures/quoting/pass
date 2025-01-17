@@ -107,12 +107,12 @@ Debug = true
 
 [33m[stage-1] [0m[94mRunning tests for Stage #1: qj0[0m
 [33m[stage-1] [setup] [0m[94mexport PATH=/tmp/foo:$PATH[0m
-[33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-1] [setup] [0m[94mAvailable executables:[0m
 [33m[stage-1] [setup] [0m[94m- 'exe  with  space'[0m
 [33m[stage-1] [setup] [0m[94m- 'exe with "quotes"'[0m
 [33m[stage-1] [setup] [0m[94m- "exe with \'single quotes\'"[0m
 [33m[stage-1] [setup] [0m[94m- 'exe with \n newline'[0m
+[33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-1] [Setup] [0m[94mecho -n "banana pineapple." > "/tmp/foo/f1"[0m
 [33m[stage-1] [Setup] [0m[94mecho -n "raspberry strawberry." > "/tmp/foo/f2"[0m
 [33m[stage-1] [Setup] [0m[94mecho -n "pineapple pear." > "/tmp/foo/f3"[0m
