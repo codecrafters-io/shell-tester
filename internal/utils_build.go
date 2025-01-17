@@ -26,6 +26,7 @@ type CommandDetails struct {
 }
 
 func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, commands []CommandDetails, useShorterDirectory bool) (string, error) {
+	stageHarness.Logger.UpdateSecondaryPrefix("setup")
 	createExecutableDirFunc := getRandomDirectory
 	if useShorterDirectory {
 		createExecutableDirFunc = getShortRandomDirectory
@@ -37,6 +38,7 @@ func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell 
 	}
 	// Add the random directory to PATH
 	// (where the custom executable is copied to)
+	stageHarness.Logger.Infof("export PATH=%s:$PATH", executableDir)
 	shell.AddToPath(executableDir)
 
 	for _, commandDetail := range commands {
@@ -61,6 +63,7 @@ func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell 
 			}
 		}
 	}
+	stageHarness.Logger.ResetSecondaryPrefix()
 
 	return executableDir, nil
 }
