@@ -7,11 +7,9 @@ import (
 	"os/exec"
 	"path"
 	"runtime"
-
-	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-func copyFile(sourcePath, destinationPath string, logger *logger.Logger) error {
+func copyFile(sourcePath, destinationPath string) error {
 	// Copy the source executable to the destination path
 	command := fmt.Sprintf("cp %s %s", sourcePath, destinationPath)
 	copyCmd := exec.Command("sh", "-c", command)
@@ -23,9 +21,9 @@ func copyFile(sourcePath, destinationPath string, logger *logger.Logger) error {
 	return nil
 }
 
-func CopyFileToMultiplePaths(sourcePath string, destinationPaths []string, logger *logger.Logger) error {
+func CopyFileToMultiplePaths(sourcePath string, destinationPaths []string) error {
 	for _, destinationPath := range destinationPaths {
-		if err := copyFile(sourcePath, destinationPath, logger); err != nil {
+		if err := copyFile(sourcePath, destinationPath); err != nil {
 			return err
 		}
 	}
