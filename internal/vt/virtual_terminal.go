@@ -8,9 +8,10 @@ import (
 )
 
 type VirtualTerminal struct {
-	vt   *vt.Terminal
-	rows int
-	cols int
+	vt       *vt.Terminal
+	rows     int
+	cols     int
+	bellChan chan bool
 }
 
 func NewStandardVT() *VirtualTerminal {
@@ -20,11 +21,27 @@ func NewStandardVT() *VirtualTerminal {
 }
 
 func NewCustomVT(rows, cols int) *VirtualTerminal {
-	return &VirtualTerminal{
-		vt:   vt.NewTerminal(cols, rows),
-		rows: rows,
-		cols: cols,
+	vtInstance := &VirtualTerminal{
+		vt:       vt.NewTerminal(cols, rows),
+		rows:     rows,
+		cols:     cols,
+		bellChan: make(chan bool, 1),
 	}
+
+	vtInstance.vt.Callbacks.Bell = func() {
+		// fmt.Println("🔔 RECEIVED BELL 🔔")
+		// Non-blocking send to channel
+		select {
+		case vtInstance.bellChan <- true:
+		default:
+		}
+	}
+
+	return vtInstance
+}
+
+func (vt *VirtualTerminal) BellChannel() chan bool {
+	return vt.bellChan
 }
 
 func (vt *VirtualTerminal) Close() {
@@ -39,6 +56,9 @@ func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 }
 
 func (vt *VirtualTerminal) GetScreenState() [][]string {
+	if vt == nil {
+		return [][]string{}
+	}
 	cursorPosition := vt.vt.CursorPosition()
 	cursorRow, cursorCol := cursorPosition.Y, cursorPosition.X
 

@@ -36,13 +36,17 @@ func NewLoggedShellAsserter(shell *shell_executable.ShellExecutable) *LoggedShel
 	return asserter
 }
 
-func (a *LoggedShellAsserter) StartShellAndAssertPrompt() error {
+func (a *LoggedShellAsserter) StartShellAndAssertPrompt(skipSuccessMessage bool) error {
 	if err := a.Shell.Start(); err != nil {
 		return err
 	}
 
 	if err := a.AssertWithPromptAndLongerTimeout(); err != nil {
 		return err
+	}
+
+	if !skipSuccessMessage {
+		a.Shell.GetLogger().Successf("✓ Received prompt ($ )")
 	}
 
 	// .NET ReadLine() method seems to have a bug where it prints the command twice
@@ -53,6 +57,10 @@ func (a *LoggedShellAsserter) StartShellAndAssertPrompt() error {
 
 func (a *LoggedShellAsserter) AddAssertion(assertion assertions.Assertion) {
 	a.AssertionCollection.AddAssertion(assertion)
+}
+
+func (a *LoggedShellAsserter) PopAssertion() assertions.Assertion {
+	return a.AssertionCollection.PopAssertion()
 }
 
 func (a *LoggedShellAsserter) AssertWithPrompt() error {

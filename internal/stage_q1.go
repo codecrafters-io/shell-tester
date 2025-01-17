@@ -15,7 +15,9 @@ import (
 func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	_, err := SetUpCustomCommands(stageHarness, shell, []string{"cat"})
+	_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
+		{CommandType: "cat", CommandName: CUSTOM_CAT_COMMAND, CommandMetadata: ""},
+	}, false)
 	if err != nil {
 		return err
 	}
@@ -38,7 +40,7 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 		strings.Join(random.RandomWords(2), " ") + "." + "\n",
 	}
 
-	if err := asserter.StartShellAndAssertPrompt(); err != nil {
+	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}
 
@@ -55,6 +57,10 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 		fmt.Sprintf("%s     %s %s%s", L[2], L[3], L[4], L[0]),
 		fileContents[0] + fileContents[1] + strings.TrimRight(fileContents[2], "\n"),
 	}
+	if err := writeFiles(filePaths, fileContents, logger); err != nil {
+		return err
+	}
+
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
 	for _, testCaseContent := range testCaseContents[:3] {
@@ -68,10 +74,6 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 	}
 
-	if err := writeFiles(filePaths, fileContents, logger); err != nil {
-		return err
-	}
-
 	testCase := test_cases.CommandResponseTestCase{
 		Command:        testCaseContents[3].Input,
 		ExpectedOutput: testCaseContents[3].ExpectedOutput,
@@ -82,24 +84,4 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	return logAndQuit(asserter, nil)
-}
-
-type testCaseContent struct {
-	Input          string
-	ExpectedOutput string
-}
-
-func newTestCaseContent(input string, expectedOutput string) testCaseContent {
-	return testCaseContent{
-		Input:          input,
-		ExpectedOutput: expectedOutput,
-	}
-}
-
-func newTestCaseContents(inputs []string, expectedOutputs []string) []testCaseContent {
-	testCases := []testCaseContent{}
-	for i, input := range inputs {
-		testCases = append(testCases, newTestCaseContent(input, expectedOutputs[i]))
-	}
-	return testCases
 }

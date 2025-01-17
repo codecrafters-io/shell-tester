@@ -22,14 +22,12 @@ languages:
   - slug: "go"
   - slug: "java"
   - slug: "javascript"
-    release_status: "alpha"
   - slug: "kotlin"
+  - slug: "php"
   - slug: "python"
   - slug: "ruby"
-    release_status: "alpha"
   - slug: "rust"
   - slug: "typescript"
-    release_status: "alpha"
   - slug: "zig"
 
 marketing:
@@ -57,13 +55,20 @@ extensions:
       In this challenge extension, you'll add directory navigation support by implementing the `cd` and `pwd` commands.
 
       Along the way, you'll learn about what the "current working directory" is, how to change it and more.
-  
+
   - slug: "quoting"
     name: "Quoting"
     description_markdown: |
       In this challenge extension, you'll add quoting support to your shell.
 
       Quoting allows you to preserve whitespace and special characters in your shell commands.
+
+  - slug: "redirection"
+    name: "Redirection"
+    description_markdown: |
+      In this challenge extension, you'll add redirection support to your shell.
+
+      Redirection allows you to redirect the output of a command to a file or another command.
 
 stages:
   - slug: "oo8"
@@ -91,10 +96,10 @@ stages:
       In this stage, you'll implement printing the shell prompt and waiting for user input.
 
   - slug: "cz2"
-    name: "Handle missing commands"
+    name: "Handle invalid commands"
     difficulty: easy
     description_md: |-
-      In this stage, you'll implement support for handling missing commands in your shell.
+      In this stage, you'll implement support for handling invalid commands in your shell.
 
       ### Tests
 
@@ -107,20 +112,20 @@ stages:
       It will then send the following command to your shell:
 
       ```bash
-      $ nonexistent
-      nonexistent: command not found
+      $ invalid_command
+      invalid_command: command not found
       ```
 
-      The tester will check whether your shell prints `<command_name>: command not found` for an unrecognized command.
+      The tester will check whether your shell prints `<command_name>: command not found\n` for an invalid command.
 
       ### Notes
 
-      - The command name will be a random string (like `missing_command_234`), so the response can't be hardcoded.
-      - We'll handle executing "valid" commands like `echo`, `cd` etc. in later stages, this stage only deals with unrecognized commands.
-      - In this stage it's okay if your program exits soon after printing the `<command_name>: command not found` message. In later stages
+      - We're treating every command as "invalid" for now, but we'll handle executing "valid" commands like `echo`, `cd` etc. in later stages.
+      - The command name will be a random string, so the response can't be hardcoded.
+      - In this stage it's okay if your program exits soon after printing the `<command_name>: command not found\n` message. In later stages
         we'll check for a REPL (Read-Eval-Print Loop), i.e. whether the shell prints a new prompt after processing each command.
     marketing_md: |-
-      In this stage, you'll implement handling unrecognized commands in your shell.
+      In this stage, you'll implement handling invalid commands in your shell.
 
   - slug: "ff0"
     name: "REPL"
@@ -230,10 +235,8 @@ stages:
       echo is a shell builtin
       $ type exit
       exit is a shell builtin
-      $ type nonexistent
-      nonexistent: not found
-      $ type cat
-      cat is /bin/cat
+      $ type invalid_command
+      invalid_command: not found
       ```
 
       In this stage we'll only test two cases: builtin commands and unrecognized commands. We'll handle
@@ -256,8 +259,8 @@ stages:
       exit is a shell builtin
       $ type type
       type is a shell builtin
-      $ type nonexistent
-      nonexistent: not found
+      $ type invalid_command
+      invalid_command: not found
       $
       ```
 
@@ -296,10 +299,10 @@ stages:
       ```bash
       $ type ls
       ls is /usr/bin/ls
-      $ type abcd
-      abcd is /usr/local/bin/abcd
-      $ type missing_cmd
-      missing_cmd: not found
+      $ type valid_command
+      valid_command is /usr/local/bin/valid_command
+      $ type invalid_command
+      invalid_command: not found
       $
       ```
 
@@ -332,11 +335,14 @@ stages:
       It'll then send a command that you need to execute:
 
       ```bash
-      $ program_1234 alice
-      Hello alice! The secret code is 1234.
+      $ custom_exe_1234 alice
+      Program was passed 2 args (including program name).
+      Arg #0 (program name): custom_exe_1234
+      Arg #1: alice
+      Program Signature: 5998595441
       ```
 
-      The command (`program_1234`) in the example above will be present in `PATH` and will be an executable file.
+      The command (`custom_exe_1234`) in the example above will be present in `PATH` and will be an executable file.
 
       The tester will check if your shell correctly executes the given command and prints the output.
 
@@ -579,7 +585,7 @@ stages:
 
       ```bash
       $ echo "quz  hello"  "bar"
-      quz hello bar
+      quz  hello bar
       $ echo "bar"  "shell's"  "foo"
       bar shell's foo
       $
@@ -703,7 +709,7 @@ stages:
       ```bash
       $ echo "hello'script'\\n'world"
       hello'script'\n'world
-      $ echo "hello\"insidequotes\"script\"
+      $ echo "hello\"insidequotes"script\"
       hello"insidequotesscript"
       $
       ```
@@ -754,6 +760,179 @@ stages:
       In this stage, you'll implement support for executing a quoted executable.
 
   - slug: "jv1"
+    primary_extension_slug: "redirection"
+    name: "Redirect stdout"
+    difficulty: medium
+    description_md: |-
+      In this stage, you'll implement support for redirecting the output of a command to a file.
+
+      The `1>` operator is used to redirect the output of a command to a file.
+      But, as a special case, if the file descriptor is not specified before the operator `>`, the output is redirected to the standard output by default, so `>` is equivalent to `1>`.
+
+      Learn more about [Redirecting Output](https://www.gnu.org/software/bash/manual/bash.html#Redirecting-Output).
+
+      ### Tests
+
+      The tester will execute your program like this:
+
+      ```bash
+      ./your_program.sh
+      ```
+
+      It'll then send a series of commands to your shell, executing commands and redirecting their output to a file:
+
+      ```bash
+      $ ls /tmp/baz > /tmp/foo/baz.md
+      $ cat /tmp/foo/baz.md
+      apple
+      blueberry
+      $ echo 'Hello James' 1> /tmp/foo/foo.md
+      $ cat /tmp/foo/foo.md
+      Hello James
+      $ cat /tmp/baz/blueberry nonexistent 1> /tmp/foo/quz.md
+      cat: nonexistent: No such file or directory
+      $ cat /tmp/foo/quz.md
+      blueberry
+      ```
+
+      The tester will check if the commands correctly execute commands and redirect their output to a file as specified.
+      The file contents will also be checked for correctness.
+
+    marketing_md: |-
+      In this stage, you'll implement support for redirecting the output of a command to a file.
+
   - slug: "vz4"
+    primary_extension_slug: "redirection"
+    name: "Redirect stderr"
+    difficulty: medium
+    description_md: |-
+      In this stage, you'll implement support for redirecting the standard error of a command to a file.
+
+      The `2>` operator is used to redirect the standard error of a command to a file.
+
+      Learn more about [Redirecting Stderr](https://www.gnu.org/software/bash/manual/bash.html#Redirecting-Output).
+
+      ### Tests
+
+      The tester will execute your program like this:
+
+      ```bash
+      ./your_program.sh
+      ```
+
+      It'll then send a series of commands to your shell, executing commands and redirecting their output to a file:
+
+      ```bash
+      $ ls nonexistent 2> /tmp/quz/baz.md
+      $ cat /tmp/quz/baz.md
+      ls: cannot access 'nonexistent': No such file or directory
+      $ echo 'Maria file cannot be found' 2> /tmp/quz/foo.md
+      Maria file cannot be found
+      $ cat /tmp/bar/pear nonexistent 2> /tmp/quz/quz.md
+      pear
+      $ cat /tmp/quz/quz.md
+      cat: nonexistent: No such file or directory
+      ```
+
+      The tester will check if the commands correctly execute commands and redirect their error message to a file as specified.
+      The file contents will also be checked for correctness.
+
+    marketing_md: |-
+      In this stage, you'll implement support for redirecting the standard error of a command to a file.
+
   - slug: "el9"
+    primary_extension_slug: "redirection"
+    name: "Append stdout"
+    difficulty: medium
+    description_md: |-
+      In this stage, you'll implement support for appending the output of a command to a file.
+
+      The `1>>` operator is used to append the output of a command to a file.
+      As a special case, if the file descriptor is not specified before the operator `>>`, the output is redirected to the standard output by default, so `>>` is equivalent to `1>>`.
+
+      Learn more about [Appending Stdout](https://www.gnu.org/software/bash/manual/bash.html#Appending-Redirected-Output).
+
+      ### Tests
+
+      The tester will execute your program like this:
+
+      ```bash
+      ./your_program.sh
+      ```
+
+      It'll then send a series of commands to your shell, executing commands and appending their output to a file:
+
+      ```bash
+      $ ls /tmp/baz >> /tmp/bar/bar.md
+      $ cat /tmp/bar/bar.md
+      apple
+      banana
+      blueberry
+      $ echo 'Hello Emily' 1>> /tmp/bar/baz.md
+      $ echo 'Hello Maria' 1>> /tmp/bar/baz.md
+      $ cat /tmp/bar/baz.md
+      Hello Emily
+      Hello Maria
+      $ echo "List of files: " > /tmp/bar/qux.md
+      $ ls /tmp/baz >> /tmp/bar/qux.md
+      $ cat /tmp/bar/qux.md
+      List of files:
+      apple
+      banana
+      blueberry
+      ```
+
+      The tester will check if the commands correctly execute commands and append their output to a file as specified.
+      The file contents will also be checked for correctness.
+
+    marketing_md: |-
+      In this stage, you'll implement support for appending the output of a command to a file.
+
   - slug: "un3"
+    primary_extension_slug: "redirection"
+    name: "Append stderr"
+    difficulty: medium
+    description_md: |-
+      In this stage, you'll implement support for appending the standard error of a command to a file.
+
+      The `2>>` operator is used to append the standard error of a command to a file.
+
+      Learn more about [Appending Stderr](https://www.gnu.org/software/bash/manual/bash.html#Appending-Redirected-Output).
+
+      ### Tests
+
+      The tester will execute your program like this:
+
+      ```bash
+      ./your_program.sh
+      ```
+
+      It'll then send a series of commands to your shell, executing commands and appending their standard error to a file:
+
+      ```bash
+      $ ls nonexistent >> /tmp/foo/baz.md
+      ls: cannot access 'nonexistent': No such file or directory
+      $ ls nonexistent 2>> /tmp/foo/qux.md
+      $ cat /tmp/foo/qux.md
+      ls: cannot access 'nonexistent': No such file or directory
+      $ echo "James says Error" 2>> /tmp/foo/quz.md
+      James says Error
+      $ cat nonexistent 2>> /tmp/foo/quz.md
+      $ ls nonexistent 2>> /tmp/foo/quz.md
+      $ cat /tmp/foo/quz.md
+      cat: nonexistent: No such file or directory
+      ls: cannot access 'nonexistent': No such file or directory
+      ```
+
+      The tester will check if the commands correctly execute commands and append their standard error to a file as specified.
+      The file contents will also be checked for correctness.
+
+    marketing_md: |-
+      In this stage, you'll implement support for appending the standard error of a command to a file.
+
+  - slug: "qp2"
+  - slug: "gm9"
+  - slug: "qm8"
+  - slug: "gy5"
+  - slug: "wh6"
+  - slug: "wt6"

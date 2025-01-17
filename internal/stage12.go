@@ -18,7 +18,7 @@ func testCd3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	shell.Setenv("HOME", tmpHomeDir)
 
-	if err := asserter.StartShellAndAssertPrompt(); err != nil {
+	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}
 

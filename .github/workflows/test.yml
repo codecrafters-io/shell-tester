@@ -4,15 +4,21 @@ on: push
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Set up Go
-        uses: actions/setup-go@v1
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.22.x
-
+          go-version: 1.23.x
+      - name: setup-env
+        run: |
+          sudo apt remove bpfcc-tools
+          bash --version
+          uname -a
+          compgen -ac | sort | grep '^ex'
+  
       - run: make test
 
   lint:
@@ -59,3 +65,23 @@ jobs:
         run: |
           make test
         shell: alpine.sh --root {0}
+
+  test-flakiness:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.22.x
+
+      - name: setup-env
+        run: |
+          sudo apt remove bpfcc-tools
+          bash --version
+          uname -a
+          compgen -ac | sort | grep '^ex'
+
+      - run: TEST_TARGET=test_bash RUNS=25 make test_flakiness

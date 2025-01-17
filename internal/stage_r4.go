@@ -16,37 +16,24 @@ import (
 func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	_, err := SetUpCustomCommands(stageHarness, shell, []string{"ls", "cat"})
+	_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
+		{CommandType: "ls", CommandName: CUSTOM_LS_COMMAND, CommandMetadata: ""},
+		{CommandType: "cat", CommandName: CUSTOM_CAT_COMMAND, CommandMetadata: ""},
+	}, false)
 	if err != nil {
 		return err
 	}
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	if err := asserter.StartShellAndAssertPrompt(); err != nil {
+	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}
 
-	dirs, err := getShortRandomDirectories(stageHarness, 2)
+	dirs, err := getShortRandomDirectories(stageHarness, 1)
 	if err != nil {
 		return err
 	}
-	stageDir, lsDir := dirs[0], dirs[1]
-
-	randomWords := random.RandomWords(3)
-	slices.Sort(randomWords)
-	filePaths := []string{
-		path.Join(lsDir, randomWords[0]),
-		path.Join(lsDir, randomWords[1]),
-		path.Join(lsDir, randomWords[2]),
-	}
-	fileContents := []string{
-		randomWords[0] + "\n",
-		randomWords[1] + "\n",
-		randomWords[2] + "\n",
-	}
-	if err := writeFiles(filePaths, fileContents, logger); err != nil {
-		return err
-	}
+	stageDir := dirs[0]
 
 	randomWords2 := random.RandomElementsFromArray(SMALL_WORDS, 3)
 	slices.Sort(randomWords2)

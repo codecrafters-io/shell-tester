@@ -14,7 +14,7 @@ func testType1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	builtIns := []string{"echo", "exit", "type"}
 
-	if err := asserter.StartShellAndAssertPrompt(); err != nil {
+	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}
 

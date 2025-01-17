@@ -19,6 +19,16 @@ func (c *AssertionCollection) AddAssertion(assertion assertions.Assertion) {
 	c.Assertions = append(c.Assertions, assertion)
 }
 
+func (c *AssertionCollection) PopAssertion() assertions.Assertion {
+	if len(c.Assertions) == 0 {
+		panic("CodeCrafters internal error: no assertions to pop")
+	}
+
+	lastAssertion := c.Assertions[len(c.Assertions)-1]
+	c.Assertions = c.Assertions[:len(c.Assertions)-1]
+	return lastAssertion
+}
+
 func (c *AssertionCollection) RunWithPromptAssertion(screenState [][]string) *assertions.AssertionError {
 	return c.runWithExtraAssertions(screenState, []assertions.Assertion{
 		assertions.PromptAssertion{ExpectedPrompt: utils.PROMPT},
