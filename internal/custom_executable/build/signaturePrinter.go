@@ -16,7 +16,7 @@ func addSecretCodeToExecutable(filePath, randomString string) error {
 	if placeholderIndex == -1 {
 		return fmt.Errorf("CodeCrafters Internal Error: <<RANDOM>> not found in file")
 	}
-	bytes := copy(data[placeholderIndex:placeholderIndex+LENGTH], []byte(randomString))
+	bytes := copy(data[placeholderIndex:placeholderIndex+LENGTH], randomString)
 	if bytes != LENGTH {
 		return fmt.Errorf("CodeCrafters Internal Error: copy failed")
 	}
