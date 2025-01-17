@@ -30,9 +30,6 @@ type CommandAutocompleteTestCase struct {
 	// CheckForBell is true if we should check for a bell
 	CheckForBell bool
 
-	// SuccessMessage is the message to log in case of success
-	SuccessMessage string
-
 	// SkipPromptAssertion is a flag to skip the final prompt assertion
 	SkipPromptAssertion bool
 }
@@ -106,7 +103,6 @@ func (t CommandAutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		return err
 	}
 
-	logger.Successf("%s", t.SuccessMessage)
 	return nil
 }
 

@@ -40,9 +40,6 @@ type CommandAutocompleteAndResponseTestCase struct {
 	// FallbackPatterns is a list of regex patterns to match against
 	FallbackPatterns []*regexp.Regexp
 
-	// SuccessMessage is the message to log in case of success
-	SuccessMessage string
-
 	// SkipPromptAssertion is a flag to skip the final prompt assertion
 	SkipPromptAssertion bool
 }
@@ -100,11 +97,12 @@ func (t CommandAutocompleteAndResponseTestCase) Run(asserter *logged_shell_asser
 	asserter.PopAssertion()
 
 	// Send ENTER
-	logNewLine(logger)
 	nextCommandToSend := "\n"
 	if t.Args != nil {
 		nextCommandToSend = strings.Join(t.Args, " ") + "\n"
 	}
+	logCommand(logger, strings.TrimSpace(nextCommandToSend))
+	logNewLine(logger)
 	if err := shell.SendCommandRaw(nextCommandToSend); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
@@ -134,7 +132,9 @@ func (t CommandAutocompleteAndResponseTestCase) Run(asserter *logged_shell_asser
 	if err := assertFuncToRun(); err != nil {
 		return err
 	}
+	if t.ExpectedOutput != "" {
+		logger.Successf("✓ Received %q", t.ExpectedOutput)
+	}
 
-	logger.Successf("%s", t.SuccessMessage)
 	return nil
 }
