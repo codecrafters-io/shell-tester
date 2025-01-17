@@ -13,6 +13,26 @@ var LARGE_WORDS = []string{"hello", "world", "test", "example", "shell", "script
 const CUSTOM_LS_COMMAND = "ls"
 const CUSTOM_CAT_COMMAND = "cat"
 
+type testCaseContent struct {
+	Input          string
+	ExpectedOutput string
+}
+
+func newTestCaseContent(input string, expectedOutput string) testCaseContent {
+	return testCaseContent{
+		Input:          input,
+		ExpectedOutput: expectedOutput,
+	}
+}
+
+func newTestCaseContents(inputs []string, expectedOutputs []string) []testCaseContent {
+	testCases := []testCaseContent{}
+	for i, input := range inputs {
+		testCases = append(testCases, newTestCaseContent(input, expectedOutputs[i]))
+	}
+	return testCases
+}
+
 func getRandomInvalidCommand() string {
 	return getRandomInvalidCommands(1)[0]
 }
