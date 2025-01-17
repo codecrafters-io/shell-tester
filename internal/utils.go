@@ -124,12 +124,6 @@ func logAndQuit(asserter *logged_shell_asserter.LoggedShellAsserter, err error) 
 	return err
 }
 
-// TODO: Add SetupSignaturePrinter to SetupCustomCommands as a case
-// type CommandMetaData struct {
-// 	CommandType     string
-// 	CommandName     string
-// 	CommandMetadata string
-// }
 // TODO: Logging is currently in stages, but it should be here
 // TODO: How to log when multiple executables are set up?
 
@@ -152,7 +146,19 @@ func SetUpSignaturePrinter(stageHarness *test_case_harness.TestCaseHarness, shel
 	return executableDir, nil
 }
 
-func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, commands []string, useShorterDirectory bool) (string, error) {
+type CommandDetails struct {
+	// CommandType is the type of the command, e.g. "ls", "cat"
+	CommandType string
+	// CommandName is the name of the generated executable, e.g. "custom_exe_1234"
+	CommandName string
+	// CommandMetadata is any other metadata required for generating the command
+	// SignaturePrinter: random code
+	// Ls: nothing
+	// Cat: nothing
+	CommandMetadata string
+}
+
+func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, commands []CommandDetails, useShorterDirectory bool) (string, error) {
 	createExecutableDirFunc := getRandomDirectory
 	if useShorterDirectory {
 		createExecutableDirFunc = getShortRandomDirectory
@@ -166,16 +172,16 @@ func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell 
 	// (where the custom executable is copied to)
 	shell.AddToPath(executableDir)
 
-	for _, command := range commands {
-		switch command {
+	for _, commandDetail := range commands {
+		switch commandDetail.CommandType {
 		case "ls":
-			customLsPath := path.Join(executableDir, CUSTOM_LS_COMMAND)
+			customLsPath := path.Join(executableDir, commandDetail.CommandName)
 			err = custom_executable.CreateLsExecutable(customLsPath)
 			if err != nil {
 				return "", err
 			}
 		case "cat":
-			customCatPath := path.Join(executableDir, CUSTOM_CAT_COMMAND)
+			customCatPath := path.Join(executableDir, commandDetail.CommandName)
 			err = custom_executable.CreateCatExecutable(customCatPath)
 			if err != nil {
 				return "", err
