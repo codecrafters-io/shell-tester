@@ -31,7 +31,9 @@ func testA6(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger.ResetSecondaryPrefix()
 
 	for _, executableName := range executableNames {
-		_, err := SetUpSignaturePrinter(stageHarness, shell, getRandomString(), executableName)
+		_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
+			{CommandType: "signature_printer", CommandName: executableName, CommandMetadata: getRandomString()},
+		}, true)
 		if err != nil {
 			return err
 		}

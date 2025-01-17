@@ -20,7 +20,9 @@ func testA4(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger.UpdateSecondaryPrefix("setup")
 	logger.Infof("Available executables:\n- %s", executableName)
 	logger.ResetSecondaryPrefix()
-	_, err := SetUpSignaturePrinter(stageHarness, shell, getRandomString(), executableName)
+	_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
+		{CommandType: "signature_printer", CommandName: executableName, CommandMetadata: getRandomString()},
+	}, true)
 	if err != nil {
 		return err
 	}

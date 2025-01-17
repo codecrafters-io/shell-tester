@@ -32,7 +32,9 @@ func testA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	for _, word := range randomWords {
 		executableName := prefix + word
 		executableNames = append(executableNames, executableName)
-		_, err := SetUpSignaturePrinter(stageHarness, shell, getRandomString(), executableName)
+		_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
+			{CommandType: "signature_printer", CommandName: executableName, CommandMetadata: getRandomString()},
+		}, true)
 		if err != nil {
 			return err
 		}
