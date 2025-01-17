@@ -152,8 +152,13 @@ func SetUpSignaturePrinter(stageHarness *test_case_harness.TestCaseHarness, shel
 	return executableDir, nil
 }
 
-func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, commands []string) (string, error) {
-	executableDir, err := getRandomDirectory(stageHarness)
+func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, commands []string, useShorterDirectory bool) (string, error) {
+	createExecutableDirFunc := getRandomDirectory
+	if useShorterDirectory {
+		createExecutableDirFunc = getShortRandomDirectory
+	}
+
+	executableDir, err := createExecutableDirFunc(stageHarness)
 	if err != nil {
 		return "", err
 	}
