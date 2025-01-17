@@ -37,7 +37,7 @@ type CommandAutocompleteTestCase struct {
 	SkipPromptAssertion bool
 }
 
-func (t CommandAutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, skipCommandLogging bool) error {
+func (t CommandAutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	// Log the details of the command before sending it
 	logCommand(logger, t.RawCommand)
 

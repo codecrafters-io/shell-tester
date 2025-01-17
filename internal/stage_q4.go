@@ -15,7 +15,9 @@ import (
 func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	_, err := SetUpCustomCommands(stageHarness, shell, []string{"cat"})
+	_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
+		{CommandType: "cat", CommandName: CUSTOM_CAT_COMMAND, CommandMetadata: ""},
+	}, false)
 	if err != nil {
 		return err
 	}
@@ -42,6 +44,9 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 		strings.Join(random.RandomWords(2), " ") + ".",
 		strings.Join(random.RandomWords(2), " ") + "." + "\n",
 	}
+	if err := writeFiles(filePaths, fileContents, logger); err != nil {
+		return err
+	}
 
 	inputs := []string{
 		fmt.Sprintf(`echo '%s\\\n%s'`, L[0], L[1]),
@@ -67,10 +72,6 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 		if err := testCase.Run(asserter, shell, logger); err != nil {
 			return err
 		}
-	}
-
-	if err := writeFiles(filePaths, fileContents, logger); err != nil {
-		return err
 	}
 
 	testCase := test_cases.CommandResponseTestCase{

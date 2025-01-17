@@ -21,23 +21,23 @@ func NewStandardVT() *VirtualTerminal {
 }
 
 func NewCustomVT(rows, cols int) *VirtualTerminal {
-	vt := &VirtualTerminal{
+	vtInstance := &VirtualTerminal{
 		vt:       vt.NewTerminal(cols, rows),
 		rows:     rows,
 		cols:     cols,
 		bellChan: make(chan bool, 1),
 	}
 
-	vt.vt.Callbacks.Bell = func() {
+	vtInstance.vt.Callbacks.Bell = func() {
 		// fmt.Println("🔔 RECEIVED BELL 🔔")
 		// Non-blocking send to channel
 		select {
-		case vt.bellChan <- true:
+		case vtInstance.bellChan <- true:
 		default:
 		}
 	}
 
-	return vt
+	return vtInstance
 }
 
 func (vt *VirtualTerminal) BellChannel() chan bool {

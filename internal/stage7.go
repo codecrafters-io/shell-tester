@@ -1,11 +1,8 @@
 package internal
 
 import (
-	"fmt"
-	"os"
 	"path/filepath"
 
-	custom_executable "github.com/codecrafters-io/shell-tester/internal/custom_executable/build"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -13,23 +10,17 @@ import (
 )
 
 func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
-	// Add the random directory to PATH (where the my_exe file is created)
-	randomDir, err := getRandomDirectory(stageHarness)
-	if err != nil {
-		return err
-	}
-
-	path := os.Getenv("PATH")
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	shell.Setenv("PATH", fmt.Sprintf("%s:%s", randomDir, path))
-	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
-
-	customExecutablePath := filepath.Join(randomDir, "my_exe")
-	err = custom_executable.CreateSignaturePrinterExecutable(getRandomString(), customExecutablePath)
+	executableName := "my_exe"
+	executableDir, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
+		{CommandType: "signature_printer", CommandName: executableName, CommandMetadata: getRandomString()},
+	}, true)
 	if err != nil {
 		return err
 	}
+	logAvailableExecutables(logger, []string{executableName})
+	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
@@ -44,7 +35,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 		var expectedPath = ""
 		if executable == "my_exe" {
-			expectedPath = customExecutablePath
+			expectedPath = filepath.Join(executableDir, executableName)
 		}
 
 		if err := testCase.RunForExecutable(asserter, shell, logger, expectedPath); err != nil {

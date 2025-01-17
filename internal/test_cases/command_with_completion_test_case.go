@@ -55,7 +55,7 @@ func (t CommandWithAttemptedCompletionTestCase) Run(asserter *logged_shell_asser
 		panic("Tabs found in the middle of the command, this is not supported")
 	}
 
-	// Seperate the command into chars & tabs, newline
+	// Separate the command into chars & tabs, newline
 	hasEnterKey := t.RawCommand[len(t.RawCommand)-1] == '\n'
 	hasTabKey := strings.Contains(t.RawCommand, "\t")
 

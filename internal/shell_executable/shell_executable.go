@@ -59,9 +59,6 @@ func (b *ShellExecutable) Setenv(key, value string) {
 }
 
 func (b *ShellExecutable) AddToPath(dir string) {
-	b.stageLogger.UpdateSecondaryPrefix("setup")
-	b.stageLogger.Infof("export PATH=%s:$PATH", dir)
-	b.stageLogger.ResetSecondaryPrefix()
 	b.env.Set("PATH", fmt.Sprintf("%s:%s", dir, b.env.Get("PATH")))
 }
 

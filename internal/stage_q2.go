@@ -17,7 +17,9 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	// TODO: Define this function on the shell executable
 	// TODO: See if we can add the signature printer too to this function
-	_, err := SetUpCustomCommands(stageHarness, shell, []string{"cat"})
+	_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
+		{CommandType: "cat", CommandName: CUSTOM_CAT_COMMAND, CommandMetadata: ""},
+	}, false)
 	if err != nil {
 		return err
 	}
@@ -57,6 +59,10 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 		fmt.Sprintf(`%s %s's %s`, L[3], L[4], L[1]),
 		fileContents[0] + fileContents[1] + strings.TrimRight(fileContents[2], "\n"),
 	}
+	if err := writeFiles(filePaths, fileContents, logger); err != nil {
+		return err
+	}
+
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
 	for _, testCaseContent := range testCaseContents[:3] {
@@ -71,9 +77,6 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 	}
 
-	if err := writeFiles(filePaths, fileContents, logger); err != nil {
-		return err
-	}
 	testCase := test_cases.CommandResponseTestCase{
 		Command:          testCaseContents[3].Input,
 		ExpectedOutput:   testCaseContents[3].ExpectedOutput,
