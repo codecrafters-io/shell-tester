@@ -1,6 +1,6 @@
 Debug = true
 
-[33m[stage-6] [0m[94mRunning tests for Stage #6: ac1[0m
+[33m[stage-6] [0m[94mRunning tests for Stage #6: qp2[0m
 [33m[stage-6] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-6] [0m[92m✓ Received prompt ($ )[0m
 [33m[stage-6] [0m[94mTyped "ech"[0m
@@ -21,7 +21,7 @@ Debug = true
 [33m[your-program] [0m$ exit 
 [33m[stage-6] [0m[92mTest passed.[0m
 
-[33m[stage-5] [0m[94mRunning tests for Stage #5: ac2[0m
+[33m[stage-5] [0m[94mRunning tests for Stage #5: gm9[0m
 [33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-5] [0m[92m✓ Received prompt ($ )[0m
 [33m[stage-5] [0m[94mTyped "ech"[0m
@@ -48,7 +48,7 @@ Debug = true
 [33m[your-program] [0m$ 
 [33m[stage-5] [0m[92mTest passed.[0m
 
-[33m[stage-4] [0m[94mRunning tests for Stage #4: ac3[0m
+[33m[stage-4] [0m[94mRunning tests for Stage #4: qm8[0m
 [33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-4] [0m[92m✓ Received prompt ($ )[0m
 [33m[stage-4] [0m[94mTyped "xyz"[0m
@@ -60,7 +60,7 @@ Debug = true
 [33m[your-program] [0m$ xyz
 [33m[stage-4] [0m[92mTest passed.[0m
 
-[33m[stage-3] [0m[94mRunning tests for Stage #3: ac4[0m
+[33m[stage-3] [0m[94mRunning tests for Stage #3: gy5[0m
 [33m[stage-3] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
 [33m[stage-3] [setup] [0m[94mAvailable executables:[0m
 [33m[stage-3] [setup] [0m[94m- custom_exe_1357[0m
@@ -74,7 +74,7 @@ Debug = true
 [33m[your-program] [0m$ custom_exe_1357 
 [33m[stage-3] [0m[92mTest passed.[0m
 
-[33m[stage-2] [0m[94mRunning tests for Stage #2: ac5[0m
+[33m[stage-2] [0m[94mRunning tests for Stage #2: wh6[0m
 [33m[stage-2] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
 [33m[stage-2] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
 [33m[stage-2] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
@@ -96,7 +96,7 @@ Debug = true
 [33m[your-program] [0m$ xyz_
 [33m[stage-2] [0m[92mTest passed.[0m
 
-[33m[stage-1] [0m[94mRunning tests for Stage #1: ac6[0m
+[33m[stage-1] [0m[94mRunning tests for Stage #1: wt6[0m
 [33m[stage-1] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
 [33m[stage-1] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
 [33m[stage-1] [setup] [0m[94mexport PATH=/tmp/qux:$PATH[0m
