@@ -1,8 +1,6 @@
 package internal
 
 import (
-	"fmt"
-
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -46,7 +44,6 @@ func a1Helper(stageHarness *test_case_harness.TestCaseHarness, logger *logger.Lo
 	err := test_cases.CommandAutocompleteTestCase{
 		RawCommand:         command,
 		ExpectedReflection: completion,
-		SuccessMessage:     fmt.Sprintf("Received completion for %q", command),
 		ExpectedAutocompletedReflectionHasNoSpace: completionEndsWithNoSpace,
 		SkipPromptAssertion:                       true,
 	}.Run(asserter, shell, logger)
