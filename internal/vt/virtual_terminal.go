@@ -52,11 +52,6 @@ func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 	if len(p) == 0 {
 		return 0, nil
 	}
-
-	// fmt.Printf("Writing: %q\n", string(p))
-	// if strings.Contains(string(p), "^[[31;9R") {
-	// 	return len(p), nil
-	// }
 	return vt.vt.Write(p)
 }
 

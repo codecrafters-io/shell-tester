@@ -4,8 +4,6 @@ import (
 	"fmt"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
-	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
-	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 	"github.com/codecrafters-io/tester-utils/random"
 )
 
@@ -68,14 +66,4 @@ func getRandomName() string {
 func logAndQuit(asserter *logged_shell_asserter.LoggedShellAsserter, err error) error {
 	asserter.LogRemainingOutput()
 	return err
-}
-
-func logScreenState(shell *shell_executable.ShellExecutable) {
-	screenState := shell.GetScreenState()
-	for _, row := range screenState {
-		cleanedRow := virtual_terminal.BuildCleanedRow(row)
-		if len(cleanedRow) > 0 {
-			fmt.Println(cleanedRow)
-		}
-	}
 }
