@@ -39,17 +39,16 @@ func testA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	command := prefix
 	sort.Strings(executableNames)
 	completions := strings.Join(executableNames, "  ")
-	completionEndsWithNoSpace := true
 
 	err := test_cases.CommandMultipleCompletionsTestCase{
 		RawCommand:         command,
 		TabCount:           2,
 		ExpectedReflection: completions,
 		SuccessMessage:     fmt.Sprintf("Received completion for %q", command),
-		ExpectedAutocompletedReflectionHasNoSpace: completionEndsWithNoSpace,
+		ExpectedAutocompletedReflectionHasNoSpace: true,
 		CheckForBell:        true,
 		SkipPromptAssertion: true,
-	}.Run(asserter, shell, logger, false)
+	}.Run(asserter, shell, logger)
 	if err != nil {
 		return err
 	}

@@ -48,7 +48,7 @@ func a1Helper(stageHarness *test_case_harness.TestCaseHarness, logger *logger.Lo
 		SuccessMessage:     fmt.Sprintf("Received completion for %q", command),
 		ExpectedAutocompletedReflectionHasNoSpace: completionEndsWithNoSpace,
 		SkipPromptAssertion:                       true,
-	}.Run(asserter, shell, logger, false)
+	}.Run(asserter, shell, logger)
 	if err != nil {
 		return err
 	}

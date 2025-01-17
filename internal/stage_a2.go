@@ -52,7 +52,7 @@ func a2Helper(stageHarness *test_case_harness.TestCaseHarness, logger *logger.Lo
 		ExpectedOutput:      response,
 		SuccessMessage:      fmt.Sprintf("Received completion for %q", command),
 		SkipPromptAssertion: true,
-	}.Run(asserter, shell, logger, false)
+	}.Run(asserter, shell, logger)
 	if err != nil {
 		return err
 	}
