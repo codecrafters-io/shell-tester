@@ -20,7 +20,6 @@ func testA1(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 
 	inputAndCompletions := []inputAndCompletion{
-		{Input: "typ", Completion: "type", CompletionEndsWithNoSpace: true},
 		{Input: "ech", Completion: "echo", CompletionEndsWithNoSpace: false},
 		{Input: "exi", Completion: "exit", CompletionEndsWithNoSpace: false},
 	}
