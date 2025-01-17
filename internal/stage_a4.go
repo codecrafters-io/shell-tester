@@ -17,15 +17,13 @@ func testA4(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	executableName := "custom_exe_" + strconv.Itoa(random.RandomInt(1000, 9999))
-	logger.UpdateSecondaryPrefix("setup")
-	logger.Infof("Available executables:\n- %s", executableName)
-	logger.ResetSecondaryPrefix()
 	_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
 		{CommandType: "signature_printer", CommandName: executableName, CommandMetadata: getRandomString()},
 	}, true)
 	if err != nil {
 		return err
 	}
+	logAvailableExecutables(logger, []string{executableName})
 
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err

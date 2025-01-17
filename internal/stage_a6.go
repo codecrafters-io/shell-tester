@@ -6,6 +6,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -19,25 +20,18 @@ func testA6(stageHarness *test_case_harness.TestCaseHarness) error {
 	initialPrefix := prefix
 	randomWords := random.RandomElementsFromArray(SMALL_WORDS, 3)
 	executableNames := []string{}
-	logger.UpdateSecondaryPrefix("setup")
-	logger.Infof("Available executables:")
-	// TODO: Not supposed to be here but can't think of how to do this cleanly
 	for _, word := range randomWords {
 		executableName := prefix + word
 		prefix = executableName + "_"
-		executableNames = append(executableNames, executableName)
-		logger.Infof("- %s", executableName)
-	}
-	logger.ResetSecondaryPrefix()
-
-	for _, executableName := range executableNames {
 		_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
 			{CommandType: "signature_printer", CommandName: executableName, CommandMetadata: getRandomString()},
 		}, true)
 		if err != nil {
 			return err
 		}
+		executableNames = append(executableNames, executableName)
 	}
+	logAvailableExecutables(logger, executableNames)
 
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err
@@ -54,4 +48,14 @@ func testA6(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	return logAndQuit(asserter, nil)
+}
+
+// TODO: Think of how to encapsulate this inside SetupExecutable function
+func logAvailableExecutables(logger *logger.Logger, executableNames []string) {
+	logger.UpdateSecondaryPrefix("setup")
+	logger.Infof("Available executables:")
+	for _, executableName := range executableNames {
+		logger.Infof("- %s", executableName)
+	}
+	logger.ResetSecondaryPrefix()
 }

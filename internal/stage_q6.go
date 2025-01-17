@@ -30,8 +30,7 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
-
-	defer cleanupDirectories([]string{executableDir})
+	logAvailableExecutables(logger, []string{executableName1, executableName2, executableName3, executableName4})
 
 	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
@@ -43,14 +42,6 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 		strings.Join(random.RandomWords(2), " ") + ".",
 		strings.Join(random.RandomWords(2), " ") + ".",
 	}
-
-	logger.UpdateSecondaryPrefix("setup")
-	logger.Infof("Available executables:")
-	// TODO: Log path not name
-	for _, executableName := range []string{executableName1, executableName2, executableName3, executableName4} {
-		logger.Infof("- %s", executableName)
-	}
-	logger.ResetSecondaryPrefix()
 
 	if err := writeFiles([]string{
 		path.Join(executableDir, "f1"),
