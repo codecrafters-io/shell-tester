@@ -12,7 +12,7 @@ import (
 )
 
 func testA6(stageHarness *test_case_harness.TestCaseHarness) error {
-	logger := stageHarness.Logger
+	stageLogger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
@@ -31,7 +31,7 @@ func testA6(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 		executableNames = append(executableNames, executableName)
 	}
-	logAvailableExecutables(logger, executableNames)
+	logAvailableExecutables(stageLogger, executableNames)
 
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err
@@ -42,7 +42,7 @@ func testA6(stageHarness *test_case_harness.TestCaseHarness) error {
 		ExpectedReflections: executableNames,
 		SuccessMessage:      fmt.Sprintf("Received all partial completions for %q", executableNames[len(executableNames)-1]),
 		SkipPromptAssertion: true,
-	}.Run(asserter, shell, logger)
+	}.Run(asserter, shell, stageLogger)
 	if err != nil {
 		return err
 	}
