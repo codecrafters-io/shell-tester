@@ -127,25 +127,6 @@ func logAndQuit(asserter *logged_shell_asserter.LoggedShellAsserter, err error) 
 // TODO: Logging is currently in stages, but it should be here
 // TODO: How to log when multiple executables are set up?
 
-func SetUpSignaturePrinter(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, randomCode string, randomExecutableName string) (string, error) {
-	executableDir, err := getShortRandomDirectory(stageHarness)
-	if err != nil {
-		return "", err
-	}
-	// Add the random directory to PATH
-	// (where the custom executable is copied to)
-	shell.AddToPath(executableDir)
-
-	// case "signature_printer":
-	exePath := path.Join(executableDir, randomExecutableName)
-	err = custom_executable.CreateSignaturePrinterExecutable(randomCode, exePath)
-	if err != nil {
-		return "", err
-	}
-
-	return executableDir, nil
-}
-
 type CommandDetails struct {
 	// CommandType is the type of the command, e.g. "ls", "cat"
 	CommandType string
@@ -183,6 +164,12 @@ func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell 
 		case "cat":
 			customCatPath := path.Join(executableDir, commandDetail.CommandName)
 			err = custom_executable.CreateCatExecutable(customCatPath)
+			if err != nil {
+				return "", err
+			}
+		case "signature_printer":
+			customSignaturePrinterPath := path.Join(executableDir, commandDetail.CommandName)
+			err = custom_executable.CreateSignaturePrinterExecutable(commandDetail.CommandMetadata, customSignaturePrinterPath)
 			if err != nil {
 				return "", err
 			}
