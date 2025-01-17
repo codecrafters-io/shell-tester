@@ -54,12 +54,14 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 		panic("CodeCrafters Internal Error: Cannot copy executable")
 	}
 
-	writeFiles([]string{
+	if err := writeFiles([]string{
 		path.Join(executableDir, "f1"),
 		path.Join(executableDir, "f2"),
 		path.Join(executableDir, "f3"),
 		path.Join(executableDir, "f4"),
-	}, []string{fileContents[0] + "\n", fileContents[1] + "\n", fileContents[2] + "\n", fileContents[3] + "\n"}, logger)
+	}, []string{fileContents[0] + "\n", fileContents[1] + "\n", fileContents[2] + "\n", fileContents[3] + "\n"}, logger); err != nil {
+		return err
+	}
 
 	inputs := []string{
 		fmt.Sprintf(`%s %s/f1`, executableName1, executableDir),
