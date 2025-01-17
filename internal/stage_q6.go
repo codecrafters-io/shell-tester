@@ -43,6 +43,7 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	executableName3 := `"exe with \'single quotes\'"`
 	executableName4 := `'exe with \n newline'`
 
+	// TODO: Why not use our cat directly here ?
 	originalExecutablePath := "/tmp/custom_cat_executable"
 	err = createExecutableCallingCat(originalExecutablePath)
 	if err != nil {
@@ -53,6 +54,13 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		panic("CodeCrafters Internal Error: Cannot copy executable")
 	}
+
+	logger.UpdateSecondaryPrefix("setup")
+	logger.Infof("Available executables:")
+	for _, executableName := range []string{executableName1, executableName2, executableName3, executableName4} {
+		logger.Infof("- %s", executableName)
+	}
+	logger.ResetSecondaryPrefix()
 
 	if err := writeFiles([]string{
 		path.Join(executableDir, "f1"),
