@@ -92,14 +92,24 @@ REDIRECTIONS_STAGES = [ \
 	{\"slug\":\"un3\",\"tester_log_prefix\":\"tester::\#un3\",\"title\":\"Stage\#22: Append stderr\"} \
 ]
 
-COMPLETIONS_STAGES = [ \
-	{\"slug\":\"qp2\",\"tester_log_prefix\":\"tester::\#qp2\",\"title\":\"Stage\#1: builtins completion\"}, \
-	{\"slug\":\"gm9\",\"tester_log_prefix\":\"tester::\#gm9\",\"title\":\"Stage\#2: completion with args\"}, \
-	{\"slug\":\"qm8\",\"tester_log_prefix\":\"tester::\#qm8\",\"title\":\"Stage\#3: completion with invalid command\"}, \
-	{\"slug\":\"gy5\",\"tester_log_prefix\":\"tester::\#gy5\",\"title\":\"Stage\#4: completion with valid command\"}, \
-	{\"slug\":\"wh6\",\"tester_log_prefix\":\"tester::\#wh6\",\"title\":\"Stage\#5: completion with multiple executables\"}, \
-	{\"slug\":\"wt6\",\"tester_log_prefix\":\"tester::\#wt6\",\"title\":\"Stage\#6: partial completions\"} \
+define COMMON_COMPLETION_STAGES
+[ \
+  {"slug":"qp2","tester_log_prefix":"tester::#qp2","title":"Stage#1: builtins completion"}, \
+  {"slug":"gm9","tester_log_prefix":"tester::#gm9","title":"Stage#2: completion with args"}, \
+  {"slug":"qm8","tester_log_prefix":"tester::#qm8","title":"Stage#3: completion with invalid command"}, \
+  {"slug":"gy5","tester_log_prefix":"tester::#gy5","title":"Stage#4: valid command"}, \
+  {"slug":"wt6","tester_log_prefix":"tester::#wt6","title":"Stage#6: partial completions"} \
 ]
+endef
+
+define COMPLETIONS_STAGE5
+{"slug":"wh6","tester_log_prefix":"tester::#wh6","title":"Stage#5: completion with multiple executables"}
+endef
+
+# Use eval to properly escape the strings
+COMPLETIONS_STAGES = $(shell echo '$(COMMON_COMPLETION_STAGES)' | sed 's/]$$/, $(COMPLETIONS_STAGE5)]/' | sed 's/"/\\"/g')
+COMPLETIONS_STAGES_FOR_ZSH = $(shell echo '$(COMMON_COMPLETION_STAGES)' | sed 's/"/\\"/g')
+REDIRECTIONS_STAGES = $(shell echo '$(_REDIRECTIONS_STAGES)' | sed 's/"/\\"/g')
 
 define run_test
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/$(2) \
@@ -162,7 +172,7 @@ test_redirections_w_zsh: build
 	$(call run_test,$(REDIRECTIONS_STAGES),zsh)
 
 test_completions_w_zsh: build
-	$(call run_test,$(COMPLETIONS_STAGES),zsh)
+	$(call run_test,$(COMPLETIONS_STAGES_FOR_ZSH),zsh)
 
 test_ash:
 	make test_base_w_ash
