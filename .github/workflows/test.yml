@@ -67,6 +67,11 @@ jobs:
           make test_dash
         shell: alpine.sh --root {0}
 
+      - name: setup-ubuntu-env
+        run: |
+          sudo apt install zsh
+          zsh --version
+
       - name: Run tests against all shells on alpine
         run: |
           sudo make test_zsh
