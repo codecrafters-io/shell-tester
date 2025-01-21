@@ -53,16 +53,6 @@ test_dash: build
 	]" \
 	dist/main.out
 
-test_failure: build
-	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/failure \
-	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#oo8\",\"title\":\"Stage #1: Init\"}, \
-		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#cz2\",\"title\":\"Stage #2: Invalid Command\"}, \
-		{\"slug\":\"ff0\",\"tester_log_prefix\":\"tester::#ff0\",\"title\":\"Stage #3: REPL\"}, \
-		{\"slug\":\"pn5\",\"tester_log_prefix\":\"tester::#pn5\",\"title\":\"Stage #4: Exit\"} \
-	]" \
-	dist/main.out
-
 # Removes ALL zsh related config files across the system
 test_zsh_dangerously: build
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/zsh \
@@ -176,6 +166,17 @@ test_redirections_w_bash: build
 test_completions_w_bash: build
 	$(call run_test,$(COMPLETIONS_STAGES),bash)
 
+test_base_w_dash: build
+	$(call run_test,$(BASE_STAGES),dash)
+
+test_nav_w_dash: build
+	$(call run_test,$(NAVIGATION_STAGES),dash)
+
+test_quoting_w_dash: build
+	$(call run_test,$(QUOTING_STAGES),dash)
+
+test_redirections_w_dash: build
+	$(call run_test,$(REDIRECTIONS_STAGES),dash)
 
 test_ash:
 	make test_base_w_ash
@@ -190,3 +191,10 @@ test_bash:
 	make test_quoting_w_bash
 	make test_redirections_w_bash
 	make test_completions_w_bash
+
+# Doesn't support completions
+test_dash:
+	make test_base_w_dash
+	make test_nav_w_dash
+	make test_quoting_w_dash
+	make test_redirections_w_dash
