@@ -97,6 +97,24 @@ build_executables:
 		done; \
 	done
 
+BASE_STAGES = [ \
+	{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::\#oo8\",\"title\":\"Stage\#1: Init\"}, \
+	{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::\#cz2\",\"title\":\"Stage\#2: Invalid Command\"}, \
+	{\"slug\":\"ff0\",\"tester_log_prefix\":\"tester::\#ff0\",\"title\":\"Stage\#3: REPL\"}, \
+	{\"slug\":\"pn5\",\"tester_log_prefix\":\"tester::\#pn5\",\"title\":\"Stage\#4: Exit\"}, \
+	{\"slug\":\"iz3\",\"tester_log_prefix\":\"tester::\#iz3\",\"title\":\"Stage\#5: Echo\"}, \
+	{\"slug\":\"ez5\",\"tester_log_prefix\":\"tester::\#ez5\",\"title\":\"Stage\#6: Type built-in\"}, \
+	{\"slug\":\"mg5\",\"tester_log_prefix\":\"tester::\#mg5\",\"title\":\"Stage\#7: Type for executables\"}, \
+	{\"slug\":\"ip1\",\"tester_log_prefix\":\"tester::\#ip1\",\"title\":\"Stage\#8: Run a program\"} \
+]
+
+NAVIGATION_STAGES = [ \
+	{\"slug\":\"ei0\",\"tester_log_prefix\":\"tester::\#ei0\",\"title\":\"Stage\#9: PWD\"}, \
+	{\"slug\":\"ra6\",\"tester_log_prefix\":\"tester::\#ra6\",\"title\":\"Stage\#10: CD-1\"}, \
+	{\"slug\":\"gq9\",\"tester_log_prefix\":\"tester::\#gq9\",\"title\":\"Stage\#11: CD-2\"}, \
+	{\"slug\":\"gp4\",\"tester_log_prefix\":\"tester::\#gp4\",\"title\":\"Stage\#12: CD-3\"} \
+]
+
 QUOTING_STAGES = [ \
 	{\"slug\":\"ni6\",\"tester_log_prefix\":\"tester::\#ni6\",\"title\":\"Stage\#13: Quoting with single quotes\"}, \
 	{\"slug\":\"tg6\",\"tester_log_prefix\":\"tester::\#tg6\",\"title\":\"Stage\#14: Quoting with double quotes\"}, \
@@ -128,26 +146,14 @@ define run_test
 	dist/main.out
 endef
 
-test_base_w_bash: build
-	$(call run_test,$(BASE_STAGES),bash)
-
 test_base_w_ash: build
 	$(call run_test,$(BASE_STAGES),ash)
-
-test_nav_w_bash: build
-	$(call run_test,$(NAVIGATION_STAGES),bash)
 
 test_nav_w_ash: build
 	$(call run_test,$(NAVIGATION_STAGES),ash)
 
-test_quoting_w_bash: build
-	$(call run_test,$(QUOTING_STAGES),bash)
-
 test_quoting_w_ash: build
 	$(call run_test,$(QUOTING_STAGES),ash)
-
-test_redirections_w_bash: build
-	$(call run_test,$(REDIRECTIONS_STAGES),bash)
 
 test_redirections_w_ash: build
 	$(call run_test,$(REDIRECTIONS_STAGES),ash)
@@ -155,19 +161,32 @@ test_redirections_w_ash: build
 test_completions_w_ash: build
 	$(call run_test,$(COMPLETIONS_STAGES),ash)
 
+test_base_w_bash: build
+	$(call run_test,$(BASE_STAGES),bash)
+
+test_nav_w_bash: build
+	$(call run_test,$(NAVIGATION_STAGES),bash)
+
+test_quoting_w_bash: build
+	$(call run_test,$(QUOTING_STAGES),bash)
+
+test_redirections_w_bash: build
+	$(call run_test,$(REDIRECTIONS_STAGES),bash)
+
 test_completions_w_bash: build
 	$(call run_test,$(COMPLETIONS_STAGES),bash)
-	
-test_bash:
-	make test_base_w_bash
-	make test_nav_w_bash
-	make test_quoting_w_bash
-	make test_redirection_w_bash
-	make test_completions_w_bash
+
 
 test_ash:
 	make test_base_w_ash
 	make test_nav_w_ash
 	make test_quoting_w_ash
-	make test_redirection_w_ash
+	make test_redirections_w_ash
 	make test_completions_w_ash
+
+test_bash:
+	make test_base_w_bash
+	make test_nav_w_bash
+	make test_quoting_w_bash
+	make test_redirections_w_bash
+	make test_completions_w_bash
