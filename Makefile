@@ -35,35 +35,6 @@ copy_course_file:
 		| base64 -d \
 		> internal/test_helpers/course_definition.yml
 
-test_dash: build
-	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/dash \
-	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#oo8\",\"title\":\"Stage #1: Init\"}, \
-		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#cz2\",\"title\":\"Stage #2: Invalid Command\"}, \
-		{\"slug\":\"ff0\",\"tester_log_prefix\":\"tester::#ff0\",\"title\":\"Stage #3: REPL\"}, \
-		{\"slug\":\"pn5\",\"tester_log_prefix\":\"tester::#pn5\",\"title\":\"Stage #4: Exit\"}, \
-		{\"slug\":\"iz3\",\"tester_log_prefix\":\"tester::#iz3\",\"title\":\"Stage #5: Echo\"}, \
-		{\"slug\":\"ez5\",\"tester_log_prefix\":\"tester::#ez5\",\"title\":\"Stage #6: Type built-in\"}, \
-		{\"slug\":\"mg5\",\"tester_log_prefix\":\"tester::#mg5\",\"title\":\"Stage #7: Type for executables\"}, \
-		{\"slug\":\"ip1\",\"tester_log_prefix\":\"tester::#ip1\",\"title\":\"Stage #8: Run a program\"}, \
-		{\"slug\":\"ei0\",\"tester_log_prefix\":\"tester::#ei0\",\"title\":\"Stage #9: PWD\"}, \
-		{\"slug\":\"ra6\",\"tester_log_prefix\":\"tester::#ra6\",\"title\":\"Stage #10: CD-1\"}, \
-		{\"slug\":\"gq9\",\"tester_log_prefix\":\"tester::#gq9\",\"title\":\"Stage #11: CD-2\"}, \
-		{\"slug\":\"gp4\",\"tester_log_prefix\":\"tester::#gp4\",\"title\":\"Stage #12: CD-3\"} \
-	]" \
-	dist/main.out
-
-# Removes ALL zsh related config files across the system
-test_zsh_dangerously: build
-	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/zsh \
-	CODECRAFTERS_TEST_CASES_JSON="[ \
-		{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::#oo8\",\"title\":\"Stage #1: Init\"}, \
-		{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::#cz2\",\"title\":\"Stage #2: Invalid Command\"}, \
-		{\"slug\":\"ff0\",\"tester_log_prefix\":\"tester::#ff0\",\"title\":\"Stage #3: REPL\"}, \
-		{\"slug\":\"pn5\",\"tester_log_prefix\":\"tester::#pn5\",\"title\":\"Stage #4: Exit\"} \
-	]" \
-	dist/main.out
-
 TEST_TARGET ?= test_bash
 RUNS ?= 100
 test_flakiness:
@@ -178,6 +149,21 @@ test_quoting_w_dash: build
 test_redirections_w_dash: build
 	$(call run_test,$(REDIRECTIONS_STAGES),dash)
 
+test_base_w_zsh: build
+	$(call run_test,$(BASE_STAGES),zsh)
+
+test_nav_w_zsh: build
+	$(call run_test,$(NAVIGATION_STAGES),zsh)
+
+test_quoting_w_zsh: build
+	$(call run_test,$(QUOTING_STAGES),zsh)
+
+test_redirections_w_zsh: build
+	$(call run_test,$(REDIRECTIONS_STAGES),zsh)
+
+test_completions_w_zsh: build
+	$(call run_test,$(COMPLETIONS_STAGES),zsh)
+
 test_ash:
 	make test_base_w_ash
 	make test_nav_w_ash
@@ -198,3 +184,11 @@ test_dash:
 	make test_nav_w_dash
 	make test_quoting_w_dash
 	make test_redirections_w_dash
+
+# Removes ALL zsh config files across the system
+test_zsh:
+	make test_base_w_zsh
+	make test_nav_w_zsh
+	make test_quoting_w_zsh
+	make test_redirections_w_zsh
+	make test_completions_w_zsh
