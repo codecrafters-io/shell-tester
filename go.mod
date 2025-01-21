@@ -2,14 +2,12 @@ module github.com/codecrafters-io/shell-tester
 
 go 1.23
 
-toolchain go1.23.4
-
 require (
 	github.com/charmbracelet/x/vt v0.0.0-20250117142827-dd310ffa7553
 	github.com/codecrafters-io/tester-utils v0.2.40
 	github.com/creack/pty v1.1.24
 	github.com/fatih/color v1.18.0
-	go.chromium.org/luci v0.0.0-20250120041927-f10777ad7454
+	go.chromium.org/luci v0.0.0-20250121063825-c52dc0e17e8c
 )
 
 // Use this to test the local version of tester-utils
