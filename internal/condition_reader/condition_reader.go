@@ -3,7 +3,6 @@ package condition_reader
 import (
 	"bufio"
 	"errors"
-	"fmt"
 	"io"
 	"time"
 
@@ -31,10 +30,7 @@ func (t *ConditionReader) ReadUntilConditionOrTimeout(condition func() bool, tim
 	}
 
 	for !time.Now().After(deadline) {
-		bytes, err := t.asyncReader.Read()
-		if len(bytes) > 0 {
-			fmt.Printf("Read bytes: %q\n", string(bytes))
-		}
+		_, err := t.asyncReader.Read()
 		if err != nil {
 			if errors.Is(err, async_reader.ErrNoData) {
 				// Since no data was available, let's avoid a busy loop
