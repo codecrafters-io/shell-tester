@@ -70,7 +70,7 @@ jobs:
       - name: Run tests against all shells on alpine
         run: |
           make test_zsh
-        shell: bash
+        shell: bash --root {0}
 
   test-alpine:
     runs-on: ubuntu-latest
