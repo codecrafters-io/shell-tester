@@ -204,6 +204,13 @@ build_executables:
 		done; \
 	done
 
+REDIRECTIONS_STAGES = [ \
+	{\"slug\":\"jv1\",\"tester_log_prefix\":\"tester::\#jv1\",\"title\":\"Stage \#19: Redirect stdout\"}, \
+	{\"slug\":\"vz4\",\"tester_log_prefix\":\"tester::\#vz4\",\"title\":\"Stage \#20: Redirect stderr\"}, \
+	{\"slug\":\"el9\",\"tester_log_prefix\":\"tester::\#el9\",\"title\":\"Stage \#21: Append stdout\"}, \
+	{\"slug\":\"un3\",\"tester_log_prefix\":\"tester::\#un3\",\"title\":\"Stage \#22: Append stderr\"} \
+]
+
 COMPLETIONS_STAGES = [ \
 	{\"slug\":\"qp2\",\"tester_log_prefix\":\"tester::\#qp2\",\"title\":\"Stage\#1: builtins completion\"}, \
 	{\"slug\":\"gm9\",\"tester_log_prefix\":\"tester::\#gm9\",\"title\":\"Stage\#2: completion with args\"}, \
@@ -213,14 +220,21 @@ COMPLETIONS_STAGES = [ \
 	{\"slug\":\"wt6\",\"tester_log_prefix\":\"tester::\#wt6\",\"title\":\"Stage\#6: partial completions\"} \
 ]
 
-define run_completions_test
-	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/$(1) \
-	CODECRAFTERS_TEST_CASES_JSON="$(COMPLETIONS_STAGES)" \
+define run_test
+	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/$(2) \
+	CODECRAFTERS_TEST_CASES_JSON="$(1)" \
 	dist/main.out
 endef
 
+test_redirections_w_bash: build
+	$(call run_test,$(REDIRECTIONS_STAGES),bash)
+
+test_redirections_w_ash: build
+	$(call run_test,$(REDIRECTIONS_STAGES),ash)
+
 test_completions_w_ash: build
-	$(call run_completions_test,ash)
+	$(call run_test,$(COMPLETIONS_STAGES),ash)
 
 test_completions_w_bash: build
-	$(call run_completions_test,bash)
+	$(call run_test,$(COMPLETIONS_STAGES),bash)
+	
