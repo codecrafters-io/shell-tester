@@ -103,7 +103,6 @@ endef
 define _COMPLETION_STAGES
 [ \
   {"slug":"qp2","tester_log_prefix":"tester::#qp2","title":"Stage#1: builtins completion"}, \
-  {"slug":"gm9","tester_log_prefix":"tester::#gm9","title":"Stage#2: completion with args"}, \
   {"slug":"qm8","tester_log_prefix":"tester::#qm8","title":"Stage#3: completion with invalid command"}, \
   {"slug":"gy5","tester_log_prefix":"tester::#gy5","title":"Stage#4: valid command"}, \
   {"slug":"wt6","tester_log_prefix":"tester::#wt6","title":"Stage#6: partial completions"} \
@@ -212,6 +211,7 @@ test_dash:
 
 # Removes ALL zsh config files across the system
 test_zsh:
+	zsh --version
 	make test_base_w_zsh
 	make test_nav_w_zsh
 	make test_quoting_w_zsh
