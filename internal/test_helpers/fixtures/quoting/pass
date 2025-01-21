@@ -69,8 +69,8 @@ Debug = true
 [33m[stage-3] [setup] [0m[94mecho -n "strawberry apple." > "/tmp/qux/'f 87'"[0m
 [33m[stage-3] [setup] [0m[94mecho -n "raspberry orange." > "/tmp/qux/'f  \\52'"[0m
 [33m[stage-3] [setup] [0m[94mecho -n "banana pineapple." > "/tmp/qux/'f \\6\\'"[0m
-[33m[your-program] [0m$ echo 'world\\\nscript'
-[33m[your-program] [0mworld\\\nscript
+[33m[your-program] [0m$ echo 'world\\nscript'
+[33m[your-program] [0mworld\\nscript
 [33m[stage-3] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ echo 'test\"helloexample\"world'
 [33m[your-program] [0mtest\"helloexample\"world
@@ -90,8 +90,8 @@ Debug = true
 [33m[stage-2] [setup] [0m[94mecho -n "mango strawberry." > "/tmp/quz/\"f\\57\""[0m
 [33m[stage-2] [setup] [0m[94mecho -n "strawberry blueberry." > "/tmp/quz/f97"[0m
 [33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo "world'example'\\n'hello"
-[33m[your-program] [0mworld'example'\n'hello
+[33m[your-program] [0m$ echo "world'example'\\'hello"
+[33m[your-program] [0mworld'example'\'hello
 [33m[stage-2] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ echo "world\"insidequotes"example\"
 [33m[your-program] [0mworld"insidequotesexample"
