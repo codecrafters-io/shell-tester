@@ -8,4 +8,4 @@ rm -rf /etc/zshrc
 rm -rf ~/.zshrc
 rm -rf /etc/zlogin
 rm -rf ~/.zlogin 
-ZDOTDIR='/workspaces/shell-tester/internal/test_helpers/zsh/zsh_config' zsh
+ZDOTDIR='./internal/test_helpers/zsh/zsh_config' zsh
