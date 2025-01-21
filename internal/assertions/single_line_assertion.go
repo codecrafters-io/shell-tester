@@ -38,7 +38,6 @@ func (a SingleLineAssertion) Run(screenState [][]string, startRowIndex int) (pro
 
 	rawRow := screenState[startRowIndex]
 	cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
-	fmt.Printf("%q: %q\n", rawRow[:20], cleanedRow)
 	for _, pattern := range a.FallbackPatterns {
 		if pattern.Match([]byte(cleanedRow)) {
 			return processedRowCount, nil

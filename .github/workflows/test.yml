@@ -65,8 +65,11 @@ jobs:
           make test_ash
           make test_bash
           make test_dash
-          make test_zsh
         shell: alpine.sh --root {0}
+
+      - name: Run tests against all shells on alpine
+        run: |
+          make test_zsh
 
   test-alpine:
     runs-on: ubuntu-latest
