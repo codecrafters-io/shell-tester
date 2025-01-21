@@ -100,7 +100,7 @@ define _REDIRECTIONS_STAGES
 ]
 endef
 
-define _COMPLETION_STAGES
+define _COMPLETION_STAGES_BASE
 [ \
   {"slug":"qp2","tester_log_prefix":"tester::#qp2","title":"Stage#1: builtins completion"}, \
   {"slug":"gm9","tester_log_prefix":"tester::#gm9","title":"Stage#2: completion with args"}, \
@@ -110,8 +110,8 @@ define _COMPLETION_STAGES
 ]
 endef
 
-define _COMPLETIONS_STAGE_5
-{"slug":"wh6","tester_log_prefix":"tester::#wh6","title":"Stage#5: completion with multiple executables"}
+define _COMPLETIONS_STAGES_COMPLEX
+  {"slug":"wh6","tester_log_prefix":"tester::#wh6","title":"Stage#5: completion with multiple executables"}
 endef
 
 # Use eval to properly escape the stage arrays
@@ -129,8 +129,8 @@ BASE_STAGES = $(call quote_strings,$(_BASE_STAGES))
 NAVIGATION_STAGES = $(call quote_strings,$(_NAVIGATION_STAGES))
 QUOTING_STAGES = $(call quote_strings,$(_QUOTING_STAGES))
 REDIRECTIONS_STAGES = $(call quote_strings,$(_REDIRECTIONS_STAGES))
-COMPLETIONS_STAGES_ZSH = $(call quote_strings,$(_COMPLETION_STAGES))
-COMPLETIONS_STAGES = $(shell echo '$(_COMPLETION_STAGES)' | sed 's/]$$/, $(_COMPLETIONS_STAGE_5)]/' | sed 's/"/\\"/g')
+COMPLETIONS_STAGES_ZSH = $(call quote_strings,$(_COMPLETION_STAGES_BASE))
+COMPLETIONS_STAGES = $(shell echo '$(_COMPLETION_STAGES_BASE)' | sed 's/]$$/, $(_COMPLETIONS_STAGES_COMPLEX)]/' | sed 's/"/\\"/g')
 
 test_base_w_ash: build
 	$(call run_test,$(BASE_STAGES),ash)
