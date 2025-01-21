@@ -54,16 +54,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Run tests against ash
+      - name: Setup git config
         run: |
           git config --global --add safe.directory /home/runner/work/shell-tester/shell-tester 
           # repo is owned by user and we intend to execute as root
-          make test_ash
         shell: alpine.sh --root {0}
 
-      - name: Run tests against bash on alpine
+      - name: Run tests against all shells on alpine
         run: |
-          make test
+          make test_ash
+          make test_bash
+          make test_dash
+          make test_zsh
         shell: alpine.sh --root {0}
 
   test-flakiness:
