@@ -32,6 +32,3 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-// // Selective vendoring is not supported by go mod
-// replace github.com/charmbracelet/x/vt => ./vendored/github.com/charmbracelet/x/vt
