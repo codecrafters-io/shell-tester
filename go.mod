@@ -3,7 +3,7 @@ module github.com/codecrafters-io/shell-tester
 go 1.23
 
 require (
-	github.com/charmbracelet/x/vt v0.0.0-20250117142827-dd310ffa7553
+	github.com/charmbracelet/x/vt v0.0.0-20250122132629-a969ddeb820d
 	github.com/codecrafters-io/tester-utils v0.2.40
 	github.com/creack/pty v1.1.24
 	github.com/fatih/color v1.18.0
@@ -15,7 +15,7 @@ require (
 
 require (
 	github.com/charmbracelet/x/ansi v0.7.0 // indirect
-	github.com/charmbracelet/x/wcwidth v0.0.0-20250117142827-dd310ffa7553 // indirect
+	github.com/charmbracelet/x/wcwidth v0.0.0-20250122132629-a969ddeb820d // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
