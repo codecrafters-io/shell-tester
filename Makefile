@@ -12,7 +12,7 @@ release:
 	git push origin main v$(next_version_number)
 
 build:
-	go build -mod=readonly -o dist/main.out ./cmd/tester
+	go build -o dist/main.out ./cmd/tester
 
 test:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/...
