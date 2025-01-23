@@ -12,20 +12,6 @@ func TestStages(t *testing.T) {
 	os.Setenv("CODECRAFTERS_RANDOM_SEED", "1234567890")
 
 	testCases := map[string]testerUtilsTesting.TesterOutputTestCase{
-		"base_stages_pass": {
-			UntilStageSlug:      "ip1",
-			CodePath:            "./test_helpers/bash",
-			ExpectedExitCode:    0,
-			StdoutFixturePath:   "./test_helpers/fixtures/base/pass",
-			NormalizeOutputFunc: normalizeTesterOutput,
-		},
-		"navigation_pass": {
-			UntilStageSlug:      "gp4",
-			CodePath:            "./test_helpers/bash",
-			ExpectedExitCode:    0,
-			StdoutFixturePath:   "./test_helpers/fixtures/navigation/pass",
-			NormalizeOutputFunc: normalizeTesterOutput,
-		},
 		"missing_command_fail": {
 			UntilStageSlug:      "cz2",
 			CodePath:            "./test_helpers/scenarios/wrong_output",
@@ -47,6 +33,20 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/escape_codes",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"base_pass": {
+			UntilStageSlug:      "ip1",
+			CodePath:            "./test_helpers/bash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/base/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"navigation_pass": {
+			UntilStageSlug:      "gp4",
+			CodePath:            "./test_helpers/bash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/navigation/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"quoting_pass": {
 			StageSlugs:          []string{"ni6", "tg6", "yt5", "le5", "gu3", "qj0"},
 			CodePath:            "./test_helpers/bash",
@@ -61,11 +61,11 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/redirection/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
-		"autocomplete_pass": {
+		"completions_pass": {
 			StageSlugs:          []string{"qp2", "gm9", "qm8", "gy5", "wh6", "wt6"},
 			CodePath:            "./test_helpers/bash",
 			ExpectedExitCode:    0,
-			StdoutFixturePath:   "./test_helpers/fixtures/autocomplete/pass",
+			StdoutFixturePath:   "./test_helpers/fixtures/completions/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 	}
