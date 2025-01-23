@@ -49,6 +49,7 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	// TODO: Simplify test case creation
 	inputs := []string{
 		fmt.Sprintf(`echo '%s\\n%s'`, L[0], L[1]),
 		fmt.Sprintf(`echo '%s\"%s%s\"%s'`, L[2], L[3], L[4], L[0]),
