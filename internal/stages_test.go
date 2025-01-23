@@ -33,39 +33,74 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/escape_codes",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
-		"base_pass": {
+		"base_pass_bash": {
 			UntilStageSlug:      "ip1",
 			CodePath:            "./test_helpers/bash",
 			ExpectedExitCode:    0,
-			StdoutFixturePath:   "./test_helpers/fixtures/base/pass",
+			StdoutFixturePath:   "./test_helpers/fixtures/bash/base/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
-		"navigation_pass": {
+		"navigation_pass_bash": {
 			UntilStageSlug:      "gp4",
 			CodePath:            "./test_helpers/bash",
 			ExpectedExitCode:    0,
-			StdoutFixturePath:   "./test_helpers/fixtures/navigation/pass",
+			StdoutFixturePath:   "./test_helpers/fixtures/bash/navigation/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
-		"quoting_pass": {
+		"quoting_pass_bash": {
 			StageSlugs:          []string{"ni6", "tg6", "yt5", "le5", "gu3", "qj0"},
 			CodePath:            "./test_helpers/bash",
 			ExpectedExitCode:    0,
-			StdoutFixturePath:   "./test_helpers/fixtures/quoting/pass",
+			StdoutFixturePath:   "./test_helpers/fixtures/bash/quoting/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
-		"redirection_pass": {
+		"redirection_pass_bash": {
 			StageSlugs:          []string{"jv1", "vz4", "el9", "un3"},
 			CodePath:            "./test_helpers/bash",
 			ExpectedExitCode:    0,
-			StdoutFixturePath:   "./test_helpers/fixtures/redirection/pass",
+			StdoutFixturePath:   "./test_helpers/fixtures/bash/redirection/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
-		"completions_pass": {
+		"completions_pass_bash": {
 			StageSlugs:          []string{"qp2", "gm9", "qm8", "gy5", "wh6", "wt6"},
 			CodePath:            "./test_helpers/bash",
 			ExpectedExitCode:    0,
-			StdoutFixturePath:   "./test_helpers/fixtures/completions/pass",
+			StdoutFixturePath:   "./test_helpers/fixtures/bash/completions/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"base_pass_ash": {
+			UntilStageSlug:      "ip1",
+			CodePath:            "./test_helpers/ash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/ash/base/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"navigation_pass_ash": {
+			UntilStageSlug:      "gp4",
+			CodePath:            "./test_helpers/ash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/ash/navigation/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"quoting_pass_ash": {
+			StageSlugs:          []string{"ni6", "tg6", "yt5", "le5", "gu3", "qj0"},
+			CodePath:            "./test_helpers/ash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/ash/quoting/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"redirection_pass_ash": {
+			StageSlugs:          []string{"jv1", "vz4", "el9", "un3"},
+			CodePath:            "./test_helpers/ash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/ash/redirection/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"completions_pass_ash": {
+			StageSlugs:          []string{"qp2", "gm9", "qm8", "gy5", "wh6", "wt6"},
+			CodePath:            "./test_helpers/ash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/ash/completions/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 	}
