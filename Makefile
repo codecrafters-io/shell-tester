@@ -17,6 +17,10 @@ build:
 test:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/...
 
+# Include bash but not ash
+tests_excluding_ash:
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v -skip "TestStages/.*[^b]ash" ./internal/...
+
 test_ls_against_bsd_ls:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/ls/... -system
 
