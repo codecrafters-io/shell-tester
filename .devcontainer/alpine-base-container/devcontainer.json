@@ -3,7 +3,11 @@
 {
 	"name": "Alpine",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/base:dev-alpine3.21",
+	// "image": "mcr.microsoft.com/devcontainers/base:dev-alpine3.21",
+	"build": {
+        // Path is relative to the devcontainer.json file.
+        "dockerfile": "java-23.Dockerfile"
+    },
 	"features": {
 		// "ghcr.io/devcontainers/features/go:1": {
 		// 	"version": "latest"
