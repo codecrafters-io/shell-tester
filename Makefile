@@ -108,6 +108,7 @@ define run_test
 endef
 
 define run_debug
+	export TESTER_DIR="/workspaces/shell-tester" && cd $(2) && \
 	CODECRAFTERS_REPOSITORY_DIR=/workspaces/shell-tester/$(2) \
 	CODECRAFTERS_TEST_CASES_JSON="$(1)" \
 	$(shell pwd)/dist/main.out
@@ -201,8 +202,6 @@ test_zsh:
 
 # Clone the repo in `debug` directory
 test_debug: build
-	export TESTER_DIR="/workspaces/shell-tester" && \
-	cd debug && \
 	$(call run_debug,$(BASE_STAGES),debug)
 	$(call run_debug,$(NAVIGATION_STAGES),debug)
 	$(call run_debug,$(QUOTING_STAGES),debug)
