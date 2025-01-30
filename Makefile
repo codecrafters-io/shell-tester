@@ -203,4 +203,8 @@ test_zsh:
 test_debug: build
 	export TESTER_DIR="/workspaces/shell-tester" && \
 	cd debug && \
+	$(call run_debug,$(BASE_STAGES),debug)
+	$(call run_debug,$(NAVIGATION_STAGES),debug)
+	$(call run_debug,$(QUOTING_STAGES),debug)
+	$(call run_debug,$(REDIRECTIONS_STAGES),debug)
 	$(call run_debug,$(COMPLETIONS_STAGES),debug)
