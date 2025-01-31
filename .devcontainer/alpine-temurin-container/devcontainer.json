@@ -26,7 +26,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "sudo apk add make go git-lfs && git config --global core.pager cat",
+	"postCreateCommand": "sudo apk add dash go git-lfs make && git config --global core.pager cat",
 
 	// Configure tool-specific properties.
 	"customizations": {"vscode": {"extensions": ["golang.go", "wakatime.vscode-wakatime", "eamodio.gitlens"]}}
