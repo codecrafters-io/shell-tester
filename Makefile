@@ -107,6 +107,13 @@ define run_test
 	dist/main.out
 endef
 
+define run_debug
+	export TESTER_DIR="/workspaces/shell-tester" && cd $(2) && \
+	CODECRAFTERS_REPOSITORY_DIR=/workspaces/shell-tester/$(2) \
+	CODECRAFTERS_TEST_CASES_JSON="$(1)" \
+	$(shell pwd)/dist/main.out
+endef
+
 test_base_w_ash: build
 	$(call run_test,$(BASE_STAGES),ash)
 
@@ -192,3 +199,11 @@ test_zsh:
 	make test_quoting_w_zsh
 	make test_redirections_w_zsh
 	make test_completions_w_zsh
+
+# Clone the repo in `debug` directory
+test_debug: build
+	$(call run_debug,$(BASE_STAGES),debug)
+	$(call run_debug,$(NAVIGATION_STAGES),debug)
+	$(call run_debug,$(QUOTING_STAGES),debug)
+	$(call run_debug,$(REDIRECTIONS_STAGES),debug)
+	$(call run_debug,$(COMPLETIONS_STAGES),debug)
