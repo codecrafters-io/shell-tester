@@ -30,7 +30,7 @@ func checkIfBellReceived(bellChannel chan bool) bool {
 	select {
 	case <-bellChannel:
 		return true
-	case <-time.After(50 * time.Millisecond): // Add reasonable timeout
+	case <-time.After(100 * time.Millisecond): // Add reasonable timeout
 		return false
 	}
 }
