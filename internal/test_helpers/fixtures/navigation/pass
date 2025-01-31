@@ -48,7 +48,7 @@ Debug = true
 [33m[your-program] [0mpwd is a shell builtin
 [33m[stage-9] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ pwd
-[33m[your-program] [0m/workspaces/shell-tester/internal
+[33m[your-program] [0m/home/runner/work/shell-tester/shell-tester/internal
 [33m[stage-9] [0m[92m✓ Received current working directory response[0m
 [33m[your-program] [0m$ 
 [33m[stage-9] [0m[92mTest passed.[0m
