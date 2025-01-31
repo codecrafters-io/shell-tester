@@ -73,9 +73,18 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 	}
 
 	if t.CheckForBell {
-		if err := RunBellAssertion(shell, logger); err != nil {
+		bellChannel := shell.VTBellChannel()
+		asserter.AddAssertion(assertions.BellAssertion{
+			BellChannel: bellChannel,
+		})
+		// Run the assertion, before sending the enter key
+		if err := asserter.AssertWithoutPrompt(); err != nil {
 			return err
 		}
+
+		logger.Successf("✓ Received bell")
+		// Pop the bell assertion after running
+		asserter.PopAssertion()
 	}
 
 	commandReflection := t.ExpectedReflection
