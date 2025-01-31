@@ -58,5 +58,7 @@ func (t *InvalidCommandTestCase) getFallbackPatterns() []*regexp.Regexp {
 	return []*regexp.Regexp{
 		regexp.MustCompile(`^(bash: )?` + t.Command + `: (command )?not found$`),
 		regexp.MustCompile(`^ash: ` + t.Command + `: not found$`),
+		regexp.MustCompile(`^zsh: command not found: ` + t.Command + `$`),
+		regexp.MustCompile(`^dash: [0-9]+: ` + t.Command + `: not found$`),
 	}
 }

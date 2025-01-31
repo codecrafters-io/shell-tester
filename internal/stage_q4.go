@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 	"path"
+	"regexp"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -48,25 +49,33 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	// TODO: Simplify test case creation
 	inputs := []string{
-		fmt.Sprintf(`echo '%s\\\n%s'`, L[0], L[1]),
+		fmt.Sprintf(`echo '%s\\n%s'`, L[0], L[1]),
 		fmt.Sprintf(`echo '%s\"%s%s\"%s'`, L[2], L[3], L[4], L[0]),
 		fmt.Sprintf(`echo '%s\\n%s'`, L[4], L[1]),
 		fmt.Sprintf(`%s "%s" "%s" "%s"`, CUSTOM_CAT_COMMAND, filePaths[0], filePaths[1], filePaths[2]),
 	}
 	expectedOutputs := []string{
-		fmt.Sprintf(`%s\\\n%s`, L[0], L[1]),
+		fmt.Sprintf(`%s\\n%s`, L[0], L[1]),
 		fmt.Sprintf(`%s\"%s%s\"%s`, L[2], L[3], L[4], L[0]),
 		fmt.Sprintf(`%s\\n%s`, L[4], L[1]),
 		fileContents[0] + fileContents[1] + strings.TrimRight(fileContents[2], "\n"),
 	}
-	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
+	fallbackPatterns := [][]*regexp.Regexp{
+		{regexp.MustCompile(fmt.Sprintf(`%s\\n%s`, L[0], L[1]))},
+		nil,
+		{regexp.MustCompile(fmt.Sprintf(`%s\\n%s`, L[4], L[1]))},
+		nil,
+	}
+
+	testCaseContents := newTestCaseContentsWithFallbackPatterns(inputs, expectedOutputs, fallbackPatterns)
 
 	for _, testCaseContent := range testCaseContents[:3] {
 		testCase := test_cases.CommandResponseTestCase{
 			Command:          testCaseContent.Input,
 			ExpectedOutput:   testCaseContent.ExpectedOutput,
-			FallbackPatterns: nil,
+			FallbackPatterns: testCaseContent.FallbackPatterns,
 			SuccessMessage:   "✓ Received expected response",
 		}
 		if err := testCase.Run(asserter, shell, logger); err != nil {

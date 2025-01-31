@@ -19,7 +19,7 @@ jobs:
           uname -a
           compgen -ac | sort | grep '^ex'
   
-      - run: make test
+      - run: make tests_excluding_ash
 
   lint:
     runs-on: ubuntu-latest
@@ -37,6 +37,47 @@ jobs:
           version: "2024.1.1"
           install-go: false
 
+  test-all-shells:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Alpine
+        uses: jirutka/setup-alpine@v1
+        with:
+          branch: latest-stable
+
+      - name: Setup Alpine dependencies
+        run: |
+          cat /etc/alpine-release
+          apk add git go make bash dash zsh binutils-gold python3
+        shell: alpine.sh --root {0}
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup git config
+        run: |
+          git config --global --add safe.directory /home/runner/work/shell-tester/shell-tester 
+          # repo is owned by user and we intend to execute as root
+        shell: alpine.sh --root {0}
+
+      - name: Run tests against all shells on alpine
+        run: |
+          make test_ash
+          make test_bash
+          make test_dash
+        shell: alpine.sh --root {0}
+
+      - name: setup-ubuntu-env
+        run: |
+          sudo apt install zsh
+          sudo apt remove bpfcc-tools
+          zsh --version
+
+      - name: Run tests against all shells on alpine
+        run: |
+          sudo make test_zsh
+        shell: bash
+
   test-alpine:
     runs-on: ubuntu-latest
     steps:
@@ -48,20 +89,19 @@ jobs:
       - name: Setup Alpine dependencies
         run: |
           cat /etc/alpine-release
-          apk add git go make bash binutils-gold python3
+          apk add git go make bash dash zsh binutils-gold python3
         shell: alpine.sh --root {0}
 
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Run tests against ash
+      - name: Setup git config
         run: |
           git config --global --add safe.directory /home/runner/work/shell-tester/shell-tester 
           # repo is owned by user and we intend to execute as root
-          make test_ash
         shell: alpine.sh --root {0}
 
-      - name: Run tests against bash on alpine
+      - name: Run tests against bash & ash on alpine
         run: |
           make test
         shell: alpine.sh --root {0}

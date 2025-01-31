@@ -17,6 +17,10 @@ build:
 test:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/...
 
+# Include bash but not ash
+tests_excluding_ash:
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v -skip "TestStages/.*[^b]ash" ./internal/...
+
 test_ls_against_bsd_ls:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/ls/... -system
 
@@ -58,48 +62,66 @@ build_executables:
 		done; \
 	done
 
-BASE_STAGES = [ \
-	{\"slug\":\"oo8\",\"tester_log_prefix\":\"tester::\#oo8\",\"title\":\"Stage\#1: Init\"}, \
-	{\"slug\":\"cz2\",\"tester_log_prefix\":\"tester::\#cz2\",\"title\":\"Stage\#2: Invalid Command\"}, \
-	{\"slug\":\"ff0\",\"tester_log_prefix\":\"tester::\#ff0\",\"title\":\"Stage\#3: REPL\"}, \
-	{\"slug\":\"pn5\",\"tester_log_prefix\":\"tester::\#pn5\",\"title\":\"Stage\#4: Exit\"}, \
-	{\"slug\":\"iz3\",\"tester_log_prefix\":\"tester::\#iz3\",\"title\":\"Stage\#5: Echo\"}, \
-	{\"slug\":\"ez5\",\"tester_log_prefix\":\"tester::\#ez5\",\"title\":\"Stage\#6: Type built-in\"}, \
-	{\"slug\":\"mg5\",\"tester_log_prefix\":\"tester::\#mg5\",\"title\":\"Stage\#7: Type for executables\"}, \
-	{\"slug\":\"ip1\",\"tester_log_prefix\":\"tester::\#ip1\",\"title\":\"Stage\#8: Run a program\"} \
+define _BASE_STAGES
+[ \
+	{"slug":"oo8","tester_log_prefix":"tester::#oo8","title":"Stage#1: Init"}, \
+	{"slug":"cz2","tester_log_prefix":"tester::#cz2","title":"Stage#2: Invalid Command"}, \
+	{"slug":"ff0","tester_log_prefix":"tester::#ff0","title":"Stage#3: REPL"}, \
+	{"slug":"pn5","tester_log_prefix":"tester::#pn5","title":"Stage#4: Exit"}, \
+	{"slug":"iz3","tester_log_prefix":"tester::#iz3","title":"Stage#5: Echo"}, \
+	{"slug":"ez5","tester_log_prefix":"tester::#ez5","title":"Stage#6: Type built-in"}, \
+	{"slug":"mg5","tester_log_prefix":"tester::#mg5","title":"Stage#7: Type for executables"}, \
+	{"slug":"ip1","tester_log_prefix":"tester::#ip1","title":"Stage#8: Run a program"} \
 ]
+endef
 
-NAVIGATION_STAGES = [ \
-	{\"slug\":\"ei0\",\"tester_log_prefix\":\"tester::\#ei0\",\"title\":\"Stage\#9: PWD\"}, \
-	{\"slug\":\"ra6\",\"tester_log_prefix\":\"tester::\#ra6\",\"title\":\"Stage\#10: CD-1\"}, \
-	{\"slug\":\"gq9\",\"tester_log_prefix\":\"tester::\#gq9\",\"title\":\"Stage\#11: CD-2\"}, \
-	{\"slug\":\"gp4\",\"tester_log_prefix\":\"tester::\#gp4\",\"title\":\"Stage\#12: CD-3\"} \
+define _NAVIGATION_STAGES
+[ \
+	{"slug":"ei0","tester_log_prefix":"tester::#ei0","title":"Stage#9: PWD"}, \
+	{"slug":"ra6","tester_log_prefix":"tester::#ra6","title":"Stage#10: CD-1"}, \
+	{"slug":"gq9","tester_log_prefix":"tester::#gq9","title":"Stage#11: CD-2"}, \
+	{"slug":"gp4","tester_log_prefix":"tester::#gp4","title":"Stage#12: CD-3"} \
 ]
+endef
 
-QUOTING_STAGES = [ \
-	{\"slug\":\"ni6\",\"tester_log_prefix\":\"tester::\#ni6\",\"title\":\"Stage\#13: Quoting with single quotes\"}, \
-	{\"slug\":\"tg6\",\"tester_log_prefix\":\"tester::\#tg6\",\"title\":\"Stage\#14: Quoting with double quotes\"}, \
-	{\"slug\":\"yt5\",\"tester_log_prefix\":\"tester::\#yt5\",\"title\":\"Stage\#15: Quoting with backslashes\"}, \
-	{\"slug\":\"le5\",\"tester_log_prefix\":\"tester::\#le5\",\"title\":\"Stage\#16: Quoting with single and double quotes\"}, \
-	{\"slug\":\"gu3\",\"tester_log_prefix\":\"tester::\#gu3\",\"title\":\"Stage\#17: Quoting with mixed quotes\"}, \
-	{\"slug\":\"qj0\",\"tester_log_prefix\":\"tester::\#qj0\",\"title\":\"Stage\#18: Quoting program names\"} \
+define _QUOTING_STAGES
+[ \
+	{"slug":"ni6","tester_log_prefix":"tester::#ni6","title":"Stage#13: Quoting with single quotes"}, \
+	{"slug":"tg6","tester_log_prefix":"tester::#tg6","title":"Stage#14: Quoting with double quotes"}, \
+	{"slug":"yt5","tester_log_prefix":"tester::#yt5","title":"Stage#15: Quoting with backslashes"}, \
+	{"slug":"le5","tester_log_prefix":"tester::#le5","title":"Stage#16: Quoting with single and double quotes"}, \
+	{"slug":"gu3","tester_log_prefix":"tester::#gu3","title":"Stage#17: Quoting with mixed quotes"}, \
+	{"slug":"qj0","tester_log_prefix":"tester::#qj0","title":"Stage#18: Quoting program names"} \
 ]
+endef
 
-REDIRECTIONS_STAGES = [ \
-	{\"slug\":\"jv1\",\"tester_log_prefix\":\"tester::\#jv1\",\"title\":\"Stage\#19: Redirect stdout\"}, \
-	{\"slug\":\"vz4\",\"tester_log_prefix\":\"tester::\#vz4\",\"title\":\"Stage\#20: Redirect stderr\"}, \
-	{\"slug\":\"el9\",\"tester_log_prefix\":\"tester::\#el9\",\"title\":\"Stage\#21: Append stdout\"}, \
-	{\"slug\":\"un3\",\"tester_log_prefix\":\"tester::\#un3\",\"title\":\"Stage\#22: Append stderr\"} \
+define _REDIRECTIONS_STAGES
+[ \
+	{"slug":"jv1","tester_log_prefix":"tester::#jv1","title":"Stage#19: Redirect stdout"}, \
+	{"slug":"vz4","tester_log_prefix":"tester::#vz4","title":"Stage#20: Redirect stderr"}, \
+	{"slug":"el9","tester_log_prefix":"tester::#el9","title":"Stage#21: Append stdout"}, \
+	{"slug":"un3","tester_log_prefix":"tester::#un3","title":"Stage#22: Append stderr"} \
 ]
+endef
 
-COMPLETIONS_STAGES = [ \
-	{\"slug\":\"qp2\",\"tester_log_prefix\":\"tester::\#qp2\",\"title\":\"Stage\#1: builtins completion\"}, \
-	{\"slug\":\"gm9\",\"tester_log_prefix\":\"tester::\#gm9\",\"title\":\"Stage\#2: completion with args\"}, \
-	{\"slug\":\"qm8\",\"tester_log_prefix\":\"tester::\#qm8\",\"title\":\"Stage\#3: completion with invalid command\"}, \
-	{\"slug\":\"gy5\",\"tester_log_prefix\":\"tester::\#gy5\",\"title\":\"Stage\#4: completion with valid command\"}, \
-	{\"slug\":\"wh6\",\"tester_log_prefix\":\"tester::\#wh6\",\"title\":\"Stage\#5: completion with multiple executables\"}, \
-	{\"slug\":\"wt6\",\"tester_log_prefix\":\"tester::\#wt6\",\"title\":\"Stage\#6: partial completions\"} \
+define _COMPLETION_STAGES_BASE
+[ \
+  {"slug":"qp2","tester_log_prefix":"tester::#qp2","title":"Stage#1: builtins completion"}, \
+  {"slug":"qm8","tester_log_prefix":"tester::#qm8","title":"Stage#3: completion with invalid command"}, \
+  {"slug":"gy5","tester_log_prefix":"tester::#gy5","title":"Stage#4: valid command"}, \
+  {"slug":"wt6","tester_log_prefix":"tester::#wt6","title":"Stage#6: partial completions"} \
 ]
+endef
+
+define _COMPLETIONS_STAGES_COMPLEX
+  {"slug":"gm9","tester_log_prefix":"tester::#gm9","title":"Stage#2: completion with args"}, \
+  {"slug":"wh6","tester_log_prefix":"tester::#wh6","title":"Stage#5: completion with multiple executables"}
+endef
+
+# Use eval to properly escape the stage arrays
+define quote_strings
+	$(shell echo '$(1)' | sed 's/"/\\"/g')
+endef
 
 define run_test
 	CODECRAFTERS_REPOSITORY_DIR=./internal/test_helpers/$(2) \
@@ -113,6 +135,13 @@ define run_debug
 	CODECRAFTERS_TEST_CASES_JSON="$(1)" \
 	$(shell pwd)/dist/main.out
 endef
+
+BASE_STAGES = $(call quote_strings,$(_BASE_STAGES))
+NAVIGATION_STAGES = $(call quote_strings,$(_NAVIGATION_STAGES))
+QUOTING_STAGES = $(call quote_strings,$(_QUOTING_STAGES))
+REDIRECTIONS_STAGES = $(call quote_strings,$(_REDIRECTIONS_STAGES))
+COMPLETIONS_STAGES_ZSH = $(call quote_strings,$(_COMPLETION_STAGES_BASE))
+COMPLETIONS_STAGES = $(shell echo '$(_COMPLETION_STAGES_BASE)' | sed 's/]$$/, $(_COMPLETIONS_STAGES_COMPLEX)]/' | sed 's/"/\\"/g')
 
 test_base_w_ash: build
 	$(call run_test,$(BASE_STAGES),ash)
@@ -169,7 +198,7 @@ test_redirections_w_zsh: build
 	$(call run_test,$(REDIRECTIONS_STAGES),zsh)
 
 test_completions_w_zsh: build
-	$(call run_test,$(COMPLETIONS_STAGES),zsh)
+	$(call run_test,$(COMPLETIONS_STAGES_ZSH),zsh)
 
 test_ash:
 	make test_base_w_ash

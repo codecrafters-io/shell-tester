@@ -1,0 +1,99 @@
+Debug = true
+
+[33m[stage-4] [0m[94mRunning tests for Stage #4: jv1[0m
+[33m[stage-4] [setup] [0m[94mexport PATH=/tmp/pear/orange/raspberry:$PATH[0m
+[33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-4] [setup] [0m[94mecho -n "banana" > "/tmp/bar/banana"[0m
+[33m[stage-4] [setup] [0m[94mecho -n "blueberry" > "/tmp/bar/blueberry"[0m
+[33m[stage-4] [setup] [0m[94mecho -n "grape" > "/tmp/bar/grape"[0m
+[33m[your-program] [0m$ ls -1 /tmp/bar > /tmp/foo/foo.md
+[33m[your-program] [0m$ cat /tmp/foo/foo.md
+[33m[your-program] [0mbanana
+[33m[your-program] [0mblueberry
+[33m[your-program] [0mgrape
+[33m[stage-4] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ echo 'Hello James' 1> /tmp/foo/qux.md
+[33m[your-program] [0m$ cat /tmp/foo/qux.md
+[33m[your-program] [0mHello James
+[33m[stage-4] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ cat /tmp/bar/blueberry nonexistent 1> /tmp/foo/quz.md
+[33m[your-program] [0mcat: nonexistent: No such file or directory
+[33m[stage-4] [0m[92m✓ Received error message[0m
+[33m[your-program] [0m$ cat /tmp/foo/quz.md
+[33m[your-program] [0mblueberry
+[33m[stage-4] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ 
+[33m[stage-4] [0m[92mTest passed.[0m
+
+[33m[stage-3] [0m[94mRunning tests for Stage #3: vz4[0m
+[33m[stage-3] [setup] [0m[94mexport PATH=/tmp/apple/apple/mango:$PATH[0m
+[33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-3] [setup] [0m[94mecho -n "raspberry" > "/tmp/quz/raspberry"[0m
+[33m[your-program] [0m$ ls -1 nonexistent 2> /tmp/foo/bar.md
+[33m[your-program] [0m$ cat /tmp/foo/bar.md
+[33m[your-program] [0mls: nonexistent: No such file or directory
+[33m[stage-3] [0m[92m✓ Received redirected error message[0m
+[33m[your-program] [0m$ echo 'James file cannot be found' 2> /tmp/foo/baz.md
+[33m[your-program] [0mJames file cannot be found
+[33m[stage-3] [0m[92m✓ Received redirected error message[0m
+[33m[stage-3] [0m[92m✓ File: /tmp/foo/baz.md is empty[0m
+[33m[your-program] [0m$ cat /tmp/quz/raspberry nonexistent 2> /tmp/foo/foo.md
+[33m[your-program] [0mraspberry
+[33m[stage-3] [0m[92m✓ Received file content[0m
+[33m[your-program] [0m$ cat /tmp/foo/foo.md
+[33m[your-program] [0mcat: nonexistent: No such file or directory
+[33m[stage-3] [0m[92m✓ Received redirected error message[0m
+[33m[your-program] [0m$ 
+[33m[stage-3] [0m[92mTest passed.[0m
+
+[33m[stage-2] [0m[94mRunning tests for Stage #2: el9[0m
+[33m[stage-2] [setup] [0m[94mexport PATH=/tmp/banana/blueberry/apple:$PATH[0m
+[33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-2] [setup] [0m[94mecho -n "blueberry" > "/tmp/qux/blueberry"[0m
+[33m[stage-2] [setup] [0m[94mecho -n "mango" > "/tmp/qux/mango"[0m
+[33m[stage-2] [setup] [0m[94mecho -n "pear" > "/tmp/qux/pear"[0m
+[33m[your-program] [0m$ ls -1 /tmp/qux >> /tmp/baz/bar.md
+[33m[your-program] [0m$ cat /tmp/baz/bar.md
+[33m[your-program] [0mblueberry
+[33m[your-program] [0mmango
+[33m[your-program] [0mpear
+[33m[stage-2] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ echo 'Hello Emily' 1>> /tmp/baz/qux.md
+[33m[your-program] [0m$ echo 'Hello Alice' 1>> /tmp/baz/qux.md
+[33m[your-program] [0m$ cat /tmp/baz/qux.md
+[33m[your-program] [0mHello Emily
+[33m[your-program] [0mHello Alice
+[33m[stage-2] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ echo "List of files: " > /tmp/baz/quz.md
+[33m[your-program] [0m$ ls -1 /tmp/qux >> /tmp/baz/quz.md
+[33m[your-program] [0m$ cat /tmp/baz/quz.md
+[33m[your-program] [0mList of files:
+[33m[your-program] [0mblueberry
+[33m[your-program] [0mmango
+[33m[your-program] [0mpear
+[33m[stage-2] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ 
+[33m[stage-2] [0m[92mTest passed.[0m
+
+[33m[stage-1] [0m[94mRunning tests for Stage #1: un3[0m
+[33m[stage-1] [setup] [0m[94mexport PATH=/tmp/blueberry/blueberry/strawberry:$PATH[0m
+[33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$ ls -1 nonexistent >> /tmp/qux/baz.md
+[33m[your-program] [0mls: nonexistent: No such file or directory
+[33m[stage-1] [0m[92m✓ Received error message[0m
+[33m[stage-1] [0m[92m✓ File: /tmp/qux/baz.md is empty[0m
+[33m[your-program] [0m$ ls -1 nonexistent 2>> /tmp/qux/qux.md
+[33m[your-program] [0m$ cat /tmp/qux/qux.md
+[33m[your-program] [0mls: nonexistent: No such file or directory
+[33m[stage-1] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ echo "David says Error" 2>> /tmp/qux/quz.md
+[33m[your-program] [0mDavid says Error
+[33m[stage-1] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ cat nonexistent 2>> /tmp/qux/quz.md
+[33m[your-program] [0m$ ls -1 nonexistent 2>> /tmp/qux/quz.md
+[33m[your-program] [0m$ cat /tmp/qux/quz.md
+[33m[your-program] [0mcat: nonexistent: No such file or directory
+[33m[your-program] [0mls: nonexistent: No such file or directory
+[33m[stage-1] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ 
+[33m[stage-1] [0m[92mTest passed.[0m

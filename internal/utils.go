@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/tester-utils/random"
@@ -14,21 +15,31 @@ const CUSTOM_LS_COMMAND = "ls"
 const CUSTOM_CAT_COMMAND = "cat"
 
 type testCaseContent struct {
-	Input          string
-	ExpectedOutput string
+	Input            string
+	ExpectedOutput   string
+	FallbackPatterns []*regexp.Regexp
 }
 
-func newTestCaseContent(input string, expectedOutput string) testCaseContent {
+func newTestCaseContent(input string, expectedOutput string, fallbackPatterns []*regexp.Regexp) testCaseContent {
 	return testCaseContent{
-		Input:          input,
-		ExpectedOutput: expectedOutput,
+		Input:            input,
+		ExpectedOutput:   expectedOutput,
+		FallbackPatterns: fallbackPatterns,
 	}
 }
 
 func newTestCaseContents(inputs []string, expectedOutputs []string) []testCaseContent {
 	testCases := []testCaseContent{}
 	for i, input := range inputs {
-		testCases = append(testCases, newTestCaseContent(input, expectedOutputs[i]))
+		testCases = append(testCases, newTestCaseContent(input, expectedOutputs[i], nil))
+	}
+	return testCases
+}
+
+func newTestCaseContentsWithFallbackPatterns(inputs []string, expectedOutputs []string, fallbackPatterns [][]*regexp.Regexp) []testCaseContent {
+	testCases := []testCaseContent{}
+	for i, input := range inputs {
+		testCases = append(testCases, newTestCaseContent(input, expectedOutputs[i], fallbackPatterns[i]))
 	}
 	return testCases
 }
