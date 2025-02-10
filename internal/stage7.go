@@ -24,17 +24,17 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// - The shell should continue searching PATH and find/execute e2
 	// - This verifies proper PATH traversal and permission checking
 	executableExpectedToNotBeFound := "my_exe"
-	executableDir, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
+	executableExpectedToNotBeFoundDir, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
 		{CommandType: "signature_printer", CommandName: executableExpectedToNotBeFound, CommandMetadata: getRandomString()},
 	}, true)
 	if err != nil {
 		return err
 	}
-	notExePath := filepath.Join(executableDir, executableExpectedToNotBeFound)
+	notExePath := filepath.Join(executableExpectedToNotBeFoundDir, executableExpectedToNotBeFound)
 	currentPerms, _ := os.Stat(notExePath)
 	os.Chmod(notExePath, currentPerms.Mode() & ^os.FileMode(0o111))
 
-	executableDir, err = SetUpCustomCommands(stageHarness, shell, []CommandDetails{
+	executableDir, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
 		{CommandType: "signature_printer", CommandName: executableName, CommandMetadata: getRandomString()},
 	}, true)
 	if err != nil {
