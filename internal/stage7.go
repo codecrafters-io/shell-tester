@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"os"
 	"path/filepath"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -13,12 +14,30 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	executableName := "my_exe"
+
+	// We create 2 custom executables with the same name
+	// in 2 different directories
+	// The one in the first directory has its executable bit removed
+	// The other one is in a directory which comes after the first one's directory on PATH
+	// The other one should still be found & used
+	executable_expected_to_be_not_found := "my_exe"
 	executableDir, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
+		{CommandType: "signature_printer", CommandName: executable_expected_to_be_not_found, CommandMetadata: getRandomString()},
+	}, true)
+	if err != nil {
+		return err
+	}
+	notExePath := filepath.Join(executableDir, executable_expected_to_be_not_found)
+	currentPerms, _ := os.Stat(notExePath)
+	os.Chmod(notExePath, currentPerms.Mode() & ^os.FileMode(0o111))
+
+	executableDir, err = SetUpCustomCommands(stageHarness, shell, []CommandDetails{
 		{CommandType: "signature_printer", CommandName: executableName, CommandMetadata: getRandomString()},
 	}, true)
 	if err != nil {
 		return err
 	}
+
 	logAvailableExecutables(logger, []string{executableName})
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
