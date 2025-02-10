@@ -15,19 +15,22 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	executableName := "my_exe"
 
-	// We create 2 custom executables with the same name
-	// in 2 different directories
-	// The one in the first directory has its executable bit removed
-	// The other one is in a directory which comes after the first one's directory on PATH
-	// The other one should still be found & used
-	executable_expected_to_be_not_found := "my_exe"
+	// Test PATH resolution with duplicate executable names
+	// This test creates two executables with identical names in different directories:
+	// 1. e1: First executable in PATH, with execute permissions removed
+	// 2. e2: Second executable in PATH, with normal permissions
+	// Expected behavior:
+	// - When the command is executed, the shell should skip e1 (not executable)
+	// - The shell should continue searching PATH and find/execute e2
+	// - This verifies proper PATH traversal and permission checking
+	executableExpectedToNotBeFound := "my_exe"
 	executableDir, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
-		{CommandType: "signature_printer", CommandName: executable_expected_to_be_not_found, CommandMetadata: getRandomString()},
+		{CommandType: "signature_printer", CommandName: executableExpectedToNotBeFound, CommandMetadata: getRandomString()},
 	}, true)
 	if err != nil {
 		return err
 	}
-	notExePath := filepath.Join(executableDir, executable_expected_to_be_not_found)
+	notExePath := filepath.Join(executableDir, executableExpectedToNotBeFound)
 	currentPerms, _ := os.Stat(notExePath)
 	os.Chmod(notExePath, currentPerms.Mode() & ^os.FileMode(0o111))
 
@@ -37,7 +40,6 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
-
 	logAvailableExecutables(logger, []string{executableName})
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
