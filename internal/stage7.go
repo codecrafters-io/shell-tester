@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"os"
 	"path/filepath"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -13,6 +14,26 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	executableName := "my_exe"
+
+	// Test PATH resolution with duplicate executable names
+	// This test creates two executables with identical names in different directories:
+	// 1. e1: First executable in PATH, with execute permissions removed
+	// 2. e2: Second executable in PATH, with normal permissions
+	// Expected behavior:
+	// - When the command is executed, the shell should skip e1 (not executable)
+	// - The shell should continue searching PATH and find/execute e2
+	// - This verifies proper PATH traversal and permission checking
+	executableExpectedToNotBeFound := "my_exe"
+	executableExpectedToNotBeFoundDir, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
+		{CommandType: "signature_printer", CommandName: executableExpectedToNotBeFound, CommandMetadata: getRandomString()},
+	}, true)
+	if err != nil {
+		return err
+	}
+	notExePath := filepath.Join(executableExpectedToNotBeFoundDir, executableExpectedToNotBeFound)
+	currentPerms, _ := os.Stat(notExePath)
+	os.Chmod(notExePath, currentPerms.Mode() & ^os.FileMode(0o111))
+
 	executableDir, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
 		{CommandType: "signature_printer", CommandName: executableName, CommandMetadata: getRandomString()},
 	}, true)
