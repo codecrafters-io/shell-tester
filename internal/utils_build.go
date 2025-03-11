@@ -29,7 +29,7 @@ func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell 
 	stageHarness.Logger.UpdateSecondaryPrefix("setup")
 	createExecutableDirFunc := getRandomDirectoryWithCleanup
 	if useShorterDirectory {
-		createExecutableDirFunc = getShortRandomDirectoryWithCleanup
+		createExecutableDirFunc = getRandomDirectoryWithCleanup
 	}
 
 	executableDir, err := createExecutableDirFunc(stageHarness)
