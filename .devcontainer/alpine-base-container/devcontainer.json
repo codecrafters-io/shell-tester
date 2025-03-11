@@ -22,7 +22,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "sudo apk add go",
+	"postCreateCommand": "sudo apk add go python3",
 
 	// Configure tool-specific properties.
 	"customizations": {"vscode": {"extensions": ["golang.go", "wakatime.vscode-wakatime", "eamodio.gitlens"]}}
