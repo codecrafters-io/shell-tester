@@ -66,8 +66,6 @@ func getShortRandomDirectoryWithCleanup(stageHarness *test_case_harness.TestCase
 		}
 	}
 
-	fmt.Println(seen, randomDir)
-
 	// Automatically cleanup the directory when the test is completed
 	stageHarness.RegisterTeardownFunc(func() {
 		cleanupDirectories([]string{randomDir})
