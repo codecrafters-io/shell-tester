@@ -27,9 +27,9 @@ type CommandDetails struct {
 
 func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, commands []CommandDetails, useShorterDirectory bool) (string, error) {
 	stageHarness.Logger.UpdateSecondaryPrefix("setup")
-	createExecutableDirFunc := getRandomDirectory
+	createExecutableDirFunc := getRandomDirectoryWithCleanup
 	if useShorterDirectory {
-		createExecutableDirFunc = getShortRandomDirectory
+		createExecutableDirFunc = getShortRandomDirectoryWithCleanup
 	}
 
 	executableDir, err := createExecutableDirFunc(stageHarness)
