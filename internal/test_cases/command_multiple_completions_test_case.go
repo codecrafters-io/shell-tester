@@ -66,7 +66,8 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 
 	// Send TAB
 	for i := 0; i < t.TabCount; i++ {
-		logTab(logger, t.ExpectedReflection)
+		shouldRingBell := (i == 0 && t.CheckForBell)
+		logTab(logger, t.ExpectedReflection, shouldRingBell)
 		if err := shell.SendCommandRaw("\t"); err != nil {
 			return fmt.Errorf("Error sending command to shell: %v", err)
 		}
