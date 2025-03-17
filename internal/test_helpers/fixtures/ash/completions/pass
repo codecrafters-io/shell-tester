@@ -69,7 +69,7 @@ Debug = true
 [33m[stage-2] [0m[94mTyped "xyz_"[0m
 [33m[your-program] [0m$ xyz_
 [33m[stage-2] [0m[92m✓ Prompt line matches "$ xyz_"[0m
-[33m[stage-2] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_baz  xyz_foo  xyz_qux")[0m
+[33m[stage-2] [0m[94mPressed "<TAB>" (expecting bell to ring)[0m
 [33m[stage-2] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_baz  xyz_foo  xyz_qux")[0m
 [33m[stage-2] [0m[92m✓ Received bell[0m
 [33m[your-program] [0mxyz_baz  xyz_foo  xyz_qux
