@@ -11,7 +11,8 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	randomDir, err := getRandomDirectory(stageHarness)
+	// We don't want to cleanup the HOME directory here
+	randomDir, err := getRandomDirectory(stageHarness, false)
 	if err != nil {
 		return err
 	}
