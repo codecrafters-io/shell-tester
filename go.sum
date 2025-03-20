@@ -4,8 +4,8 @@ github.com/charmbracelet/x/vt v0.0.0-20250122132629-a969ddeb820d h1:cIxw4y+aEGux
 github.com/charmbracelet/x/vt v0.0.0-20250122132629-a969ddeb820d/go.mod h1:RB6f81fnGXyFGRenuO1fMdTlBh0Dbp/0+jwiMtgZvJw=
 github.com/charmbracelet/x/wcwidth v0.0.0-20250122132629-a969ddeb820d h1:tMt1myDNfJtCBwq0I8lZzpqeWxU3M+E6LTzn49jhU+A=
 github.com/charmbracelet/x/wcwidth v0.0.0-20250122132629-a969ddeb820d/go.mod h1:o8SjyUvrtemTqzPFlDzT1aWmDjO5lhVdgoudwVwcZjc=
-github.com/codecrafters-io/tester-utils v0.2.40 h1:5YIQjgenDbLf5HH0hhqN0jumBGnbrjXdR0DryaKUu/I=
-github.com/codecrafters-io/tester-utils v0.2.40/go.mod h1:VgP0WmmRsA8L1urWGMXPW4Zv5jcwHwR0LdKZ8ZAEFT4=
+github.com/codecrafters-io/tester-utils v0.2.42 h1:/CkgsOV+i5cEH7rleoS4t9sQMFMm3wDNnAjDkRd/NVw=
+github.com/codecrafters-io/tester-utils v0.2.42/go.mod h1:VgP0WmmRsA8L1urWGMXPW4Zv5jcwHwR0LdKZ8ZAEFT4=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/creack/pty v1.1.24 h1:bJrF4RRfyJnbTJqzRLHzcGaZK1NeM5kTC9jGgovnR1s=
 github.com/creack/pty v1.1.24/go.mod h1:08sCNb52WyoAwi2QDyzUCTgcvVFhUzewun7wtTfvcwE=
