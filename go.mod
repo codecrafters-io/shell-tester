@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	github.com/charmbracelet/x/vt v0.0.0-20250122132629-a969ddeb820d
-	github.com/codecrafters-io/tester-utils v0.2.40
+	github.com/codecrafters-io/tester-utils v0.2.43
 	github.com/creack/pty v1.1.24
 	github.com/fatih/color v1.18.0
 	go.chromium.org/luci v0.0.0-20250121063825-c52dc0e17e8c
