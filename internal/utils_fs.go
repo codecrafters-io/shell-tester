@@ -45,11 +45,11 @@ func GetRandomDirectory(stageHarness *test_case_harness.TestCaseHarness) (string
 	return getRandomDirectory(stageHarness, true)
 }
 
-// getShortRandomDirectoryWithCleanup creates a random directory in /tmp, creates the directories and returns the full path
+// GetShortRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
 // directory is of the form `/tmp/<random-word>`
 // Cleanup is performed automatically, and as the total possible directories
 // is very small, this should not be used without cleanup
-func getShortRandomDirectoryWithCleanup(stageHarness *test_case_harness.TestCaseHarness) (string, error) {
+func GetShortRandomDirectory(stageHarness *test_case_harness.TestCaseHarness) (string, error) {
 	randomDir := path.Join("/tmp", random.RandomElementFromArray(SMALL_WORDS))
 	if err := os.MkdirAll(randomDir, 0755); err != nil {
 		return "", fmt.Errorf("CodeCrafters internal error. Error creating directory %s: %v", randomDir, err)
@@ -63,7 +63,7 @@ func getShortRandomDirectoryWithCleanup(stageHarness *test_case_harness.TestCase
 	return randomDir, nil
 }
 
-func getShortRandomDirectoriesWithCleanup(stageHarness *test_case_harness.TestCaseHarness, n int) ([]string, error) {
+func GetShortRandomDirectories(stageHarness *test_case_harness.TestCaseHarness, n int) ([]string, error) {
 	directoryNames := random.RandomElementsFromArray(SMALL_WORDS, n)
 	randomDirs := make([]string, n)
 	for i := range n {
