@@ -59,7 +59,7 @@ func (t CommandAutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	asserter.PopAssertion()
 
 	// Send TAB
-	logTab(logger, t.ExpectedReflection)
+	logTab(logger, t.ExpectedReflection, false)
 	if err := shell.SendCommandRaw("\t"); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
@@ -117,8 +117,12 @@ func logNewLine(logger *logger.Logger) {
 	logger.Infof("Pressed %q", "<ENTER>")
 }
 
-func logTab(logger *logger.Logger, expectedReflection string) {
-	logger.Infof("Pressed %q (expecting autocomplete to %q)", "<TAB>", expectedReflection)
+func logTab(logger *logger.Logger, expectedReflection string, expectBell bool) {
+	if expectBell {
+		logger.Infof("Pressed %q (expecting bell to ring)", "<TAB>")
+	} else {
+		logger.Infof("Pressed %q (expecting autocomplete to %q)", "<TAB>", expectedReflection)
+	}
 }
 
 func logCommand(logger *logger.Logger, command string) {

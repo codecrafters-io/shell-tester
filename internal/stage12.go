@@ -12,7 +12,7 @@ func testCd3(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	tmpHomeDir, err := getRandomDirectoryWithCleanup(stageHarness)
+	tmpHomeDir, err := GetRandomDirectory(stageHarness)
 	if err != nil {
 		return err
 	}
@@ -22,7 +22,7 @@ func testCd3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	directory, err := getRandomDirectoryWithCleanup(stageHarness)
+	directory, err := GetRandomDirectory(stageHarness)
 	if err != nil {
 		return err
 	}

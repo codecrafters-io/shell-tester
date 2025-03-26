@@ -11,9 +11,11 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-// getRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
+// getRandomDirectory creates a random directory in /tmp,
+// creates the directories and returns the full path
 // directory is of the form `/tmp/<random-word>/<random-word>/<random-word>`
-// If performCleanup is true, the directory will be cleaned up when the test is completed
+// If performCleanup is true, the directory will be cleaned up
+// when the test is completed
 // The total possible directories is 10^3 = 1000
 // This can be used without cleanup in most cases
 func getRandomDirectory(stageHarness *test_case_harness.TestCaseHarness, performCleanup bool) (string, error) {
@@ -39,17 +41,16 @@ func getRandomDirectory(stageHarness *test_case_harness.TestCaseHarness, perform
 	return randomDir, nil
 }
 
-func getRandomDirectoryWithCleanup(stageHarness *test_case_harness.TestCaseHarness) (string, error) {
+func GetRandomDirectory(stageHarness *test_case_harness.TestCaseHarness) (string, error) {
 	return getRandomDirectory(stageHarness, true)
 }
 
-// getShortRandomDirectoryWithCleanup creates a random directory in /tmp, creates the directories and returns the full path
+// GetShortRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
 // directory is of the form `/tmp/<random-word>`
 // Cleanup is performed automatically, and as the total possible directories
 // is very small, this should not be used without cleanup
-func getShortRandomDirectoryWithCleanup(stageHarness *test_case_harness.TestCaseHarness) (string, error) {
+func GetShortRandomDirectory(stageHarness *test_case_harness.TestCaseHarness) (string, error) {
 	seen := make(map[string]bool)
-
 	randomDir := path.Join("/tmp", random.RandomElementFromArray(SMALL_WORDS))
 	for {
 		seen[randomDir] = true
@@ -74,7 +75,7 @@ func getShortRandomDirectoryWithCleanup(stageHarness *test_case_harness.TestCase
 	return randomDir, nil
 }
 
-func getShortRandomDirectoriesWithCleanup(stageHarness *test_case_harness.TestCaseHarness, n int) ([]string, error) {
+func GetShortRandomDirectories(stageHarness *test_case_harness.TestCaseHarness, n int) ([]string, error) {
 	if n > len(SMALL_WORDS) {
 		panic(fmt.Sprintf("CodeCrafters internal error. Number of directories to create is greater than the number of possible directories: %d", n))
 	}
