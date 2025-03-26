@@ -19,7 +19,7 @@ func testCd1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	directory, err := getRandomDirectory(stageHarness)
+	directory, err := GetRandomDirectory(stageHarness)
 	if err != nil {
 		return err
 	}
