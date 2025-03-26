@@ -45,7 +45,8 @@ func GetRandomDirectory(stageHarness *test_case_harness.TestCaseHarness) (string
 	return getRandomDirectory(stageHarness, true)
 }
 
-// GetShortRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
+// GetShortRandomDirectory creates a random directory in /tmp,
+// creates the directories and returns the full path
 // directory is of the form `/tmp/<random-word>`
 // Cleanup is performed automatically, and as the total possible directories
 // is very small, this should not be used without cleanup
@@ -63,6 +64,8 @@ func GetShortRandomDirectory(stageHarness *test_case_harness.TestCaseHarness) (s
 		randomDir = path.Join("/tmp", random.RandomElementFromArray(SMALL_WORDS))
 		if len(seen) == len(SMALL_WORDS) {
 			// We've seen all possible directories, so we return randomDir
+			// We are okay with returning an used directory here
+			// TODO: Possibly return error here instead ?
 			break
 		}
 	}
