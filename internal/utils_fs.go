@@ -45,14 +45,29 @@ func GetRandomDirectory(stageHarness *test_case_harness.TestCaseHarness) (string
 	return getRandomDirectory(stageHarness, true)
 }
 
-// GetShortRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
+// GetShortRandomDirectory creates a random directory in /tmp,
+// creates the directories and returns the full path
 // directory is of the form `/tmp/<random-word>`
 // Cleanup is performed automatically, and as the total possible directories
 // is very small, this should not be used without cleanup
 func GetShortRandomDirectory(stageHarness *test_case_harness.TestCaseHarness) (string, error) {
+	seen := make(map[string]bool)
 	randomDir := path.Join("/tmp", random.RandomElementFromArray(SMALL_WORDS))
-	if err := os.MkdirAll(randomDir, 0755); err != nil {
-		return "", fmt.Errorf("CodeCrafters internal error. Error creating directory %s: %v", randomDir, err)
+	for {
+		seen[randomDir] = true
+		if _, err := os.Stat(randomDir); os.IsNotExist(err) {
+			if err := os.MkdirAll(randomDir, 0755); err != nil {
+				return "", fmt.Errorf("CodeCrafters internal error. Error creating directory %s: %v", randomDir, err)
+			}
+			break
+		}
+		randomDir = path.Join("/tmp", random.RandomElementFromArray(SMALL_WORDS))
+		if len(seen) == len(SMALL_WORDS) {
+			// We've seen all possible directories, so we return randomDir
+			// We are okay with returning an used directory here
+			// TODO: Possibly return error here instead ?
+			break
+		}
 	}
 
 	// Automatically cleanup the directory when the test is completed
@@ -64,6 +79,10 @@ func GetShortRandomDirectory(stageHarness *test_case_harness.TestCaseHarness) (s
 }
 
 func GetShortRandomDirectories(stageHarness *test_case_harness.TestCaseHarness, n int) ([]string, error) {
+	if n > len(SMALL_WORDS) {
+		panic(fmt.Sprintf("CodeCrafters internal error. Number of directories to create is greater than the number of possible directories: %d", n))
+	}
+
 	directoryNames := random.RandomElementsFromArray(SMALL_WORDS, n)
 	randomDirs := make([]string, n)
 	for i := range n {
