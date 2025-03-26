@@ -11,9 +11,11 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-// getRandomDirectory creates a random directory in /tmp, creates the directories and returns the full path
+// getRandomDirectory creates a random directory in /tmp,
+// creates the directories and returns the full path
 // directory is of the form `/tmp/<random-word>/<random-word>/<random-word>`
-// If performCleanup is true, the directory will be cleaned up when the test is completed
+// If performCleanup is true, the directory will be cleaned up
+// when the test is completed
 // The total possible directories is 10^3 = 1000
 // This can be used without cleanup in most cases
 func getRandomDirectory(stageHarness *test_case_harness.TestCaseHarness, performCleanup bool) (string, error) {
@@ -39,7 +41,7 @@ func getRandomDirectory(stageHarness *test_case_harness.TestCaseHarness, perform
 	return randomDir, nil
 }
 
-func getRandomDirectoryWithCleanup(stageHarness *test_case_harness.TestCaseHarness) (string, error) {
+func GetRandomDirectory(stageHarness *test_case_harness.TestCaseHarness) (string, error) {
 	return getRandomDirectory(stageHarness, true)
 }
 
