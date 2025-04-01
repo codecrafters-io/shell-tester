@@ -71,7 +71,11 @@ func (b *ShellExecutable) Start(args ...string) error {
 	cmd := exec.Command(b.executable.Path, args...)
 	cmd.Env = b.env.Sorted()
 
-	pty, err := ptylib.Start(cmd)
+	winsize := &ptylib.Winsize{
+		Rows: 24,
+		Cols: 80,
+	}
+	pty, err := ptylib.StartWithSize(cmd, winsize)
 	if err != nil {
 		return fmt.Errorf("Failed to execute %s: %v", b.executable.Path, err)
 	}
