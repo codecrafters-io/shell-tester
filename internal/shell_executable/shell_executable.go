@@ -72,8 +72,8 @@ func (b *ShellExecutable) Start(args ...string) error {
 	cmd.Env = b.env.Sorted()
 
 	winsize := &ptylib.Winsize{
-		Rows: 24,
-		Cols: 80,
+		Rows: 100,
+		Cols: 120,
 	}
 	pty, err := ptylib.StartWithSize(cmd, winsize)
 	if err != nil {
