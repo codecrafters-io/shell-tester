@@ -71,18 +71,19 @@ func (b *ShellExecutable) Start(args ...string) error {
 	cmd := exec.Command(b.executable.Path, args...)
 	cmd.Env = b.env.Sorted()
 
+	b.cmd = cmd
+	b.vt = virtual_terminal.NewStandardVT()
+
 	winsize := &ptylib.Winsize{
-		Rows: 100,
-		Cols: 120,
+		Rows: uint16(b.vt.GetRowCount()),
+		Cols: uint16(b.vt.GetColumnCount()),
 	}
 	pty, err := ptylib.StartWithSize(cmd, winsize)
 	if err != nil {
 		return fmt.Errorf("Failed to execute %s: %v", b.executable.Path, err)
 	}
 
-	b.cmd = cmd
 	b.pty = pty
-	b.vt = virtual_terminal.NewStandardVT()
 	b.ptyReader = condition_reader.NewConditionReader(io.TeeReader(b.pty, b.vt))
 
 	return nil
