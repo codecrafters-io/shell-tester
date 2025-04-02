@@ -79,6 +79,14 @@ func (vt *VirtualTerminal) GetScreenState() [][]string {
 	return screenState
 }
 
+func (vt *VirtualTerminal) GetColumnCount() int {
+	return vt.cols
+}
+
+func (vt *VirtualTerminal) GetRowCount() int {
+	return vt.rows
+}
+
 func (vt *VirtualTerminal) GetRow(row int) []string {
 	screenState := make([]string, vt.cols)
 	for j := 0; j < vt.cols; j++ {
