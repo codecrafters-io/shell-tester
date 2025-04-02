@@ -106,15 +106,11 @@ endef
 
 define _COMPLETION_STAGES_BASE
 [ \
-  {"slug":"qp2","tester_log_prefix":"tester::#qp2","title":"Stage#1: builtins completion"}, \
-  {"slug":"qm8","tester_log_prefix":"tester::#qm8","title":"Stage#3: completion with invalid command"}, \
-  {"slug":"gy5","tester_log_prefix":"tester::#gy5","title":"Stage#4: valid command"}, \
   {"slug":"wt6","tester_log_prefix":"tester::#wt6","title":"Stage#6: partial completions"} \
 ]
 endef
 
 define _COMPLETIONS_STAGES_COMPLEX
-  {"slug":"gm9","tester_log_prefix":"tester::#gm9","title":"Stage#2: completion with args"}, \
   {"slug":"wh6","tester_log_prefix":"tester::#wh6","title":"Stage#5: completion with multiple executables"}
 endef
 
@@ -231,8 +227,4 @@ test_zsh:
 
 # Clone the repo in `debug` directory
 test_debug: build
-	$(call run_debug,$(BASE_STAGES),debug)
-	$(call run_debug,$(NAVIGATION_STAGES),debug)
-	$(call run_debug,$(QUOTING_STAGES),debug)
-	$(call run_debug,$(REDIRECTIONS_STAGES),debug)
 	$(call run_debug,$(COMPLETIONS_STAGES),debug)

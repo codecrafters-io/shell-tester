@@ -2,10 +2,12 @@ package test_cases
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
@@ -48,6 +50,8 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
+	render(shell)
+
 	inputReflection := fmt.Sprintf("$ %s", t.RawCommand)
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: inputReflection,
@@ -57,6 +61,8 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
 	}
+
+	render(shell)
 
 	// Only if we attempted to autocomplete, print the success message
 	logger.Successf("✓ Prompt line matches %q", inputReflection)
@@ -68,10 +74,15 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 	for i := 0; i < t.TabCount; i++ {
 		shouldRingBell := (i == 0 && t.CheckForBell)
 		logTab(logger, t.ExpectedReflection, shouldRingBell)
+
+		time.Sleep(1 * time.Millisecond)
+
 		if err := shell.SendCommandRaw("\t"); err != nil {
 			return fmt.Errorf("Error sending command to shell: %v", err)
 		}
 	}
+
+	render(shell)
 
 	if t.CheckForBell {
 		bellChannel := shell.VTBellChannel()
@@ -88,11 +99,15 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 		asserter.PopAssertion()
 	}
 
+	render(shell)
+
 	commandReflection := t.ExpectedReflection
 	// Space after autocomplete
 	if !t.ExpectedAutocompletedReflectionHasNoSpace {
 		commandReflection = fmt.Sprintf("%s ", t.ExpectedReflection)
 	}
+
+	render(shell)
 
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
@@ -103,11 +118,15 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 		return err
 	}
 
+	render(shell)
+
 	// Only if we attempted to autocomplete, print the success message
 	logger.Successf("✓ Prompt line matches %q", t.ExpectedReflection)
 
 	// The space at the end of the reflection won't be present, so replace that assertion
 	// asserter.PopAssertion()
+
+	render(shell)
 
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: inputReflection,
@@ -118,6 +137,8 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 		return err
 	}
 
+	render(shell)
+
 	var assertFuncToRun func() error
 	if t.SkipPromptAssertion {
 		assertFuncToRun = asserter.AssertWithoutPrompt
@@ -125,10 +146,24 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 		assertFuncToRun = asserter.AssertWithPrompt
 	}
 
+	render(shell)
+
 	if err := assertFuncToRun(); err != nil {
 		return err
 	}
 
+	render(shell)
+
 	logger.Successf("%s", t.SuccessMessage)
 	return nil
+}
+
+func render(shell *shell_executable.ShellExecutable) {
+	screen := (shell.GetScreenState())
+	for row := range screen {
+		cleanedRow := virtual_terminal.BuildCleanedRow2(screen[row])
+		if len(cleanedRow) > 0 {
+			fmt.Println(cleanedRow)
+		}
+	}
 }

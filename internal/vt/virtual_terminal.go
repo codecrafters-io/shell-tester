@@ -104,3 +104,12 @@ func BuildCleanedRow(row []string) string {
 	result = strings.ReplaceAll(result, utils.VT_SENTINEL_CHARACTER, " ")
 	return result
 }
+
+func BuildCleanedRow2(row []string) string {
+	result := strings.Join(row, "")
+	result = strings.TrimRight(result, " ")
+
+	// VT_SENTINEL_CHARACTER is the representation of " " that we intend to preserve
+	result = strings.ReplaceAll(result, utils.VT_SENTINEL_CHARACTER, "★")
+	return result
+}
