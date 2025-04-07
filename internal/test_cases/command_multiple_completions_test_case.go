@@ -2,6 +2,7 @@ package test_cases
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -65,9 +66,14 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 	// asserter.PopAssertion()
 
 	// Send TAB
-	for i := 0; i < t.TabCount; i++ {
+	for i := range t.TabCount {
 		shouldRingBell := (i == 0 && t.CheckForBell)
 		logTab(logger, t.ExpectedReflection, shouldRingBell)
+
+		// Node's readline doesn't register 2nd tab if sent instantly
+		// Ref: CC-1689
+		time.Sleep(5 * time.Millisecond)
+
 		if err := shell.SendCommandRaw("\t"); err != nil {
 			return fmt.Errorf("Error sending command to shell: %v", err)
 		}
