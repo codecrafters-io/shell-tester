@@ -8,7 +8,6 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
-	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -41,7 +40,6 @@ func testA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	sort.Strings(executableNames)
 	completions := strings.Join(executableNames, "  ")
 
-	render(shell)
 	err := test_cases.CommandMultipleCompletionsTestCase{
 		RawCommand:         command,
 		TabCount:           2,
@@ -52,20 +50,8 @@ func testA5(stageHarness *test_case_harness.TestCaseHarness) error {
 		SkipPromptAssertion: true,
 	}.Run(asserter, shell, logger)
 	if err != nil {
-		render(shell)
 		return err
 	}
-	render(shell)
 
 	return logAndQuit(asserter, nil)
-}
-
-func render(shell *shell_executable.ShellExecutable) {
-	screen := (shell.GetScreenState())
-	for row := range screen {
-		cleanedRow := virtual_terminal.BuildCleanedRow2(screen[row])
-		if len(cleanedRow) > 0 {
-			fmt.Println(cleanedRow)
-		}
-	}
 }
