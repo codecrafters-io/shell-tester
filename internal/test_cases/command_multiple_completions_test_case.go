@@ -71,11 +71,13 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 	// asserter.PopAssertion()
 
 	// Send TAB
-	for i := 0; i < t.TabCount; i++ {
+	for i := range t.TabCount {
 		shouldRingBell := (i == 0 && t.CheckForBell)
 		logTab(logger, t.ExpectedReflection, shouldRingBell)
 
-		time.Sleep(1 * time.Millisecond)
+		// Node's readline doesn't register 2nd tab if sent instantly
+		// Ref: CC-1689
+		time.Sleep(5 * time.Millisecond)
 
 		if err := shell.SendCommandRaw("\t"); err != nil {
 			return fmt.Errorf("Error sending command to shell: %v", err)
