@@ -3,6 +3,7 @@ package internal
 import (
 	"errors"
 	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -42,6 +43,14 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	readErr := shell.ReadUntilConditionOrTimeout(utils.AsBool(assertFn), logged_shell_asserter.SUBSEQUENT_READ_TIMEOUT)
 	output := virtual_terminal.BuildCleanedRow(shell.GetScreenState()[asserter.GetLastLoggedRowIndex()+1])
+	output = strings.TrimSpace(output)
+	screen := (shell.GetScreenState())
+	for row := range screen {
+		cleanedRow := virtual_terminal.BuildCleanedRow(screen[row])
+		if len(cleanedRow) > 0 {
+			fmt.Println(cleanedRow)
+		}
+	}
 
 	// We're expecting EOF since the program should've terminated
 	if !errors.Is(readErr, shell_executable.ErrProgramExited) {
@@ -65,7 +74,8 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Most shells return nothing but bash returns the string "exit" when it exits, we allow both styles
-	if len(output) > 0 && strings.TrimSpace(output) != "exit" {
+	allowedExitMessages := []string{"exit", "exit 0"}
+	if len(output) > 0 && !slices.Contains(allowedExitMessages, output) {
 		return fmt.Errorf("Expected no output after exit command, got %q", output)
 	}
 
