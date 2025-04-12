@@ -92,7 +92,7 @@ func (a *LoggedShellAsserter) assert(withoutPrompt bool, readTimeout time.Durati
 		return assertFn() == nil
 	}
 
-	if readErr := a.Shell.ReadUntilConditionOrTimeout(conditionFn, readTimeout); readErr != nil {
+	if readErr := a.Shell.ReadUntilConditionOrTimeout(conditionFn, readTimeout, "assertion to pass"); readErr != nil {
 		if assertionErr := assertFn(); assertionErr != nil {
 			a.logAssertionError(*assertionErr)
 			return fmt.Errorf("Assertion failed.")

@@ -236,3 +236,18 @@ test_debug: build
 	$(call run_debug,$(QUOTING_STAGES),debug)
 	$(call run_debug,$(REDIRECTIONS_STAGES),debug)
 	$(call run_debug,$(COMPLETIONS_STAGES),debug)
+
+# Testing a custom implementation of the shell
+test_base_w_arpan_ruby: build
+	$(call run_test,$(BASE_STAGES),arpan-ruby-shell)
+
+test_nav_w_arpan_ruby: build
+	$(call run_test,$(NAVIGATION_STAGES),arpan-ruby-shell)
+
+test_quoting_w_arpan_ruby: build
+	$(call run_test,$(QUOTING_STAGES),arpan-ruby-shell)
+
+test_redirections_w_arpan_ruby: build
+	$(call run_test,$(REDIRECTIONS_STAGES),arpan-ruby-shell)
+
+	

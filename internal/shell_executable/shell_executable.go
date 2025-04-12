@@ -101,8 +101,8 @@ func (b *ShellExecutable) VTBellChannel() chan bool {
 	return b.vt.BellChannel()
 }
 
-func (b *ShellExecutable) ReadUntilConditionOrTimeout(condition func() bool, timeout time.Duration) error {
-	err := b.ptyReader.ReadUntilConditionOrTimeout(condition, timeout)
+func (b *ShellExecutable) ReadUntilConditionOrTimeout(condition func() bool, timeout time.Duration, expectedCondition string) error {
+	err := b.ptyReader.ReadUntilConditionOrTimeout(condition, timeout, expectedCondition)
 	if err != nil {
 		return wrapReaderError(err)
 	}
