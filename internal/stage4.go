@@ -58,17 +58,18 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 		return fmt.Errorf("Expected program to exit with 0 exit code, program is still running.")
 	}
 
-	logger.Successf("✓ Program exited successfully")
-
 	if exitCode != 0 {
 		return fmt.Errorf("Expected 0 as exit code, got %d", exitCode)
 	}
 
 	// Most shells return nothing but bash returns the string "exit" when it exits, we allow both styles
 	if len(output) > 0 && strings.TrimSpace(output) != "exit" {
+		// If there is some unexpected output, we need to log it before returning an error
+		asserter.LogRemainingOutput()
 		return fmt.Errorf("Expected no output after exit command, got %q", output)
 	}
 
+	logger.Successf("✓ Program exited successfully")
 	logger.Successf("✓ No output after exit command")
 
 	return logAndQuit(asserter, nil)
