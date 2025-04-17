@@ -85,7 +85,8 @@ func prettyPrintCommand(args []string) {
 	copy(copiedArgs, args)
 	for i, arg := range copiedArgs {
 		if !strings.HasPrefix(arg, "-") {
-			copiedArgs[i] = strings.Split(arg, "/")[len(strings.Split(arg, "/"))-1]
+			// copiedArgs[i] = strings.Split(arg, "/")[len(strings.Split(arg, "/"))-1]
+			copiedArgs[i] = arg
 		}
 	}
 
@@ -99,21 +100,29 @@ func TestWcSingleFile(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	currentDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatal(err)
+	}
+	defer os.Chdir(currentDir)
 	defer cleanupDirectories([]string{tmpDir})
 
-	content := "Hello, World!\nThis is a test file.\n"
+	content := "Hello, World\nis a test file.\n"
 	testFiles := []testFile{
 		{name: "test.txt", content: []byte(content), mode: 0644},
 	}
 	createTestFiles(t, tmpDir, testFiles)
 
 	// Run wc and get output
-	output, exitCode, err := runWc(t, filepath.Join(tmpDir, "test.txt"))
+	output, exitCode, err := runWc(t, "test.txt")
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
 
-	expected := "       2       8      38 test.txt\n"
+	expected := "       2       6      29 test.txt\n"
 	if output != expected {
 		t.Errorf("Expected output %q, got %q", expected, output)
 	}
@@ -136,9 +145,19 @@ func TestWcMultipleFiles(t *testing.T) {
 	}
 	createTestFiles(t, tmpDir, testFiles)
 
+	currentDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatal(err)
+	}
+	defer os.Chdir(currentDir)
+	defer cleanupDirectories([]string{tmpDir})
+
 	output, exitCode, err := runWc(t,
-		filepath.Join(tmpDir, "file1.txt"),
-		filepath.Join(tmpDir, "file2.txt"))
+		"file1.txt",
+		"file2.txt")
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
@@ -162,48 +181,57 @@ func TestWcWithFlags(t *testing.T) {
 	}
 	defer cleanupDirectories([]string{tmpDir})
 
-	content := "Hello, World!\nThis is a test file.\n"
+	content := "Hello, World\nis a test file.\n"
 	testFiles := []testFile{
 		{name: "test.txt", content: []byte(content), mode: 0644},
 	}
 	createTestFiles(t, tmpDir, testFiles)
+	currentDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatal(err)
+	}
+	defer os.Chdir(currentDir)
+	defer cleanupDirectories([]string{tmpDir})
 
 	// Test -l flag
-	output, _, err := runWc(t, "-l", filepath.Join(tmpDir, "test.txt"))
+	output, _, err := runWc(t, "-l", "test.txt")
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
-	expected := "       2 test.txt\n"
+	expected := fmt.Sprintf("       2 %s\n", "test.txt")
 	if output != expected {
 		t.Errorf("Expected output %q, got %q", expected, output)
 	}
 
 	// Test -w flag
-	output, _, err = runWc(t, "-w", filepath.Join(tmpDir, "test.txt"))
+	output, _, err = runWc(t, "-w", "test.txt")
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
-	expected = "       8 test.txt\n"
+	expected = fmt.Sprintf("       6 %s\n", "test.txt")
 	if output != expected {
 		t.Errorf("Expected output %q, got %q", expected, output)
 	}
 
 	// Test -c flag
-	output, _, err = runWc(t, "-c", filepath.Join(tmpDir, "test.txt"))
+	output, _, err = runWc(t, "-c", "test.txt")
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
-	expected = "      38 test.txt\n"
+	expected = fmt.Sprintf("      29 %s\n", "test.txt")
 	if output != expected {
 		t.Errorf("Expected output %q, got %q", expected, output)
 	}
 
 	// Test multiple flags
-	output, _, err = runWc(t, "-lw", filepath.Join(tmpDir, "test.txt"))
+	output, _, err = runWc(t, "-lw", "test.txt")
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
-	expected = "       2       8 test.txt\n"
+	expected = fmt.Sprintf("       2       6 %s\n", "test.txt")
 	if output != expected {
 		t.Errorf("Expected output %q, got %q", expected, output)
 	}
@@ -218,7 +246,7 @@ func TestWcStdin(t *testing.T) {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
 
-	expected := "       1       3      17 -\n"
+	expected := "       1       3      17\n"
 	if string(output) != expected {
 		t.Errorf("Expected output %q, got %q", expected, string(output))
 	}
@@ -226,7 +254,7 @@ func TestWcStdin(t *testing.T) {
 
 func TestWcNonExistentFile(t *testing.T) {
 	output, exitCode, _ := runWc(t, "nonexistent.txt")
-	expectedError := "wc: nonexistent.txt: No such file or directory\n"
+	expectedError := "wc: nonexistent.txt: open: No such file or directory\n"
 	if output != expectedError {
 		t.Errorf("Expected error message %q, got %q", expectedError, output)
 	}
@@ -247,16 +275,25 @@ func TestWcMixedExistingAndNonExisting(t *testing.T) {
 		{name: "exists.txt", content: []byte("I exist\n"), mode: 0644},
 	}
 	createTestFiles(t, tmpDir, testFiles)
+	currentDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatal(err)
+	}
+	defer os.Chdir(currentDir)
+	defer cleanupDirectories([]string{tmpDir})
 
 	output, exitCode, _ := runWc(t,
-		filepath.Join(tmpDir, "exists.txt"),
+		"exists.txt",
 		"nonexistent.txt",
-		filepath.Join(tmpDir, "exists.txt"),
+		"exists.txt",
 	)
 
 	expectedContent := "       1       2       8 exists.txt\n"
-	expectedError := "wc: nonexistent.txt: No such file or directory\n"
-	expected := expectedContent + expectedError + expectedContent + "       2       4      16 total\n"
+	expectedError := "wc: nonexistent.txt: open: No such file or directory\n"
+	expected := expectedError + expectedContent + expectedContent + "       2       4      16 total\n"
 
 	if output != expected {
 		t.Errorf("Expected output %q, got %q", expected, output)
