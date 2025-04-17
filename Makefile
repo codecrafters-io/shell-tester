@@ -27,6 +27,21 @@ test_ls_against_bsd_ls:
 test_cat_against_bsd_cat:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/cat/... -system
 
+test_wc_against_bsd_wc:
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/wc/... -system
+
+test_yes_against_bsd_yes:
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/yes/... -system
+
+test_executables_against_their_bsd_counterparts:
+	test_cat_against_bsd_cat
+	test_ls_against_bsd_ls
+	test_wc_against_bsd_wc
+	test_yes_against_bsd_yes
+
+test_executables: build_executables
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/...
+
 record_fixtures:
 	CODECRAFTERS_RECORD_FIXTURES=true make test
 
@@ -59,6 +74,8 @@ build_executables:
 		for arch in $$arches; do \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/ls_$${os}_$${arch} ./internal/custom_executable/ls/ls.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/cat_$${os}_$${arch} ./internal/custom_executable/cat/cat.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/wc_$${os}_$${arch} ./internal/custom_executable/wc/wc.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/yes_$${os}_$${arch} ./internal/custom_executable/yes/yes.go; \
 		done; \
 	done
 
@@ -130,8 +147,8 @@ define run_test
 endef
 
 define run_debug
-	export TESTER_DIR="/workspaces/shell-tester" && cd $(2) && \
-	CODECRAFTERS_REPOSITORY_DIR=/workspaces/shell-tester/$(2) \
+	export TESTER_DIR="${PWD}" && cd $(2) && \
+	CODECRAFTERS_REPOSITORY_DIR="${PWD}/$(2)" \
 	CODECRAFTERS_TEST_CASES_JSON="$(1)" \
 	$(shell pwd)/dist/main.out
 endef
