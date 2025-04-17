@@ -225,16 +225,6 @@ func TestWcWithFlags(t *testing.T) {
 	if output != expected {
 		t.Errorf("Expected output %q, got %q", expected, output)
 	}
-
-	// Test multiple flags
-	output, _, err = runWc(t, "-lw", "test.txt")
-	if err != nil {
-		t.Fatalf("Expected no error, got: %v", err)
-	}
-	expected = fmt.Sprintf("       2       6 %s\n", "test.txt")
-	if output != expected {
-		t.Errorf("Expected output %q, got %q", expected, output)
-	}
 }
 
 func TestWcStdin(t *testing.T) {

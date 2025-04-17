@@ -63,8 +63,9 @@ func main() {
 
 	total := counts{}
 
+	// Print errors first
 	for _, filename := range fileArgs {
-		f, err := os.Open(filename)
+		_, err := os.Open(filename)
 		if err != nil {
 			// Match specific error message for "No such file"
 			if errors.Is(err, os.ErrNotExist) {
@@ -73,6 +74,12 @@ func main() {
 				fmt.Fprintf(os.Stderr, "wc: %s: %v\n", filename, err)
 			}
 			exitCode = 1
+		}
+	}
+
+	for _, filename := range fileArgs {
+		f, err := os.Open(filename)
+		if err != nil {
 			continue
 		}
 
@@ -149,28 +156,12 @@ func countReader(r io.Reader, countLines, countWords, countBytes bool) (counts, 
 		c.bytes = counter.count
 	}
 
-	// If only lines were requested, but words were calculated because scanner works line-by-line,
-	// ensure the returned count only includes lines if !countWords.
-	// However, standard wc calculates all necessary counts even if only some are displayed.
-	// So, we calculate lines if needed for words, and bytes if needed. We just filter display later.
-	// The current logic calculates lines if lFlag or wFlag is true. This seems correct.
-
-	// If only -c was specified, we need to count bytes but not necessarily lines/words.
-	// The TeeReader handles bytes. The scanner loop runs anyway to consume the input for TeeReader.
-	// Can we avoid the scanner loop if only -c? Yes, by using io.Copy with the counter.
-
-	// Let's refine: if ONLY -c is true, skip the scanner.
 	if countBytes && !countLines && !countWords {
 		// Special case: only count bytes
 		// Lines and words remain 0
 		return c, nil
 	}
 
-	// --- Revert the optimization above, standard wc likely reads line-by-line anyway ---
-	// Stick to the previous simpler countReader logic for now, focus on formatting first.
-
-	// Reset countReader to previous state, passing flags wasn't the issue.
-	// The issue is likely formatting or a hidden error.
 	scanner = bufio.NewScanner(readerForScanner) // Re-init scanner with potentially tee'd reader
 
 	for scanner.Scan() {
@@ -183,11 +174,7 @@ func countReader(r io.Reader, countLines, countWords, countBytes bool) (counts, 
 	}
 	if countBytes && counter != nil { // Assign bytes if counted
 		c.bytes = counter.count
-	} else if countBytes { // If -c was true but counter is nil (shouldn't happen with TeeReader logic)
-		// Need to re-read or use a different approach if Tee wasn't used.
-		// Sticking with TeeReader approach: counter will exist if countBytes is true.
 	}
-
 	return c, nil
 }
 
@@ -215,13 +202,6 @@ func printCounts(c counts, name string, showLines, showWords, showBytes bool) {
 		if len(fields) > 0 {
 			output += " " + name
 		} else {
-			// If no counts were selected (e.g. `wc somefile` with explicit `-l=false -w=false -c=false`?),
-			// standard wc still prints the name preceded by padding as if 0 counts were there.
-			// But our logic ensures at least one flag is true if invoked normally.
-			// If fields is empty, it means no flags were true. Let's print just the name then?
-			// No, wc prints `0 0 0 name` if no flags are set. Our default ensures flags are set.
-			// If user explicitly does `wc -l=false -w=false -c=false file`, what happens? Let's ignore this edge case.
-			// The most robust is to add the space if fields exist.
 			output += name // This line might be problematic if fields is empty.
 		}
 	}
