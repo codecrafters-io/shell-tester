@@ -312,6 +312,112 @@ func TestWcWithUnsupportedFlag(t *testing.T) {
 	}
 }
 
+func TestWcWithPipedInput(t *testing.T) {
+	tmpDir, err := os.MkdirTemp("", "wc-test-*")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer cleanupDirectories([]string{tmpDir})
+
+	// Create test file
+	content := "Hello, World!\nThis is a test file.\nWith three lines.\n"
+	testFiles := []testFile{
+		{name: "test.txt", content: []byte(content), mode: 0644},
+	}
+	createTestFiles(t, tmpDir, testFiles)
+
+	currentDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatal(err)
+	}
+	defer os.Chdir(currentDir)
+
+	// Test cat file | wc
+	cmd := exec.Command("cat", "test.txt")
+	output, err := cmd.Output()
+	if err != nil {
+		t.Fatalf("Failed to run cat: %v", err)
+	}
+
+	// Use cat output as input to wc
+	executable := getWcExecutable(t)
+	wcCmd := exec.Command(executable)
+	wcCmd.Stdin = strings.NewReader(string(output))
+	wcOutput, err := wcCmd.CombinedOutput()
+	fmt.Println("=== RUN:  > cat test.txt | wc")
+	if err != nil {
+		t.Fatalf("Failed to run wc: %v", err)
+	}
+
+	expected := "       3      10      53\n"
+	if string(wcOutput) != expected {
+		t.Errorf("Expected output from 'cat test.txt | wc': %q, got %q", expected, string(wcOutput))
+	}
+
+	// Test wc with line count only
+	cmd = exec.Command("cat", "test.txt")
+	output, err = cmd.Output()
+	if err != nil {
+		t.Fatalf("Failed to run cat: %v", err)
+	}
+
+	wcCmd = exec.Command(executable, "-l")
+	wcCmd.Stdin = strings.NewReader(string(output))
+	wcOutput, err = wcCmd.CombinedOutput()
+	fmt.Println("=== RUN:  > cat test.txt | wc -l")
+	if err != nil {
+		t.Fatalf("Failed to run wc: %v", err)
+	}
+
+	expected = "       3\n"
+	if string(wcOutput) != expected {
+		t.Errorf("Expected output from 'cat test.txt | wc -l': %q, got %q", expected, string(wcOutput))
+	}
+
+	// Test wc with word count only
+	cmd = exec.Command("cat", "test.txt")
+	output, err = cmd.Output()
+	if err != nil {
+		t.Fatalf("Failed to run cat: %v", err)
+	}
+
+	wcCmd = exec.Command(executable, "-w")
+	wcCmd.Stdin = strings.NewReader(string(output))
+	wcOutput, err = wcCmd.CombinedOutput()
+	fmt.Println("=== RUN:  > cat test.txt | wc -w")
+	if err != nil {
+		t.Fatalf("Failed to run wc: %v", err)
+	}
+
+	expected = "      10\n"
+	if string(wcOutput) != expected {
+		t.Errorf("Expected output from 'cat test.txt | wc -w': %q, got %q", expected, string(wcOutput))
+	}
+
+	// Test wc with -c flag
+	cmd = exec.Command("cat", "test.txt")
+	output, err = cmd.Output()
+	if err != nil {
+		t.Fatalf("Failed to run cat: %v", err)
+	}
+
+	wcCmd = exec.Command(executable, "-c")
+	wcCmd.Stdin = strings.NewReader(string(output))
+	wcOutput, err = wcCmd.CombinedOutput()
+	fmt.Println("=== RUN:  > cat test.txt | wc -c")
+	if err != nil {
+		t.Fatalf("Failed to run wc: %v", err)
+	}
+
+	expected = "      53\n"
+	if string(wcOutput) != expected {
+		t.Errorf("Expected output from 'cat test.txt | wc -c': %q, got %q", expected, string(wcOutput))
+	}
+}
+
 func cleanupDirectories(dirs []string) {
 	for _, dir := range dirs {
 		if err := os.RemoveAll(dir); err != nil {
