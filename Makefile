@@ -21,11 +21,14 @@ test:
 tests_excluding_ash:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v -skip "TestStages/.*[^b]ash" ./internal/...
 
-test_ls_against_bsd_ls:
-	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/ls/... -system
-
 test_cat_against_bsd_cat:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/cat/... -system
+
+test_head_against_bsd_head:
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/head/... -system
+
+test_ls_against_bsd_ls:
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/ls/... -system
 
 test_wc_against_bsd_wc:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/wc/... -system
@@ -34,10 +37,11 @@ test_yes_against_bsd_yes:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/yes/... -system
 
 test_executables_against_their_bsd_counterparts:
-	test_cat_against_bsd_cat
-	test_ls_against_bsd_ls
-	test_wc_against_bsd_wc
-	test_yes_against_bsd_yes
+	make test_cat_against_bsd_cat
+	make test_head_against_bsd_head
+	make test_ls_against_bsd_ls
+	make test_wc_against_bsd_wc
+	make test_yes_against_bsd_yes
 
 test_executables: build_executables
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/...
@@ -72,8 +76,9 @@ build_executables:
 	arches="arm64 amd64" ; \
 	for os in $$oses; do \
 		for arch in $$arches; do \
-		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/ls_$${os}_$${arch} ./internal/custom_executable/ls/ls.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/cat_$${os}_$${arch} ./internal/custom_executable/cat/cat.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/ls_$${os}_$${arch} ./internal/custom_executable/ls/ls.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/head_$${os}_$${arch} ./internal/custom_executable/head/head.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/wc_$${os}_$${arch} ./internal/custom_executable/wc/wc.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/yes_$${os}_$${arch} ./internal/custom_executable/yes/yes.go; \
 		done; \
