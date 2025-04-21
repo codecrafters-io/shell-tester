@@ -122,7 +122,7 @@ func main() {
 // countReader now accepts flags to potentially optimize (e.g., skip word count if !wFlag)
 func countReader(r io.Reader, countLines, countWords, countBytes bool) (counts, error) {
 	var c counts
-	var readerForScanner io.Reader = r // Start with the original reader
+	var readerForScanner = r // Start with the original reader
 
 	// Setup byte counter only if needed
 	var counter *byteCounter
