@@ -240,4 +240,66 @@ func TestHeadWithLineCount(t *testing.T) {
 	}
 }
 
+func TestHeadWithByteCount(t *testing.T) {
+	// Create a temporary directory for testing
+	tmpDir, err := os.MkdirTemp("", "head-test-*")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer cleanupDirectories([]string{tmpDir})
+
+	// Create a test file
+	content := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	testFiles := []testFile{
+		{name: "test.txt", content: []byte(content), mode: 0644},
+	}
+	createTestFiles(t, tmpDir, testFiles)
+
+	// Test with -c flag
+	output, exitCode, err := runHead(t, "-c", "10", filepath.Join(tmpDir, "test.txt"))
+	if err != nil {
+		t.Fatalf("Expected no error, got: %v", err)
+	}
+
+	// Check that only the first 10 bytes are printed
+	expected := "ABCDEFGHIJ"
+	if output != expected {
+		t.Errorf("Expected output to contain first 10 bytes, got: %q", output)
+	}
+
+	if exitCode != 0 {
+		t.Errorf("Expected exit code 0, got %d", exitCode)
+	}
+
+	// Test with --bytes flag
+	output, exitCode, err = runHead(t, "--bytes=5", filepath.Join(tmpDir, "test.txt"))
+	if err != nil {
+		t.Fatalf("Expected no error, got: %v", err)
+	}
+
+	// Check that only the first 5 bytes are printed
+	expected = "ABCDE"
+	if output != expected {
+		t.Errorf("Expected output to contain first 5 bytes, got: %q", output)
+	}
+
+	if exitCode != 0 {
+		t.Errorf("Expected exit code 0, got %d", exitCode)
+	}
+
+	// Test with -c and negative value
+	output, exitCode, err = runHead(t, "-c", "-16", filepath.Join(tmpDir, "test.txt"))
+	if err != nil {
+		t.Fatalf("Expected no error, got: %v", err)
+	}
+
+	// Check that all but the last 16 bytes are printed
+	expected = "ABCDEFGHIJ"
+	if output != expected {
+		t.Errorf("Expected output to contain all but last 16 bytes, got: %q", output)
+	}
+
+	if exitCode != 0 {
+		t.Errorf("Expected exit code 0, got %d", exitCode)
+	}
 }
