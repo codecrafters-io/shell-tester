@@ -78,10 +78,7 @@ func runHead(t *testing.T, args ...string) (string, int, error) {
 }
 
 func prettyPrintCommand(args []string) {
-	fileParts := strings.Split(args[len(args)-1], "/")
-	fileName := fileParts[len(fileParts)-1]
-
-	fmt.Printf("=== RUN:  > head %s\n", strings.Join(args[0:len(args)-1], " ")+" "+fileName)
+	fmt.Printf("=== RUN:  > head %s\n", strings.Join(args, " "))
 }
 
 func cleanupDirectories(dirs []string) {
@@ -96,6 +93,14 @@ func TestHeadDefaultBehavior(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	currentDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatal(err)
+	}
+	defer os.Chdir(currentDir)
 	defer cleanupDirectories([]string{tmpDir})
 
 	// Create a test file with more than 10 lines
@@ -120,7 +125,7 @@ func TestHeadDefaultBehavior(t *testing.T) {
 	createTestFiles(t, tmpDir, testFiles)
 
 	// Run head on the test file
-	output, exitCode, err := runHead(t, filepath.Join(tmpDir, "test.txt"))
+	output, exitCode, err := runHead(t, "test.txt")
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
@@ -154,6 +159,14 @@ func TestHeadWithLineCount(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	currentDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatal(err)
+	}
+	defer os.Chdir(currentDir)
 	defer cleanupDirectories([]string{tmpDir})
 
 	// Create a test file with more than 5 lines
@@ -173,7 +186,7 @@ func TestHeadWithLineCount(t *testing.T) {
 	createTestFiles(t, tmpDir, testFiles)
 
 	// Test with -n flag
-	output, exitCode, err := runHead(t, "-n", "5", filepath.Join(tmpDir, "test.txt"))
+	output, exitCode, err := runHead(t, "-n", "5", "test.txt")
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
@@ -196,7 +209,7 @@ func TestHeadWithLineCount(t *testing.T) {
 	}
 
 	// Test with --lines flag
-	output, exitCode, err = runHead(t, "--lines=3", filepath.Join(tmpDir, "test.txt"))
+	output, exitCode, err = runHead(t, "--lines=3", "test.txt")
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
@@ -217,26 +230,17 @@ func TestHeadWithLineCount(t *testing.T) {
 	}
 
 	// Test with -n and negative value
-	output, exitCode, err = runHead(t, "-n", "-2", filepath.Join(tmpDir, "test.txt"))
-	if err != nil {
-		t.Fatalf("Expected no error, got: %v", err)
+	output, exitCode, err = runHead(t, "-n", "-2", "test.txt")
+	if err == nil {
+		t.Fatalf("Expected error, got no error")
 	}
 
-	// Check that all but the last 2 lines are printed
-	expected = strings.Join([]string{
-		"Line 1",
-		"Line 2",
-		"Line 3",
-		"Line 4",
-		"Line 5",
-	}, "\n") + "\n"
-
-	if output != expected {
-		t.Errorf("Expected output to contain all but last 2 lines, got:\n%s", output)
+	if !strings.Contains(output, "head: illegal line count -- -2") {
+		t.Errorf("Expected error to contain 'head: illegal line count -- -2', got: %s", output)
 	}
 
-	if exitCode != 0 {
-		t.Errorf("Expected exit code 0, got %d", exitCode)
+	if exitCode != 1 {
+		t.Errorf("Expected exit code 1, got %d", exitCode)
 	}
 }
 
@@ -246,6 +250,14 @@ func TestHeadWithByteCount(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	currentDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatal(err)
+	}
+	defer os.Chdir(currentDir)
 	defer cleanupDirectories([]string{tmpDir})
 
 	// Create a test file
@@ -256,7 +268,7 @@ func TestHeadWithByteCount(t *testing.T) {
 	createTestFiles(t, tmpDir, testFiles)
 
 	// Test with -c flag
-	output, exitCode, err := runHead(t, "-c", "10", filepath.Join(tmpDir, "test.txt"))
+	output, exitCode, err := runHead(t, "-c", "10", "test.txt")
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
@@ -272,7 +284,7 @@ func TestHeadWithByteCount(t *testing.T) {
 	}
 
 	// Test with --bytes flag
-	output, exitCode, err = runHead(t, "--bytes=5", filepath.Join(tmpDir, "test.txt"))
+	output, exitCode, err = runHead(t, "--bytes=5", "test.txt")
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
@@ -288,18 +300,16 @@ func TestHeadWithByteCount(t *testing.T) {
 	}
 
 	// Test with -c and negative value
-	output, exitCode, err = runHead(t, "-c", "-16", filepath.Join(tmpDir, "test.txt"))
-	if err != nil {
-		t.Fatalf("Expected no error, got: %v", err)
+	output, exitCode, err = runHead(t, "-c", "-16", "test.txt")
+	if err == nil {
+		t.Fatalf("Expected error, got no error")
 	}
 
-	// Check that all but the last 16 bytes are printed
-	expected = "ABCDEFGHIJ"
-	if output != expected {
-		t.Errorf("Expected output to contain all but last 16 bytes, got: %q", output)
+	if !strings.Contains(output, "head: illegal byte count -- -16") {
+		t.Errorf("Expected error to contain 'head: illegal byte count -- -16', got: %s", output)
 	}
 
-	if exitCode != 0 {
-		t.Errorf("Expected exit code 0, got %d", exitCode)
+	if exitCode != 1 {
+		t.Errorf("Expected exit code 1, got %d", exitCode)
 	}
 }

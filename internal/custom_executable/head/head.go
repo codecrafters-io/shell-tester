@@ -18,8 +18,8 @@ With more than one FILE, precede each with a header giving the file name.
 With no FILE, or when FILE is -, read standard input.
 
 Mandatory arguments to long options are mandatory for short options too.
-  -c, --bytes=[-]K     print the first K bytes of each file
-  -n, --lines=[-]K     print the first K lines instead of the first 10
+  -c, --bytes=K     print the first K bytes of each file
+  -n, --lines=K     print the first K lines instead of the first 10
   -q, --quiet          never print headers giving file names
   -v, --verbose        always print headers giving file names
   --help               display this help and exit
@@ -91,7 +91,10 @@ func parseOptions() (opts options, files []string, err error) {
 				i++
 				lineCount, err := parseCount(args[i])
 				if err != nil {
-					return opts, nil, fmt.Errorf("invalid line count: %v", err)
+					return opts, nil, fmt.Errorf("invalid line count: %v\n", err)
+				}
+				if lineCount < 0 {
+					return opts, nil, fmt.Errorf("illegal line count -- %d\n", lineCount)
 				}
 				opts.lineCount = lineCount
 			case arg == "-c" || arg == "--bytes":
@@ -102,6 +105,9 @@ func parseOptions() (opts options, files []string, err error) {
 				byteCount, err := parseCount(args[i])
 				if err != nil {
 					return opts, nil, fmt.Errorf("invalid byte count: %v", err)
+				}
+				if byteCount < 0 {
+					return opts, nil, fmt.Errorf("illegal byte count -- %d", byteCount)
 				}
 				opts.byteCount = byteCount
 			default:
@@ -129,7 +135,7 @@ func parseOptions() (opts options, files []string, err error) {
 								// The value is immediately after -n
 								lineCount, err := parseCount(arg[j+1:])
 								if err != nil {
-									return opts, nil, fmt.Errorf("invalid line count: %v", err)
+									return opts, nil, fmt.Errorf("illegal line count: %v", err)
 								}
 								opts.lineCount = lineCount
 								j = len(arg) // Skip the rest
@@ -144,6 +150,9 @@ func parseOptions() (opts options, files []string, err error) {
 								byteCount, err := parseCount(args[i])
 								if err != nil {
 									return opts, nil, fmt.Errorf("invalid byte count: %v", err)
+								}
+								if byteCount < 0 {
+									return opts, nil, fmt.Errorf("illegal byte count -- %d", byteCount)
 								}
 								opts.byteCount = byteCount
 							} else {
@@ -223,7 +232,7 @@ func parseCount(value string) (int, error) {
 	return count, nil
 }
 
-func processFile(filename string, opts options, isFirst bool, isLast bool) error {
+func processFile(filename string, opts options, isFirst bool, multipleFilesPresent bool) error {
 	var reader io.Reader
 	var file *os.File
 	var err error
@@ -245,7 +254,7 @@ func processFile(filename string, opts options, isFirst bool, isLast bool) error
 	}
 
 	// Print header if needed
-	printHeader := !inputSourceIsStdin && ((len(os.Args) > 2 && !opts.quiet) || opts.verbose)
+	printHeader := !inputSourceIsStdin && multipleFilesPresent && ((len(os.Args) > 3 && !opts.quiet) || opts.verbose)
 	if printHeader && !isFirst {
 		fmt.Println()
 	}
@@ -338,7 +347,7 @@ func main() {
 
 	exitCode := 0
 	for i, filename := range files {
-		err := processFile(filename, opts, i == 0, i == len(files)-1)
+		err := processFile(filename, opts, i == 0, len(files) > 1)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "%v", err)
 			exitCode = 1
