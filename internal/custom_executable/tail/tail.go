@@ -590,12 +590,6 @@ func main() {
 			// Error message is already formatted by processFile or its callees
 			fmt.Fprintf(os.Stderr, "%v\n", err)
 			exitCode = 1
-			// If -f is used, we might want to continue following other files?
-			// Standard tail exits if any file causes an error initially.
-			if !opts.follow {
-				// No need to break if follow is active for other files
-				// break // Exit on first error if not following?
-			}
 		}
 	}
 

@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 	"strings"
 )
 
@@ -102,7 +101,7 @@ func main() {
 		}
 
 		// Print counts for the current file
-		displayName := filepath.Base(filename)
+		displayName := filename
 		printCounts(fileCounts, displayName, *lFlag, *wFlag, *cFlag)
 
 		// Add to total counts
@@ -156,25 +155,6 @@ func countReader(r io.Reader, countLines, countWords, countBytes bool) (counts, 
 		c.bytes = counter.count
 	}
 
-	if countBytes && !countLines && !countWords {
-		// Special case: only count bytes
-		// Lines and words remain 0
-		return c, nil
-	}
-
-	scanner = bufio.NewScanner(readerForScanner) // Re-init scanner with potentially tee'd reader
-
-	for scanner.Scan() {
-		c.lines++
-		c.words += int64(len(strings.Fields(scanner.Text())))
-	}
-
-	if err := scanner.Err(); err != nil {
-		return counts{}, err // Return zero counts and the error
-	}
-	if countBytes && counter != nil { // Assign bytes if counted
-		c.bytes = counter.count
-	}
 	return c, nil
 }
 
