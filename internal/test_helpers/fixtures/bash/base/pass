@@ -21,13 +21,13 @@ Debug = true
 [33m[stage-7] [setup] [0m[94m- my_exe[0m
 [33m[stage-7] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ type cat
-[33m[your-program] [0mcat is /bin/cat
+[33m[your-program] [0mcat is /usr/bin/cat
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type cp
-[33m[your-program] [0mcp is /bin/cp
+[33m[your-program] [0mcp is /usr/bin/cp
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type mkdir
-[33m[your-program] [0mmkdir is /bin/mkdir
+[33m[your-program] [0mmkdir is /usr/bin/mkdir
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type my_exe
 [33m[your-program] [0mmy_exe is /tmp/foo/my_exe
