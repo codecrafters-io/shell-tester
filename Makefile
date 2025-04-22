@@ -145,6 +145,14 @@ define _COMPLETIONS_STAGES_COMPLEX
   {"slug":"wh6","tester_log_prefix":"tester::#wh6","title":"Stage#5: completion with multiple executables"}
 endef
 
+define _PIPELINE_STAGES
+[ \
+	{"slug":"p1","tester_log_prefix":"tester::#p1","title":"Stage#1: Pipeline"}, \
+	{"slug":"p2","tester_log_prefix":"tester::#p2","title":"Stage#2: Pipeline"}, \
+	{"slug":"p3","tester_log_prefix":"tester::#p3","title":"Stage#3: Pipeline"} \
+]
+endef
+
 # Use eval to properly escape the stage arrays
 define quote_strings
 	$(shell echo '$(1)' | sed 's/"/\\"/g')
@@ -169,6 +177,7 @@ QUOTING_STAGES = $(call quote_strings,$(_QUOTING_STAGES))
 REDIRECTIONS_STAGES = $(call quote_strings,$(_REDIRECTIONS_STAGES))
 COMPLETIONS_STAGES_ZSH = $(call quote_strings,$(_COMPLETION_STAGES_BASE))
 COMPLETIONS_STAGES = $(shell echo '$(_COMPLETION_STAGES_BASE)' | sed 's/]$$/, $(_COMPLETIONS_STAGES_COMPLEX)]/' | sed 's/"/\\"/g')
+PIPELINE_STAGES = $(call quote_strings,$(_PIPELINE_STAGES))
 
 test_base_w_ash: build
 	$(call run_test,$(BASE_STAGES),ash)
@@ -199,6 +208,9 @@ test_redirections_w_bash: build
 
 test_completions_w_bash: build
 	$(call run_test,$(COMPLETIONS_STAGES),bash)
+
+test_pipeline_w_bash: build
+	$(call run_test,$(PIPELINE_STAGES),bash)
 
 test_base_w_dash: build
 	$(call run_test,$(BASE_STAGES),dash)

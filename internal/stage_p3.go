@@ -32,8 +32,8 @@ func testP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	filePath := path.Join(randomDir, fmt.Sprintf("file-%d", random.RandomInt(1, 100)))
-	randomWords := random.RandomWords(4)
-	fileContent := fmt.Sprintf("%s %s\n%s %s\n", randomWords[0], randomWords[1], randomWords[2], randomWords[3])
+	randomWords := random.RandomWords(6)
+	fileContent := fmt.Sprintf("%s %s\n%s %s\n%s %s", randomWords[0], randomWords[1], randomWords[2], randomWords[3], randomWords[4], randomWords[5])
 
 	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
