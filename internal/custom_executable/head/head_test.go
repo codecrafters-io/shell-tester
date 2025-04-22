@@ -313,3 +313,88 @@ func TestHeadWithByteCount(t *testing.T) {
 		t.Errorf("Expected exit code 1, got %d", exitCode)
 	}
 }
+
+func TestHeadWithMultipleFiles(t *testing.T) {
+	// Create a temporary directory for testing
+	tmpDir, err := os.MkdirTemp("", "head-test-*")
+	if err != nil {
+		t.Fatal(err)
+	}
+	currentDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatal(err)
+	}
+	defer os.Chdir(currentDir)
+	defer cleanupDirectories([]string{tmpDir})
+
+	// Create test files
+	testFiles := []testFile{
+		{name: "file1.txt", content: []byte("A\nB\nC\nD\nE\n"), mode: 0644},
+		{name: "file2.txt", content: []byte("1\n2\n3\n4\n5\n"), mode: 0644},
+	}
+	createTestFiles(t, tmpDir, testFiles)
+
+	// Test with multiple files
+	output, exitCode, err := runHead(t,
+		"file1.txt",
+		"file2.txt")
+	if err != nil {
+		t.Fatalf("Expected no error, got: %v", err)
+	}
+
+	// Check that headers are printed for each file
+	file1Path := "file1.txt"
+	file2Path := "file2.txt"
+	expected := fmt.Sprintf("==> %s <==\nA\nB\nC\nD\nE\n\n==> %s <==\n1\n2\n3\n4\n5\n",
+		file1Path, file2Path)
+
+	if output != expected {
+		t.Errorf("Expected output with headers, got:\n%s", output)
+	}
+
+	if exitCode != 0 {
+		t.Errorf("Expected exit code 0, got %d", exitCode)
+	}
+}
+
+func TestHeadWithNonExistentFile(t *testing.T) {
+	// Run head on a non-existent file
+	output, exitCode, _ := runHead(t, "nonexistent.txt")
+
+	// Check that an error message is printed
+	if !strings.Contains(output, "nonexistent.txt") || !strings.Contains(output, "No such file") {
+		t.Errorf("Expected error message about non-existent file, got: %s", output)
+	}
+
+	if exitCode != 1 {
+		t.Errorf("Expected exit code 1, got %d", exitCode)
+	}
+}
+
+// func TestHeadWithStdin(t *testing.T) {
+// 	executable := getHeadExecutable(t)
+
+// 	// Create a pipe to feed input to head
+// 	cmd := exec.Command("echo", "-e", "A\nB\nC\nD\nE\nF\nG\nH\nI\nJ\nK\nL")
+// 	headCmd := exec.Command(executable, "-n", "5")
+// 	headCmd.Stdin, _ = cmd.StdoutPipe()
+
+// 	fmt.Println("=== RUN:  > echo -e \"A\\nB\\nC\\nD\\nE\\nF\\nG\\nH\\nI\\nJ\\nK\\nL\" | head -n 5")
+
+// 	output, err := headCmd.Output()
+// 	if err != nil {
+// 		t.Fatalf("Expected no error, got: %v", err)
+// 	}
+
+// 	if err := cmd.Start(); err != nil {
+// 		t.Fatalf("Failed to start echo command: %v", err)
+// 	}
+
+// 	expected := "A\nB\nC\nD\nE\n"
+// 	if string(output) != expected {
+// 		t.Errorf("Expected first 5 lines from stdin, got: %q", string(output))
+// 	}
+// }

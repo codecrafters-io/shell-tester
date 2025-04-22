@@ -20,8 +20,6 @@ With no FILE, or when FILE is -, read standard input.
 Mandatory arguments to long options are mandatory for short options too.
   -c, --bytes=K     print the first K bytes of each file
   -n, --lines=K     print the first K lines instead of the first 10
-  -q, --quiet          never print headers giving file names
-  -v, --verbose        always print headers giving file names
   --help               display this help and exit
   --version            output version information and exit`
 )
@@ -39,8 +37,6 @@ func parseOptions() (opts options, files []string, err error) {
 	opts = options{
 		lineCount: defaultLineCount,
 		byteCount: -1,
-		quiet:     false,
-		verbose:   false,
 	}
 
 	args := os.Args[1:]
@@ -56,10 +52,6 @@ func parseOptions() (opts options, files []string, err error) {
 			case arg == "--version":
 				fmt.Println(version)
 				os.Exit(0)
-			case arg == "-q" || arg == "--quiet" || arg == "--silent":
-				opts.quiet = true
-			case arg == "-v" || arg == "--verbose":
-				opts.verbose = true
 			case strings.HasPrefix(arg, "-n=") || strings.HasPrefix(arg, "--lines="):
 				var value string
 				if strings.HasPrefix(arg, "-n=") {
@@ -115,10 +107,6 @@ func parseOptions() (opts options, files []string, err error) {
 				if len(arg) > 1 && arg[0] == '-' && arg[1] != '-' {
 					for j := 1; j < len(arg); j++ {
 						switch arg[j] {
-						case 'q':
-							opts.quiet = true
-						case 'v':
-							opts.verbose = true
 						case 'n':
 							// If -n is the last character, the next arg is the value
 							if j == len(arg)-1 {
@@ -247,14 +235,17 @@ func processFile(filename string, opts options, isFirst bool, multipleFilesPrese
 	} else {
 		file, err = os.Open(filename)
 		if err != nil {
-			return fmt.Errorf("head: %s: %v", filename, err)
+			if os.IsNotExist(err) {
+				return fmt.Errorf("head: %s: No such file or directory\n", filename)
+			}
+			return fmt.Errorf("head: %s: %v\n", filename, err)
 		}
 		defer file.Close()
 		reader = file
 	}
 
 	// Print header if needed
-	printHeader := !inputSourceIsStdin && multipleFilesPresent && ((len(os.Args) > 3 && !opts.quiet) || opts.verbose)
+	printHeader := !inputSourceIsStdin && (multipleFilesPresent)
 	if printHeader && !isFirst {
 		fmt.Println()
 	}
