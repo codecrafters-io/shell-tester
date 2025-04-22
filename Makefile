@@ -30,6 +30,9 @@ test_head_against_bsd_head:
 test_ls_against_bsd_ls:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/ls/... -system
 
+test_tail_against_bsd_tail:
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/tail/... -system
+
 test_wc_against_bsd_wc:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/wc/... -system
 
@@ -40,6 +43,7 @@ test_executables_against_their_bsd_counterparts:
 	make test_cat_against_bsd_cat
 	make test_head_against_bsd_head
 	make test_ls_against_bsd_ls
+	make test_tail_against_bsd_tail
 	make test_wc_against_bsd_wc
 	make test_yes_against_bsd_yes
 
@@ -79,6 +83,7 @@ build_executables:
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/cat_$${os}_$${arch} ./internal/custom_executable/cat/cat.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/ls_$${os}_$${arch} ./internal/custom_executable/ls/ls.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/head_$${os}_$${arch} ./internal/custom_executable/head/head.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/tail_$${os}_$${arch} ./internal/custom_executable/tail/tail.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/wc_$${os}_$${arch} ./internal/custom_executable/wc/wc.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/yes_$${os}_$${arch} ./internal/custom_executable/yes/yes.go; \
 		done; \
