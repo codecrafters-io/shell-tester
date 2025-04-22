@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/codecrafters-io/shell-tester/internal/condition_reader"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -43,9 +44,14 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	readErr := shell.ReadUntilConditionOrTimeout(utils.AsBool(assertFn), logged_shell_asserter.SUBSEQUENT_READ_TIMEOUT)
 	output := virtual_terminal.BuildCleanedRow(shell.GetScreenState()[asserter.GetLastLoggedRowIndex()+1])
 
+	asserter.LogRemainingOutput()
+
 	// We're expecting EOF since the program should've terminated
 	if !errors.Is(readErr, shell_executable.ErrProgramExited) {
 		if readErr == nil {
+			return fmt.Errorf("Expected program to exit with 0 exit code, program is still running.")
+		} else if errors.Is(readErr, condition_reader.ErrConditionNotMet) {
+
 			return fmt.Errorf("Expected program to exit with 0 exit code, program is still running.")
 		} else {
 			// TODO: Other than ErrProgramExited, what other errors could we get? Are they user errors or internal errors?
