@@ -1,7 +1,6 @@
 module github.com/codecrafters-io/shell-tester
 
-go 1.23
-toolchain go1.24.1
+go 1.24
 
 require (
 	github.com/charmbracelet/x/vt v0.0.0-20250122132629-a969ddeb820d
