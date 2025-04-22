@@ -374,27 +374,88 @@ func TestHeadWithNonExistentFile(t *testing.T) {
 	}
 }
 
-// func TestHeadWithStdin(t *testing.T) {
-// 	executable := getHeadExecutable(t)
+func TestHeadWithPipedInput(t *testing.T) {
+	tmpDir, err := os.MkdirTemp("", "head-test-*")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer cleanupDirectories([]string{tmpDir})
 
-// 	// Create a pipe to feed input to head
-// 	cmd := exec.Command("echo", "-e", "A\nB\nC\nD\nE\nF\nG\nH\nI\nJ\nK\nL")
-// 	headCmd := exec.Command(executable, "-n", "5")
-// 	headCmd.Stdin, _ = cmd.StdoutPipe()
+	// Create test file
+	content := "Hello.\nWorld!\nLine1.\nLine2.\nLine3.\nLine4.\nLine5.\nLine6.\nLine7.\nLine8.\nLine9.\nLine10.\n"
+	testFiles := []testFile{
+		{name: "test.txt", content: []byte(content), mode: 0644},
+	}
+	createTestFiles(t, tmpDir, testFiles)
 
-// 	fmt.Println("=== RUN:  > echo -e \"A\\nB\\nC\\nD\\nE\\nF\\nG\\nH\\nI\\nJ\\nK\\nL\" | head -n 5")
+	currentDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatal(err)
+	}
+	defer os.Chdir(currentDir)
 
-// 	output, err := headCmd.Output()
-// 	if err != nil {
-// 		t.Fatalf("Expected no error, got: %v", err)
-// 	}
+	// Test echo file | head
+	cmd := exec.Command("cat", "test.txt")
+	output, err := cmd.Output()
+	if err != nil {
+		t.Fatalf("Failed to run echo: %v", err)
+	}
 
-// 	if err := cmd.Start(); err != nil {
-// 		t.Fatalf("Failed to start echo command: %v", err)
-// 	}
+	// Use echo output as input to head
+	executable := getHeadExecutable(t)
+	headCmd := exec.Command(executable)
+	headCmd.Stdin = strings.NewReader(string(output))
+	headOutput, err := headCmd.CombinedOutput()
+	fmt.Println("=== RUN:  > echo test.txt | head")
+	if err != nil {
+		t.Fatalf("Failed to run head: %v", err)
+	}
 
-// 	expected := "A\nB\nC\nD\nE\n"
-// 	if string(output) != expected {
-// 		t.Errorf("Expected first 5 lines from stdin, got: %q", string(output))
-// 	}
-// }
+	expected := "Hello.\nWorld!\nLine1.\nLine2.\nLine3.\nLine4.\nLine5.\nLine6.\nLine7.\nLine8.\n"
+	if string(headOutput) != expected {
+		t.Errorf("Expected output from 'cat test.txt | head': %q, got %q", expected, string(headOutput))
+	}
+
+	// Test head with line count only
+	cmd = exec.Command("cat", "test.txt")
+	output, err = cmd.Output()
+	if err != nil {
+		t.Fatalf("Failed to run echo: %v", err)
+	}
+
+	headCmd = exec.Command(executable, "-n", "3")
+	headCmd.Stdin = strings.NewReader(string(output))
+	headOutput, err = headCmd.CombinedOutput()
+	fmt.Println("=== RUN:  > echo test.txt | head -n 3")
+	if err != nil {
+		t.Fatalf("Failed to run head: %v", err)
+	}
+
+	expected = "Hello.\nWorld!\nLine1.\n"
+	if string(headOutput) != expected {
+		t.Errorf("Expected output from 'cat test.txt | head -n 3': %q, got %q", expected, string(headOutput))
+	}
+
+	// Test head with word count only
+	cmd = exec.Command("cat", "test.txt")
+	output, err = cmd.Output()
+	if err != nil {
+		t.Fatalf("Failed to run echo: %v", err)
+	}
+
+	headCmd = exec.Command(executable, "-c", "14")
+	headCmd.Stdin = strings.NewReader(string(output))
+	headOutput, err = headCmd.CombinedOutput()
+	fmt.Println("=== RUN:  > cat test.txt | head -c 14")
+	if err != nil {
+		t.Fatalf("Failed to run head: %v", err)
+	}
+
+	expected = "Hello.\nWorld!\n"
+	if string(headOutput) != expected {
+		t.Errorf("Expected output from 'echo test.txt | head -c 10': %q, got %q", expected, string(headOutput))
+	}
+}
