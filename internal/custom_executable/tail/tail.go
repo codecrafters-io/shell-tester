@@ -272,16 +272,8 @@ func processFile(filename string, opts options, isFirst bool, multipleFilesPrese
 	var err error
 
 	inputSourceIsStdin := false
-	fileInfo, _ := os.Stdin.Stat()
-	canSeekStdin := (fileInfo.Mode()&os.ModeCharDevice) == 0 && (fileInfo.Mode()&os.ModeNamedPipe) == 0
 
 	if filename == "-" {
-		if !canSeekStdin && (opts.byteCount.value > 0 || (opts.lineCount.value > 0 && !opts.lineCount.fromBeginning)) {
-			// Cannot seek on stdin (like a pipe) for tailing from end
-			// Need to read all input first for these modes.
-			// Handle this special case within processBytes/processLines.
-			// For now, we fall through, but the processing functions must handle it.
-		}
 		reader = os.Stdin
 		filename = "standard input"
 		inputSourceIsStdin = true
@@ -610,8 +602,5 @@ func main() {
 	// If following, the main loop would be elsewhere (or main would block)
 	if !opts.follow || len(files) == 0 || (len(files) == 1 && files[0] == "-") {
 		os.Exit(exitCode)
-	} else {
-		// If following files, keep the process alive (the actual following loop isn't here yet)
-		select {} // Block forever
 	}
 }

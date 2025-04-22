@@ -25,11 +25,8 @@ Mandatory arguments to long options are mandatory for short options too.
 )
 
 type options struct {
-	lineCount   int
-	byteCount   int
-	quiet       bool
-	verbose     bool
-	invertCount bool
+	lineCount int
+	byteCount int
 }
 
 func parseOptions() (opts options, files []string, err error) {
