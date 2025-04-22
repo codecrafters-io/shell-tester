@@ -169,52 +169,16 @@ func parseOptions() (opts options, files []string, err error) {
 	return opts, files, nil
 }
 
-// parseCount parses a count value which may have a leading '-' for inversion
-// or a suffix like k, M, etc.
+// parseCount parses a count value
+// leading '-' for inversion or suffixes like k, M, are NOT supported
 func parseCount(value string) (int, error) {
-	invertCount := false
 	if strings.HasPrefix(value, "-") {
-		invertCount = true
-		value = value[1:]
-	}
-
-	// Check for multiplier suffixes
-	multiplier := 1
-	if len(value) > 1 {
-		lastChar := value[len(value)-1]
-		switch lastChar {
-		case 'b':
-			value = value[:len(value)-1]
-			multiplier = 512
-		case 'k':
-			value = value[:len(value)-1]
-			multiplier = 1000
-		case 'K':
-			value = value[:len(value)-1]
-			multiplier = 1024
-		case 'm':
-			value = value[:len(value)-1]
-			multiplier = 1000 * 1000
-		case 'M':
-			value = value[:len(value)-1]
-			multiplier = 1024 * 1024
-		case 'g':
-			value = value[:len(value)-1]
-			multiplier = 1000 * 1000 * 1000
-		case 'G':
-			value = value[:len(value)-1]
-			multiplier = 1024 * 1024 * 1024
-		}
+		return 0, fmt.Errorf("invalid count: %s", value)
 	}
 
 	count, err := strconv.Atoi(value)
 	if err != nil {
 		return 0, err
-	}
-
-	count *= multiplier
-	if invertCount {
-		count = -count
 	}
 
 	return count, nil
