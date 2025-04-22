@@ -61,7 +61,7 @@ func parseOptions() (opts options, files []string, err error) {
 				}
 				lineCount, err := parseCount(value)
 				if err != nil {
-					return opts, nil, fmt.Errorf("invalid line count: %v", err)
+					return opts, nil, fmt.Errorf("illegal line count -- %d", lineCount)
 				}
 				opts.lineCount = lineCount
 			case strings.HasPrefix(arg, "-c=") || strings.HasPrefix(arg, "--bytes="):
@@ -83,7 +83,7 @@ func parseOptions() (opts options, files []string, err error) {
 				i++
 				lineCount, err := parseCount(args[i])
 				if err != nil {
-					return opts, nil, fmt.Errorf("invalid line count: %v\n", err)
+					return opts, nil, fmt.Errorf("illegal line count -- %d\n", lineCount)
 				}
 				if lineCount < 0 {
 					return opts, nil, fmt.Errorf("illegal line count -- %d\n", lineCount)
@@ -96,10 +96,10 @@ func parseOptions() (opts options, files []string, err error) {
 				i++
 				byteCount, err := parseCount(args[i])
 				if err != nil {
-					return opts, nil, fmt.Errorf("invalid byte count: %v", err)
+					return opts, nil, fmt.Errorf("illegal byte count -- %d\n", byteCount)
 				}
 				if byteCount < 0 {
-					return opts, nil, fmt.Errorf("illegal byte count -- %d", byteCount)
+					return opts, nil, fmt.Errorf("illegal byte count -- %d\n", byteCount)
 				}
 				opts.byteCount = byteCount
 			default:
@@ -116,7 +116,7 @@ func parseOptions() (opts options, files []string, err error) {
 								i++
 								lineCount, err := parseCount(args[i])
 								if err != nil {
-									return opts, nil, fmt.Errorf("invalid line count: %v", err)
+									return opts, nil, fmt.Errorf("illegal line count -- %d", lineCount)
 								}
 								opts.lineCount = lineCount
 							} else {
@@ -137,7 +137,7 @@ func parseOptions() (opts options, files []string, err error) {
 								i++
 								byteCount, err := parseCount(args[i])
 								if err != nil {
-									return opts, nil, fmt.Errorf("invalid byte count: %v", err)
+									return opts, nil, fmt.Errorf("illegal byte count -- %d", byteCount)
 								}
 								if byteCount < 0 {
 									return opts, nil, fmt.Errorf("illegal byte count -- %d", byteCount)
@@ -147,7 +147,7 @@ func parseOptions() (opts options, files []string, err error) {
 								// The value is immediately after -c
 								byteCount, err := parseCount(arg[j+1:])
 								if err != nil {
-									return opts, nil, fmt.Errorf("invalid byte count: %v", err)
+									return opts, nil, fmt.Errorf("illegal byte count -- %d", byteCount)
 								}
 								opts.byteCount = byteCount
 								j = len(arg) // Skip the rest
@@ -173,7 +173,12 @@ func parseOptions() (opts options, files []string, err error) {
 // leading '-' for inversion or suffixes like k, M, are NOT supported
 func parseCount(value string) (int, error) {
 	if strings.HasPrefix(value, "-") {
-		return 0, fmt.Errorf("invalid count: %s", value)
+		negativeValue := value[1:]
+		count, err := strconv.Atoi(negativeValue)
+		if err != nil {
+			return 0, fmt.Errorf("illegal count: %s", value)
+		}
+		return -count, fmt.Errorf("illegal count: %s", value)
 	}
 
 	count, err := strconv.Atoi(value)

@@ -544,10 +544,7 @@ func TestTailWithPipedInput(t *testing.T) {
 	}
 }
 
-// Test for -f (follow) - requires implementation in tail.go first
 func TestTailFollow(t *testing.T) {
-	t.Skip("Skipping follow tests until -f is implemented") // Skip until implemented
-
 	tmpDir, cleanup := setupTestDir(t)
 	defer cleanup()
 

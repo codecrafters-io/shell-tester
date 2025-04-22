@@ -8,6 +8,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -47,7 +48,9 @@ func parseOptions() (opts options, files []string, err error) {
 	// Default options: last 10 lines
 	opts = options{
 		lineCount: countParam{value: defaultLineCount, fromBeginning: false},
-		byteCount: countParam{value: -1, fromBeginning: false}, // -1 indicates not set
+		byteCount: countParam{value: -1, fromBeginning: false},
+		follow:    false,
+		reverse:   false,
 	}
 
 	args := os.Args[1:]
@@ -319,8 +322,7 @@ func processFile(filename string, opts options, isFirst bool, multipleFilesPrese
 
 	// --- Follow Logic (-f) ---
 	if opts.follow && !inputSourceIsStdin {
-		// Need to pass the *os.File for follow logic
-		return followFile(file, opts)
+		return followFile(file)
 	}
 
 	return nil
@@ -511,24 +513,70 @@ func processLinesReverse(reader io.Reader, count countParam) error {
 	return nil
 }
 
-// followFile handles the -f logic (unimplemented stub)
-func followFile(file *os.File, opts options) error {
-	fmt.Fprintf(os.Stderr, "tail: -f option is not yet implemented for file %s\n", file.Name())
-	// Basic idea:
-	// 1. Seek to the end of the file.
-	// 2. Start a loop:
-	//    a. Try reading new data.
-	//    b. If data read, print it.
-	//    c. If EOF, wait briefly (e.g., time.Sleep).
-	//    d. Check if the file was truncated (stat size < current pos) -> seek to end.
-	//    e. Check for file rotation (needs more complex inode/device checking).
-	//    f. Handle interrupts gracefully.
-	// Use something like fsnotify for more efficient watching.
+// followFile handles the -f logic
+func followFile(file *os.File) error {
+	// For `follow`, we always start reading from the *current end* after the initial tail display.
+	// So, regardless of where processLines/Bytes left off, seek to end now.
+	endOffset, err := file.Seek(0, io.SeekEnd)
+	if err != nil {
+		return fmt.Errorf("tail: cannot seek to end of file %s: %v", file.Name(), err)
+	}
+	currentOffset := endOffset
 
-	// Keep process alive for testing purposes (until proper impl)
-	// time.Sleep(30 * time.Second)
+	buffer := make([]byte, 4096) // Read in chunks
 
-	return nil
+	for {
+		// Check for truncation *before* reading
+		stat, err := file.Stat()
+		if err != nil {
+			// Handle error: file might have been removed
+			if os.IsNotExist(err) {
+				fmt.Fprintf(os.Stderr, "tail: %s: file disappeared\n", file.Name())
+				// Should we keep trying or exit? Standard tail often keeps trying.
+				time.Sleep(1 * time.Second)
+				continue // Keep trying
+			} else {
+				return fmt.Errorf("tail: error getting file stats for %s: %v", file.Name(), err)
+			}
+		}
+
+		if stat.Size() < currentOffset {
+			fmt.Fprintf(os.Stderr, "tail: %s: file truncated\n", file.Name())
+			currentOffset, err = file.Seek(0, io.SeekEnd)
+			if err != nil {
+				return fmt.Errorf("tail: error seeking after truncation for %s: %v", file.Name(), err)
+			}
+		}
+
+		// Try reading from the current offset
+		// Ensure we're at the correct offset before reading
+		_, err = file.Seek(currentOffset, io.SeekStart)
+		if err != nil {
+			return fmt.Errorf("tail: error seeking to offset %d for %s: %v", currentOffset, file.Name(), err)
+		}
+
+		n, err := file.Read(buffer)
+		if n > 0 {
+			_, writeErr := os.Stdout.Write(buffer[:n])
+			if writeErr != nil {
+				return fmt.Errorf("tail: error writing to stdout: %v", writeErr)
+			}
+			currentOffset += int64(n) // Update our position
+		}
+
+		if err != nil {
+			if err == io.EOF {
+				// End of file reached, wait for more data
+				// Reduce sleep time for faster test execution
+				time.Sleep(50 * time.Millisecond) // Poll interval reduced from 1s
+				continue
+			} else {
+				// A real read error occurred
+				return fmt.Errorf("tail: error reading %s: %v", file.Name(), err)
+			}
+		}
+	}
+	// This loop runs indefinitely until an error or interrupt
 }
 
 func main() {
