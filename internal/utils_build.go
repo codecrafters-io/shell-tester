@@ -20,8 +20,7 @@ type CommandDetails struct {
 	CommandName string
 	// CommandMetadata is any other metadata required for generating the command
 	// SignaturePrinter: random code
-	// Ls: nothing
-	// Cat: nothing
+	// Cat, Ls, Head, Tail, Wc, Yes: nothing
 	CommandMetadata string
 }
 
