@@ -555,7 +555,7 @@ stages:
       Then it will also send a `cat` command, with the file name parameter enclosed in single quotes:
 
       ```bash
-      $ cat '/tmp/file name' '/tmp/file name with spaces' 
+      $ cat '/tmp/file name' '/tmp/file name with spaces'
       content1 content2
       ```
 
@@ -596,7 +596,7 @@ stages:
       Then it will also send a `cat` command, with the file name parameter enclosed in double quotes:
 
       ```bash
-      $ cat "/tmp/file name" "/tmp/'file name' with spaces" 
+      $ cat "/tmp/file name" "/tmp/'file name' with spaces"
       content1 content2
       ```
 
@@ -637,7 +637,7 @@ stages:
       Then it will also send a `cat` command, with the file name parameters consisting of backslashes inside quotes:
 
       ```bash
-      $ cat "/tmp/file\\name" "/tmp/file\ name" 
+      $ cat "/tmp/file\\name" "/tmp/file\ name"
       content1 content2
       ```
 
@@ -678,7 +678,7 @@ stages:
 
       Then it will also send a `cat` command, with the file name parameters consisting of backslashes inside single quotes:
       ```bash
-      $ cat "/tmp/file/'name'" "/tmp/file/'\name\'"  
+      $ cat "/tmp/file/'name'" "/tmp/file/'\name\'"
       content1 content2
       ```
 
@@ -719,7 +719,7 @@ stages:
       Then it will also send a `cat` command, with the file name parameters consisting of backslashes inside double quotes:
 
       ```bash
-      $ cat "/tmp/"file\name"" "/tmp/"file name"" 
+      $ cat "/tmp/"file\name"" "/tmp/"file name""
       content1 content2
       ```
 
@@ -936,3 +936,6 @@ stages:
   - slug: "gy5"
   - slug: "wh6"
   - slug: "wt6"
+  - slug: "p1"
+  - slug: "p2"
+  - slug: "p3"
