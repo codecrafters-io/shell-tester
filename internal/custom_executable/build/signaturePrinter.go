@@ -21,6 +21,9 @@ func CreateSignaturePrinterExecutable(randomString, outputPath string) error {
 	ldflags := fmt.Sprintf("-X '%s=%s'", secretCodeVariablePath, randomString)
 
 	sourcePath := path.Join(os.Getenv("TESTER_DIR"), "internal", "custom_executable", "signature_printer", "main.go")
+	if _, err := os.Stat(sourcePath); os.IsNotExist(err) {
+		return fmt.Errorf("CodeCrafters Internal Error: signature printer source file: %s does not exist", sourcePath)
+	}
 
 	cmd := exec.Command("go", "build", "-o", outputPath, "-ldflags", ldflags, sourcePath)
 	cmd.Env = append(os.Environ(),
