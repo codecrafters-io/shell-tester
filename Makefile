@@ -80,7 +80,7 @@ build_executables:
 	arches="arm64 amd64" ; \
 	for os in $$oses; do \
 		for arch in $$arches; do \
-		GOOS="$$os" GOARCH="$$arch" go build -ldflags="-X 'main.secretCode=ryanknows'" -o built_executables/signature_printer_$${os}_$${arch} ./internal/custom_executable/signature_printer/main.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -ldflags="-X 'main.secretCode=<<RANDOM>>'" -o built_executables/signature_printer_$${os}_$${arch} ./internal/custom_executable/signature_printer/main.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/cat_$${os}_$${arch} ./internal/custom_executable/cat/cat.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/ls_$${os}_$${arch} ./internal/custom_executable/ls/ls.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/head_$${os}_$${arch} ./internal/custom_executable/head/head.go; \
