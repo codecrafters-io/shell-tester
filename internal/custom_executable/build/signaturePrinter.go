@@ -3,6 +3,8 @@ package custom_executable
 import (
 	"fmt"
 	"os"
+	"os/exec"
+	"runtime"
 	"strings"
 )
 
@@ -39,6 +41,36 @@ func CreateSignaturePrinterExecutable(randomString, outputPath string) error {
 	err = addSecretCodeToExecutable(outputPath, randomString)
 	if err != nil {
 		return fmt.Errorf("CodeCrafters Internal Error: adding secret code to executable failed: %w", err)
+	}
+
+	if runtime.GOOS == "darwin" && runtime.GOARCH == "arm64" {
+		// Remove the signature from the executable
+		command := fmt.Sprintf("codesign --remove-signature %s", outputPath)
+		err = exec.Command("sh", "-c", command).Run()
+		if err != nil {
+			return fmt.Errorf("CodeCrafters Internal Error: removing signature from executable failed: %w", err)
+		}
+
+		// Sign the executable
+		command = fmt.Sprintf("codesign -s - %s", outputPath)
+		err = exec.Command("sh", "-c", command).Run()
+		if err != nil {
+			return fmt.Errorf("CodeCrafters Internal Error: signing executable failed: %w", err)
+		}
+
+		// Verify the signature
+		command = fmt.Sprintf("codesign -vv %s", outputPath)
+		err = exec.Command("sh", "-c", command).Run()
+		if err != nil {
+			return fmt.Errorf("CodeCrafters Internal Error: verifying signature failed: %w", err)
+		}
+
+		// Print the signature
+		command = fmt.Sprintf("codesign -d --verbose=2 %s", outputPath)
+		err = exec.Command("sh", "-c", command).Run()
+		if err != nil {
+			return fmt.Errorf("CodeCrafters Internal Error: printing signature failed: %w", err)
+		}
 	}
 
 	return nil
