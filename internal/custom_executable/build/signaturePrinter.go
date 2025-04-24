@@ -3,36 +3,50 @@ package custom_executable
 import (
 	"fmt"
 	"os"
-	"os/exec"
-	"path"
-	"runtime"
+	"strings"
 )
 
-const secretCodeVariablePath = "main.secretCode"
+func addSecretCodeToExecutable(filePath, randomString string) error {
+	LENGTH := 10
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		return fmt.Errorf("CodeCrafters Internal Error: read file failed: %w", err)
+	}
+	placeholderIndex := strings.Index(string(data), "<<RANDOM>>")
+	if placeholderIndex == -1 {
+		return fmt.Errorf("CodeCrafters Internal Error: <<RANDOM>> not found in file")
+	}
+	bytes := copy(data[placeholderIndex:placeholderIndex+LENGTH], randomString)
+	if bytes != LENGTH {
+		return fmt.Errorf("CodeCrafters Internal Error: copy failed")
+	}
+	if err := os.WriteFile(filePath, data, 0644); err != nil {
+		return fmt.Errorf("CodeCrafters Internal Error: write file failed: %w", err)
+	}
+	return nil
+}
 
 func CreateSignaturePrinterExecutable(randomString, outputPath string) error {
+	// Our executable contains a placeholder for the random string
+	// The placeholder is <<<RANDOM>>>
+	// We will replace the placeholder with the random string
+	// The random string HAS to be the same length as the placeholder
 	if len(randomString) != 10 {
 		return fmt.Errorf("CodeCrafters Internal Error: randomString length must be 10")
 	}
 
-	goos := runtime.GOOS
-	goarch := runtime.GOARCH
-
-	ldflags := fmt.Sprintf("-X '%s=%s'", secretCodeVariablePath, randomString)
-
-	sourcePath := path.Join(os.Getenv("TESTER_DIR"), "internal", "custom_executable", "signature_printer", "main.go")
-	if _, err := os.Stat(sourcePath); os.IsNotExist(err) {
-		return fmt.Errorf("CodeCrafters Internal Error: signature printer source file: %s does not exist", sourcePath)
+	executableName := "signature_printer"
+	// Copy the base executable from archive location to user's executable path
+	err := createExecutableForOSAndArch(executableName, outputPath)
+	if err != nil {
+		return fmt.Errorf("CodeCrafters Internal Error: copying executable failed: %w", err)
 	}
 
-	cmd := exec.Command("go", "build", "-o", outputPath, "-ldflags", ldflags, sourcePath)
-	cmd.Env = append(os.Environ(),
-		fmt.Sprintf("GOOS=%s", goos),
-		fmt.Sprintf("GOARCH=%s", goarch),
-	)
-	output, err := cmd.CombinedOutput()
+	// Replace the placeholder with the random string
+	// We can run the executable now, it will work as expected
+	err = addSecretCodeToExecutable(outputPath, randomString)
 	if err != nil {
-		panic("CodeCrafters Internal Error: failed to build signature printer executable for " + goos + "/" + goarch + "\n" + string(output))
+		return fmt.Errorf("CodeCrafters Internal Error: adding secret code to executable failed: %w", err)
 	}
 
 	return nil
