@@ -7,20 +7,12 @@ import (
 )
 
 func addSecretCodeToExecutable(filePath, randomString string) error {
-	LENGTH := 10
 	data, err := os.ReadFile(filePath)
 	if err != nil {
 		return fmt.Errorf("CodeCrafters Internal Error: read file failed: %w", err)
 	}
-	placeholderIndex := strings.Index(string(data), "<<RANDOM>>")
-	if placeholderIndex == -1 {
-		return fmt.Errorf("CodeCrafters Internal Error: <<RANDOM>> not found in file")
-	}
-	bytes := copy(data[placeholderIndex:placeholderIndex+LENGTH], randomString)
-	if bytes != LENGTH {
-		return fmt.Errorf("CodeCrafters Internal Error: copy failed")
-	}
-	if err := os.WriteFile(filePath, data, 0644); err != nil {
+	newData := strings.ReplaceAll(string(data), "<<RANDOM>>", randomString)
+	if err := os.WriteFile(filePath, []byte(newData), 0644); err != nil {
 		return fmt.Errorf("CodeCrafters Internal Error: write file failed: %w", err)
 	}
 	return nil
