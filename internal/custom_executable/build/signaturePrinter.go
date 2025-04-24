@@ -1,11 +1,11 @@
 package custom_executable
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"os/exec"
 	"runtime"
-	"strings"
 )
 
 func addSecretCodeToExecutable(filePath, randomString string) error {
@@ -13,8 +13,13 @@ func addSecretCodeToExecutable(filePath, randomString string) error {
 	if err != nil {
 		return fmt.Errorf("CodeCrafters Internal Error: read file failed: %w", err)
 	}
-	newData := strings.ReplaceAll(string(data), "<<RANDOM>>", randomString)
-	if err := os.WriteFile(filePath, []byte(newData), 0644); err != nil {
+	placeholder := []byte("<<RANDOM>>")
+	if !bytes.Contains(data, placeholder) {
+		return fmt.Errorf("CodeCrafters Internal Error: placeholder %q not found in %s", placeholder, filePath)
+	}
+
+	newData := bytes.ReplaceAll(data, placeholder, []byte(randomString))
+	if err := os.WriteFile(filePath, newData, 0644); err != nil {
 		return fmt.Errorf("CodeCrafters Internal Error: write file failed: %w", err)
 	}
 	return nil
