@@ -5,10 +5,9 @@ import (
 	"os"
 )
 
-// This variable will be set at build time.
-var secretCode string
-
 func main() {
+	secretCode := "<<RANDOM>>"
+
 	var randomCode string
 	if len(os.Args) > 1 {
 		randomCode = os.Args[1]
