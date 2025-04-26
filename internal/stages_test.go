@@ -111,12 +111,12 @@ func TestStages(t *testing.T) {
 	if runtime.GOOS == "darwin" {
 		// Getting almquist shell (ash) to work properly on macOS is a pain.
 		// So, we skip those while running make test on macOS.
-		testCases = filterTestCases(testCases)
+		testCases = filterOutAshTestCases(testCases)
 	}
 	testerUtilsTesting.TestTesterOutput(t, testerDefinition, testCases)
 }
 
-func filterTestCases(testCases map[string]testerUtilsTesting.TesterOutputTestCase) map[string]testerUtilsTesting.TesterOutputTestCase {
+func filterOutAshTestCases(testCases map[string]testerUtilsTesting.TesterOutputTestCase) map[string]testerUtilsTesting.TesterOutputTestCase {
 	filteredTestCases := make(map[string]testerUtilsTesting.TesterOutputTestCase)
 	for slug, testCase := range testCases {
 		if testCase.CodePath != "./test_helpers/ash" {
