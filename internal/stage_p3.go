@@ -59,5 +59,19 @@ func testP3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	// Append content to the file while command is running
+	if err := appendFile(filePath, "This is line 4.\n"); err != nil {
+		return err
+	}
+
+	singleLineAssertion := assertions.SingleLineAssertion{
+		ExpectedOutput: "This is line 4.",
+	}
+	asserter.AddAssertion(&singleLineAssertion)
+
+	if err := asserter.AssertWithoutPrompt(); err != nil {
+		return err
+	}
+
 	return logAndQuit(asserter, nil)
 }

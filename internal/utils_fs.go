@@ -106,6 +106,16 @@ func writeFile(path string, content string) error {
 	return os.WriteFile(path, []byte(content), 0644)
 }
 
+func appendFile(path string, content string) error {
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	_, err = file.WriteString(content)
+	return err
+}
+
 // writeFiles writes a list of files to the given paths with the given contents
 func writeFiles(paths []string, contents []string, logger *logger.Logger) error {
 	for i, content := range contents {
