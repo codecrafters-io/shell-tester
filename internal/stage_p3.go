@@ -64,14 +64,30 @@ func testP3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	singleLineAssertion := assertions.SingleLineAssertion{
+	firstSingleLineAssertion := assertions.SingleLineAssertion{
 		ExpectedOutput: "This is line 4.",
 	}
-	asserter.AddAssertion(&singleLineAssertion)
+	asserter.AddAssertion(&firstSingleLineAssertion)
 
 	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
 	}
+	logger.Successf("✓ Received appended line 4")
+
+	// Append again
+	if err := appendFile(filePath, "This is line 5.\n"); err != nil {
+		return err
+	}
+
+	secondSingleLineAssertion := assertions.SingleLineAssertion{
+		ExpectedOutput: "This is line 5.",
+	}
+	asserter.AddAssertion(&secondSingleLineAssertion)
+
+	if err := asserter.AssertWithoutPrompt(); err != nil {
+		return err
+	}
+	logger.Successf("✓ Received appended line 5")
 
 	return logAndQuit(asserter, nil)
 }
