@@ -11,7 +11,7 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-func testP4(stageHarness *test_case_harness.TestCaseHarness) error {
+func testP2(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{

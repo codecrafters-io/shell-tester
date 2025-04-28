@@ -152,9 +152,9 @@ endef
 
 define _PIPELINE_STAGES
 [ \
-	{"slug":"p1","tester_log_prefix":"tester::#p1","title":"Stage#1: Pipeline"}, \
-	{"slug":"p4","tester_log_prefix":"tester::#p4","title":"Stage#4: Pipeline"}, \
-	{"slug":"p6","tester_log_prefix":"tester::#p6","title":"Stage#6: Pipeline"} \
+	{"slug":"br6","tester_log_prefix":"tester::#br6","title":"Stage#1: Pipeline"}, \
+	{"slug":"ny9","tester_log_prefix":"tester::#ny9","title":"Stage#4: Pipeline"}, \
+	{"slug":"xk3","tester_log_prefix":"tester::#xk3","title":"Stage#6: Pipeline"} \
 ]
 endef
 

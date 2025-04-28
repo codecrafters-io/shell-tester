@@ -3,9 +3,10 @@ package internal
 import (
 	"fmt"
 	"path"
+	"regexp"
+	"sort"
 	"strings"
 
-	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -17,8 +18,9 @@ func testP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
+		{CommandType: "cat", CommandName: CUSTOM_CAT_COMMAND, CommandMetadata: ""},
 		{CommandType: "head", CommandName: CUSTOM_HEAD_COMMAND, CommandMetadata: ""},
-		{CommandType: "tail", CommandName: CUSTOM_TAIL_COMMAND, CommandMetadata: ""},
+		{CommandType: "wc", CommandName: CUSTOM_WC_COMMAND, CommandMetadata: ""},
 	}, false)
 	if err != nil {
 		return err
@@ -26,15 +28,14 @@ func testP3(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
+	// Test-1
 	randomDir, err := GetShortRandomDirectory(stageHarness)
 	if err != nil {
 		return err
 	}
-
 	filePath := path.Join(randomDir, fmt.Sprintf("file-%d", random.RandomInt(1, 100)))
-	randomWords := random.RandomWords(6)
-	fileContent := fmt.Sprintf("%s %s\n%s %s\n%s %s\n", randomWords[0], randomWords[1], randomWords[2], randomWords[3], randomWords[4], randomWords[5])
-
+	randomWords := random.RandomWords(5)
+	fileContent := fmt.Sprintf("%s\n%s\n%s\n%s\n%s", randomWords[0], randomWords[1], randomWords[2], randomWords[3], randomWords[4])
 	if err := writeFiles([]string{filePath}, []string{fileContent}, logger); err != nil {
 		return err
 	}
@@ -43,51 +44,57 @@ func testP3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	input := fmt.Sprintf(`tail -f %s | head -n 5`, filePath)
-	expectedOutput := strings.Split(fileContent, "\n")
-	if err := writeFiles([]string{filePath}, []string{fileContent}, logger); err != nil {
+	lines := strings.Count(fileContent, "\n")
+	words := strings.Count(strings.ReplaceAll(fileContent, "\n", " "), " ") + 1
+	bytes := len(fileContent)
+
+	input := fmt.Sprintf(`cat %s | head -n 5 | wc`, filePath)
+	expectedOutput := fmt.Sprintf("%7d%8d%8d", lines, words, bytes)
+
+	singleLineTestCase := test_cases.CommandResponseTestCase{
+		Command:          input,
+		ExpectedOutput:   expectedOutput,
+		FallbackPatterns: nil,
+		SuccessMessage:   "✓ Received expected output",
+	}
+	if err := singleLineTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
-	multiLineTestCase := test_cases.CommandWithMultilineResponseTestCase{
-		Command:             input,
-		MultiLineAssertion:  assertions.NewMultiLineAssertion(expectedOutput),
-		SuccessMessage:      "✓ Received redirected file content",
-		SkipPromptAssertion: true,
+	// Test-2
+	newRandomDir, err := GetShortRandomDirectory(stageHarness)
+	if err != nil {
+		return err
 	}
-	if err := multiLineTestCase.Run(asserter, shell, logger); err != nil {
+	randomUniqueFileNames := random.RandomInts(1, 100, 6)
+	filePaths := []string{
+		path.Join(newRandomDir, fmt.Sprintf("f-%d", randomUniqueFileNames[0])),
+		path.Join(newRandomDir, fmt.Sprintf("f-%d", randomUniqueFileNames[1])),
+		path.Join(newRandomDir, fmt.Sprintf("f-%d", randomUniqueFileNames[2])),
+		path.Join(newRandomDir, fmt.Sprintf("f-%d", randomUniqueFileNames[3])),
+		path.Join(newRandomDir, fmt.Sprintf("f-%d", randomUniqueFileNames[4])),
+		path.Join(newRandomDir, fmt.Sprintf("f-%d", randomUniqueFileNames[5])),
+	}
+	fileContents := random.RandomWords(6)
+	if err := writeFiles(filePaths, fileContents, logger); err != nil {
 		return err
 	}
 
-	// Append content to the file while command is running
-	if err := appendFile(filePath, "This is line 4.\n"); err != nil {
+	sort.Ints(randomUniqueFileNames)
+	availableEntries := randomUniqueFileNames[1:4]
+
+	input = fmt.Sprintf(`ls -la %s | tail -n 5 | head -n 3 | grep "f-%d"`, newRandomDir, availableEntries[2])
+	expectedRegexPattern := fmt.Sprintf("^[rwx-]* .* f-%d", availableEntries[2])
+
+	singleLineTestCase2 := test_cases.CommandResponseTestCase{
+		Command:          input,
+		ExpectedOutput:   "NIL",
+		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(expectedRegexPattern)},
+		SuccessMessage:   "✓ Received expected output",
+	}
+	if err := singleLineTestCase2.Run(asserter, shell, logger); err != nil {
 		return err
 	}
-
-	firstSingleLineAssertion := assertions.SingleLineAssertion{
-		ExpectedOutput: "This is line 4.",
-	}
-	asserter.AddAssertion(&firstSingleLineAssertion)
-
-	if err := asserter.AssertWithoutPrompt(); err != nil {
-		return err
-	}
-	logger.Successf("✓ Received appended line 4")
-
-	// Append again
-	if err := appendFile(filePath, "This is line 5.\n"); err != nil {
-		return err
-	}
-
-	secondSingleLineAssertion := assertions.SingleLineAssertion{
-		ExpectedOutput: "This is line 5.",
-	}
-	asserter.AddAssertion(&secondSingleLineAssertion)
-
-	if err := asserter.AssertWithoutPrompt(); err != nil {
-		return err
-	}
-	logger.Successf("✓ Received appended line 5")
 
 	return logAndQuit(asserter, nil)
 }
