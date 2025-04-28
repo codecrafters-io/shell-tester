@@ -84,9 +84,6 @@ func runGrep(t *testing.T, stdinContent string, args ...string) (string, string,
 		var exitError *exec.ExitError
 		if errors.As(err, &exitError) {
 			exitCode = exitError.ExitCode()
-		} else {
-			// If it's not an ExitError, it might be a different execution problem (e.g., command not found)
-			// We return it so the test can decide how to handle it.
 		}
 	}
 
