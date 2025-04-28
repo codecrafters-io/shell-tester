@@ -24,6 +24,9 @@ tests_excluding_ash:
 test_cat_against_bsd_cat:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/cat/... -system
 
+test_grep_against_bsd_grep:
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/grep/... -system
+
 test_head_against_bsd_head:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/head/... -system
 
@@ -41,6 +44,7 @@ test_yes_against_bsd_yes:
 
 test_executables_against_their_bsd_counterparts:
 	make test_cat_against_bsd_cat
+	test_grep_against_bsd_grep
 	make test_head_against_bsd_head
 	make test_ls_against_bsd_ls
 	make test_tail_against_bsd_tail
@@ -81,8 +85,9 @@ build_executables:
 	for os in $$oses; do \
 		for arch in $$arches; do \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/cat_$${os}_$${arch} ./internal/custom_executable/cat/cat.go; \
-		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/ls_$${os}_$${arch} ./internal/custom_executable/ls/ls.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/grep_$${os}_$${arch} ./internal/custom_executable/grep/grep.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/head_$${os}_$${arch} ./internal/custom_executable/head/head.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/ls_$${os}_$${arch} ./internal/custom_executable/ls/ls.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/tail_$${os}_$${arch} ./internal/custom_executable/tail/tail.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/wc_$${os}_$${arch} ./internal/custom_executable/wc/wc.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/yes_$${os}_$${arch} ./internal/custom_executable/yes/yes.go; \
@@ -148,10 +153,7 @@ endef
 define _PIPELINE_STAGES
 [ \
 	{"slug":"p1","tester_log_prefix":"tester::#p1","title":"Stage#1: Pipeline"}, \
-	{"slug":"p2","tester_log_prefix":"tester::#p2","title":"Stage#2: Pipeline"}, \
-	{"slug":"p3","tester_log_prefix":"tester::#p3","title":"Stage#3: Pipeline"}, \
 	{"slug":"p4","tester_log_prefix":"tester::#p4","title":"Stage#4: Pipeline"}, \
-	{"slug":"p5","tester_log_prefix":"tester::#p5","title":"Stage#5: Pipeline"}, \
 	{"slug":"p6","tester_log_prefix":"tester::#p6","title":"Stage#6: Pipeline"} \
 ]
 endef
