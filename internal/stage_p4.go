@@ -27,6 +27,7 @@ func testP4(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	// Test-1
 	data := fmt.Sprintf(`%s\n%s`, random.RandomWord(), random.RandomWord())
 	lines := strings.Count(data, `\n`)
 	words := strings.Count(strings.ReplaceAll(data, "\n", " "), " ") + 1
@@ -36,6 +37,21 @@ func testP4(stageHarness *test_case_harness.TestCaseHarness) error {
 	expectedOutput := fmt.Sprintf("%7d%8d%8d", lines, words, bytes)
 
 	singleLineTestCase := test_cases.CommandResponseTestCase{
+		Command:          input,
+		ExpectedOutput:   expectedOutput,
+		FallbackPatterns: nil,
+		SuccessMessage:   "✓ Received expected output",
+	}
+	if err := singleLineTestCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	// Test-2
+
+	input = `ls | type exit`
+	expectedOutput = `exit is a shell builtin`
+
+	singleLineTestCase = test_cases.CommandResponseTestCase{
 		Command:          input,
 		ExpectedOutput:   expectedOutput,
 		FallbackPatterns: nil,
