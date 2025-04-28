@@ -3,6 +3,8 @@ package internal
 import (
 	"fmt"
 	"path"
+	"regexp"
+	"sort"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -26,6 +28,7 @@ func testP6(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
+	// Test-1
 	randomDir, err := GetShortRandomDirectory(stageHarness)
 	if err != nil {
 		return err
@@ -55,6 +58,41 @@ func testP6(stageHarness *test_case_harness.TestCaseHarness) error {
 		SuccessMessage:   "✓ Received expected output",
 	}
 	if err := singleLineTestCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	// Test-2
+	newRandomDir, err := GetShortRandomDirectory(stageHarness)
+	if err != nil {
+		return err
+	}
+	randomUniqueFileNames := random.RandomInts(1, 100, 6)
+	filePaths := []string{
+		path.Join(newRandomDir, fmt.Sprintf("f-%d", randomUniqueFileNames[0])),
+		path.Join(newRandomDir, fmt.Sprintf("f-%d", randomUniqueFileNames[1])),
+		path.Join(newRandomDir, fmt.Sprintf("f-%d", randomUniqueFileNames[2])),
+		path.Join(newRandomDir, fmt.Sprintf("f-%d", randomUniqueFileNames[3])),
+		path.Join(newRandomDir, fmt.Sprintf("f-%d", randomUniqueFileNames[4])),
+		path.Join(newRandomDir, fmt.Sprintf("f-%d", randomUniqueFileNames[5])),
+	}
+	fileContents := random.RandomWords(6)
+	if err := writeFiles(filePaths, fileContents, logger); err != nil {
+		return err
+	}
+
+	sort.Ints(randomUniqueFileNames)
+	availableEntries := randomUniqueFileNames[1:4]
+
+	input = fmt.Sprintf(`ls -la %s | tail -n 5 | head -n 3 | grep "f-%d"`, newRandomDir, availableEntries[2])
+	expectedRegexPattern := fmt.Sprintf("^[rwx-]* .* f-%d", availableEntries[2])
+
+	singleLineTestCase2 := test_cases.CommandResponseTestCase{
+		Command:          input,
+		ExpectedOutput:   "NIL",
+		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(expectedRegexPattern)},
+		SuccessMessage:   "✓ Received expected output",
+	}
+	if err := singleLineTestCase2.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
