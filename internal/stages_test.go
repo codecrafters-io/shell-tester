@@ -68,6 +68,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/completions/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"pipelines_pass_bash": {
+			StageSlugs:          []string{"br6", "ny9", "xk3"},
+			CodePath:            "./test_helpers/bash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/bash/pipelines/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"base_pass_ash": {
 			UntilStageSlug:      "ip1",
 			CodePath:            "./test_helpers/ash",
@@ -103,6 +110,13 @@ func TestStages(t *testing.T) {
 			CodePath:            "./test_helpers/ash",
 			ExpectedExitCode:    0,
 			StdoutFixturePath:   "./test_helpers/fixtures/ash/completions/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"pipelines_pass_ash": {
+			StageSlugs:          []string{"br6", "ny9", "xk3"},
+			CodePath:            "./test_helpers/ash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/ash/pipelines/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 	}
