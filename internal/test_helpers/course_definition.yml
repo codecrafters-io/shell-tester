@@ -939,3 +939,6 @@ stages:
   - slug: "p1"
   - slug: "p2"
   - slug: "p3"
+  - slug: "p4"
+  - slug: "p5"
+  - slug: "p6"

@@ -149,7 +149,10 @@ define _PIPELINE_STAGES
 [ \
 	{"slug":"p1","tester_log_prefix":"tester::#p1","title":"Stage#1: Pipeline"}, \
 	{"slug":"p2","tester_log_prefix":"tester::#p2","title":"Stage#2: Pipeline"}, \
-	{"slug":"p3","tester_log_prefix":"tester::#p3","title":"Stage#3: Pipeline"} \
+	{"slug":"p3","tester_log_prefix":"tester::#p3","title":"Stage#3: Pipeline"}, \
+	{"slug":"p4","tester_log_prefix":"tester::#p4","title":"Stage#4: Pipeline"}, \
+	{"slug":"p5","tester_log_prefix":"tester::#p5","title":"Stage#5: Pipeline"}, \
+	{"slug":"p6","tester_log_prefix":"tester::#p6","title":"Stage#6: Pipeline"} \
 ]
 endef
 
