@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -52,10 +53,11 @@ func testP2(stageHarness *test_case_harness.TestCaseHarness) error {
 	expectedOutput = `exit is a shell builtin`
 
 	singleLineTestCase = test_cases.CommandResponseTestCase{
-		Command:          input,
-		ExpectedOutput:   expectedOutput,
-		FallbackPatterns: nil,
-		SuccessMessage:   "✓ Received expected output",
+		Command:        input,
+		ExpectedOutput: expectedOutput,
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(`exit is a special shell builtin`)},
+		SuccessMessage: "✓ Received expected output",
 	}
 	if err := singleLineTestCase.Run(asserter, shell, logger); err != nil {
 		return err
