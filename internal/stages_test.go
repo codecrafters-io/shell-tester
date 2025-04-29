@@ -3,6 +3,7 @@ package internal
 import (
 	"os"
 	"regexp"
+	"runtime"
 	"testing"
 
 	testerUtilsTesting "github.com/codecrafters-io/tester-utils/testing"
@@ -114,7 +115,22 @@ func TestStages(t *testing.T) {
 		},
 	}
 
+	if runtime.GOOS == "darwin" {
+		// Getting almquist shell (ash) to work properly on macOS is a pain.
+		// So, we skip those while running make test on macOS.
+		testCases = filterOutAshTestCases(testCases)
+	}
 	testerUtilsTesting.TestTesterOutput(t, testerDefinition, testCases)
+}
+
+func filterOutAshTestCases(testCases map[string]testerUtilsTesting.TesterOutputTestCase) map[string]testerUtilsTesting.TesterOutputTestCase {
+	filteredTestCases := make(map[string]testerUtilsTesting.TesterOutputTestCase)
+	for slug, testCase := range testCases {
+		if testCase.CodePath != "./test_helpers/ash" {
+			filteredTestCases[slug] = testCase
+		}
+	}
+	return filteredTestCases
 }
 
 func normalizeTesterOutput(testerOutput []byte) []byte {
