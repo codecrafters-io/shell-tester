@@ -264,20 +264,40 @@ func processLines(reader io.Reader, lineCount int) error {
 		return nil
 	}
 
-	scanner := bufio.NewScanner(reader)
-
 	if lineCount > 0 {
 		// Print first N lines
 		linesRead := 0
-		for scanner.Scan() && linesRead < lineCount {
-			fmt.Println(scanner.Text())
-			linesRead++
+		// Use bufio.Reader to preserve original line endings
+		bufReader := bufio.NewReader(reader)
+		for linesRead < lineCount {
+			lineBytes, err := bufReader.ReadBytes('\n')
+			if len(lineBytes) > 0 {
+				// Write the bytes read, including the newline if present
+				_, writeErr := os.Stdout.Write(lineBytes)
+				if writeErr != nil {
+					return writeErr
+				}
+				// Only increment linesRead if we actually wrote something that ended with a newline
+				// or if it was the last line of the file without a newline
+				if err == nil || (err == io.EOF && len(lineBytes) > 0) {
+					linesRead++
+				}
+			}
+			if err != nil {
+				if err == io.EOF {
+					break // Reached end of file
+				}
+				return err // Return other errors
+			}
 		}
-		return scanner.Err()
+		return nil // Success
 	}
 
 	// For negative line count (all but last N lines)
-	// We need to keep a rolling buffer of the last N lines
+	// Scanner logic is likely okay here as we print lines *before* the last N
+	// Keep existing scanner logic for negative count
+	scanner := bufio.NewScanner(reader)
+
 	absCount := -lineCount
 	var lines []string
 	for scanner.Scan() {
