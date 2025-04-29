@@ -20,8 +20,8 @@ type CommandDetails struct {
 	// CommandName is the name of the generated executable, e.g. "custom_exe_1234"
 	CommandName string
 	// CommandMetadata is any other metadata required for generating the command
-	// SignaturePrinter: random code
-	// Cat, Ls, Head, Tail, Wc, Yes: nothing
+	// signaturePrinter: random code
+	// cat, grep, head, ls, tail, wc, yes: nothing
 	CommandMetadata string
 }
 

@@ -153,9 +153,9 @@ endef
 
 define _PIPELINE_STAGES
 [ \
-	{"slug":"br6","tester_log_prefix":"tester::#br6","title":"Stage#1: Pipeline"}, \
-	{"slug":"ny9","tester_log_prefix":"tester::#ny9","title":"Stage#4: Pipeline"}, \
-	{"slug":"xk3","tester_log_prefix":"tester::#xk3","title":"Stage#6: Pipeline"} \
+	{"slug":"br6","tester_log_prefix":"tester::#br6","title":"Stage#1: Basic dual-command pipeline"}, \
+	{"slug":"ny9","tester_log_prefix":"tester::#ny9","title":"Stage#4: Pipelines with built-ins"}, \
+	{"slug":"xk3","tester_log_prefix":"tester::#xk3","title":"Stage#6: Multi-command pipelines"} \
 ]
 endef
 
