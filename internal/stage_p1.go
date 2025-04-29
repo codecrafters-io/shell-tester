@@ -77,7 +77,7 @@ func testP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	input = fmt.Sprintf(`tail -f %s | head -n 5`, filePath)
-	expectedMultiLineOutput := strings.Split(fileContent, "\n")
+	expectedMultiLineOutput := strings.Split(strings.Trim(fileContent, "\n"), "\n")
 	if err := writeFiles([]string{filePath}, []string{fileContent}, logger); err != nil {
 		return err
 	}
