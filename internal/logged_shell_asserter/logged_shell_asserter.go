@@ -125,6 +125,7 @@ func (a *LoggedShellAsserter) LogRemainingOutput() {
 	startRowIndex := a.lastLoggedRowIndex + 1
 	endRowIndex := len(a.Shell.GetScreenState())
 	a.logRows(startRowIndex, endRowIndex)
+	a.lastLoggedRowIndex = endRowIndex - 2 // -2 to account for the error message and the prompt
 }
 
 func (a *LoggedShellAsserter) logRows(startRowIndex int, endRowIndex int) {
@@ -132,6 +133,7 @@ func (a *LoggedShellAsserter) logRows(startRowIndex int, endRowIndex int) {
 		rawRow := a.Shell.GetScreenState()[i]
 		cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
 		if len(cleanedRow) > 0 {
+			fmt.Println("LogRemainingOutput-cleanedRow", cleanedRow)
 			a.Shell.LogOutput([]byte(cleanedRow))
 		}
 	}
