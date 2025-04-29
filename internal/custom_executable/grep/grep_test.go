@@ -47,22 +47,6 @@ func getGrepExecutable(t *testing.T) string {
 
 // runGrep runs the grep executable with given arguments and returns its output and error if any
 func runGrep(t *testing.T, stdinContent string, args ...string) (string, string, int, error) {
-	// Build step needed before running tests if not using system grep
-	// and executable isn't pre-built by another process.
-	if !*useSystemGrep {
-		// We need to ensure the executable exists. Let's build it.
-		// Assuming we are in the 'grep' directory when 'go test' is run.
-		buildCmd := exec.Command("go", "build", "-o", "grep", ".")
-		buildOutput, err := buildCmd.CombinedOutput()
-		if err != nil {
-			t.Fatalf("Failed to build grep executable for testing: %v\nOutput:\n%s", err, string(buildOutput))
-		}
-		// Ensure cleanup of the built executable
-		t.Cleanup(func() {
-			os.Remove("./grep")
-		})
-	}
-
 	executable := getGrepExecutable(t)
 
 	t.Helper()
@@ -196,11 +180,3 @@ func TestGrepStdin(t *testing.T) {
 		})
 	}
 }
-
-// TODO: Add tests for file arguments once file handling is implemented in grep.go
-// func TestGrepFile(t *testing.T) { ... }
-
-// Helper functions for file creation and cleanup (can be copied from cat_test.go/wc_test.go if needed)
-// type testFile struct { ... }
-// func createTestFiles(t *testing.T, dir string, files []testFile) { ... }
-// func cleanupDirectories(dirs []string) { ... }
