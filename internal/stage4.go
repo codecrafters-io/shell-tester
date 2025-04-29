@@ -44,10 +44,11 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 	readErr := shell.ReadUntilConditionOrTimeout(utils.AsBool(assertFn), logged_shell_asserter.SUBSEQUENT_READ_TIMEOUT)
 	output := virtual_terminal.BuildCleanedRow(shell.GetScreenState()[asserter.GetLastLoggedRowIndex()+1])
 
-	asserter.LogRemainingOutput()
-
 	// We're expecting EOF since the program should've terminated
 	if !errors.Is(readErr, shell_executable.ErrProgramExited) {
+
+		asserter.LogRemainingOutput()
+
 		if readErr == nil {
 			return fmt.Errorf("Expected program to exit with 0 exit code, program is still running.")
 		} else if errors.Is(readErr, condition_reader.ErrConditionNotMet) {
