@@ -38,7 +38,7 @@ func testP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	randomWords := random.RandomWords(10)
 	fileContent := fmt.Sprintf("%s %s\n%s %s\n%s %s\n%s %s\n%s %s", randomWords[0], randomWords[1], randomWords[2], randomWords[3], randomWords[4], randomWords[5], randomWords[6], randomWords[7], randomWords[8], randomWords[9])
 
-	lines := strings.Count(fileContent, "\n")
+	lines := strings.Count(fileContent, "\n") + 1
 	words := strings.Count(strings.ReplaceAll(fileContent, "\n", " "), " ") + 1
 	bytes := len(fileContent)
 
@@ -47,7 +47,7 @@ func testP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	input := fmt.Sprintf(`cat %s | wc`, filePath)
-	expectedOutput := fmt.Sprintf("%7d%8d%8d", lines, words, bytes)
+	expectedOutput := fmt.Sprintf("%8d%8d%8d", lines, words, bytes)
 
 	if err := writeFiles([]string{filePath}, []string{fileContent}, logger); err != nil {
 		return err

@@ -44,12 +44,12 @@ func testP3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	lines := strings.Count(fileContent, "\n")
+	lines := strings.Count(fileContent, "\n") + 1
 	words := strings.Count(strings.ReplaceAll(fileContent, "\n", " "), " ") + 1
 	bytes := len(fileContent)
 
 	input := fmt.Sprintf(`cat %s | head -n 5 | wc`, filePath)
-	expectedOutput := fmt.Sprintf("%7d%8d%8d", lines, words, bytes)
+	expectedOutput := fmt.Sprintf("%8d%8d%8d", lines, words, bytes)
 
 	singleLineTestCase := test_cases.CommandResponseTestCase{
 		Command:          input,

@@ -35,7 +35,7 @@ func testP2(stageHarness *test_case_harness.TestCaseHarness) error {
 	bytes := len(data)
 
 	input := fmt.Sprintf(`echo %s | wc`, data)
-	expectedOutput := fmt.Sprintf("%7d%8d%8d", lines, words, bytes)
+	expectedOutput := fmt.Sprintf("%8d%8d%8d", lines, words, bytes)
 
 	singleLineTestCase := test_cases.CommandResponseTestCase{
 		Command:          input,
