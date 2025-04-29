@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -237,7 +238,7 @@ func processBytes(reader io.Reader, byteCount int) error {
 		// Print first N bytes
 		buffer := make([]byte, byteCount)
 		n, err := io.ReadFull(reader, buffer)
-		if err != nil && err != io.EOF && err != io.ErrUnexpectedEOF {
+		if err != nil && err != io.EOF && !errors.Is(err, io.ErrUnexpectedEOF) {
 			return err
 		}
 		os.Stdout.Write(buffer[:n])

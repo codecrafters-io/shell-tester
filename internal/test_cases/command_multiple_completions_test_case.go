@@ -67,7 +67,7 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 
 	// Send TAB
 	for i := range t.TabCount {
-		shouldRingBell := (i == 0 && t.CheckForBell)
+		shouldRingBell := i == 0 && t.CheckForBell
 		logTab(logger, t.ExpectedReflection, shouldRingBell)
 
 		// Node's readline doesn't register 2nd tab if sent instantly

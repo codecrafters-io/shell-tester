@@ -120,7 +120,7 @@ func TestGrepStdin(t *testing.T) {
 		},
 		{
 			name:         "Match on empty string pattern",
-			pattern:      "", // Our simple strings.Contains matches everything
+			pattern:      "", // Our simple strings.Contain matches everything
 			input:        "line1\nline2",
 			expectedOut:  "line1\nline2\n",
 			expectedErr:  "",
@@ -171,7 +171,8 @@ func TestGrepStdin(t *testing.T) {
 				t.Errorf("Expected a non-nil error for usage error case, but got nil")
 			} else if tt.expectedExit != 2 && runErr != nil {
 				// If we didn't expect an error exit, but got one, check if it was *exec.ExitError
-				if _, ok := runErr.(*exec.ExitError); !ok {
+				var exitError *exec.ExitError
+				if !errors.As(runErr, &exitError) {
 					// It was some other error during execution
 					t.Errorf("Command execution failed unexpectedly: %v", runErr)
 				}
