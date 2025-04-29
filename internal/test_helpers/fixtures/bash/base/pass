@@ -78,9 +78,9 @@ Debug = true
 [33m[your-program] [0mbash: invalid_strawberry_command: command not found
 [33m[stage-4] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ exit 0
+[33m[your-program] [0mexit
 [33m[stage-4] [0m[92m✓ Program exited successfully[0m
 [33m[stage-4] [0m[92m✓ No output after exit command[0m
-[33m[your-program] [0mexit
 [33m[stage-4] [0m[92mTest passed.[0m
 
 [33m[stage-3] [0m[94mRunning tests for Stage #3: ff0[0m
