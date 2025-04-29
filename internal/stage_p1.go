@@ -71,17 +71,12 @@ func testP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	filePath = path.Join(randomDir, fmt.Sprintf("file-%d", random.RandomInt(1, 100)))
 	randomWords = random.RandomWords(6)
 	fileContent = fmt.Sprintf("%s %s\n%s %s\n%s %s\n", randomWords[0], randomWords[1], randomWords[2], randomWords[3], randomWords[4], randomWords[5])
-
 	if err := writeFiles([]string{filePath}, []string{fileContent}, logger); err != nil {
 		return err
 	}
 
 	input = fmt.Sprintf(`tail -f %s | head -n 5`, filePath)
 	expectedMultiLineOutput := strings.Split(strings.Trim(fileContent, "\n"), "\n")
-	if err := writeFiles([]string{filePath}, []string{fileContent}, logger); err != nil {
-		return err
-	}
-
 	multiLineTestCase := test_cases.CommandWithMultilineResponseTestCase{
 		Command:             input,
 		MultiLineAssertion:  assertions.NewMultiLineAssertion(expectedMultiLineOutput),
