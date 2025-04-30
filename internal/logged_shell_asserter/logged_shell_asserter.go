@@ -116,19 +116,20 @@ func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRow
 }
 
 func (a *LoggedShellAsserter) logAssertionError(err assertions.AssertionError) {
-	a.logRows(a.lastLoggedRowIndex+1, err.ErrorRowIndex+1)
+	a.logRows(a.lastLoggedRowIndex+1, err.ErrorRowIndex)
 	a.Shell.GetLogger().Errorf("%s", err.Message)
-	a.logRows(err.ErrorRowIndex+1, len(a.Shell.GetScreenState()))
+	a.logRows(err.ErrorRowIndex+1, len(a.Shell.GetScreenState())-1)
 }
 
 func (a *LoggedShellAsserter) LogRemainingOutput() {
 	startRowIndex := a.lastLoggedRowIndex + 1
-	endRowIndex := len(a.Shell.GetScreenState())
+	endRowIndex := len(a.Shell.GetScreenState()) - 1
 	a.logRows(startRowIndex, endRowIndex)
+	a.lastLoggedRowIndex = endRowIndex
 }
 
 func (a *LoggedShellAsserter) logRows(startRowIndex int, endRowIndex int) {
-	for i := startRowIndex; i < endRowIndex; i++ {
+	for i := startRowIndex; i <= endRowIndex; i++ {
 		rawRow := a.Shell.GetScreenState()[i]
 		cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
 		if len(cleanedRow) > 0 {

@@ -34,6 +34,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/escape_codes",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"exit_error_fail": {
+			UntilStageSlug:      "pn5",
+			CodePath:            "./test_helpers/scenarios/exit_error",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/exit_error",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"base_pass_bash": {
 			UntilStageSlug:      "ip1",
 			CodePath:            "./test_helpers/bash",
