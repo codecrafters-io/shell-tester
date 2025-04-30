@@ -24,6 +24,9 @@ tests_excluding_ash:
 test_cat_against_bsd_cat:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/cat/... -system
 
+test_grep_against_bsd_grep:
+	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/grep/... -system
+
 test_head_against_bsd_head:
 	TESTER_DIR=$(shell pwd) go test -count=1 -p 1 -v ./internal/custom_executable/head/... -system
 
@@ -41,6 +44,7 @@ test_yes_against_bsd_yes:
 
 test_executables_against_their_bsd_counterparts:
 	make test_cat_against_bsd_cat
+	make test_grep_against_bsd_grep
 	make test_head_against_bsd_head
 	make test_ls_against_bsd_ls
 	make test_tail_against_bsd_tail
@@ -82,8 +86,9 @@ build_executables:
 		for arch in $$arches; do \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/signature_printer_$${os}_$${arch} ./internal/custom_executable/signature_printer/main.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/cat_$${os}_$${arch} ./internal/custom_executable/cat/cat.go; \
-		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/ls_$${os}_$${arch} ./internal/custom_executable/ls/ls.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/grep_$${os}_$${arch} ./internal/custom_executable/grep/grep.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/head_$${os}_$${arch} ./internal/custom_executable/head/head.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/ls_$${os}_$${arch} ./internal/custom_executable/ls/ls.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/tail_$${os}_$${arch} ./internal/custom_executable/tail/tail.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/wc_$${os}_$${arch} ./internal/custom_executable/wc/wc.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/yes_$${os}_$${arch} ./internal/custom_executable/yes/yes.go; \
@@ -146,6 +151,14 @@ define _COMPLETIONS_STAGES_COMPLEX
   {"slug":"wh6","tester_log_prefix":"tester::#wh6","title":"Stage#5: completion with multiple executables"}
 endef
 
+define _PIPELINE_STAGES
+[ \
+	{"slug":"br6","tester_log_prefix":"tester::#br6","title":"Stage#1: Basic dual-command pipeline"}, \
+	{"slug":"ny9","tester_log_prefix":"tester::#ny9","title":"Stage#4: Pipelines with built-ins"}, \
+	{"slug":"xk3","tester_log_prefix":"tester::#xk3","title":"Stage#6: Multi-command pipelines"} \
+]
+endef
+
 # Use eval to properly escape the stage arrays
 define quote_strings
 	$(shell echo '$(1)' | sed 's/"/\\"/g')
@@ -170,6 +183,7 @@ QUOTING_STAGES = $(call quote_strings,$(_QUOTING_STAGES))
 REDIRECTIONS_STAGES = $(call quote_strings,$(_REDIRECTIONS_STAGES))
 COMPLETIONS_STAGES_ZSH = $(call quote_strings,$(_COMPLETION_STAGES_BASE))
 COMPLETIONS_STAGES = $(shell echo '$(_COMPLETION_STAGES_BASE)' | sed 's/]$$/, $(_COMPLETIONS_STAGES_COMPLEX)]/' | sed 's/"/\\"/g')
+PIPELINE_STAGES = $(call quote_strings,$(_PIPELINE_STAGES))
 
 test_base_w_ash: build
 	$(call run_test,$(BASE_STAGES),ash)
@@ -200,6 +214,9 @@ test_redirections_w_bash: build
 
 test_completions_w_bash: build
 	$(call run_test,$(COMPLETIONS_STAGES),bash)
+
+test_pipeline_w_bash: build
+	$(call run_test,$(PIPELINE_STAGES),bash)
 
 test_base_w_dash: build
 	$(call run_test,$(BASE_STAGES),dash)

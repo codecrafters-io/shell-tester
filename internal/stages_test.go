@@ -69,6 +69,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/completions/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"pipelines_pass_bash": {
+			StageSlugs:          []string{"br6", "ny9", "xk3"},
+			CodePath:            "./test_helpers/bash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/bash/pipelines/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"base_pass_ash": {
 			UntilStageSlug:      "ip1",
 			CodePath:            "./test_helpers/ash",
@@ -106,6 +113,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/ash/completions/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"pipelines_pass_ash": {
+			StageSlugs:          []string{"br6", "ny9", "xk3"},
+			CodePath:            "./test_helpers/ash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/ash/pipelines/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 	}
 
 	if runtime.GOOS == "darwin" {
@@ -131,6 +145,7 @@ func normalizeTesterOutput(testerOutput []byte) []byte {
 		"/bin/$1":                         {regexp.MustCompile(`\/usr/bin/(\w+)`)},
 		"[your-program] my_exe is <path>": {regexp.MustCompile(`\[your-program\] .{4}my_exe is .*`)},
 		"[your-program] <cwd>":            {regexp.MustCompile(`\[your-program\] .{4}/(workspaces|home|Users)/.*`)},
+		"ls-la-output-line":               {regexp.MustCompile(`-rw-r--r-- .*`)},
 	}
 
 	for replacement, regexes := range replacements {

@@ -27,8 +27,8 @@ func (a SingleLineAssertion) Inspect() string {
 }
 
 func (a SingleLineAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err *AssertionError) {
-	if a.ExpectedOutput == "" {
-		panic("CodeCrafters Internal Error: ExpectedOutput must be provided")
+	if a.ExpectedOutput == "" && len(a.FallbackPatterns) == 0 {
+		panic("CodeCrafters Internal Error: ExpectedOutput or fallbackPatterns must be provided")
 	}
 
 	processedRowCount = 1

@@ -586,7 +586,7 @@ func TestTailFollow(t *testing.T) {
 				output.Write(buf[:n])
 				// Send partial output or wait until done? Let's send full when done.
 			}
-			if err == io.EOF || err == io.ErrClosedPipe {
+			if err == io.EOF || errors.Is(err, io.ErrClosedPipe) {
 				break
 			}
 			if err != nil {
@@ -606,7 +606,7 @@ func TestTailFollow(t *testing.T) {
 			if n > 0 {
 				output.Write(buf[:n])
 			}
-			if err == io.EOF || err == io.ErrClosedPipe {
+			if err == io.EOF || errors.Is(err, io.ErrClosedPipe) {
 				break
 			}
 			if err != nil {

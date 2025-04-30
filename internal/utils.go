@@ -11,8 +11,12 @@ import (
 var SMALL_WORDS = []string{"foo", "bar", "baz", "qux", "quz"}
 var LARGE_WORDS = []string{"hello", "world", "test", "example", "shell", "script"}
 
-const CUSTOM_LS_COMMAND = "ls"
 const CUSTOM_CAT_COMMAND = "cat"
+const CUSTOM_HEAD_COMMAND = "head"
+const CUSTOM_LS_COMMAND = "ls"
+const CUSTOM_TAIL_COMMAND = "tail"
+const CUSTOM_WC_COMMAND = "wc"
+const CUSTOM_YES_COMMAND = "yes"
 
 type testCaseContent struct {
 	Input            string

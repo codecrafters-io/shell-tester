@@ -102,8 +102,25 @@ func GetShortRandomDirectories(stageHarness *test_case_harness.TestCaseHarness, 
 }
 
 // writeFile writes a file to the given path with the given content
-func writeFile(path string, content string) error {
-	return os.WriteFile(path, []byte(content), 0644)
+func writeFile(filePath string, content string) error {
+	return os.WriteFile(filePath, []byte(content), 0644)
+}
+
+func appendFile(filePath string, content string) error {
+	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	if _, err := file.WriteString(content); err != nil {
+		return err
+	}
+
+	// ensure the file is flushed to disk immediately
+	// we don't care about the error here
+	file.Sync()
+
+	return nil
 }
 
 // writeFiles writes a list of files to the given paths with the given contents

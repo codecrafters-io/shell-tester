@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	"path"
 
 	custom_executable "github.com/codecrafters-io/shell-tester/internal/custom_executable/build"
@@ -19,9 +20,8 @@ type CommandDetails struct {
 	// CommandName is the name of the generated executable, e.g. "custom_exe_1234"
 	CommandName string
 	// CommandMetadata is any other metadata required for generating the command
-	// SignaturePrinter: random code
-	// Ls: nothing
-	// Cat: nothing
+	// signaturePrinter: random code
+	// cat, grep, head, ls, tail, wc, yes: nothing
 	CommandMetadata string
 }
 
@@ -43,15 +43,45 @@ func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell 
 
 	for _, commandDetail := range commands {
 		switch commandDetail.CommandType {
+		case "cat":
+			customCatPath := path.Join(executableDir, commandDetail.CommandName)
+			err = custom_executable.CreateCatExecutable(customCatPath)
+			if err != nil {
+				return "", err
+			}
+		case "grep":
+			customGrepPath := path.Join(executableDir, commandDetail.CommandName)
+			err = custom_executable.CreateGrepExecutable(customGrepPath)
+			if err != nil {
+				return "", err
+			}
+		case "head":
+			customHeadPath := path.Join(executableDir, commandDetail.CommandName)
+			err = custom_executable.CreateHeadExecutable(customHeadPath)
+			if err != nil {
+				return "", err
+			}
 		case "ls":
 			customLsPath := path.Join(executableDir, commandDetail.CommandName)
 			err = custom_executable.CreateLsExecutable(customLsPath)
 			if err != nil {
 				return "", err
 			}
-		case "cat":
-			customCatPath := path.Join(executableDir, commandDetail.CommandName)
-			err = custom_executable.CreateCatExecutable(customCatPath)
+		case "tail":
+			customTailPath := path.Join(executableDir, commandDetail.CommandName)
+			err = custom_executable.CreateTailExecutable(customTailPath)
+			if err != nil {
+				return "", err
+			}
+		case "wc":
+			customWcPath := path.Join(executableDir, commandDetail.CommandName)
+			err = custom_executable.CreateWcExecutable(customWcPath)
+			if err != nil {
+				return "", err
+			}
+		case "yes":
+			customYesPath := path.Join(executableDir, commandDetail.CommandName)
+			err = custom_executable.CreateYesExecutable(customYesPath)
 			if err != nil {
 				return "", err
 			}
@@ -61,6 +91,8 @@ func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell 
 			if err != nil {
 				return "", err
 			}
+		default:
+			panic(fmt.Sprintf("CodeCrafters Internal Error: unknown command type %s", commandDetail.CommandType))
 		}
 	}
 	stageHarness.Logger.ResetSecondaryPrefix()

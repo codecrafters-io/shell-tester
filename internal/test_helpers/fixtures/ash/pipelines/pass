@@ -1,0 +1,51 @@
+Debug = true
+
+[33m[stage-3] [0m[94mRunning tests for Stage #3: br6[0m
+[33m[stage-3] [setup] [0m[94mexport PATH=/tmp/pear/orange/raspberry:$PATH[0m
+[33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
+[33m[stage-3] [setup] [0m[94mecho -n "strawberry apple\npear banana\nraspberry mango\nblueberry pineapple\norange grape" > "/tmp/foo/file-24"[0m
+[33m[your-program] [0m$ cat /tmp/foo/file-24 | wc
+[33m[your-program] [0m       5      10      77
+[33m[stage-3] [0m[92m✓ Received expected response[0m
+[33m[stage-3] [setup] [0m[94mecho -n "orange blueberry\nstrawberry pineapple\nbanana mango" > "/tmp/baz/file-3"[0m
+[33m[your-program] [0m$ tail -f /tmp/baz/file-3 | head -n 5
+[33m[your-program] [0morange blueberry
+[33m[your-program] [0mstrawberry pineapple
+[33m[your-program] [0mbanana mango
+[33m[stage-3] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0mThis is line 4.
+[33m[stage-3] [0m[92m✓ Received appended line 4[0m
+[33m[your-program] [0mThis is line 5.
+[33m[stage-3] [0m[92m✓ Received appended line 5[0m
+[33m[stage-3] [0m[92mTest passed.[0m
+
+[33m[stage-2] [0m[94mRunning tests for Stage #2: ny9[0m
+[33m[stage-2] [setup] [0m[94mexport PATH=/tmp/apple/blueberry/banana:$PATH[0m
+[33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$ echo apple\npineapple | wc
+[33m[your-program] [0m       1       1      16
+[33m[stage-2] [0m[92m✓ Received expected output[0m
+[33m[your-program] [0m$ ls | type exit
+[33m[your-program] [0mexit is a special shell builtin
+[33m[stage-2] [0m[92m✓ Received expected output[0m
+[33m[your-program] [0m$ 
+[33m[stage-2] [0m[92mTest passed.[0m
+
+[33m[stage-1] [0m[94mRunning tests for Stage #1: xk3[0m
+[33m[stage-1] [setup] [0m[94mexport PATH=/tmp/blueberry/grape/raspberry:$PATH[0m
+[33m[stage-1] [setup] [0m[94mecho -n "raspberry\norange\napple\npear\nmango" > "/tmp/foo/file-25"[0m
+[33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$ cat /tmp/foo/file-25 | head -n 5 | wc
+[33m[your-program] [0m       5       5      33
+[33m[stage-1] [0m[92m✓ Received expected output[0m
+[33m[stage-1] [setup] [0m[94mecho -n "apple" > "/tmp/qux/f-56"[0m
+[33m[stage-1] [setup] [0m[94mecho -n "banana" > "/tmp/qux/f-17"[0m
+[33m[stage-1] [setup] [0m[94mecho -n "pineapple" > "/tmp/qux/f-81"[0m
+[33m[stage-1] [setup] [0m[94mecho -n "grape" > "/tmp/qux/f-2"[0m
+[33m[stage-1] [setup] [0m[94mecho -n "orange" > "/tmp/qux/f-20"[0m
+[33m[stage-1] [setup] [0m[94mecho -n "mango" > "/tmp/qux/f-16"[0m
+[33m[your-program] [0m$ ls -la /tmp/qux | tail -n 5 | head -n 3 | grep "f-20"
+[33m[your-program] [0m-rw-r--r-- 1 vscode vscode     6 Apr 29 08:45 f-20
+[33m[stage-1] [0m[92m✓ Received expected output[0m
+[33m[your-program] [0m$ 
+[33m[stage-1] [0m[92mTest passed.[0m
