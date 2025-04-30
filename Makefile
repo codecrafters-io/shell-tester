@@ -44,7 +44,7 @@ test_yes_against_bsd_yes:
 
 test_executables_against_their_bsd_counterparts:
 	make test_cat_against_bsd_cat
-	test_grep_against_bsd_grep
+	make test_grep_against_bsd_grep
 	make test_head_against_bsd_head
 	make test_ls_against_bsd_ls
 	make test_tail_against_bsd_tail
