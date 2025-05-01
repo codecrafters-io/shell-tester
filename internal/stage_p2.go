@@ -29,10 +29,11 @@ func testP2(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Test-1
-	data := fmt.Sprintf(`%s\n%s`, random.RandomWord(), random.RandomWord())
-	lines := strings.Count(data, `\n`)
+	data := fmt.Sprintf("%s-%s", random.RandomWord(), random.RandomWord())
+	lines := strings.Count(data, "\n") + 1
 	words := strings.Count(strings.ReplaceAll(data, "\n", " "), " ") + 1
-	bytes := len(data)
+	// echo adds a newline to the end of the string
+	bytes := len(data) + 1
 
 	input := fmt.Sprintf(`echo %s | wc`, data)
 	expectedOutput := fmt.Sprintf("%8d%8d%8d", lines, words, bytes)
