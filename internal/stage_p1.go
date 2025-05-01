@@ -70,7 +70,7 @@ func testP1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	filePath = path.Join(randomDir, fmt.Sprintf("file-%d", random.RandomInt(1, 100)))
 	randomWords = random.RandomWords(6)
-	fileContent = fmt.Sprintf("%s %s\n%s %s\n%s %s\n", randomWords[0], randomWords[1], randomWords[2], randomWords[3], randomWords[4], randomWords[5])
+	fileContent = fmt.Sprintf("1. %s %s\n2. %s %s\n3. %s %s\n", randomWords[0], randomWords[1], randomWords[2], randomWords[3], randomWords[4], randomWords[5])
 	if err := writeFiles([]string{filePath}, []string{fileContent}, logger); err != nil {
 		return err
 	}
@@ -88,12 +88,13 @@ func testP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Append content to the file while command is running
-	if err := appendFile(filePath, "This is line 4.\n"); err != nil {
+	line4 := "4. " + strings.Join(random.RandomWords(2), " ")
+	if err := appendFile(filePath, fmt.Sprintf("%s\n", line4)); err != nil {
 		return err
 	}
 
 	firstSingleLineAssertion := assertions.SingleLineAssertion{
-		ExpectedOutput: "This is line 4.",
+		ExpectedOutput: line4,
 	}
 	asserter.AddAssertion(&firstSingleLineAssertion)
 
@@ -103,12 +104,13 @@ func testP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger.Successf("✓ Received appended line 4")
 
 	// Append again
-	if err := appendFile(filePath, "This is line 5.\n"); err != nil {
+	line5 := "5. " + strings.Join(random.RandomWords(2), " ")
+	if err := appendFile(filePath, fmt.Sprintf("%s\n", line5)); err != nil {
 		return err
 	}
 
 	secondSingleLineAssertion := assertions.SingleLineAssertion{
-		ExpectedOutput: "This is line 5.",
+		ExpectedOutput: line5,
 	}
 	asserter.AddAssertion(&secondSingleLineAssertion)
 
