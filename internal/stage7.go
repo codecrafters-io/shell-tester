@@ -7,6 +7,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -41,6 +42,8 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 	logAvailableExecutables(logger, []string{executableName})
+	logPath(logger, shell)
+
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
@@ -76,4 +79,11 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	return logAndQuit(asserter, nil)
+}
+
+func logPath(logger *logger.Logger, shell *shell_executable.ShellExecutable) {
+	logger.UpdateSecondaryPrefix("setup")
+	logger.Infof("The contents of PATH are:")
+	logger.Infof("%s", shell.GetPath())
+	logger.ResetSecondaryPrefix()
 }

@@ -19,6 +19,8 @@ Debug = true
 [33m[stage-7] [setup] [0m[94mexport PATH=/tmp/foo:$PATH[0m
 [33m[stage-7] [setup] [0m[94mAvailable executables:[0m
 [33m[stage-7] [setup] [0m[94m- my_exe[0m
+[33m[stage-7] [setup] [0m[94mThe contents of PATH are:[0m
+[33m[stage-7] [setup] [0m[94m/tmp/foo:/tmp/baz:/opt/homebrew/Cellar/go/1.24.3/libexec/bin:/Users/andy/.opam/5.2.0/bin:/Users/andy/Library/pnpm:/Users/andy/.nvm/versions/node/v20.19.1/bin:/Users/andy/.cargo/bin:/Users/andy/.rbenv/shims:/opt/homebrew/opt/rustup/bin:/opt/homebrew/opt/openjdk/bin:/opt/homebrew/opt/go@1.23/bin:/opt/homebrew/opt/dart@2.19/bin:/opt/homebrew/anaconda3/bin:/opt/homebrew/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Applications/Wireshark.app/Contents/MacOS:/Applications/iTerm.app/Contents/Resources/utilities:/Users/andy/.local/bin[0m
 [33m[stage-7] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ type cat
 [33m[your-program] [0mcat is /usr/bin/cat
