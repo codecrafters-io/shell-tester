@@ -62,10 +62,6 @@ func (b *ShellExecutable) AddToPath(dir string) {
 	b.env.Set("PATH", fmt.Sprintf("%s:%s", dir, b.env.Get("PATH")))
 }
 
-func (b *ShellExecutable) GetPath() string {
-	return b.env.Get("PATH")
-}
-
 func (b *ShellExecutable) Start(args ...string) error {
 	b.stageLogger.Infof(b.getInitialLogLine(args...))
 

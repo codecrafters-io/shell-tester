@@ -41,9 +41,9 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
-	logAvailableExecutables(logger, []string{executableName})
-	debugLogPath(logger, shell)
 
+	logDemoPath(logger, executableExpectedToNotBeFoundDir, executableDir)
+	logAvailableExecutables(logger, []string{executableName})
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
@@ -81,9 +81,14 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	return logAndQuit(asserter, nil)
 }
 
-func debugLogPath(logger *logger.Logger, shell *shell_executable.ShellExecutable) {
+func logDemoPath(logger *logger.Logger, paths ...string) {
+	demoPath := "/usr/bin:/bin:..."
+	for _, path := range paths {
+		demoPath = path + ":" + demoPath
+	}
+
 	logger.UpdateSecondaryPrefix("setup")
-	logger.Debugf("The contents of PATH are:")
-	logger.Debugf("%s", shell.GetPath())
+	logger.Infof("Now PATH looks like this:")
+	logger.Infof("%s", demoPath)
 	logger.ResetSecondaryPrefix()
 }

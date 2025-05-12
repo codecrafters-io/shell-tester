@@ -70,10 +70,10 @@ Debug = true
 [33m[stage-7] [0m[94mRunning tests for Stage #7: mg5[0m
 [33m[stage-7] [setup] [0m[94mexport PATH=/tmp/foo:$PATH[0m
 [33m[stage-7] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
+[33m[stage-7] [setup] [0m[94mNow PATH looks like this:[0m
+[33m[stage-7] [setup] [0m[94m/tmp/quz:/tmp/foo:/usr/bin:/bin:...[0m
 [33m[stage-7] [setup] [0m[94mAvailable executables:[0m
 [33m[stage-7] [setup] [0m[94m- my_exe[0m
-[33m[stage-7] [setup] [0m[36mThe contents of PATH are:[0m
-[33m[stage-7] [setup] [0m[36m/tmp/quz:/tmp/foo:/opt/hostedtoolcache/go/1.23.8/x64/bin:/home/runner/go/bin:/opt/hostedtoolcache/go/1.23.8/x64/bin:/snap/bin:/home/runner/.local/bin:/opt/pipx_bin:/home/runner/.cargo/bin:/home/runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin[0m
 [33m[stage-7] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ type cat
 [33m[your-program] [0mcat is /usr/bin/cat
