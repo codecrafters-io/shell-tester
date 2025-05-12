@@ -42,7 +42,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 	logAvailableExecutables(logger, []string{executableName})
-	logPath(logger, shell)
+	debugLogPath(logger, shell)
 
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
@@ -81,9 +81,9 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	return logAndQuit(asserter, nil)
 }
 
-func logPath(logger *logger.Logger, shell *shell_executable.ShellExecutable) {
+func debugLogPath(logger *logger.Logger, shell *shell_executable.ShellExecutable) {
 	logger.UpdateSecondaryPrefix("setup")
-	logger.Infof("The contents of PATH are:")
-	logger.Infof("%s", shell.GetPath())
+	logger.Debugf("The contents of PATH are:")
+	logger.Debugf("%s", shell.GetPath())
 	logger.ResetSecondaryPrefix()
 }
