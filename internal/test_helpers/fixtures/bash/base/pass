@@ -17,8 +17,7 @@ Debug = true
 [33m[stage-7] [0m[94mRunning tests for Stage #7: mg5[0m
 [33m[stage-7] [setup] [0m[94mexport PATH=/tmp/baz:$PATH[0m
 [33m[stage-7] [setup] [0m[94mexport PATH=/tmp/foo:$PATH[0m
-[33m[stage-7] [setup] [0m[94mNow PATH looks like this:[0m
-[33m[stage-7] [setup] [0m[94m/tmp/foo:/tmp/baz:/usr/bin:/bin:...[0m
+[33m[stage-7] [setup] [0m[94mPATH is now: /tmp/foo:/tmp/qux:/foobar:/usr/bin:/bin:...[0m
 [33m[stage-7] [setup] [0m[94mAvailable executables:[0m
 [33m[stage-7] [setup] [0m[94m- my_exe[0m
 [33m[stage-7] [0m[94mRunning ./your_shell.sh[0m

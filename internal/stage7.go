@@ -3,6 +3,7 @@ package internal
 import (
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -42,7 +43,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	logDemoPath(logger, executableExpectedToNotBeFoundDir, executableDir)
+	logPath(shell, logger, 36) // Prefix length is 36 characters for this stage
 	logAvailableExecutables(logger, []string{executableName})
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
@@ -81,14 +82,26 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	return logAndQuit(asserter, nil)
 }
 
-func logDemoPath(logger *logger.Logger, paths ...string) {
-	demoPath := "/usr/bin:/bin:..."
-	for _, path := range paths {
-		demoPath = path + ":" + demoPath
+func logPath(shell *shell_executable.ShellExecutable, logger *logger.Logger, prefixLength int) {
+	path := shell.GetPath()
+	lineLimit := 80 - prefixLength
+
+	if len(path) > lineLimit {
+		pathChunks := strings.Split(path, ":")
+		path = ""
+
+		for _, chunk := range pathChunks {
+			// 4 is reserved for the colon and the ellipsis
+			if len(path)+len(chunk) <= lineLimit-4 {
+				path += chunk + ":"
+			} else {
+				path += "..."
+				break
+			}
+		}
 	}
 
 	logger.UpdateSecondaryPrefix("setup")
-	logger.Infof("Now PATH looks like this:")
-	logger.Infof("%s", demoPath)
+	logger.Infof("PATH is now: %s", path)
 	logger.ResetSecondaryPrefix()
 }
