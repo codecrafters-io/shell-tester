@@ -84,15 +84,15 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 func logPath(shell *shell_executable.ShellExecutable, logger *logger.Logger, prefixLength int) {
 	path := shell.GetPath()
-	lineLimit := 80 - prefixLength
+	lengthLimit := 80 - prefixLength
 
-	if len(path) > lineLimit {
+	if len(path) > lengthLimit {
 		pathChunks := strings.Split(path, ":")
 		path = ""
 
 		for _, chunk := range pathChunks {
 			// 4 is reserved for the colon and the ellipsis
-			if len(path)+len(chunk) <= lineLimit-4 {
+			if len(path)+len(chunk) <= lengthLimit-4 {
 				path += chunk + ":"
 			} else {
 				path += "..."
