@@ -259,9 +259,6 @@ test_history_w_zsh: build
 test_history_w_bash: build
 	$(call run_test,$(HISTORY_STAGES),bash)
 
-test_history_w_ash: build
-	$(call run_test,$(HISTORY_STAGES),ash)
-
 test_ash:
 	make test_base_w_ash
 	make test_nav_w_ash
