@@ -162,7 +162,8 @@ endef
 define _HISTORY_STAGES
 [ \
 	{"slug":"bq4","tester_log_prefix":"tester::#bq4","title":"Stage#1: The history builtin"}, \
-	{"slug":"yf5","tester_log_prefix":"tester::#yf5","title":"Stage#2: Listing history"} \
+	{"slug":"yf5","tester_log_prefix":"tester::#yf5","title":"Stage#2: Listing history"}, \
+	{"slug":"ag6","tester_log_prefix":"tester::#ag6","title":"Stage#3: Limiting history entries"} \
 ]
 endef
 

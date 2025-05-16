@@ -26,6 +26,10 @@ type HistoryTestCase struct {
 
 	// CommandsBeforeHistory is a list of commands to execute before running history
 	CommandsBeforeHistory []CommandOutputPair
+
+	// LastNCommands specifies how many of the most recent commands to check in history
+	// If not set, all commands will be checked
+	LastNCommands int
 }
 
 func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
@@ -49,29 +53,56 @@ func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter
 		}
 	}
 
-	if err := shell.SendCommand("history"); err != nil {
+	historyCommand := "history"
+	if t.LastNCommands > 0 {
+		historyCommand = fmt.Sprintf("history %d", t.LastNCommands)
+	}
+	if err := shell.SendCommand(historyCommand); err != nil {
 		return fmt.Errorf("failed to send history command: %v", err)
 	}
 
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ history",
-	})
-
-	for i, cmdPair := range t.CommandsBeforeHistory {
+	if t.LastNCommands > 0 {
 		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput: fmt.Sprintf("    %d  %s", i+1, cmdPair.Command),
+			ExpectedOutput: fmt.Sprintf("$ history %d", t.LastNCommands),
+		})
+	} else {
+		asserter.AddAssertion(assertions.SingleLineAssertion{
+			ExpectedOutput: "$ history",
+		})
+	}
+
+	// Calculate which commands to check based on LastNCommands
+	startIdx := 0
+	if t.LastNCommands > 0 && t.LastNCommands < len(t.CommandsBeforeHistory) {
+		startIdx = len(t.CommandsBeforeHistory) - t.LastNCommands + 1
+	}
+
+	// Check only the specified number of most recent commands
+	for i, cmdPair := range t.CommandsBeforeHistory[startIdx:] {
+		asserter.AddAssertion(assertions.SingleLineAssertion{
+			ExpectedOutput: fmt.Sprintf("    %d  %s", startIdx+i+1, cmdPair.Command),
 			FallbackPatterns: []*regexp.Regexp{
-				regexp.MustCompile(fmt.Sprintf(`^    \d+\s+%s$`, regexp.QuoteMeta(cmdPair.Command))),
+				regexp.MustCompile(fmt.Sprintf(`^\s*\d+\s+%s$`, regexp.QuoteMeta(cmdPair.Command))),
 			},
 		})
 	}
 
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: fmt.Sprintf("    %d  history", len(t.CommandsBeforeHistory)+1),
-		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(`^    \d+\s+history$`),
-		},
-	})
+	// Add assertion for the history command itself
+	if t.LastNCommands > 0 {
+		asserter.AddAssertion(assertions.SingleLineAssertion{
+			ExpectedOutput: fmt.Sprintf("    %d  history %d", len(t.CommandsBeforeHistory)+1, t.LastNCommands),
+			FallbackPatterns: []*regexp.Regexp{
+				regexp.MustCompile(fmt.Sprintf(`^\s*\d+\s+history %d$`, t.LastNCommands)),
+			},
+		})
+	} else {
+		asserter.AddAssertion(assertions.SingleLineAssertion{
+			ExpectedOutput: fmt.Sprintf("    %d  history", len(t.CommandsBeforeHistory)+1),
+			FallbackPatterns: []*regexp.Regexp{
+				regexp.MustCompile(`^\s*\d+\s+history$`),
+			},
+		})
+	}
 
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err

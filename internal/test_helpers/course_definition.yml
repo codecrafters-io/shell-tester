@@ -85,6 +85,11 @@ extensions:
 
       Pipelines allow you to connect multiple commands together, so the output of one command becomes the input of the next command.
 
+  - slug: "history"
+    name: "Command History"
+    description_markdown: |
+      In this extension, you'll add support for viewing and recalling previously entered commands using the `history` builtin.
+
 stages:
   - slug: "oo8"
     name: "Print a prompt"
@@ -1281,3 +1286,24 @@ stages:
       -   Proper process cleanup and waiting are crucial.
     marketing_md: |-
       Implement support for multi-command pipelines like `command1 | command2 | command3`.
+
+  - slug: "bq4"
+    primary_extension_slug: "history"
+    name: "Basic history"
+    difficulty: medium
+    description_md: |-
+      In this stage, you'll implement the `history` builtin to print previously entered commands.
+
+  - slug: "yf5"
+    primary_extension_slug: "history"
+    name: "History with N argument"
+    difficulty: medium
+    description_md: |-
+      In this stage, you'll implement support for `history N` to print the last N commands.
+
+  - slug: "ag6"
+    primary_extension_slug: "history"
+    name: "Limiting history entries"
+    difficulty: medium
+    description_md: |-
+      In this stage, you'll implement support for `history N` to print the last N commands.
