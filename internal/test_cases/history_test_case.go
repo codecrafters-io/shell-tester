@@ -29,18 +29,15 @@ type HistoryTestCase struct {
 }
 
 func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	// Run all commands before history
 	for _, cmdPair := range t.CommandsBeforeHistory {
 		if err := shell.SendCommand(cmdPair.Command); err != nil {
-			return fmt.Errorf("Error sending command to shell: %v", err)
+			return fmt.Errorf("failed to send command: %v", err)
 		}
 
-		// Check command reflection
 		asserter.AddAssertion(assertions.SingleLineAssertion{
 			ExpectedOutput: fmt.Sprintf("$ %s", cmdPair.Command),
 		})
 
-		// Check command output if expected
 		if cmdPair.ExpectedOutput != "" {
 			asserter.AddAssertion(assertions.SingleLineAssertion{
 				ExpectedOutput: cmdPair.ExpectedOutput,
@@ -52,38 +49,29 @@ func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter
 		}
 	}
 
-	// Now run the history command
 	if err := shell.SendCommand("history"); err != nil {
-		return fmt.Errorf("Error sending history command to shell: %v", err)
+		return fmt.Errorf("failed to send history command: %v", err)
 	}
 
-	// Check if the history command is present in the output
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: "$ history",
 	})
 
-	// Add assertions for each command in history
-	for _, cmdPair := range t.CommandsBeforeHistory {
-		// Add assertion for each command in history
+	for i, cmdPair := range t.CommandsBeforeHistory {
 		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput: "",
+			ExpectedOutput: fmt.Sprintf("    %d  %s", i+1, cmdPair.Command),
 			FallbackPatterns: []*regexp.Regexp{
-				regexp.MustCompile(fmt.Sprintf(`^\s*\d+\s+%s$`, regexp.QuoteMeta(cmdPair.Command))),
+				regexp.MustCompile(fmt.Sprintf(`^    \d+\s+%s$`, regexp.QuoteMeta(cmdPair.Command))),
 			},
 		})
 	}
 
-	// Add assertion for the history command itself
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "",
+		ExpectedOutput: fmt.Sprintf("    %d  history", len(t.CommandsBeforeHistory)+1),
 		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(`^\s*\d+\s+history$`),
+			regexp.MustCompile(`^    \d+\s+history$`),
 		},
 	})
-
-	// Log the history output before asserting
-	logger.Infof("History output:")
-	asserter.LogRemainingOutput()
 
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
