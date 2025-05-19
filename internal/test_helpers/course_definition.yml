@@ -1315,7 +1315,7 @@ stages:
     description_md: |-
       hi
   
-  - slug: "rh8"
+  - slug: "vq0"
     primary_extension_slug: "history"
     name: "Down arrow navigation"
     difficulty: medium
