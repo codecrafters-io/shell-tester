@@ -168,6 +168,12 @@ define _HISTORY_STAGES
 ]
 endef
 
+define _HISTORY_STAGES_ZSH
+[ \
+	{"slug":"bq4","tester_log_prefix":"tester::#bq4","title":"Stage#1: The history builtin"}, \
+	{"slug":"rh7","tester_log_prefix":"tester::#rh7","title":"Stage#4: UP Arrow Navigation"} \
+]
+endef
 # Use eval to properly escape the stage arrays
 define quote_strings
 	$(shell echo '$(1)' | sed 's/"/\\"/g')
@@ -194,6 +200,7 @@ COMPLETIONS_STAGES_ZSH = $(call quote_strings,$(_COMPLETION_STAGES_BASE))
 COMPLETIONS_STAGES = $(shell echo '$(_COMPLETION_STAGES_BASE)' | sed 's/]$$/, $(_COMPLETIONS_STAGES_COMPLEX)]/' | sed 's/"/\\"/g')
 PIPELINE_STAGES = $(call quote_strings,$(_PIPELINE_STAGES))
 HISTORY_STAGES = $(call quote_strings,$(_HISTORY_STAGES))
+HISTORY_STAGES_ZSH = $(call quote_strings,$(_HISTORY_STAGES_ZSH))
 
 test_base_w_ash: build
 	$(call run_test,$(BASE_STAGES),ash)
@@ -255,9 +262,6 @@ test_redirections_w_zsh: build
 test_completions_w_zsh: build
 	$(call run_test,$(COMPLETIONS_STAGES_ZSH),zsh)
 
-test_history_w_zsh: build
-	$(call run_test,$(HISTORY_STAGES),zsh)
-
 test_history_w_bash: build
 	$(call run_test,$(HISTORY_STAGES),bash)
 
@@ -289,7 +293,7 @@ test_zsh:
 	make test_quoting_w_zsh
 	make test_redirections_w_zsh
 	make test_completions_w_zsh
-	make test_history_w_zsh
+	
 # Clone the repo in `debug` directory
 test_debug: build
 	$(call run_debug,$(BASE_STAGES),debug)

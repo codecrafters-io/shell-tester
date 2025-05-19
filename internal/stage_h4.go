@@ -12,142 +12,67 @@ import (
 )
 
 func testH4(stageHarness *test_case_harness.TestCaseHarness) error {
-	// Create a new shell instance and asserter for this test run
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	// Start the shell and assert that the prompt is shown
 	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}
 
-	// 2. Simulate pressing the up arrow key and check if the correct command is recalled
-	upArrow := "\x1b[A" // ANSI escape sequence for up arrow
-	enter := "\n"
-	// Send echo hello
-	if err := shell.SendCommand("echo hello"); err != nil {
+	upArrow := "\x1b[A"
+
+	// $ ls dist/
+	if err := shell.SendCommand("ls dist/"); err != nil {
 		return err
 	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ echo hello",
-	})
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "hello",
-	})
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ ls dist/"})
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "main.out"})
+	if err := asserter.AssertWithPrompt(); err != nil {
+		return err
+	}
 
-	// Send the up arrow key
+	// Send cd dist/
+	if err := shell.SendCommand("cd dist/"); err != nil {
+		return err
+	}
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ cd dist/"})
+	if err := asserter.AssertWithPrompt(); err != nil {
+		return err
+	}
+
+	// Send ls
+	if err := shell.SendCommand("ls"); err != nil {
+		return err
+	}
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ ls"})
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "main.out"})
+	if err := asserter.AssertWithPrompt(); err != nil {
+		return err
+	}
+
+	// Send up arrow
 	if err := shell.SendCommandRaw(upArrow); err != nil {
 		return err
 	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ echo hello",
-	})
-	if err := shell.SendCommandRaw(enter); err != nil {
-		return err
-	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ echo hello",
-	})
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "hello",
-	})
+	stageHarness.Logger.Infof("<UP ARROW>")
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ ls"})
 
-	stageHarness.Logger.Infof("Check for a single command up arrow passed")
-
-	// Checking for 2 up arrow keys
-
-	// Send pwd command
-	if err := shell.SendCommand("pwd"); err != nil {
-		return err
-	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ pwd",
-	})
-
-	// Send echo world
-	if err := shell.SendCommand("echo world"); err != nil {
-		return err
-	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ echo world",
-	})
-
-	// Send the up arrow key
+	// Send up arrow again
 	if err := shell.SendCommandRaw(upArrow); err != nil {
 		return err
 	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ echo world",
-	})
+	stageHarness.Logger.Infof("<UP ARROW>")
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ ls dist/"})
 
-	// Send the up arrow key
-	if err := shell.SendCommandRaw(upArrow); err != nil {
+	// Send enter
+	if err := shell.SendCommandRaw("\n"); err != nil {
 		return err
 	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ echo world",
-	})
-
-	// Send the up arrow key
-	if err := shell.SendCommandRaw(upArrow); err != nil {
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ ls dist/"})
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "main.out"})
+	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
 	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ echo world",
-	})
-	if err := shell.SendCommandRaw(enter); err != nil {
-		return err
-	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ echo world",
-	})
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "world",
-	})
-
-	stageHarness.Logger.Infof("Check for 2 up arrow keys passed")
-
-	// Checking for 3 up arrow keys
-
-	// Send the up arrow key
-	if err := shell.SendCommandRaw(upArrow); err != nil {
-		return err
-	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ echo world",
-	})
-
-	// Send the up arrow key
-	if err := shell.SendCommandRaw(upArrow); err != nil {
-		return err
-	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ pwd",
-	})
-
-	// Send the up arrow key
-	if err := shell.SendCommandRaw(upArrow); err != nil {
-		return err
-	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ echo hello",
-	})
-
-	// If all assertions pass, finish the test
-	if err := shell.SendCommandRaw(enter); err != nil {
-		return err
-	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ echo hello",
-	})
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "hello",
-	})
-
-	stageHarness.Logger.Infof("Check for 3 up arrow keys passed")
-
-	// Log a success message
-	stageHarness.Logger.Successf("✓ Up-arrow navigation works as expected")
 
 	return logAndQuit(asserter, nil)
 }

@@ -1,8 +1,6 @@
 package internal
 
 import (
-	"os"
-
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -18,17 +16,12 @@ func testH2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	wd, err := os.Getwd()
-	if err != nil {
-		return err
-	}
-
 	testCase := test_cases.HistoryTestCase{
-		SuccessMessage: "✓ Received expected response",
+		SuccessMessage: "✓ History command works as expected",
 		CommandsBeforeHistory: []test_cases.CommandOutputPair{
-			{Command: "echo hello", ExpectedOutput: "hello"},
-			{Command: "echo world", ExpectedOutput: "world"},
-			{Command: "pwd", ExpectedOutput: wd},
+			{Command: "ls dist/", ExpectedOutput: "main.out"},
+			{Command: "cd dist/", ExpectedOutput: ""},
+			{Command: "ls", ExpectedOutput: "main.out"},
 		},
 	}
 	if err := testCase.Run(asserter, shell, logger); err != nil {
