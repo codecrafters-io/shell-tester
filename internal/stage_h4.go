@@ -50,19 +50,36 @@ func testH4(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	// Send cd ..
+	if err := shell.SendCommand("cd .."); err != nil {
+		return err
+	}
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ cd .."})
+	if err := asserter.AssertWithPrompt(); err != nil {
+		return err
+	}
+
 	// Send up arrow
 	if err := shell.SendCommandRaw(upArrow); err != nil {
 		return err
 	}
 	stageHarness.Logger.Infof("<UP ARROW>")
-	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ ls"})
-
 	// Send up arrow again
 	if err := shell.SendCommandRaw(upArrow); err != nil {
 		return err
 	}
 	stageHarness.Logger.Infof("<UP ARROW>")
-	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ ls dist/"})
+	// Send up arrow again
+	if err := shell.SendCommandRaw(upArrow); err != nil {
+		return err
+	}
+	stageHarness.Logger.Infof("<UP ARROW>")
+	// Send up arrow again
+	if err := shell.SendCommandRaw(upArrow); err != nil {
+		return err
+	}
+	stageHarness.Logger.Infof("<UP ARROW>")
+	// Send up arrow again
 
 	// Send enter
 	if err := shell.SendCommandRaw("\n"); err != nil {

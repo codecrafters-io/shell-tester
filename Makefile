@@ -265,6 +265,9 @@ test_completions_w_zsh: build
 test_history_w_bash: build
 	$(call run_test,$(HISTORY_STAGES),bash)
 
+test_history_w_zsh: build
+	$(call run_test,$(HISTORY_STAGES_ZSH),zsh)
+
 test_ash:
 	make test_base_w_ash
 	make test_nav_w_ash
@@ -293,7 +296,7 @@ test_zsh:
 	make test_quoting_w_zsh
 	make test_redirections_w_zsh
 	make test_completions_w_zsh
-	
+
 # Clone the repo in `debug` directory
 test_debug: build
 	$(call run_debug,$(BASE_STAGES),debug)
