@@ -1315,9 +1315,9 @@ stages:
     description_md: |-
       hi
   
-  # - slug: "rh8"
-  #   primary_extension_slug: "history"
-  #   name: "Down arrow navigation"
-  #   difficulty: medium
-  #   description_md: |-
-  #     hi
+  - slug: "rh8"
+    primary_extension_slug: "history"
+    name: "Down arrow navigation"
+    difficulty: medium
+    description_md: |-
+      hi
