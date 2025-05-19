@@ -1307,3 +1307,17 @@ stages:
     difficulty: medium
     description_md: |-
       In this stage, you'll implement support for `history N` to print the last N commands.
+
+  - slug: "rh7"
+    primary_extension_slug: "history"
+    name: "Up arrow navigation"
+    difficulty: medium
+    description_md: |-
+      hi
+  
+  # - slug: "rh8"
+  #   primary_extension_slug: "history"
+  #   name: "Down arrow navigation"
+  #   difficulty: medium
+  #   description_md: |-
+  #     hi
