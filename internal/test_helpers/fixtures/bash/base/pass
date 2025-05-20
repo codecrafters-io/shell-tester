@@ -16,7 +16,7 @@ Debug = true
 
 [33m[stage-7] [0m[94mRunning tests for Stage #7: mg5[0m
 [33m[stage-7] [setup] [0m[94mexport PATH=/tmp/baz:$PATH[0m
-[33m[stage-7] [setup] [0m[94mexport PATH=/tmp/foo:$PATH[0m
+[33m[stage-7] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
 [33m[stage-7] [setup] [0m[94mAvailable executables:[0m
 [33m[stage-7] [setup] [0m[94m- my_exe[0m
 [33m[stage-7] [0m[94mRunning ./your_shell.sh[0m
@@ -30,10 +30,10 @@ Debug = true
 [33m[your-program] [0mmkdir is /usr/bin/mkdir
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type my_exe
-[33m[your-program] [0mmy_exe is /tmp/foo/my_exe
+[33m[your-program] [0mmy_exe is /tmp/quz/my_exe
 [33m[stage-7] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type invalid_raspberry_command
-[33m[your-program] [0mbash: type: invalid_raspberry_command: not found
+[33m[your-program] [0m$ type invalid_mango_command
+[33m[your-program] [0mbash: type: invalid_mango_command: not found
 [33m[stage-7] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type invalid_orange_command
 [33m[your-program] [0mbash: type: invalid_orange_command: not found
@@ -52,30 +52,33 @@ Debug = true
 [33m[your-program] [0m$ type type
 [33m[your-program] [0mtype is a shell builtin
 [33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type invalid_pineapple_command
-[33m[your-program] [0mbash: type: invalid_pineapple_command: not found
+[33m[your-program] [0m$ type invalid_banana_command
+[33m[your-program] [0mbash: type: invalid_banana_command: not found
 [33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type invalid_mango_command
-[33m[your-program] [0mbash: type: invalid_mango_command: not found
+[33m[your-program] [0m$ type invalid_apple_command
+[33m[your-program] [0mbash: type: invalid_apple_command: not found
 [33m[stage-6] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-6] [0m[92mTest passed.[0m
 
 [33m[stage-5] [0m[94mRunning tests for Stage #5: iz3[0m
 [33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo raspberry orange
-[33m[your-program] [0mraspberry orange
+[33m[your-program] [0m$ echo raspberry strawberry
+[33m[your-program] [0mraspberry strawberry
 [33m[stage-5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo strawberry orange mango
-[33m[your-program] [0mstrawberry orange mango
+[33m[your-program] [0m$ echo orange raspberry
+[33m[your-program] [0morange raspberry
+[33m[stage-5] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m$ echo grape blueberry banana
+[33m[your-program] [0mgrape blueberry banana
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[stage-5] [0m[92mTest passed.[0m
 
 [33m[stage-4] [0m[94mRunning tests for Stage #4: pn5[0m
 [33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ invalid_strawberry_command
-[33m[your-program] [0mbash: invalid_strawberry_command: command not found
+[33m[your-program] [0m$ invalid_pineapple_command
+[33m[your-program] [0mbash: invalid_pineapple_command: command not found
 [33m[stage-4] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ exit 0
 [33m[your-program] [0mexit
@@ -97,16 +100,13 @@ Debug = true
 [33m[your-program] [0m$ invalid_command_4
 [33m[your-program] [0mbash: invalid_command_4: command not found
 [33m[stage-3] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ invalid_command_5
-[33m[your-program] [0mbash: invalid_command_5: command not found
-[33m[stage-3] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ 
 [33m[stage-3] [0m[92mTest passed.[0m
 
 [33m[stage-2] [0m[94mRunning tests for Stage #2: cz2[0m
 [33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ invalid_pineapple_command
-[33m[your-program] [0mbash: invalid_pineapple_command: command not found
+[33m[your-program] [0m$ invalid_raspberry_command
+[33m[your-program] [0mbash: invalid_raspberry_command: command not found
 [33m[stage-2] [0m[92m✓ Received command not found message[0m
 [33m[stage-2] [0m[92mTest passed.[0m
 
