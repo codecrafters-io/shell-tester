@@ -84,7 +84,7 @@ func TestStages(t *testing.T) {
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"history_pass_bash": {
-			StageSlugs:          []string{"bq4", "yf5", "ag6", "rh7", "vq0"},
+			StageSlugs:          []string{"bq4", "yf5", "ag6", "rh7", "vq0", "dm2"},
 			CodePath:            "./test_helpers/bash",
 			ExpectedExitCode:    0,
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/history/pass",
@@ -135,7 +135,7 @@ func TestStages(t *testing.T) {
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"history_pass_ash": {
-			StageSlugs:          []string{"bq4", "yf5", "rh7", "vq0"},
+			StageSlugs:          []string{"bq4", "yf5", "rh7", "vq0", "dm2"},
 			CodePath:            "./test_helpers/ash",
 			ExpectedExitCode:    0,
 			StdoutFixturePath:   "./test_helpers/fixtures/ash/history/pass",

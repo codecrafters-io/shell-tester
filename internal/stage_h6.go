@@ -1,6 +1,6 @@
-// Stage 4: Up-arrow navigation test
-// This test checks if the shell supports recalling previous commands using the up arrow key.
-// It sends a few commands, then simulates up arrow presses and checks if the correct command is recalled at the prompt.
+// Stage 5: Down-arrow navigation test
+// This test checks if the shell supports traversing through history with both up and down arrow keys.
+// It sends a few commands, simulates up and down arrow presses, and checks if the correct command is recalled at the prompt.
 
 package internal
 
@@ -16,7 +16,7 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-func testH4(stageHarness *test_case_harness.TestCaseHarness) error {
+func testH6(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
@@ -25,6 +25,7 @@ func testH4(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	upArrow := "\x1b[A"
+	downArrow := "\x1b[B"
 
 	// Execute initial commands using CommandResponseTestCase
 	randomWords1 := strings.Join(random.RandomWords(2), " ")
@@ -36,6 +37,7 @@ func testH4(stageHarness *test_case_harness.TestCaseHarness) error {
 		{Command: "echo " + randomWords1, ExpectedOutput: randomWords1, SuccessMessage: commandSuccessMessage},
 		{Command: "echo " + randomWords2, ExpectedOutput: randomWords2, SuccessMessage: commandSuccessMessage},
 	}
+
 	for _, command := range commandTestCases {
 		if err := command.Run(asserter, shell, stageHarness.Logger); err != nil {
 			return err
@@ -64,11 +66,9 @@ func testH4(stageHarness *test_case_harness.TestCaseHarness) error {
 	expectedCommands := []struct {
 		command string
 		message string
-		output  string
 	}{
-		{echoCommand.Command, "echo " + randomWords3, randomWords3},
-		{randomCommand, randomCommand, ""},
-		{"echo " + randomWords2, "echo " + randomWords2, randomWords2},
+		{echoCommand.Command, "echo " + randomWords3},
+		{randomCommand, randomCommand},
 	}
 
 	for _, expected := range expectedCommands {
@@ -89,6 +89,43 @@ func testH4(stageHarness *test_case_harness.TestCaseHarness) error {
 		asserter.PopAssertion()
 		stageHarness.Logger.Successf("✓ Prompt line matches %q", expected.message)
 	}
+
+	// Down-arrow should go forward to the echo command
+	if err := shell.SendCommandRaw(downArrow); err != nil {
+		return err
+	}
+	stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<DOWN ARROW>", echoCommand.Command)
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: "$ " + echoCommand.Command,
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(`^\s*` + echoCommand.Command + `\s*$`),
+		},
+		StayOnSameLine: true,
+	})
+	if err := asserter.AssertWithoutPrompt(); err != nil {
+		return err
+	}
+	asserter.PopAssertion()
+	stageHarness.Logger.Successf("✓ Prompt line matches %q", echoCommand.Command)
+
+	// Execute the echo command
+	if err := shell.SendCommandRaw("\n"); err != nil {
+		return err
+	}
+	stageHarness.Logger.Infof("Executing command %q", echoCommand.Command)
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: "$ " + echoCommand.Command,
+	})
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: randomWords3,
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(`^\s*` + randomWords3 + `\s*$`),
+		},
+	})
+	if err := asserter.AssertWithPrompt(); err != nil {
+		return err
+	}
+	stageHarness.Logger.Successf("✓ Command executed with expected output")
 
 	return logAndQuit(asserter, nil)
 }

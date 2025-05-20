@@ -68,21 +68,12 @@ func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter
 	}
 
 	// Add assertion for the history command itself
-	if t.LastNCommands > 0 {
-		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput: fmt.Sprintf("    %d  history %d", len(t.CommandsBeforeHistory)+1, t.LastNCommands),
-			FallbackPatterns: []*regexp.Regexp{
-				regexp.MustCompile(fmt.Sprintf(`^\s*\d+\s+history %d$`, t.LastNCommands)),
-			},
-		})
-	} else {
-		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput: fmt.Sprintf("    %d  history", len(t.CommandsBeforeHistory)+1),
-			FallbackPatterns: []*regexp.Regexp{
-				regexp.MustCompile(`^\s*\d+\s+history$`),
-			},
-		})
-	}
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: fmt.Sprintf("    %d  %s", len(t.CommandsBeforeHistory)+1, historyCommand),
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(fmt.Sprintf(`^\s*\d+\s+%s$`, regexp.QuoteMeta(historyCommand))),
+		},
+	})
 
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err

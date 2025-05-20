@@ -1417,9 +1417,6 @@ stages:
       $ echo world
       <UP ARROW>
       $ echo hello
-      <ENTER>
-      hello
-      $
       ```
     
     marketing_md: |-
@@ -1453,11 +1450,45 @@ stages:
       $ echo hello
       <DOWN ARROW>
       $ echo world
-      <ENTER>
-      world
-      $
       ```
       
     marketing_md: |-
       In this stage, you'll implement support for recalling history with the down arrow key.
+      
+  - slug: "dm2"
+    primary_extension_slug: "history"
+    name: "Test Enter with Arrow Navigation"
+    difficulty: medium
+    description_md: |-
+      In this stage, you'll implement support for being able to press enter to execute a command recalled using UP-DOWN arrows.
+
+      ### Tests
+
+      The tester will execute your program like this:
+
+      ```bash
+      ./your_program.sh
+      ```
+      
+      It will then send multiple commands to your shell, followed by the up and then down arrow keys to recall the history:
+
+      ```bash
+      $ echo hello
+      hello
+      $ echo world
+      world
+      <UP ARROW>
+      $ echo world
+      <UP ARROW>
+      $ echo hello
+      <DOWN ARROW>
+      $ echo world
+      <ENTER>
+      world
+      $
+      ```
+
+    marketing_md: |-
+      In this stage, you'll implement support for being able to press enter to execute a command recalled using UP-DOWN arrows.
+      
       
