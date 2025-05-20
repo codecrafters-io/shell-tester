@@ -1310,6 +1310,8 @@ stages:
       $
       ```
 
+      The tester will then execute the `type history` command and expect the output to be `history is a shell builtin`.
+
       ### Notes
       
       - For now we're just testing that the `type` builtin identifies `history` as a valid builtin.
@@ -1346,6 +1348,8 @@ stages:
           4  history
       $
       ```
+
+      The tester will then execute the `history` command and expect a history list with the commands that were executed, formatted and indexed like in the example above.
 
       ### Notes
 
@@ -1384,6 +1388,8 @@ stages:
       $
       ```
 
+      The tester will then execute the `history <n>` command and expect the history list to be limited to the last `n` commands.
+
       ### Notes
 
       - The tester expects the history command to be present in the history list.
@@ -1418,6 +1424,8 @@ stages:
       <UP ARROW>
       $ echo hello
       ```
+
+      The tester will execute some commands and then press the up arrow key to recall the history.
     
     marketing_md: |-
       In this stage, you'll implement support for recalling history with the up arrow key.
@@ -1451,7 +1459,9 @@ stages:
       <DOWN ARROW>
       $ echo world
       ```
-      
+
+      The tester will execute some commands and then press the up and then down arrow keys to recall the history.
+
     marketing_md: |-
       In this stage, you'll implement support for recalling history with the down arrow key.
       
@@ -1487,6 +1497,8 @@ stages:
       world
       $
       ```
+
+      The tester will execute some commands and then press the up and then down arrow keys to recall the history and then press enter to execute the command arrived.
 
     marketing_md: |-
       In this stage, you'll implement support for being able to press enter to execute a command recalled using UP-DOWN arrows.
