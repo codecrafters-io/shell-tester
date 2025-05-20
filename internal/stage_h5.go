@@ -36,62 +36,109 @@ func testH5(stageHarness *test_case_harness.TestCaseHarness) error {
 	commands := []test_cases.CommandResponseTestCase{
 		{Command: "echo " + randomWords1, ExpectedOutput: randomWords1, SuccessMessage: commandSuccessMessage},
 		{Command: "echo " + randomWords2, ExpectedOutput: randomWords2, SuccessMessage: commandSuccessMessage},
-		{
-			Command:        randomCommand,
-			ExpectedOutput: "command not found: " + randomCommand,
-			SuccessMessage: commandSuccessMessage,
-			FallbackPatterns: []*regexp.Regexp{
-				regexp.MustCompile(`^.*command not found.*` + randomCommand + `.*$`),
-				regexp.MustCompile(`^.*` + randomCommand + `.*command not found.*$`),
-				regexp.MustCompile(`^.*` + randomCommand + `.*not found.*$`),
-				regexp.MustCompile(`^(zsh|bash): command not found: ` + randomCommand + `$`),
-			},
+	}
+
+	for _, command := range commands {
+		if err := command.Run(asserter, shell, stageHarness.Logger); err != nil {
+			return err
+		}
+	}
+
+	// Run invalid command test case
+	invalidCommandTestCase := test_cases.InvalidCommandTestCase{
+		Command: randomCommand,
+	}
+	if err := invalidCommandTestCase.Run(asserter, shell, stageHarness.Logger); err != nil {
+		return err
+	}
+
+	// Run the last echo command
+	echoCommand := test_cases.CommandResponseTestCase{
+		Command:        "echo " + randomWords3,
+		ExpectedOutput: randomWords3,
+		SuccessMessage: commandSuccessMessage,
+	}
+	if err := echoCommand.Run(asserter, shell, stageHarness.Logger); err != nil {
+		return err
+	}
+
+	// First up-arrow should recall the last command (echo randomWords3)
+	if err := shell.SendCommandRaw(upArrow); err != nil {
+		return err
+	}
+	stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<UP ARROW>", "echo "+randomWords3)
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: "$ echo " + randomWords3,
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(`^\s*echo ` + randomWords3 + `$`),
 		},
-		{Command: "echo " + randomWords3, ExpectedOutput: randomWords3, SuccessMessage: commandSuccessMessage},
+		StayOnSameLine: true,
+	})
+	if err := asserter.AssertWithoutPrompt(); err != nil {
+		return err
 	}
+	asserter.PopAssertion()
+	stageHarness.Logger.Successf("✓ Prompt line matches %q", "echo "+randomWords3)
 
-	for _, cmd := range commands {
-		if err := shell.SendCommand(cmd.Command); err != nil {
-			return err
-		}
-		asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ " + cmd.Command})
-		if cmd.FallbackPatterns != nil {
-			asserter.AddAssertion(assertions.SingleLineAssertion{
-				ExpectedOutput:   cmd.ExpectedOutput,
-				FallbackPatterns: cmd.FallbackPatterns,
-			})
-		} else {
-			asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: cmd.ExpectedOutput})
-		}
-		if err := asserter.AssertWithPrompt(); err != nil {
-			return err
-		}
+	// Second up-arrow should recall the invalid command
+	if err := shell.SendCommandRaw(upArrow); err != nil {
+		return err
 	}
+	stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<UP ARROW>", randomCommand)
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: "$ " + randomCommand,
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(`^\s*` + randomCommand + `$`),
+		},
+		StayOnSameLine: true,
+	})
+	if err := asserter.AssertWithoutPrompt(); err != nil {
+		return err
+	}
+	asserter.PopAssertion()
+	stageHarness.Logger.Successf("✓ Prompt line matches %q", randomCommand)
 
-	// <UP ARROW> (should recall 'echo ' + randomWords3)
+	// Third up-arrow should recall echo randomWords2
 	if err := shell.SendCommandRaw(upArrow); err != nil {
 		return err
 	}
-	stageHarness.Logger.Infof("<UP ARROW>")
-	// <UP ARROW> (should recall 'nonexistent_command')
-	if err := shell.SendCommandRaw(upArrow); err != nil {
+	stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<UP ARROW>", "echo "+randomWords2)
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: "$ echo " + randomWords2,
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(`^\s*echo ` + randomWords2 + `$`),
+		},
+		StayOnSameLine: true,
+	})
+	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
 	}
-	stageHarness.Logger.Infof("<UP ARROW>")
-	// <UP ARROW> (should recall 'echo ' + randomWords2)
-	if err := shell.SendCommandRaw(upArrow); err != nil {
-		return err
-	}
-	stageHarness.Logger.Infof("<UP ARROW>")
-	// <DOWN ARROW> (should go forward to 'nonexistent_command')
+	asserter.PopAssertion()
+	stageHarness.Logger.Successf("✓ Prompt line matches %q", "echo "+randomWords2)
+
+	// Down-arrow should go forward to the invalid command
 	if err := shell.SendCommandRaw(downArrow); err != nil {
 		return err
 	}
-	stageHarness.Logger.Infof("<DOWN ARROW>")
-	// <ENTER> (should execute 'nonexistent_command' again)
+	stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<DOWN ARROW>", randomCommand)
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: "$ " + randomCommand,
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(`^\s*` + randomCommand + `$`),
+		},
+		StayOnSameLine: true,
+	})
+	if err := asserter.AssertWithoutPrompt(); err != nil {
+		return err
+	}
+	asserter.PopAssertion()
+	stageHarness.Logger.Successf("✓ Prompt line matches %q", randomCommand)
+
+	// Execute the invalid command again
 	if err := shell.SendCommandRaw("\n"); err != nil {
 		return err
 	}
+	stageHarness.Logger.Infof("Executing command %q", randomCommand)
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: "$ " + randomCommand,
 		FallbackPatterns: []*regexp.Regexp{
@@ -110,6 +157,7 @@ func testH5(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
 	}
+	stageHarness.Logger.Successf("✓ Command executed with expected error message")
 
 	return logAndQuit(asserter, nil)
 }

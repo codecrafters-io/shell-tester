@@ -42,8 +42,6 @@ func testH3(stageHarness *test_case_harness.TestCaseHarness) error {
 	randomWords7 := strings.Join(random.RandomWords(2), " ")
 	randomWords8 := strings.Join(random.RandomWords(2), " ")
 	randomWords9 := strings.Join(random.RandomWords(2), " ")
-	randomWords10 := strings.Join(random.RandomWords(2), " ")
-	randomWords11 := strings.Join(random.RandomWords(2), " ")
 
 	testCase2 := test_cases.HistoryTestCase{
 		SuccessMessage: "✓ Received expected response",
@@ -54,31 +52,10 @@ func testH3(stageHarness *test_case_harness.TestCaseHarness) error {
 			{Command: "echo " + randomWords7, ExpectedOutput: randomWords7, SuccessMessage: commandSuccessMessage},
 			{Command: "echo " + randomWords8, ExpectedOutput: randomWords8, SuccessMessage: commandSuccessMessage},
 			{Command: "echo " + randomWords9, ExpectedOutput: randomWords9, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords10, ExpectedOutput: randomWords10, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords11, ExpectedOutput: randomWords11, SuccessMessage: commandSuccessMessage},
 		},
-		LastNCommands: random.RandomInt(3, 6),
+		LastNCommands: random.RandomInt(3, 5),
 	}
 	if err := testCase2.Run(asserter, shell, logger); err != nil {
-		return err
-	}
-
-	// Can remove, just did it a second time to allow more insight with varying number `n`
-	testCase3 := test_cases.HistoryTestCase{
-		SuccessMessage: "✓ Received expected response",
-		CommandsBeforeHistory: []test_cases.CommandResponseTestCase{
-			{Command: "echo " + randomWords4, ExpectedOutput: randomWords4, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords5, ExpectedOutput: randomWords5, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords6, ExpectedOutput: randomWords6, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords7, ExpectedOutput: randomWords7, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords8, ExpectedOutput: randomWords8, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords9, ExpectedOutput: randomWords9, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords10, ExpectedOutput: randomWords10, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords11, ExpectedOutput: randomWords11, SuccessMessage: commandSuccessMessage},
-		},
-		LastNCommands: random.RandomInt(5, 7),
-	}
-	if err := testCase3.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
