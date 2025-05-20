@@ -42,7 +42,6 @@ Debug = true
 [33m[stage-5] [0m[94mTyped "0"[0m
 [33m[stage-5] [0m[94mPressed "<ENTER>"[0m
 [33m[your-program] [0m$ exit 0
-[33m[your-program] [0mexit
 [33m[stage-5] [0m[94mTearing down shell[0m
 [33m[stage-5] [0m[92mTest passed.[0m
 
