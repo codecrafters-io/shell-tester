@@ -66,7 +66,7 @@ func testH4(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err := shell.SendCommandRaw(upArrow); err != nil {
 		return err
 	}
-	stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<UP ARROW>", "echo "+randomWords3)
+	stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<UP ARROW>", echoCommand.Command)
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: "$ echo " + randomWords3,
 		FallbackPatterns: []*regexp.Regexp{
