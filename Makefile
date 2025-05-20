@@ -176,6 +176,17 @@ define _HISTORY_STAGES_ZSH
 	{"slug":"vq0","tester_log_prefix":"tester::#vq0","title":"Stage#5: DOWN Arrow Navigation"} \
 ]
 endef
+
+# Ash doesn't support `history n`
+define _HISTORY_STAGES_ASH
+[ \
+	{"slug":"bq4","tester_log_prefix":"tester::#bq4","title":"Stage#1: The history builtin"}, \
+	{"slug":"yf5","tester_log_prefix":"tester::#yf5","title":"Stage#2: Listing history"}, \
+	{"slug":"rh7","tester_log_prefix":"tester::#rh7","title":"Stage#4: UP Arrow Navigation"}, \
+	{"slug":"vq0","tester_log_prefix":"tester::#vq0","title":"Stage#5: DOWN Arrow Navigation"} \
+] 
+endef
+
 # Use eval to properly escape the stage arrays
 define quote_strings
 	$(shell echo '$(1)' | sed 's/"/\\"/g')
@@ -203,6 +214,7 @@ COMPLETIONS_STAGES = $(shell echo '$(_COMPLETION_STAGES_BASE)' | sed 's/]$$/, $(
 PIPELINE_STAGES = $(call quote_strings,$(_PIPELINE_STAGES))
 HISTORY_STAGES = $(call quote_strings,$(_HISTORY_STAGES))
 HISTORY_STAGES_ZSH = $(call quote_strings,$(_HISTORY_STAGES_ZSH))
+HISTORY_STAGES_ASH = $(call quote_strings,$(_HISTORY_STAGES_ASH))
 
 test_base_w_ash: build
 	$(call run_test,$(BASE_STAGES),ash)
@@ -271,7 +283,7 @@ test_history_w_zsh: build
 	$(call run_test,$(HISTORY_STAGES_ZSH),zsh)
 
 test_history_w_ash: build
-	$(call run_test,$(HISTORY_STAGES),ash)
+	$(call run_test,$(HISTORY_STAGES_ASH),ash)
 
 test_ash:
 	make test_base_w_ash
