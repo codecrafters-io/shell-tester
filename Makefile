@@ -270,12 +270,16 @@ test_history_w_bash: build
 test_history_w_zsh: build
 	$(call run_test,$(HISTORY_STAGES_ZSH),zsh)
 
+test_history_w_ash: build
+	$(call run_test,$(HISTORY_STAGES),ash)
+
 test_ash:
 	make test_base_w_ash
 	make test_nav_w_ash
 	make test_quoting_w_ash
 	make test_redirections_w_ash
 	make test_completions_w_ash
+	make test_history_w_ash
 
 test_bash:
 	make test_base_w_bash
@@ -284,6 +288,7 @@ test_bash:
 	make test_redirections_w_bash
 	make test_completions_w_bash
 	make test_history_w_bash
+
 # Doesn't support completions, history
 test_dash:
 	make test_base_w_dash

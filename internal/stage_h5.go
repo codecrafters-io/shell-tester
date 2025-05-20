@@ -67,7 +67,7 @@ func testH5(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// $ echo CodeCrafters
+	// $ echo random words
 	randomWords3 := strings.Join(random.RandomWords(2), " ")
 	if err := shell.SendCommand("echo " + randomWords3); err != nil {
 		return err
@@ -78,7 +78,7 @@ func testH5(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// <UP ARROW> (should recall 'echo CodeCrafters')
+	// <UP ARROW> (should recall 'echo ' + randomWords3)
 	if err := shell.SendCommandRaw(upArrow); err != nil {
 		return err
 	}
@@ -88,22 +88,35 @@ func testH5(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 	stageHarness.Logger.Infof("<UP ARROW>")
-	// <DOWN ARROW> (should go forward to 'echo CodeCrafters')
+	// <UP ARROW> (should recall 'echo ' + randomWords2)
+	if err := shell.SendCommandRaw(upArrow); err != nil {
+		return err
+	}
+	stageHarness.Logger.Infof("<UP ARROW>")
+	// <DOWN ARROW> (should go forward to 'nonexistent_command')
 	if err := shell.SendCommandRaw(downArrow); err != nil {
 		return err
 	}
 	stageHarness.Logger.Infof("<DOWN ARROW>")
-	// <ENTER> (should execute 'echo CodeCrafters' again)
+	// <ENTER> (should execute 'nonexistent_command' again)
 	if err := shell.SendCommandRaw("\n"); err != nil {
 		return err
 	}
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ echo " + randomWords3,
+		ExpectedOutput: "$ " + randomCommand,
 		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(`^\s*echo ` + randomWords3 + `$`),
+			regexp.MustCompile(`^\s*` + randomCommand + `$`),
 		},
 	})
-	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: randomWords3})
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: "command not found: " + randomCommand,
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(`^.*command not found.*` + randomCommand + `.*$`),
+			regexp.MustCompile(`^.*` + randomCommand + `.*command not found.*$`),
+			regexp.MustCompile(`^.*` + randomCommand + `.*not found.*$`),
+			regexp.MustCompile(`^(zsh|bash): command not found: ` + randomCommand + `$`),
+		},
+	})
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
 	}

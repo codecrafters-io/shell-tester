@@ -37,6 +37,7 @@ ENV GOTOOLCHAIN=local
 COPY . .
 
 # Build the tester
+WORKDIR /app
 RUN make build
 
 # Set the default shell to zsh
