@@ -5,9 +5,13 @@
 package internal
 
 import (
+	"regexp"
+	"strings"
+
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -21,40 +25,53 @@ func testH4(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	upArrow := "\x1b[A"
 
-	// $ ls dist/
-	if err := shell.SendCommand("ls dist/"); err != nil {
+	// $ echo hello
+	randomWords1 := strings.Join(random.RandomWords(2), " ")
+	if err := shell.SendCommand("echo " + randomWords1); err != nil {
 		return err
 	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ ls dist/"})
-	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "main.out"})
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ echo " + randomWords1})
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: randomWords1})
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
 	}
 
-	// Send cd dist/
-	if err := shell.SendCommand("cd dist/"); err != nil {
+	// $ echo world
+	randomWords2 := strings.Join(random.RandomWords(2), " ")
+	if err := shell.SendCommand("echo " + randomWords2); err != nil {
 		return err
 	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ cd dist/"})
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ echo " + randomWords2})
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: randomWords2})
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
 	}
 
-	// Send ls
-	if err := shell.SendCommand("ls"); err != nil {
+	// $ nonexistent_command
+	randomCommand := getRandomInvalidCommand()
+	if err := shell.SendCommand(randomCommand); err != nil {
 		return err
 	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ ls"})
-	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "main.out"})
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ " + randomCommand})
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: "command not found: " + randomCommand,
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(`^.*command not found.*` + randomCommand + `.*$`),
+			regexp.MustCompile(`^.*` + randomCommand + `.*command not found.*$`),
+			regexp.MustCompile(`^.*` + randomCommand + `.*not found.*$`),
+			regexp.MustCompile(`^(zsh|bash): command not found: ` + randomCommand + `$`),
+		},
+	})
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
 	}
 
-	// Send cd ..
-	if err := shell.SendCommand("cd .."); err != nil {
+	randomWords3 := strings.Join(random.RandomWords(2), " ")
+	if err := shell.SendCommand("echo " + randomWords3); err != nil {
 		return err
 	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ cd .."})
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ echo " + randomWords3})
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: randomWords3})
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
 	}
@@ -79,14 +96,13 @@ func testH4(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 	stageHarness.Logger.Infof("<UP ARROW>")
-	// Send up arrow again
 
 	// Send enter
 	if err := shell.SendCommandRaw("\n"); err != nil {
 		return err
 	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ ls dist/"})
-	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "main.out"})
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ echo " + randomWords1})
+	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: randomWords1})
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
 	}

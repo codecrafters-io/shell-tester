@@ -1,9 +1,12 @@
 package internal
 
 import (
+	"strings"
+
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -16,12 +19,16 @@ func testH2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	randomWords1 := strings.Join(random.RandomWords(2), " ")
+	randomWords2 := strings.Join(random.RandomWords(2), " ")
+	randomWords3 := strings.Join(random.RandomWords(2), " ")
+
 	testCase := test_cases.HistoryTestCase{
-		SuccessMessage: "✓ History command works as expected",
+		SuccessMessage: "✓ Received expected response",
 		CommandsBeforeHistory: []test_cases.CommandOutputPair{
-			{Command: "ls dist/", ExpectedOutput: "main.out"},
-			{Command: "cd dist/", ExpectedOutput: ""},
-			{Command: "ls", ExpectedOutput: "main.out"},
+			{Command: "echo " + randomWords1, ExpectedOutput: randomWords1},
+			{Command: "echo " + randomWords2, ExpectedOutput: randomWords2},
+			{Command: "echo " + randomWords3, ExpectedOutput: randomWords3},
 		},
 	}
 	if err := testCase.Run(asserter, shell, logger); err != nil {

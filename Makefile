@@ -298,6 +298,7 @@ test_zsh:
 	make test_quoting_w_zsh
 	make test_redirections_w_zsh
 	make test_completions_w_zsh
+	make test_history_w_zsh
 
 # Clone the repo in `debug` directory
 test_debug: build
