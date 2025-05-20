@@ -43,7 +43,7 @@ func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter
 
 	if t.LastNCommands > 0 {
 		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput: fmt.Sprintf("$ history %d", t.LastNCommands),
+			ExpectedOutput: fmt.Sprintf("$ %s", historyCommand),
 		})
 	} else {
 		asserter.AddAssertion(assertions.SingleLineAssertion{
