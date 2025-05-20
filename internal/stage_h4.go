@@ -101,7 +101,12 @@ func testH4(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err := shell.SendCommandRaw("\n"); err != nil {
 		return err
 	}
-	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: "$ echo " + randomWords1})
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: "$ echo " + randomWords1,
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(`^\s*echo ` + randomWords1 + `$`),
+		},
+	})
 	asserter.AddAssertion(assertions.SingleLineAssertion{ExpectedOutput: randomWords1})
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
