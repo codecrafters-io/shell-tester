@@ -10,6 +10,8 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
+const commandSuccessMessage = "✓ Command executed successfully"
+
 func testH2(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
@@ -25,10 +27,10 @@ func testH2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	testCase := test_cases.HistoryTestCase{
 		SuccessMessage: "✓ Received expected response",
-		CommandsBeforeHistory: []test_cases.CommandOutputPair{
-			{Command: "echo " + randomWords1, ExpectedOutput: randomWords1},
-			{Command: "echo " + randomWords2, ExpectedOutput: randomWords2},
-			{Command: "echo " + randomWords3, ExpectedOutput: randomWords3},
+		CommandsBeforeHistory: []test_cases.CommandResponseTestCase{
+			{Command: "echo " + randomWords1, ExpectedOutput: randomWords1, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords2, ExpectedOutput: randomWords2, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords3, ExpectedOutput: randomWords3, SuccessMessage: commandSuccessMessage},
 		},
 	}
 	if err := testCase.Run(asserter, shell, logger); err != nil {

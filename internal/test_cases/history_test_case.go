@@ -10,12 +10,6 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-// CommandOutputPair represents a command and its expected output
-type CommandOutputPair struct {
-	Command        string
-	ExpectedOutput string
-}
-
 // HistoryTestCase is a test case that:
 // Sends the history command to the shell
 // Verifies that the command is printed to the screen
@@ -25,7 +19,7 @@ type HistoryTestCase struct {
 	SuccessMessage string
 
 	// CommandsBeforeHistory is a list of commands to execute before running history
-	CommandsBeforeHistory []CommandOutputPair
+	CommandsBeforeHistory []CommandResponseTestCase
 
 	// LastNCommands specifies how many of the most recent commands to check in history
 	// If not set, all commands will be checked
@@ -33,23 +27,9 @@ type HistoryTestCase struct {
 }
 
 func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	for _, cmdPair := range t.CommandsBeforeHistory {
-		if err := shell.SendCommand(cmdPair.Command); err != nil {
-			return fmt.Errorf("failed to send command: %v", err)
-		}
-
-		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput: fmt.Sprintf("$ %s", cmdPair.Command),
-		})
-
-		if cmdPair.ExpectedOutput != "" {
-			asserter.AddAssertion(assertions.SingleLineAssertion{
-				ExpectedOutput: cmdPair.ExpectedOutput,
-			})
-		}
-
-		if err := asserter.AssertWithPrompt(); err != nil {
-			return err
+	for _, testCase := range t.CommandsBeforeHistory {
+		if err := testCase.Run(asserter, shell, logger); err != nil {
+			return fmt.Errorf("failed to execute command: %v", err)
 		}
 	}
 
@@ -78,11 +58,11 @@ func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter
 	}
 
 	// Check only the specified number of most recent commands
-	for i, cmdPair := range t.CommandsBeforeHistory[startIdx:] {
+	for i, testCase := range t.CommandsBeforeHistory[startIdx:] {
 		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput: fmt.Sprintf("    %d  %s", startIdx+i+1, cmdPair.Command),
+			ExpectedOutput: fmt.Sprintf("    %d  %s", startIdx+i+1, testCase.Command),
 			FallbackPatterns: []*regexp.Regexp{
-				regexp.MustCompile(fmt.Sprintf(`^\s*\d+\s+%s$`, regexp.QuoteMeta(cmdPair.Command))),
+				regexp.MustCompile(fmt.Sprintf(`^\s*\d+\s+%s$`, regexp.QuoteMeta(testCase.Command))),
 			},
 		})
 	}

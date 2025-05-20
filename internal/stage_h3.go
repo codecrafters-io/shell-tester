@@ -25,10 +25,10 @@ func testH3(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	testCase1 := test_cases.HistoryTestCase{
 		SuccessMessage: "✓ Received expected response",
-		CommandsBeforeHistory: []test_cases.CommandOutputPair{
-			{Command: "echo " + randomWords1, ExpectedOutput: randomWords1},
-			{Command: "echo " + randomWords2, ExpectedOutput: randomWords2},
-			{Command: "echo " + randomWords3, ExpectedOutput: randomWords3},
+		CommandsBeforeHistory: []test_cases.CommandResponseTestCase{
+			{Command: "echo " + randomWords1, ExpectedOutput: randomWords1, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords2, ExpectedOutput: randomWords2, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords3, ExpectedOutput: randomWords3, SuccessMessage: commandSuccessMessage},
 		},
 		LastNCommands: 2,
 	}
@@ -47,15 +47,15 @@ func testH3(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	testCase2 := test_cases.HistoryTestCase{
 		SuccessMessage: "✓ Received expected response",
-		CommandsBeforeHistory: []test_cases.CommandOutputPair{
-			{Command: "echo " + randomWords4, ExpectedOutput: randomWords4},
-			{Command: "echo " + randomWords5, ExpectedOutput: randomWords5},
-			{Command: "echo " + randomWords6, ExpectedOutput: randomWords6},
-			{Command: "echo " + randomWords7, ExpectedOutput: randomWords7},
-			{Command: "echo " + randomWords8, ExpectedOutput: randomWords8},
-			{Command: "echo " + randomWords9, ExpectedOutput: randomWords9},
-			{Command: "echo " + randomWords10, ExpectedOutput: randomWords10},
-			{Command: "echo " + randomWords11, ExpectedOutput: randomWords11},
+		CommandsBeforeHistory: []test_cases.CommandResponseTestCase{
+			{Command: "echo " + randomWords4, ExpectedOutput: randomWords4, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords5, ExpectedOutput: randomWords5, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords6, ExpectedOutput: randomWords6, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords7, ExpectedOutput: randomWords7, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords8, ExpectedOutput: randomWords8, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords9, ExpectedOutput: randomWords9, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords10, ExpectedOutput: randomWords10, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords11, ExpectedOutput: randomWords11, SuccessMessage: commandSuccessMessage},
 		},
 		LastNCommands: random.RandomInt(3, 6),
 	}
@@ -66,15 +66,15 @@ func testH3(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Can remove, just did it a second time to allow more insight with varying number `n`
 	testCase3 := test_cases.HistoryTestCase{
 		SuccessMessage: "✓ Received expected response",
-		CommandsBeforeHistory: []test_cases.CommandOutputPair{
-			{Command: "echo " + randomWords4, ExpectedOutput: randomWords4},
-			{Command: "echo " + randomWords5, ExpectedOutput: randomWords5},
-			{Command: "echo " + randomWords6, ExpectedOutput: randomWords6},
-			{Command: "echo " + randomWords7, ExpectedOutput: randomWords7},
-			{Command: "echo " + randomWords8, ExpectedOutput: randomWords8},
-			{Command: "echo " + randomWords9, ExpectedOutput: randomWords9},
-			{Command: "echo " + randomWords10, ExpectedOutput: randomWords10},
-			{Command: "echo " + randomWords11, ExpectedOutput: randomWords11},
+		CommandsBeforeHistory: []test_cases.CommandResponseTestCase{
+			{Command: "echo " + randomWords4, ExpectedOutput: randomWords4, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords5, ExpectedOutput: randomWords5, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords6, ExpectedOutput: randomWords6, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords7, ExpectedOutput: randomWords7, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords8, ExpectedOutput: randomWords8, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords9, ExpectedOutput: randomWords9, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords10, ExpectedOutput: randomWords10, SuccessMessage: commandSuccessMessage},
+			{Command: "echo " + randomWords11, ExpectedOutput: randomWords11, SuccessMessage: commandSuccessMessage},
 		},
 		LastNCommands: random.RandomInt(5, 7),
 	}

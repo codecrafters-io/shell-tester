@@ -86,7 +86,7 @@ extensions:
       Pipelines allow you to connect multiple commands together, so the output of one command becomes the input of the next command.
 
   - slug: "history"
-    name: "Command History"
+    name: "History"
     description_markdown: |
       In this extension, you'll add support for viewing and recalling previously entered commands using the `history` builtin.
 
@@ -1289,35 +1289,35 @@ stages:
 
   - slug: "bq4"
     primary_extension_slug: "history"
-    name: "Basic history"
-    difficulty: medium
+    name: "The history builtin"
+    difficulty: easy
     description_md: |-
-      In this stage, you'll implement the `history` builtin to print previously entered commands.
+      In this stage, you'll add support for [history](https://www.gnu.org/software/bash/manual/html_node/Bash-History-Builtins.html#index-history) as a shell builtin.
 
   - slug: "yf5"
     primary_extension_slug: "history"
-    name: "History with N argument"
+    name: "Listing history"
     difficulty: medium
     description_md: |-
-      In this stage, you'll implement support for `history N` to print the last N commands.
+      In this stage, you'll implement the `history` builtin.
 
   - slug: "ag6"
     primary_extension_slug: "history"
     name: "Limiting history entries"
     difficulty: medium
     description_md: |-
-      In this stage, you'll implement support for `history N` to print the last N commands.
+      In this stage, you'll add support for limiting history entries using the `history <n>` syntax.
 
   - slug: "rh7"
     primary_extension_slug: "history"
-    name: "Up arrow navigation"
+    name: "Up-arrow navigation"
     difficulty: medium
     description_md: |-
-      hi
+      In this stage, you'll add support for recalling history with the up arrow key.
   
   - slug: "vq0"
     primary_extension_slug: "history"
-    name: "Down arrow navigation"
+    name: "Down-arrow navigation"
     difficulty: medium
     description_md: |-
-      hi
+      In this stage, you'll add support for recalling history with the down arrow key.
