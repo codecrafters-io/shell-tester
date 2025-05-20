@@ -70,7 +70,7 @@ func testH5(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: "$ echo " + randomWords3,
 		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(`^\s*echo ` + randomWords3 + `$`),
+			regexp.MustCompile(`^\s*echo ` + randomWords3 + `\s*$`),
 		},
 		StayOnSameLine: true,
 	})
@@ -88,7 +88,7 @@ func testH5(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: "$ " + randomCommand,
 		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(`^\s*` + randomCommand + `$`),
+			regexp.MustCompile(`^\s*` + randomCommand + `\s*$`),
 		},
 		StayOnSameLine: true,
 	})
@@ -106,7 +106,7 @@ func testH5(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: "$ echo " + randomWords2,
 		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(`^\s*echo ` + randomWords2 + `$`),
+			regexp.MustCompile(`^\s*echo ` + randomWords2 + `\s*$`),
 		},
 		StayOnSameLine: true,
 	})
@@ -124,7 +124,7 @@ func testH5(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: "$ " + randomCommand,
 		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(`^\s*` + randomCommand + `$`),
+			regexp.MustCompile(`^\s*` + randomCommand + `\s*$`),
 		},
 		StayOnSameLine: true,
 	})
@@ -142,7 +142,7 @@ func testH5(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: "$ " + randomCommand,
 		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(`^\s*` + randomCommand + `$`),
+			regexp.MustCompile(`^\s*` + randomCommand + `\s*$`),
 		},
 	})
 	asserter.AddAssertion(assertions.SingleLineAssertion{
