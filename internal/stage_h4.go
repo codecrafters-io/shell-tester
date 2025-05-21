@@ -5,7 +5,6 @@
 package internal
 
 import (
-	"regexp"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
@@ -78,9 +77,6 @@ func testH4(stageHarness *test_case_harness.TestCaseHarness) error {
 		stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<UP ARROW>", expected.message)
 		asserter.AddAssertion(assertions.SingleLineAssertion{
 			ExpectedOutput: "$ " + expected.command,
-			FallbackPatterns: []*regexp.Regexp{
-				regexp.MustCompile(`^\s*` + expected.command + `\s*$`),
-			},
 			StayOnSameLine: true,
 		})
 		if err := asserter.AssertWithoutPrompt(); err != nil {

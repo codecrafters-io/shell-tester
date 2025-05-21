@@ -97,9 +97,6 @@ func testH5(stageHarness *test_case_harness.TestCaseHarness) error {
 	stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<DOWN ARROW>", echoCommand.Command)
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: "$ " + echoCommand.Command,
-		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(`^\s*` + echoCommand.Command + `\s*$`),
-		},
 		StayOnSameLine: true,
 	})
 	if err := asserter.AssertWithoutPrompt(); err != nil {
