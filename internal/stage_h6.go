@@ -115,15 +115,9 @@ func testH6(stageHarness *test_case_harness.TestCaseHarness) error {
 	stageHarness.Logger.Infof("Executing command %q", echoCommand.Command)
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: "$ " + echoCommand.Command,
-		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(`^\s*` + echoCommand.Command + `\s*$`),
-		},
 	})
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: randomWords3,
-		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(`^\s*` + randomWords3 + `\s*$`),
-		},
 	})
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
