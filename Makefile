@@ -159,6 +159,37 @@ define _PIPELINE_STAGES
 ]
 endef
 
+define _HISTORY_STAGES
+[ \
+	{"slug":"bq4","tester_log_prefix":"tester::#bq4","title":"Stage#1: The history builtin"}, \
+	{"slug":"yf5","tester_log_prefix":"tester::#yf5","title":"Stage#2: Listing history"}, \
+	{"slug":"ag6","tester_log_prefix":"tester::#ag6","title":"Stage#3: Limiting history entries"}, \
+	{"slug":"rh7","tester_log_prefix":"tester::#rh7","title":"Stage#4: UP Arrow Navigation"}, \
+	{"slug":"vq0","tester_log_prefix":"tester::#vq0","title":"Stage#5: DOWN Arrow Navigation"}, \
+	{"slug":"dm2","tester_log_prefix":"tester::#dm2","title":"Stage#6: Test Enter with Arrow Navigation"} \
+]
+endef
+
+define _HISTORY_STAGES_ZSH
+[ \
+	{"slug":"bq4","tester_log_prefix":"tester::#bq4","title":"Stage#1: The history builtin"}, \
+	{"slug":"rh7","tester_log_prefix":"tester::#rh7","title":"Stage#4: UP Arrow Navigation"}, \
+	{"slug":"vq0","tester_log_prefix":"tester::#vq0","title":"Stage#5: DOWN Arrow Navigation"}, \
+	{"slug":"dm2","tester_log_prefix":"tester::#dm2","title":"Stage#6: Test Enter with Arrow Navigation"} \
+]
+endef
+
+# Ash doesn't support `history n`
+define _HISTORY_STAGES_ASH
+[ \
+	{"slug":"bq4","tester_log_prefix":"tester::#bq4","title":"Stage#1: The history builtin"}, \
+	{"slug":"yf5","tester_log_prefix":"tester::#yf5","title":"Stage#2: Listing history"}, \
+	{"slug":"rh7","tester_log_prefix":"tester::#rh7","title":"Stage#4: UP Arrow Navigation"}, \
+	{"slug":"vq0","tester_log_prefix":"tester::#vq0","title":"Stage#5: DOWN Arrow Navigation"}, \
+	{"slug":"dm2","tester_log_prefix":"tester::#dm2","title":"Stage#6: Test Enter with Arrow Navigation"} \
+] 
+endef
+
 # Use eval to properly escape the stage arrays
 define quote_strings
 	$(shell echo '$(1)' | sed 's/"/\\"/g')
@@ -184,6 +215,9 @@ REDIRECTIONS_STAGES = $(call quote_strings,$(_REDIRECTIONS_STAGES))
 COMPLETIONS_STAGES_ZSH = $(call quote_strings,$(_COMPLETION_STAGES_BASE))
 COMPLETIONS_STAGES = $(shell echo '$(_COMPLETION_STAGES_BASE)' | sed 's/]$$/, $(_COMPLETIONS_STAGES_COMPLEX)]/' | sed 's/"/\\"/g')
 PIPELINE_STAGES = $(call quote_strings,$(_PIPELINE_STAGES))
+HISTORY_STAGES = $(call quote_strings,$(_HISTORY_STAGES))
+HISTORY_STAGES_ZSH = $(call quote_strings,$(_HISTORY_STAGES_ZSH))
+HISTORY_STAGES_ASH = $(call quote_strings,$(_HISTORY_STAGES_ASH))
 
 test_base_w_ash: build
 	$(call run_test,$(BASE_STAGES),ash)
@@ -245,12 +279,22 @@ test_redirections_w_zsh: build
 test_completions_w_zsh: build
 	$(call run_test,$(COMPLETIONS_STAGES_ZSH),zsh)
 
+test_history_w_bash: build
+	$(call run_test,$(HISTORY_STAGES),bash)
+
+test_history_w_zsh: build
+	$(call run_test,$(HISTORY_STAGES_ZSH),zsh)
+
+test_history_w_ash: build
+	$(call run_test,$(HISTORY_STAGES_ASH),ash)
+
 test_ash:
 	make test_base_w_ash
 	make test_nav_w_ash
 	make test_quoting_w_ash
 	make test_redirections_w_ash
 	make test_completions_w_ash
+	make test_history_w_ash
 
 test_bash:
 	make test_base_w_bash
@@ -258,8 +302,9 @@ test_bash:
 	make test_quoting_w_bash
 	make test_redirections_w_bash
 	make test_completions_w_bash
+	make test_history_w_bash
 
-# Doesn't support completions
+# Doesn't support completions, history
 test_dash:
 	make test_base_w_dash
 	make test_nav_w_dash
@@ -273,6 +318,7 @@ test_zsh:
 	make test_quoting_w_zsh
 	make test_redirections_w_zsh
 	make test_completions_w_zsh
+	make test_history_w_zsh
 
 # Clone the repo in `debug` directory
 test_debug: build

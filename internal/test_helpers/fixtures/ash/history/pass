@@ -1,0 +1,102 @@
+Debug = true
+
+[33m[stage-5] [0m[94mRunning tests for Stage #5: bq4[0m
+[33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$ type history
+[33m[your-program] [0mhistory is a shell builtin
+[33m[stage-5] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m$ 
+[33m[stage-5] [0m[92mTest passed.[0m
+
+[33m[stage-4] [0m[94mRunning tests for Stage #4: yf5[0m
+[33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$ echo apple blueberry
+[33m[your-program] [0mapple blueberry
+[33m[stage-4] [0m[92m✓ Command executed successfully[0m
+[33m[your-program] [0m$ echo blueberry raspberry
+[33m[your-program] [0mblueberry raspberry
+[33m[stage-4] [0m[92m✓ Command executed successfully[0m
+[33m[your-program] [0m$ echo blueberry mango
+[33m[your-program] [0mblueberry mango
+[33m[stage-4] [0m[92m✓ Command executed successfully[0m
+[33m[your-program] [0m$ history
+[33m[your-program] [0m   0 echo apple blueberry
+[33m[your-program] [0m   1 echo blueberry raspberry
+[33m[your-program] [0m   2 echo blueberry mango
+[33m[your-program] [0m   3 history
+[33m[stage-4] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m$ 
+[33m[stage-4] [0m[92mTest passed.[0m
+
+[33m[stage-3] [0m[94mRunning tests for Stage #3: rh7[0m
+[33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$ echo orange blueberry
+[33m[your-program] [0morange blueberry
+[33m[stage-3] [0m[92m✓ Command executed successfully[0m
+[33m[your-program] [0m$ echo grape pineapple
+[33m[your-program] [0mgrape pineapple
+[33m[stage-3] [0m[92m✓ Command executed successfully[0m
+[33m[your-program] [0m$ invalid_banana_command
+[33m[your-program] [0mash: invalid_banana_command: not found
+[33m[stage-3] [0m[92m✓ Received command not found message[0m
+[33m[your-program] [0m$ echo blueberry apple
+[33m[your-program] [0mblueberry apple
+[33m[stage-3] [0m[92m✓ Command executed successfully[0m
+[33m[stage-3] [0m[94mPressed "<UP ARROW>" (expecting to recall "echo blueberry apple")[0m
+[33m[stage-3] [0m[92m✓ Prompt line matches "echo blueberry apple"[0m
+[33m[stage-3] [0m[94mPressed "<UP ARROW>" (expecting to recall "invalid_banana_command")[0m
+[33m[stage-3] [0m[92m✓ Prompt line matches "invalid_banana_command"[0m
+[33m[stage-3] [0m[94mPressed "<UP ARROW>" (expecting to recall "echo grape pineapple")[0m
+[33m[stage-3] [0m[92m✓ Prompt line matches "echo grape pineapple"[0m
+[33m[your-program] [0m$ echo grape pineapple
+[33m[stage-3] [0m[92mTest passed.[0m
+
+[33m[stage-2] [0m[94mRunning tests for Stage #2: vq0[0m
+[33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$ echo orange raspberry
+[33m[your-program] [0morange raspberry
+[33m[stage-2] [0m[92m✓ Command executed successfully[0m
+[33m[your-program] [0m$ echo apple banana
+[33m[your-program] [0mapple banana
+[33m[stage-2] [0m[92m✓ Command executed successfully[0m
+[33m[your-program] [0m$ invalid_grape_command
+[33m[your-program] [0mash: invalid_grape_command: not found
+[33m[stage-2] [0m[92m✓ Received command not found message[0m
+[33m[your-program] [0m$ echo strawberry pear
+[33m[your-program] [0mstrawberry pear
+[33m[stage-2] [0m[92m✓ Command executed successfully[0m
+[33m[stage-2] [0m[94mPressed "<UP ARROW>" (expecting to recall "echo strawberry pear")[0m
+[33m[stage-2] [0m[92m✓ Prompt line matches "echo strawberry pear"[0m
+[33m[stage-2] [0m[94mPressed "<UP ARROW>" (expecting to recall "invalid_grape_command")[0m
+[33m[stage-2] [0m[92m✓ Prompt line matches "invalid_grape_command"[0m
+[33m[stage-2] [0m[94mPressed "<DOWN ARROW>" (expecting to recall "echo strawberry pear")[0m
+[33m[stage-2] [0m[92m✓ Prompt line matches "echo strawberry pear"[0m
+[33m[your-program] [0m$ echo strawberry pear
+[33m[stage-2] [0m[92mTest passed.[0m
+
+[33m[stage-1] [0m[94mRunning tests for Stage #1: dm2[0m
+[33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$ echo apple raspberry
+[33m[your-program] [0mapple raspberry
+[33m[stage-1] [0m[92m✓ Command executed successfully[0m
+[33m[your-program] [0m$ echo raspberry pear
+[33m[your-program] [0mraspberry pear
+[33m[stage-1] [0m[92m✓ Command executed successfully[0m
+[33m[your-program] [0m$ invalid_strawberry_command
+[33m[your-program] [0mash: invalid_strawberry_command: not found
+[33m[stage-1] [0m[92m✓ Received command not found message[0m
+[33m[your-program] [0m$ echo raspberry apple
+[33m[your-program] [0mraspberry apple
+[33m[stage-1] [0m[92m✓ Command executed successfully[0m
+[33m[stage-1] [0m[94mPressed "<UP ARROW>" (expecting to recall "echo raspberry apple")[0m
+[33m[stage-1] [0m[92m✓ Prompt line matches "echo raspberry apple"[0m
+[33m[stage-1] [0m[94mPressed "<UP ARROW>" (expecting to recall "invalid_strawberry_command")[0m
+[33m[stage-1] [0m[92m✓ Prompt line matches "invalid_strawberry_command"[0m
+[33m[stage-1] [0m[94mPressed "<DOWN ARROW>" (expecting to recall "echo raspberry apple")[0m
+[33m[stage-1] [0m[92m✓ Prompt line matches "echo raspberry apple"[0m
+[33m[stage-1] [0m[94mExecuting command "echo raspberry apple"[0m
+[33m[your-program] [0m$ echo raspberry apple
+[33m[your-program] [0mraspberry apple
+[33m[stage-1] [0m[92m✓ Command executed with expected output[0m
+[33m[your-program] [0m$ 
+[33m[stage-1] [0m[92mTest passed.[0m
