@@ -35,7 +35,7 @@ func (t FileContentAssertion) Run(screenState [][]string, startRowIndex int) (pr
 		return processedRowCount, &AssertionError{
 			StartRowIndex: startRowIndex,
 			ErrorRowIndex: startRowIndex,
-			Message:       fmt.Sprintf("Expected %s contains (%q) but received %q", t.FilePath, t.ExpectedContent, fileContent),
+			Message:       fmt.Sprintf("Expected %s to contain %q but received %q", t.FilePath, t.ExpectedContent, fileContent),
 		}
 	}
 
