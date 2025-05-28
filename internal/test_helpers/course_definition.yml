@@ -1615,7 +1615,7 @@ stages:
     marketing_md: |-
       In this stage, you'll implement support for writing command history to a file.
 
-  - slug: "hp3"
+  - slug: "sx3"
     primary_extension_slug: "history-persistence"
     name: "Appending history to file"
     difficulty: medium
