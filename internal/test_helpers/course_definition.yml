@@ -1615,4 +1615,38 @@ stages:
     marketing_md: |-
       In this stage, you'll implement support for writing command history to a file.
 
+  - slug: "hp3"
+    primary_extension_slug: "history-persistence"
+    name: "Appending history to file"
+    difficulty: medium
+    description_md: |-
+      In this stage, you will add support for appending commands to the history file using the `history -a` command.
 
+      **Tests**
+      The tester will execute your program like this:
+
+      ```bash
+      ./your_program.sh
+      ```
+
+      It will then send the following commands to your shell:
+
+      ```bash
+      $ echo hello
+      hello
+      $ echo world
+      world
+      $ history -a <File_name>
+      $
+      ```
+
+      The tester will then expect the history file's contents to look like:
+
+      ```
+      echo hello
+      echo world
+      history -a <File_name>
+      ```
+
+    marketing_md: |-
+      In this stage, you'll implement support for appending commands to the history file.
