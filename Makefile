@@ -190,6 +190,13 @@ define _HISTORY_STAGES_ASH
 ] 
 endef
 
+define _HISTORY_PERSISTENCE_STAGES
+[ \
+	{"slug":"za2","tester_log_prefix":"tester::#za2","title":"Stage#1: Read history from file"}, \
+	{"slug":"in3","tester_log_prefix":"tester::#in3","title":"Stage#2: Write history to file"} \
+]
+endef
+
 # Use eval to properly escape the stage arrays
 define quote_strings
 	$(shell echo '$(1)' | sed 's/"/\\"/g')
@@ -218,6 +225,7 @@ PIPELINE_STAGES = $(call quote_strings,$(_PIPELINE_STAGES))
 HISTORY_STAGES = $(call quote_strings,$(_HISTORY_STAGES))
 HISTORY_STAGES_ZSH = $(call quote_strings,$(_HISTORY_STAGES_ZSH))
 HISTORY_STAGES_ASH = $(call quote_strings,$(_HISTORY_STAGES_ASH))
+HISTORY_PERSISTENCE_STAGES = $(call quote_strings,$(_HISTORY_PERSISTENCE_STAGES))
 
 test_base_w_ash: build
 	$(call run_test,$(BASE_STAGES),ash)
@@ -288,6 +296,9 @@ test_history_w_zsh: build
 test_history_w_ash: build
 	$(call run_test,$(HISTORY_STAGES_ASH),ash)
 
+test_history_persistence_w_bash: build
+	$(call run_test,$(HISTORY_PERSISTENCE_STAGES),bash)
+
 test_ash:
 	make test_base_w_ash
 	make test_nav_w_ash
@@ -303,6 +314,7 @@ test_bash:
 	make test_redirections_w_bash
 	make test_completions_w_bash
 	make test_history_w_bash
+	make test_history_persistence_w_bash
 
 # Doesn't support completions, history
 test_dash:
