@@ -28,9 +28,7 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Create temporary history file paths
 	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_test")
-	overwriteFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_test")
-	defer os.Remove(historyFile)   // Clean up the history file when done
-	defer os.Remove(overwriteFile) // Clean up the overwrite file when done
+	defer os.Remove(historyFile) // Clean up the history file when done
 
 	// Generate some random commands
 	nCommands := random.RandomInt(2, 5)
@@ -84,45 +82,6 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 			return fmt.Errorf("command %q not found in history file", cmd)
 		}
 		logger.Successf("✓ Found command %q in history file", cmd)
-	}
-
-	// --- Test file overwrite behavior ---
-
-	// Pre-populate the overwrite file with dummy content
-	dummyContent := "this should be overwritten"
-	if err := os.WriteFile(overwriteFile, []byte(dummyContent), 0644); err != nil {
-		logger.Errorf("Failed to pre-populate overwrite file: %v", err)
-		return err
-	}
-
-	// Run history -w to write to the overwrite file
-	overwriteCommand := "history -w " + overwriteFile
-	logger.Infof("Testing overwrite: writing history to a new file")
-	historyTestCase2 := test_cases.CommandReflectionTestCase{
-		Command:        overwriteCommand,
-		SuccessMessage: "✓ History written to overwrite file",
-	}
-	if err := historyTestCase2.Run(asserter, shell, logger, false); err != nil {
-		return err
-	}
-
-	// Verify the overwrite file was written correctly
-	overwriteContent, err := os.ReadFile(overwriteFile)
-	if err != nil {
-		logger.Errorf("Failed to read overwrite file: %v", err)
-		return err
-	}
-	overwriteStr := string(overwriteContent)
-	if strings.Contains(overwriteStr, dummyContent) {
-		logger.Errorf("Overwrite file was not written correctly, still contains dummy content")
-		return fmt.Errorf("overwrite file not written correctly")
-	}
-	for _, cmd := range expectedCommands {
-		if !strings.Contains(overwriteStr, cmd) {
-			logger.Errorf("Command %q not found in overwrite file", cmd)
-			return fmt.Errorf("command %q not found in overwrite file", cmd)
-		}
-		logger.Successf("✓ Found command %q in overwrite file", cmd)
 	}
 
 	return logAndQuit(asserter, nil)
