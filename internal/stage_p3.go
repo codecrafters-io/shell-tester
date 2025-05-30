@@ -19,6 +19,7 @@ func testP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
 		{CommandType: "cat", CommandName: CUSTOM_CAT_COMMAND, CommandMetadata: ""},
+		{CommandType: "grep", CommandName: CUSTOM_GREP_COMMAND, CommandMetadata: ""},
 		{CommandType: "head", CommandName: CUSTOM_HEAD_COMMAND, CommandMetadata: ""},
 		{CommandType: "ls", CommandName: CUSTOM_LS_COMMAND, CommandMetadata: ""},
 		{CommandType: "wc", CommandName: CUSTOM_WC_COMMAND, CommandMetadata: ""},
