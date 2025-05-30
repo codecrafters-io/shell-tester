@@ -19,7 +19,9 @@ func testP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
 		{CommandType: "cat", CommandName: CUSTOM_CAT_COMMAND, CommandMetadata: ""},
+		{CommandType: "grep", CommandName: CUSTOM_GREP_COMMAND, CommandMetadata: ""},
 		{CommandType: "head", CommandName: CUSTOM_HEAD_COMMAND, CommandMetadata: ""},
+		{CommandType: "ls", CommandName: CUSTOM_LS_COMMAND, CommandMetadata: ""},
 		{CommandType: "wc", CommandName: CUSTOM_WC_COMMAND, CommandMetadata: ""},
 	}, false)
 	if err != nil {
@@ -83,12 +85,13 @@ func testP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	sort.Ints(randomUniqueFileNames)
 	availableEntries := randomUniqueFileNames[1:4]
 
-	input = fmt.Sprintf(`ls -la %s | tail -n 5 | head -n 3 | grep "f-%d"`, newRandomDir, availableEntries[2])
-	expectedRegexPattern := fmt.Sprintf("^[rwx-]* .* f-%d", availableEntries[2])
+	input = fmt.Sprintf(`ls %s | tail -n 5 | head -n 3 | grep "f-%d"`, newRandomDir, availableEntries[2])
+	expectedOutput = fmt.Sprintf("f-%d", availableEntries[2])
+	expectedRegexPattern := fmt.Sprintf("^f-%d$", availableEntries[2])
 
 	singleLineTestCase2 := test_cases.CommandResponseTestCase{
 		Command:          input,
-		ExpectedOutput:   "NIL",
+		ExpectedOutput:   expectedOutput,
 		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(expectedRegexPattern)},
 		SuccessMessage:   "✓ Received expected output",
 	}
