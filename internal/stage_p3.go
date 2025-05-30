@@ -86,7 +86,7 @@ func testP3(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	input = fmt.Sprintf(`ls %s | tail -n 5 | head -n 3 | grep "f-%d"`, newRandomDir, availableEntries[2])
 	expectedOutput = fmt.Sprintf("f-%d", availableEntries[2])
-	expectedRegexPattern := fmt.Sprintf("^[rwx-]* .* f-%d", availableEntries[2])
+	expectedRegexPattern := fmt.Sprintf("^f-%d$", availableEntries[2])
 
 	singleLineTestCase2 := test_cases.CommandResponseTestCase{
 		Command:          input,
