@@ -44,8 +44,8 @@ Debug = true
 [33m[stage-1] [setup] [0m[94mecho -n "mango" > "/tmp/baz/f-56"[0m
 [33m[stage-1] [setup] [0m[94mecho -n "grape" > "/tmp/baz/f-19"[0m
 [33m[stage-1] [setup] [0m[94mecho -n "blueberry" > "/tmp/baz/f-42"[0m
-[33m[your-program] [0m$ ls -la /tmp/baz | tail -n 5 | head -n 3 | grep "f-42"
-[33m[your-program] [0m-rw-r--r-- 1 vscode vscode     9 May  1 16:17 f-42
+[33m[your-program] [0m$ ls /tmp/baz | tail -n 5 | head -n 3 | grep "f-42"
+[33m[your-program] [0mf-42
 [33m[stage-1] [0m[92m✓ Received expected output[0m
 [33m[your-program] [0m$ 
 [33m[stage-1] [0m[92mTest passed.[0m
