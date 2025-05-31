@@ -94,7 +94,7 @@ func testHP4(stageHarness *test_case_harness.TestCaseHarness) error {
 	historyStr := string(historyContent)
 
 	// print the history file content
-	logger.Infof("History file content: \n%s", historyStr)
+	logger.Debugf("History file content: \n%s", historyStr)
 
 	// Verify new commands were written
 	for _, cmd := range commandTestCases {

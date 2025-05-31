@@ -51,7 +51,7 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 		logger.Errorf("Failed to read history file: %v", err)
 		return err
 	}
-	logger.Infof("History file content: \n%s", string(content))
+	logger.Debugf("History file content: \n%s", string(content))
 
 	// Step 2: Run some commands in the shell
 	nShellCommands := random.RandomInt(2, 4)
