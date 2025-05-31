@@ -17,6 +17,9 @@ func testH2(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
+	// Set HISTFILE to /dev/null before starting the shell
+	shell.Setenv("HISTFILE", "/dev/null")
+
 	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}

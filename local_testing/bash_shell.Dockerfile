@@ -1,17 +1,17 @@
-FROM alpine:latest
+FROM ubuntu:latest
 
 # Set Go version
 ARG GO_VERSION=1.23.0
 ENV GO_VERSION=${GO_VERSION}
 
 # Install required packages
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y \
     wget \
     git \
     gcc \
-    musl-dev \
     make \
-    ca-certificates
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Go
 RUN wget -P /tmp "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz" && \
@@ -39,8 +39,8 @@ RUN go mod download
 # Copy the rest of the project files
 COPY . .
 
-# Set the default shell to ash
-SHELL ["/bin/ash", "-c"]
+# Set the default shell to bash
+SHELL ["/bin/bash", "-c"]
 
 # Default command
-CMD ["/bin/ash"] 
+CMD ["/bin/bash"] 
