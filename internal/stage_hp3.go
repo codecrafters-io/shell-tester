@@ -114,7 +114,73 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 		logger.Errorf("History append command %q not found in history file", historyAppendCmd)
 		return fmt.Errorf("history append command %q not found in history file", historyAppendCmd)
 	}
+	logger.Debugf("History file content after appending: \n%s", historyStr)
 	logger.Successf("✓ Found history append command in history file")
+
+	// Get initial counts of commands
+	initialCounts := make(map[string]int)
+	for _, cmd := range initialCommands {
+		initialCounts[cmd] = strings.Count(historyStr, cmd)
+	}
+	for _, cmd := range commandTestCases {
+		initialCounts[cmd.Command] = strings.Count(historyStr, cmd.Command)
+	}
+	// Don't count history -a command since it's expected to appear multiple times
+
+	// Run some new commands
+	nShellCommands = random.RandomInt(2, 4)
+	commandTestCases = make([]test_cases.CommandResponseTestCase, nShellCommands)
+	for i := 0; i < nShellCommands; i++ {
+		cmdWords := random.RandomWords(random.RandomInt(2, 4))
+		cmd := "echo " + strings.Join(cmdWords, " ")
+		commandTestCases[i] = test_cases.CommandResponseTestCase{
+			Command:        cmd,
+			ExpectedOutput: strings.Join(cmdWords, " "),
+			SuccessMessage: fmt.Sprintf("✓ Ran %s", cmd),
+		}
+	}
+
+	// Run the new commands
+	for _, cmd := range commandTestCases {
+		if err := cmd.Run(asserter, shell, logger); err != nil {
+			return err
+		}
+	}
+
+	// Run history -a again
+	historyAppendCmd = "history -a " + historyFile
+	historyAppendTest = test_cases.CommandReflectionTestCase{
+		Command:        historyAppendCmd,
+		SuccessMessage: "✓ History appended to file",
+	}
+	if err := historyAppendTest.Run(asserter, shell, logger, false); err != nil {
+		return err
+	}
+
+	// Add a small delay to ensure file is written
+	time.Sleep(100 * time.Millisecond)
+
+	// Read the updated history file content again
+	historyContent, err = os.ReadFile(historyFile)
+	if err != nil {
+		logger.Errorf("Failed to read history file: %v", err)
+		return err
+	}
+	historyStr = string(historyContent)
+	logger.Debugf("History file content after second append: \n%s", historyStr)
+
+	// Verify counts haven't increased (excluding history -a command)
+	for cmd, initialCount := range initialCounts {
+		if cmd == historyAppendCmd {
+			continue // Skip history -a command
+		}
+		newCount := strings.Count(historyStr, cmd)
+		if newCount > initialCount {
+			logger.Errorf("Command %q appears %d times in history file (was %d)", cmd, newCount, initialCount)
+			return fmt.Errorf("command %q appears %d times in history file (was %d)", cmd, newCount, initialCount)
+		}
+		logger.Successf("✓ Command %q count preserved (%d)", cmd, initialCount)
+	}
 
 	return logAndQuit(asserter, nil)
 }
