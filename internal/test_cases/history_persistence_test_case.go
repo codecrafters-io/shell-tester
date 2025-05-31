@@ -26,6 +26,9 @@ type HistoryPersistenceTestCase struct {
 
 	// Was history command executed before loading the history file
 	WasHistoryCommandExecuted bool
+
+	// ExpectHistoryRCommand controls whether to expect a history -r command in the history
+	ExpectHistoryRCommand bool
 }
 
 func (t HistoryPersistenceTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
@@ -79,23 +82,26 @@ func (t HistoryPersistenceTestCase) Run(asserter *logged_shell_asserter.LoggedSh
 		historyOffset = 2
 	}
 
-	// Add assertion for the history -r command first
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput:   fmt.Sprintf("    %d  history -r %s", len(t.PreviousCommands)+historyOffset, t.FilePath),
-		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^\s*\d+\s+history -r %s$`, regexp.QuoteMeta(t.FilePath)))},
-	})
+	// Add assertion for the history -r command if expected
+	if t.ExpectHistoryRCommand {
+		asserter.AddAssertion(assertions.SingleLineAssertion{
+			ExpectedOutput:   fmt.Sprintf("    %d  history -r %s", len(t.PreviousCommands)+historyOffset, t.FilePath),
+			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^\s*\d+\s+history -r %s$`, regexp.QuoteMeta(t.FilePath)))},
+		})
+		historyOffset++
+	}
 
 	// Then check file commands
 	for i, cmd := range fileCommands {
 		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput:   fmt.Sprintf("    %d  %s", len(t.PreviousCommands)+historyOffset+1+i, cmd),
+			ExpectedOutput:   fmt.Sprintf("    %d  %s", len(t.PreviousCommands)+historyOffset+i, cmd),
 			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^\s*\d+\s+%s$`, regexp.QuoteMeta(cmd)))},
 		})
 	}
 
 	// Add assertion for the final history command
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput:   fmt.Sprintf("    %d  history", len(t.PreviousCommands)+len(fileCommands)+historyOffset+2),
+		ExpectedOutput:   fmt.Sprintf("    %d  history", len(t.PreviousCommands)+len(fileCommands)+historyOffset+1),
 		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(`^\s*\d+\s+history$`)},
 	})
 

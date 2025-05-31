@@ -1650,3 +1650,63 @@ stages:
 
     marketing_md: |-
       In this stage, you'll implement support for appending commands to the history file.
+  
+  - slug: "kz7"
+    primary_extension_slug: "history-persistence"
+    name: "Persisting history on exit"
+    difficulty: medium
+    description_md: |-
+      In this stage, you will add support for persisting the history to the file when the shell exits.
+
+      **Tests**
+      The tester will execute your program like this:
+
+      ```bash
+      ./your_program.sh
+      ```
+
+      It will then send the following commands to your shell:
+
+      ```bash
+      $ echo hello
+      hello
+      $ echo world
+      world
+      $ exit
+      ```
+
+      The tester will then expect the history file's contents to look like:
+
+      ```
+      echo hello
+      echo world
+      ```
+
+    marketing_md: |-
+      In this stage, you'll implement support for persisting the history to the file when the shell exits.
+
+  - slug: "zp4"
+    primary_extension_slug: "history-persistence"
+    name: "Loading history on startup"
+    difficulty: medium
+    description_md: |-
+      In this stage, you will add support for loading the history from the file when the shell starts.
+
+      **Tests**
+      The tester will execute your program like this:
+
+      ```bash
+      ./your_program.sh
+      ```
+
+      It will then send the following commands to your shell:
+      
+      ```bash
+      $ history
+      1  echo hello
+      2  echo world
+      $
+      ```
+
+      The tester will then expect the history file's contents to look like:
+      

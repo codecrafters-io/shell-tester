@@ -91,6 +91,7 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 		FilePath:                  historyFile,
 		SuccessMessage:            "✓ History after loading file is correct",
 		WasHistoryCommandExecuted: true,
+		ExpectHistoryRCommand:     true,
 	}
 	if err := historyAfter.Run(asserter, shell, logger); err != nil {
 		return err
