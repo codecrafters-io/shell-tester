@@ -32,12 +32,12 @@ ENV GOSUMDB=off
 ENV GOINSECURE=*
 ENV GOTOOLCHAIN=local
 
-# Copy the project files
-COPY . .
+# Copy go.mod and go.sum first to cache dependencies
+COPY go.mod go.sum ./
+RUN go mod download
 
-# Build the tester
-WORKDIR /app
-RUN make build
+# Copy the rest of the project files
+COPY . .
 
 # Set the default shell to ash
 SHELL ["/bin/ash", "-c"]
