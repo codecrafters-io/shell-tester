@@ -194,7 +194,8 @@ define _HISTORY_PERSISTENCE_STAGES
 [ \
 	{"slug":"za2","tester_log_prefix":"tester::#za2","title":"Stage#1: Read history from file"}, \
 	{"slug":"in3","tester_log_prefix":"tester::#in3","title":"Stage#2: Write history to file"}, \
-	{"slug":"sx3","tester_log_prefix":"tester::#sx3","title":"Stage#3: Append history to file"} \
+	{"slug":"sx3","tester_log_prefix":"tester::#sx3","title":"Stage#3: Append history to file"}, \
+	{"slug":"kz7","tester_log_prefix":"tester::#kz7","title":"Stage#4: Persist history on exit"} \
 ]
 endef
 

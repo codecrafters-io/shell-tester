@@ -22,13 +22,16 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
-		return err
-	}
-
 	// Step 1: Create a temporary history file with some commands
 	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_test")
 	defer os.Remove(historyFile)
+
+	// Set HISTFILE to /dev/null before starting the shell
+	shell.Setenv("HISTFILE", "/dev/null")
+
+	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
+		return err
+	}
 
 	// Step 1: Create history file with random commands
 	nFileCommands := random.RandomInt(2, 5)
