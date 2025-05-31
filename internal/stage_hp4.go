@@ -64,9 +64,9 @@ func testHP4(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Step 5: Exit the shell
-	shell.SendCommand("exit")
+	shell.SendCommand("exit 0")
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ exit",
+		ExpectedOutput: "$ exit 0",
 	})
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: "exit",
