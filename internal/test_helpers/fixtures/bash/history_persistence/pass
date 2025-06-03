@@ -3,146 +3,161 @@ Debug = true
 [33m[stage-5] [0m[94mRunning tests for Stage #5: za2[0m
 [33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-5] [0m[36mHistory file content: [0m
-[33m[stage-5] [0m[36mecho blueberry mango[0m
-[33m[stage-5] [0m[36mecho pineapple grape[0m
+[33m[stage-5] [0m[36mecho orange mango pineapple[0m
+[33m[stage-5] [0m[36mecho pear raspberry[0m
+[33m[stage-5] [0m[36mecho banana apple[0m
 [33m[stage-5] [0m[36m[0m
-[33m[your-program] [0m$ echo pear banana
-[33m[your-program] [0mpear banana
-[33m[stage-5] [0m[92m✓ Ran echo pear banana[0m
-[33m[your-program] [0m$ echo mango orange pear
-[33m[your-program] [0mmango orange pear
-[33m[stage-5] [0m[92m✓ Ran echo mango orange pear[0m
+[33m[your-program] [0m$ echo pineapple raspberry apple
+[33m[your-program] [0mpineapple raspberry apple
+[33m[stage-5] [0m[92m✓ Ran echo pineapple raspberry apple[0m
+[33m[your-program] [0m$ echo grape pear strawberry
+[33m[your-program] [0mgrape pear strawberry
+[33m[stage-5] [0m[92m✓ Ran echo grape pear strawberry[0m
 [33m[your-program] [0m$ history
-[33m[your-program] [0m    1  echo pear banana
-[33m[your-program] [0m    2  echo mango orange pear
+[33m[your-program] [0m    1  echo pineapple raspberry apple
+[33m[your-program] [0m    2  echo grape pear strawberry
 [33m[your-program] [0m    3  history
 [33m[stage-5] [0m[92m✓ History before loading file is correct[0m
 [33m[your-program] [0m$ history -r /tmp/pear_shell_history_test
 [33m[stage-5] [0m[92m✓ Loaded history from file[0m
 [33m[your-program] [0m$ history
-[33m[your-program] [0m    1  echo pear banana
-[33m[your-program] [0m    2  echo mango orange pear
+[33m[your-program] [0m    1  echo pineapple raspberry apple
+[33m[your-program] [0m    2  echo grape pear strawberry
 [33m[your-program] [0m    3  history
 [33m[your-program] [0m    4  history -r /tmp/pear_shell_history_test
-[33m[your-program] [0m    5  echo blueberry mango
-[33m[your-program] [0m    6  echo pineapple grape
-[33m[your-program] [0m    7  history
+[33m[your-program] [0m    5  echo orange mango pineapple
+[33m[your-program] [0m    6  echo pear raspberry
+[33m[your-program] [0m    7  echo banana apple
+[33m[your-program] [0m    8  history
 [33m[stage-5] [0m[92m✓ History after loading file is correct[0m
 [33m[your-program] [0m$ 
 [33m[stage-5] [0m[92mTest passed.[0m
 
 [33m[stage-4] [0m[94mRunning tests for Stage #4: in3[0m
 [33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo blueberry raspberry
-[33m[your-program] [0mblueberry raspberry
+[33m[your-program] [0m$ echo pineapple raspberry
+[33m[your-program] [0mpineapple raspberry
 [33m[stage-4] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo raspberry strawberry
-[33m[your-program] [0mraspberry strawberry
+[33m[your-program] [0m$ echo pear strawberry
+[33m[your-program] [0mpear strawberry
 [33m[stage-4] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo pear raspberry
-[33m[your-program] [0mpear raspberry
+[33m[your-program] [0m$ echo banana blueberry
+[33m[your-program] [0mbanana blueberry
 [33m[stage-4] [0m[92m✓ Received expected response[0m
-[33m[stage-4] [0m[94mWriting history to file using command: history -w /tmp/raspberry_shell_history_test[0m
-[33m[your-program] [0m$ history -w /tmp/raspberry_shell_history_test
+[33m[stage-4] [0m[94mWriting history to file using command: history -w /tmp/banana_shell_history_test[0m
+[33m[your-program] [0m$ history -w /tmp/banana_shell_history_test
 [33m[stage-4] [0m[92m✓ History written to file[0m
 [33m[stage-4] [0m[94mVerifying history file contents[0m
-[33m[stage-4] [0m[92m✓ Found command "echo blueberry raspberry" in history file[0m
-[33m[stage-4] [0m[92m✓ Found command "echo raspberry strawberry" in history file[0m
-[33m[stage-4] [0m[92m✓ Found command "echo pear raspberry" in history file[0m
-[33m[stage-4] [0m[92m✓ Found command "history -w /tmp/raspberry_shell_history_test" in history file[0m
+[33m[stage-4] [0m[92m✓ Found command "echo pineapple raspberry" in history file[0m
+[33m[stage-4] [0m[92m✓ Found command "echo pear strawberry" in history file[0m
+[33m[stage-4] [0m[92m✓ Found command "echo banana blueberry" in history file[0m
+[33m[stage-4] [0m[92m✓ Found command "history -w /tmp/banana_shell_history_test" in history file[0m
 [33m[your-program] [0m$ 
 [33m[stage-4] [0m[92mTest passed.[0m
 
 [33m[stage-3] [0m[94mRunning tests for Stage #3: sx3[0m
 [33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo mango pear blueberry
-[33m[your-program] [0mmango pear blueberry
-[33m[stage-3] [0m[92m✓ Ran echo mango pear blueberry[0m
-[33m[your-program] [0m$ echo raspberry strawberry
-[33m[your-program] [0mraspberry strawberry
-[33m[stage-3] [0m[92m✓ Ran echo raspberry strawberry[0m
-[33m[your-program] [0m$ echo pineapple strawberry
-[33m[your-program] [0mpineapple strawberry
-[33m[stage-3] [0m[92m✓ Ran echo pineapple strawberry[0m
+[33m[your-program] [0m$ echo banana orange
+[33m[your-program] [0mbanana orange
+[33m[stage-3] [0m[92m✓ Ran echo banana orange[0m
+[33m[your-program] [0m$ echo pineapple banana
+[33m[your-program] [0mpineapple banana
+[33m[stage-3] [0m[92m✓ Ran echo pineapple banana[0m
+[33m[your-program] [0m$ echo pear apple blueberry
+[33m[your-program] [0mpear apple blueberry
+[33m[stage-3] [0m[92m✓ Ran echo pear apple blueberry[0m
 [33m[your-program] [0m$ history
-[33m[your-program] [0m    1  echo mango pear blueberry
-[33m[your-program] [0m    2  echo raspberry strawberry
-[33m[your-program] [0m    3  echo pineapple strawberry
+[33m[your-program] [0m    1  echo banana orange
+[33m[your-program] [0m    2  echo pineapple banana
+[33m[your-program] [0m    3  echo pear apple blueberry
 [33m[your-program] [0m    4  history
 [33m[stage-3] [0m[92m✓ History before appending is correct[0m
-[33m[your-program] [0m$ history -a /tmp/raspberry_shell_history_test
+[33m[your-program] [0m$ history -a /tmp/banana_shell_history_test
 [33m[stage-3] [0m[92m✓ History appended to file[0m
-[33m[stage-3] [0m[92m✓ Found initial command "echo blueberry strawberry pineapple" in history file[0m
-[33m[stage-3] [0m[92m✓ Found initial command "echo orange apple" in history file[0m
-[33m[stage-3] [0m[92m✓ Found new command "echo mango pear blueberry" in history file[0m
-[33m[stage-3] [0m[92m✓ Found new command "echo raspberry strawberry" in history file[0m
-[33m[stage-3] [0m[92m✓ Found new command "echo pineapple strawberry" in history file[0m
+[33m[stage-3] [0m[92m✓ Found initial command "echo pear mango" in history file[0m
+[33m[stage-3] [0m[92m✓ Found initial command "echo grape raspberry orange" in history file[0m
+[33m[stage-3] [0m[92m✓ Found initial command "echo orange raspberry" in history file[0m
+[33m[stage-3] [0m[92m✓ Found new command "echo banana orange" in history file[0m
+[33m[stage-3] [0m[92m✓ Found new command "echo pineapple banana" in history file[0m
+[33m[stage-3] [0m[92m✓ Found new command "echo pear apple blueberry" in history file[0m
 [33m[stage-3] [0m[36mHistory file content after appending: [0m
-[33m[stage-3] [0m[36mecho blueberry strawberry pineapple[0m
-[33m[stage-3] [0m[36mecho orange apple[0m
-[33m[stage-3] [0m[36mecho mango pear blueberry[0m
-[33m[stage-3] [0m[36mecho raspberry strawberry[0m
-[33m[stage-3] [0m[36mecho pineapple strawberry[0m
+[33m[stage-3] [0m[36mecho pear mango[0m
+[33m[stage-3] [0m[36mecho grape raspberry orange[0m
+[33m[stage-3] [0m[36mecho orange raspberry[0m
+[33m[stage-3] [0m[36mecho banana orange[0m
+[33m[stage-3] [0m[36mecho pineapple banana[0m
+[33m[stage-3] [0m[36mecho pear apple blueberry[0m
 [33m[stage-3] [0m[36mhistory[0m
-[33m[stage-3] [0m[36mhistory -a /tmp/raspberry_shell_history_test[0m
+[33m[stage-3] [0m[36mhistory -a /tmp/banana_shell_history_test[0m
 [33m[stage-3] [0m[36m[0m
 [33m[stage-3] [0m[92m✓ Found history append command in history file[0m
-[33m[your-program] [0m$ history -a /tmp/raspberry_shell_history_test
+[33m[your-program] [0m$ history -a /tmp/banana_shell_history_test
 [33m[stage-3] [0m[92m✓ History appended to file[0m
 [33m[stage-3] [0m[36mHistory file content after second append: [0m
-[33m[stage-3] [0m[36mecho blueberry strawberry pineapple[0m
-[33m[stage-3] [0m[36mecho orange apple[0m
-[33m[stage-3] [0m[36mecho mango pear blueberry[0m
-[33m[stage-3] [0m[36mecho raspberry strawberry[0m
-[33m[stage-3] [0m[36mecho pineapple strawberry[0m
+[33m[stage-3] [0m[36mecho pear mango[0m
+[33m[stage-3] [0m[36mecho grape raspberry orange[0m
+[33m[stage-3] [0m[36mecho orange raspberry[0m
+[33m[stage-3] [0m[36mecho banana orange[0m
+[33m[stage-3] [0m[36mecho pineapple banana[0m
+[33m[stage-3] [0m[36mecho pear apple blueberry[0m
 [33m[stage-3] [0m[36mhistory[0m
-[33m[stage-3] [0m[36mhistory -a /tmp/raspberry_shell_history_test[0m
-[33m[stage-3] [0m[36mhistory -a /tmp/raspberry_shell_history_test[0m
+[33m[stage-3] [0m[36mhistory -a /tmp/banana_shell_history_test[0m
+[33m[stage-3] [0m[36mhistory -a /tmp/banana_shell_history_test[0m
 [33m[stage-3] [0m[36m[0m
-[33m[stage-3] [0m[92m✓ Command "echo pineapple strawberry" count preserved (1)[0m
-[33m[stage-3] [0m[92m✓ Command "echo blueberry strawberry pineapple" count preserved (1)[0m
-[33m[stage-3] [0m[92m✓ Command "echo orange apple" count preserved (1)[0m
-[33m[stage-3] [0m[92m✓ Command "echo mango pear blueberry" count preserved (1)[0m
-[33m[stage-3] [0m[92m✓ Command "echo raspberry strawberry" count preserved (1)[0m
+[33m[stage-3] [0m[92m✓ Command "echo pear mango" count preserved (1)[0m
+[33m[stage-3] [0m[92m✓ Command "echo grape raspberry orange" count preserved (1)[0m
+[33m[stage-3] [0m[92m✓ Command "echo orange raspberry" count preserved (1)[0m
+[33m[stage-3] [0m[92m✓ Command "echo banana orange" count preserved (1)[0m
+[33m[stage-3] [0m[92m✓ Command "echo pineapple banana" count preserved (1)[0m
+[33m[stage-3] [0m[92m✓ Command "echo pear apple blueberry" count preserved (1)[0m
 [33m[your-program] [0m$ 
 [33m[stage-3] [0m[92mTest passed.[0m
 
 [33m[stage-2] [0m[94mRunning tests for Stage #2: kz7[0m
 [33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo strawberry orange
-[33m[your-program] [0mstrawberry orange
-[33m[stage-2] [0m[92m✓ Ran echo strawberry orange[0m
-[33m[your-program] [0m$ echo pineapple banana grape
-[33m[your-program] [0mpineapple banana grape
-[33m[stage-2] [0m[92m✓ Ran echo pineapple banana grape[0m
+[33m[your-program] [0m$ echo blueberry orange mango
+[33m[your-program] [0mblueberry orange mango
+[33m[stage-2] [0m[92m✓ Ran echo blueberry orange mango[0m
+[33m[your-program] [0m$ echo pear mango
+[33m[your-program] [0mpear mango
+[33m[stage-2] [0m[92m✓ Ran echo pear mango[0m
+[33m[your-program] [0m$ echo banana pineapple orange
+[33m[your-program] [0mbanana pineapple orange
+[33m[stage-2] [0m[92m✓ Ran echo banana pineapple orange[0m
 [33m[your-program] [0m$ history
-[33m[your-program] [0m    1  echo strawberry orange
-[33m[your-program] [0m    2  echo pineapple banana grape
-[33m[your-program] [0m    3  history
+[33m[your-program] [0m    1  echo blueberry orange mango
+[33m[your-program] [0m    2  echo pear mango
+[33m[your-program] [0m    3  echo banana pineapple orange
+[33m[your-program] [0m    4  history
 [33m[stage-2] [0m[92m✓ History before exiting is correct[0m
 [33m[your-program] [0m$ exit 0
 [33m[stage-2] [0m[36mHistory file content: [0m
-[33m[stage-2] [0m[36mecho strawberry orange[0m
-[33m[stage-2] [0m[36mecho pineapple banana grape[0m
+[33m[stage-2] [0m[36mecho blueberry orange mango[0m
+[33m[stage-2] [0m[36mecho pear mango[0m
+[33m[stage-2] [0m[36mecho banana pineapple orange[0m
 [33m[stage-2] [0m[36mhistory[0m
 [33m[stage-2] [0m[36mexit 0[0m
 [33m[stage-2] [0m[36m[0m
-[33m[stage-2] [0m[92m✓ Found command "echo strawberry orange" in history file[0m
-[33m[stage-2] [0m[92m✓ Found command "echo pineapple banana grape" in history file[0m
+[33m[stage-2] [0m[92m✓ Found command "echo blueberry orange mango" in history file[0m
+[33m[stage-2] [0m[92m✓ Found command "echo pear mango" in history file[0m
+[33m[stage-2] [0m[92m✓ Found command "echo banana pineapple orange" in history file[0m
+[33m[your-program] [0mexit
 [33m[stage-2] [0m[92mTest passed.[0m
 
 [33m[stage-1] [0m[94mRunning tests for Stage #1: zp4[0m
 [33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-1] [0m[36mHistory file content: [0m
-[33m[stage-1] [0m[36mecho mango blueberry[0m
-[33m[stage-1] [0m[36mecho blueberry raspberry apple[0m
-[33m[stage-1] [0m[36mecho strawberry orange grape[0m
+[33m[stage-1] [0m[36mecho pear orange grape[0m
+[33m[stage-1] [0m[36mecho apple blueberry[0m
+[33m[stage-1] [0m[36mecho grape orange[0m
+[33m[stage-1] [0m[36mecho pear mango[0m
 [33m[stage-1] [0m[36m[0m
 [33m[your-program] [0m$ history
-[33m[your-program] [0m    1  echo mango blueberry
-[33m[your-program] [0m    2  echo blueberry raspberry apple
-[33m[your-program] [0m    3  echo strawberry orange grape
-[33m[your-program] [0m    4  history
+[33m[your-program] [0m    1  echo pear orange grape
+[33m[your-program] [0m    2  echo apple blueberry
+[33m[your-program] [0m    3  echo grape orange
+[33m[your-program] [0m    4  echo pear mango
+[33m[your-program] [0m    5  history
 [33m[stage-1] [0m[92m✓ History loaded from file is correct[0m
 [33m[your-program] [0m$ 
 [33m[stage-1] [0m[92mTest passed.[0m
