@@ -13,6 +13,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -58,7 +59,7 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	historyTestCase := test_cases.CommandReflectionTestCase{
 		Command:        historyWriteCommand,
-		SuccessMessage: "✓ History written to file",
+		SuccessMessage: "✓ History -w command executed",
 	}
 	if err := historyTestCase.Run(asserter, shell, logger, false); err != nil {
 		return err
@@ -72,16 +73,18 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	utils.LogReadableFileContents(logger, string(historyContent), "History file content:")
+
 	// Check if all commands are present in the history file in order, allowing for number prefixes
 	historyStr := string(historyContent)
 	expectedCommands := make([]string, nCommands+1)
 	for i, cmd := range commandTestCases {
-		expectedCommands[i] = "echo " + cmd.ExpectedOutput
+		expectedCommands[i] = cmd.Command
 	}
+	historyLines := strings.Split(historyStr, "\n")
 	expectedCommands[nCommands] = historyWriteCommand
-	for _, cmd := range expectedCommands {
-		if !strings.Contains(historyStr, cmd) {
-			logger.Errorf("Command %q not found in history file", cmd)
+	for i, cmd := range expectedCommands {
+		if historyLines[i] != cmd {
 			return fmt.Errorf("command %q not found in history file", cmd)
 		}
 		logger.Successf("✓ Found command %q in history file", cmd)

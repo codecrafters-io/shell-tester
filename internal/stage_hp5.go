@@ -13,6 +13,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -27,7 +28,7 @@ func testHP5(stageHarness *test_case_harness.TestCaseHarness) error {
 	defer os.Remove(historyFile)
 
 	// Create initial history file content
-	nInitialCommands := 4
+	nInitialCommands := random.RandomInt(2, 5)
 	initialCommands := make([]string, nInitialCommands)
 	for i := 0; i < nInitialCommands; i++ {
 		initialCommands[i] = "echo " + strings.Join(random.RandomWords(random.RandomInt(2, 4)), " ")
@@ -49,7 +50,7 @@ func testHP5(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return fmt.Errorf("failed to read history file: %v", err)
 	}
-	logger.Debugf("History file content: \n%s", string(historyContent))
+	utils.LogReadableFileContents(logger, string(historyContent), "History file content:")
 
 	// Step 2: Check history to verify initial commands are loaded
 	historyTest := test_cases.HistoryPersistenceTestCase{

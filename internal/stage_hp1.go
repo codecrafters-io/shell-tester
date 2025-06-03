@@ -1,6 +1,6 @@
-// Stage HP2: History Write Test
-// This test checks if the shell supports writing command history to a file using the history -w command.
-// It sends a few commands, writes them to history, and verifies the history file contents.
+// Stage HP1: History Read Test
+// This test checks if the shell supports reading command history from a file using the history -r command.
+// It creates a history file with some commands, loads it into the shell, and verifies the history contents.
 
 package internal
 
@@ -13,6 +13,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -34,7 +35,7 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Step 1: Create history file with random commands
-	nFileCommands := 3 // Fixed number of initial commands
+	nFileCommands := random.RandomInt(2, 4)
 	fileCommands := make([]string, nFileCommands)
 	for i := 0; i < nFileCommands; i++ {
 		fileCommands[i] = "echo " + strings.Join(random.RandomWords(random.RandomInt(2, 4)), " ")
@@ -51,10 +52,10 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 		logger.Errorf("Failed to read history file: %v", err)
 		return err
 	}
-	logger.Debugf("History file content: \n%s", string(content))
+	utils.LogReadableFileContents(logger, string(content), "History file content:")
 
 	// Step 2: Run some commands in the shell
-	nShellCommands := 2 // Fixed number of shell commands
+	nShellCommands := random.RandomInt(2, 4)
 	commandTestCases := make([]test_cases.CommandResponseTestCase, nShellCommands)
 	for i := 0; i < nShellCommands; i++ {
 		cmdWords := random.RandomWords(random.RandomInt(2, 4))
@@ -76,24 +77,23 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Step 4: Load history from file
-	historyLoadCmd := "history -r " + historyFile
 	historyLoadTest := test_cases.CommandReflectionTestCase{
-		Command:        historyLoadCmd,
-		SuccessMessage: "✓ Loaded history from file",
+		Command:        fmt.Sprintf("history -r %s", historyFile),
+		SuccessMessage: "✓ history -r command executed",
 	}
 	if err := historyLoadTest.Run(asserter, shell, logger, false); err != nil {
 		return err
 	}
 
 	// Step 5: Check history after loading from file (should include previous + loaded)
-	historyAfter := test_cases.HistoryPersistenceTestCase{
+	afterLoadHistoryTest := test_cases.HistoryPersistenceTestCase{
 		PreviousCommands:          commandTestCases,
 		FilePath:                  historyFile,
 		SuccessMessage:            "✓ History after loading file is correct",
 		WasHistoryCommandExecuted: true,
 		ExpectHistoryRCommand:     true,
 	}
-	if err := historyAfter.Run(asserter, shell, logger); err != nil {
+	if err := afterLoadHistoryTest.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 

@@ -8,14 +8,13 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
-	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -42,7 +41,7 @@ func testHP4(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Step 3: Run some commands in the shell
-	nShellCommands := 3 // Fixed number of shell commands
+	nShellCommands := random.RandomInt(2, 4)
 	commandTestCases := make([]test_cases.CommandResponseTestCase, nShellCommands)
 	for i := 0; i < nShellCommands; i++ {
 		cmdWords := random.RandomWords(random.RandomInt(2, 4))
@@ -68,38 +67,38 @@ func testHP4(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: "$ exit 0",
 	})
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "exit",
-		StayOnSameLine: true,
-		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(`^$`),
-			regexp.MustCompile(`^exit$`),
-		},
-	})
 	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
 	}
 
-	// Add a small delay to ensure file is written
-	time.Sleep(100 * time.Millisecond)
+	// Read the output after exit command
+	output := ""
+	if screen := shell.GetScreenState(); len(screen) > 0 {
+		output = strings.TrimSpace(screen[len(screen)-1][0])
+	}
+	// Allow both no output and 'exit' (like bash)
+	if len(output) > 0 && output != "exit" {
+		return fmt.Errorf("Expected no output or 'exit' after exit command, got %q", output)
+	}
+
+	asserter.LogRemainingOutput()
 
 	// Step 6: Read the history file content
 	historyContent, err := os.ReadFile(historyFile)
 	if err != nil {
-		logger.Errorf("Failed to read history file: %v", err)
-		return err
+		return fmt.Errorf("failed to read history file: %v", err)
 	}
 
 	// Check if all commands are present in the history file
 	historyStr := string(historyContent)
+	historyLines := strings.Split(historyStr, "\n")
 
 	// print the history file content
-	logger.Debugf("History file content: \n%s", historyStr)
+	utils.LogReadableFileContents(logger, historyStr, "History file content:")
 
 	// Verify new commands were written
-	for _, cmd := range commandTestCases {
-		if !strings.Contains(historyStr, cmd.Command) {
-			logger.Errorf("Command %q not found in history file", cmd.Command)
+	for i, cmd := range commandTestCases {
+		if historyLines[i] != cmd.Command {
 			return fmt.Errorf("command %q not found in history file", cmd.Command)
 		}
 		logger.Successf("✓ Found command %q in history file", cmd.Command)
