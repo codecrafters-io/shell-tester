@@ -50,13 +50,13 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 	inputs := []string{
 		fmt.Sprintf(`echo "%s %s"`, L[0], L[1]),
 		fmt.Sprintf(`echo "%s  %s"  "%s""%s"`, L[1], L[2], L[3], L[0]),
-		fmt.Sprintf(`echo "%s"  "%s's"  "%s"`, L[3], L[4], L[1]),
+		fmt.Sprintf(`echo "%s"  "%s's"  %s""%s`, L[3], L[4], L[1], L[2]),
 		fmt.Sprintf(`%s "%s" "%s" "%s"`, CUSTOM_CAT_COMMAND, filePaths[0], filePaths[1], filePaths[2]),
 	}
 	expectedOutputs := []string{
 		fmt.Sprintf("%s %s", L[0], L[1]),
 		fmt.Sprintf("%s  %s %s%s", L[1], L[2], L[3], L[0]),
-		fmt.Sprintf(`%s %s's %s`, L[3], L[4], L[1]),
+		fmt.Sprintf(`%s %s's %s%s`, L[3], L[4], L[1], L[2]),
 		fileContents[0] + fileContents[1] + strings.TrimRight(fileContents[2], "\n"),
 	}
 	if err := writeFiles(filePaths, fileContents, logger); err != nil {
