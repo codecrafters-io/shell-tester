@@ -54,11 +54,11 @@ func testHP5(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Step 2: Check history to verify initial commands are loaded
 	historyTest := test_cases.HistoryPersistenceTestCase{
-		PreviousCommands:          []test_cases.CommandResponseTestCase{},
+		ExpectHistoryRCommand:     false,
 		FilePath:                  historyFile,
+		PreviousCommands:          []test_cases.CommandResponseTestCase{},
 		SuccessMessage:            "✓ History loaded from file is correct",
 		WasHistoryCommandExecuted: false,
-		ExpectHistoryRCommand:     false,
 	}
 	if err := historyTest.Run(asserter, shell, logger); err != nil {
 		return err
