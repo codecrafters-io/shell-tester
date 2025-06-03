@@ -15,15 +15,15 @@ import (
 // Verifies that the command is printed to the screen
 // Verifies that the history output shows the command in the expected format
 type HistoryTestCase struct {
-	// SuccessMessage is the message to log in case of success
-	SuccessMessage string
-
 	// CommandsBeforeHistory is a list of commands to execute before running history
 	CommandsBeforeHistory []CommandResponseTestCase
 
 	// LastNCommands specifies how many of the most recent commands to check in history
 	// If not set, all commands will be checked
 	LastNCommands int
+
+	// SuccessMessage is the message to log in case of success
+	SuccessMessage string
 }
 
 func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {

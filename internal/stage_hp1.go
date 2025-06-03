@@ -69,8 +69,8 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Step 3: Check history before loading from file
 	historyBefore := test_cases.HistoryTestCase{
-		SuccessMessage:        "✓ History before loading file is correct",
 		CommandsBeforeHistory: commandTestCases,
+		SuccessMessage:        "✓ History before loading file is correct",
 	}
 	if err := historyBefore.Run(asserter, shell, logger); err != nil {
 		return err
@@ -87,11 +87,11 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Step 5: Check history after loading from file (should include previous + loaded)
 	afterLoadHistoryTest := test_cases.HistoryPersistenceTestCase{
-		PreviousCommands:          commandTestCases,
+		ExpectHistoryRCommand:     true,
 		FilePath:                  historyFile,
+		PreviousCommands:          commandTestCases,
 		SuccessMessage:            "✓ History after loading file is correct",
 		WasHistoryCommandExecuted: true,
-		ExpectHistoryRCommand:     true,
 	}
 	if err := afterLoadHistoryTest.Run(asserter, shell, logger); err != nil {
 		return err

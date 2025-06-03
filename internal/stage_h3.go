@@ -27,13 +27,13 @@ func testH3(stageHarness *test_case_harness.TestCaseHarness) error {
 	randomWords3 := strings.Join(random.RandomWords(2), " ")
 
 	testCase1 := test_cases.HistoryTestCase{
-		SuccessMessage: "✓ Received expected response",
 		CommandsBeforeHistory: []test_cases.CommandResponseTestCase{
 			{Command: "echo " + randomWords1, ExpectedOutput: randomWords1, SuccessMessage: commandSuccessMessage},
 			{Command: "echo " + randomWords2, ExpectedOutput: randomWords2, SuccessMessage: commandSuccessMessage},
 			{Command: "echo " + randomWords3, ExpectedOutput: randomWords3, SuccessMessage: commandSuccessMessage},
 		},
-		LastNCommands: 2,
+		LastNCommands:  2,
+		SuccessMessage: "✓ Received expected response",
 	}
 	if err := testCase1.Run(asserter, shell, logger); err != nil {
 		return err
@@ -47,7 +47,6 @@ func testH3(stageHarness *test_case_harness.TestCaseHarness) error {
 	randomWords9 := strings.Join(random.RandomWords(2), " ")
 
 	testCase2 := test_cases.HistoryTestCase{
-		SuccessMessage: "✓ Received expected response",
 		CommandsBeforeHistory: []test_cases.CommandResponseTestCase{
 			{Command: "echo " + randomWords4, ExpectedOutput: randomWords4, SuccessMessage: commandSuccessMessage},
 			{Command: "echo " + randomWords5, ExpectedOutput: randomWords5, SuccessMessage: commandSuccessMessage},
@@ -56,7 +55,8 @@ func testH3(stageHarness *test_case_harness.TestCaseHarness) error {
 			{Command: "echo " + randomWords8, ExpectedOutput: randomWords8, SuccessMessage: commandSuccessMessage},
 			{Command: "echo " + randomWords9, ExpectedOutput: randomWords9, SuccessMessage: commandSuccessMessage},
 		},
-		LastNCommands: random.RandomInt(3, 5),
+		LastNCommands:  random.RandomInt(3, 5),
+		SuccessMessage: "✓ Received expected response",
 	}
 	if err := testCase2.Run(asserter, shell, logger); err != nil {
 		return err

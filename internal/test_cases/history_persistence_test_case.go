@@ -15,20 +15,20 @@ import (
 
 // HistoryPersistenceTestCase checks that after loading history from a file, the shell's history output matches the file's contents.
 type HistoryPersistenceTestCase struct {
-	// PreviousCommands are the commands that were executed before loading the history file
-	PreviousCommands []CommandResponseTestCase
+	// ExpectHistoryRCommand controls whether to expect a history -r command in the history
+	ExpectHistoryRCommand bool
 
 	// FilePath is the path to the file containing history commands
 	FilePath string
+
+	// PreviousCommands are the commands that were executed before loading the history file
+	PreviousCommands []CommandResponseTestCase
 
 	// SuccessMessage is the message to log in case of success
 	SuccessMessage string
 
 	// Was history command executed before loading the history file
 	WasHistoryCommandExecuted bool
-
-	// ExpectHistoryRCommand controls whether to expect a history -r command in the history
-	ExpectHistoryRCommand bool
 }
 
 func (t HistoryPersistenceTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {

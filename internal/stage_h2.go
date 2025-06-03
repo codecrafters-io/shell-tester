@@ -29,12 +29,12 @@ func testH2(stageHarness *test_case_harness.TestCaseHarness) error {
 	randomWords3 := strings.Join(random.RandomWords(2), " ")
 
 	testCase := test_cases.HistoryTestCase{
-		SuccessMessage: "✓ Received expected response",
 		CommandsBeforeHistory: []test_cases.CommandResponseTestCase{
 			{Command: "echo " + randomWords1, ExpectedOutput: randomWords1, SuccessMessage: commandSuccessMessage},
 			{Command: "echo " + randomWords2, ExpectedOutput: randomWords2, SuccessMessage: commandSuccessMessage},
 			{Command: "echo " + randomWords3, ExpectedOutput: randomWords3, SuccessMessage: commandSuccessMessage},
 		},
+		SuccessMessage: "✓ Received expected response",
 	}
 	if err := testCase.Run(asserter, shell, logger); err != nil {
 		return err

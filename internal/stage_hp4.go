@@ -55,8 +55,8 @@ func testHP4(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Step 4: Check history before exiting
 	historyBefore := test_cases.HistoryTestCase{
-		SuccessMessage:        "✓ History before exiting is correct",
 		CommandsBeforeHistory: commandTestCases,
+		SuccessMessage:        "✓ History before exiting is correct",
 	}
 	if err := historyBefore.Run(asserter, shell, logger); err != nil {
 		return err

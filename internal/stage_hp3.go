@@ -64,8 +64,8 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Step 3: Check history before appending
 	historyBeforeTest := test_cases.HistoryTestCase{
-		SuccessMessage:        "✓ History before appending is correct",
 		CommandsBeforeHistory: commandTestCases,
+		SuccessMessage:        "✓ History before appending is correct",
 	}
 	if err := historyBeforeTest.Run(asserter, shell, logger); err != nil {
 		return err
