@@ -133,6 +133,7 @@ Debug = true
 [33m[your-program] [0m    3  history
 [33m[stage-2] [0m[92m✓ History before exiting is correct[0m
 [33m[your-program] [0m$ exit 0
+[33m[your-program] [0mexit
 [33m[stage-2] [0m[94mHistory file content:[0m
 [33m[stage-2] [0m[strawberry_shell_history_test] echo mango banana apple
 [33m[stage-2] [0m[strawberry_shell_history_test] echo strawberry pear
