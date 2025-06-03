@@ -141,7 +141,6 @@ Debug = true
 [33m[stage-2] [0m[92m✓ Found command "echo blueberry orange mango" in history file[0m
 [33m[stage-2] [0m[92m✓ Found command "echo pear mango" in history file[0m
 [33m[stage-2] [0m[92m✓ Found command "echo banana pineapple orange" in history file[0m
-[33m[your-program] [0mexit
 [33m[stage-2] [0m[92mTest passed.[0m
 
 [33m[stage-1] [0m[94mRunning tests for Stage #1: zp4[0m
