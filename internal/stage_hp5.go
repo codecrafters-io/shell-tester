@@ -50,7 +50,7 @@ func testHP5(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return fmt.Errorf("failed to read history file: %v", err)
 	}
-	utils.LogReadableFileContents(logger, string(historyContent), "History file content:")
+	utils.LogReadableFileContents(logger, string(historyContent), "History file content:", filepath.Base(historyFile))
 
 	// Step 2: Check history to verify initial commands are loaded
 	historyTest := test_cases.HistoryPersistenceTestCase{

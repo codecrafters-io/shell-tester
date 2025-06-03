@@ -90,16 +90,33 @@ func testHP4(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Check if all commands are present in the history file
-	historyStr := string(historyContent)
+	historyStr := strings.TrimSpace(string(historyContent))
 	historyLines := strings.Split(historyStr, "\n")
 
-	// print the history file content
-	utils.LogReadableFileContents(logger, historyStr, "History file content:")
+	utils.LogReadableFileContents(logger, historyStr, "History file content:", filepath.Base(historyFile))
+
+	if len(historyLines) != len(commandTestCases)+2 {
+		return fmt.Errorf("history file has %d lines, expected %d", len(historyLines), len(commandTestCases)+2)
+	}
+	logger.Successf("✓ History file has correct number of lines")
 
 	// Verify new commands were written
+	commandTestCases = append(commandTestCases, test_cases.CommandResponseTestCase{
+		Command:        "history",
+		ExpectedOutput: "history",
+		SuccessMessage: "✓ Found command history in history file",
+	})
+	commandTestCases = append(commandTestCases, test_cases.CommandResponseTestCase{
+		Command:        "exit 0",
+		ExpectedOutput: "exit 0",
+		SuccessMessage: "✓ Found command exit 0 in history file",
+	})
+	if len(historyLines) != len(commandTestCases) {
+		return fmt.Errorf("history file has %d lines, expected %d", len(historyLines), len(commandTestCases))
+	}
 	for i, cmd := range commandTestCases {
 		if historyLines[i] != cmd.Command {
-			return fmt.Errorf("command %q not found in history file", cmd.Command)
+			return fmt.Errorf("expected command %q at line %d, got %q", cmd.Command, i+1, historyLines[i])
 		}
 		logger.Successf("✓ Found command %q in history file", cmd.Command)
 	}

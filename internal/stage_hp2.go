@@ -73,19 +73,23 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	utils.LogReadableFileContents(logger, string(historyContent), "History file content:")
+	utils.LogReadableFileContents(logger, string(historyContent), "History file content:", filepath.Base(historyFile))
 
 	// Check if all commands are present in the history file in order, allowing for number prefixes
-	historyStr := string(historyContent)
+	historyStr := strings.TrimSpace(string(historyContent))
 	expectedCommands := make([]string, nCommands+1)
 	for i, cmd := range commandTestCases {
 		expectedCommands[i] = cmd.Command
 	}
 	historyLines := strings.Split(historyStr, "\n")
+	if len(historyLines) != len(expectedCommands) {
+		return fmt.Errorf("history file has %d lines, expected %d", len(historyLines), len(expectedCommands))
+	}
+	logger.Successf("✓ History file has correct number of lines")
 	expectedCommands[nCommands] = historyWriteCommand
 	for i, cmd := range expectedCommands {
 		if historyLines[i] != cmd {
-			return fmt.Errorf("command %q not found in history file", cmd)
+			return fmt.Errorf("expected command %q at line %d, got %q", cmd, i+1, historyLines[i])
 		}
 		logger.Successf("✓ Found command %q in history file", cmd)
 	}

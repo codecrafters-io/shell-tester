@@ -40,7 +40,7 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	defer os.Remove(historyFile)
 
-	utils.LogReadableFileContents(logger, initialContent, "Original history file content:")
+	utils.LogReadableFileContents(logger, initialContent, "Original history file content:", filepath.Base(historyFile))
 
 	// Set HISTFILE to /dev/null before starting the shell
 	shell.Setenv("HISTFILE", "/dev/null")
@@ -88,16 +88,20 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	utils.LogReadableFileContents(logger, string(historyContent), "History file content after appending:")
+	utils.LogReadableFileContents(logger, string(historyContent), "History file content after appending:", filepath.Base(historyFile))
 
 	// Check if all commands are present in the history file
-	historyStr := string(historyContent)
+	historyStr := strings.TrimSpace(string(historyContent))
 	historyLines := strings.Split(historyStr, "\n")
+	if len(historyLines) != len(initialCommands)+len(commandTestCases)+2 {
+		return fmt.Errorf("history file has %d lines, expected %d", len(historyLines), len(initialCommands)+len(commandTestCases)+2)
+	}
+	logger.Successf("✓ History file has correct number of lines")
 	i := 0
 	// First verify initial commands are still present
 	for _, cmd := range initialCommands {
 		if historyLines[i] != cmd {
-			return fmt.Errorf("initial command %q not found in history file", cmd)
+			return fmt.Errorf("expected initial command %q at line %d, got %q", cmd, i+1, historyLines[i])
 		}
 		logger.Successf("✓ Found initial command %q in history file", cmd)
 		i++
@@ -106,7 +110,7 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Then verify new commands were appended
 	for _, cmd := range commandTestCases {
 		if historyLines[i] != cmd.Command {
-			return fmt.Errorf("new command %q not found in history file", cmd.Command)
+			return fmt.Errorf("expected new command %q at line %d, got %q", cmd.Command, i+1, historyLines[i])
 		}
 		logger.Successf("✓ Found new command %q in history file", cmd.Command)
 		i++
@@ -121,7 +125,7 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Verify history -a command itself is present
 	if historyLines[i] != historyAppendCmd {
-		return fmt.Errorf("history append command %q not found in history file", historyAppendCmd)
+		return fmt.Errorf("expected history append command %q at line %d, got %q", historyAppendCmd, i+1, historyLines[i])
 	}
 	logger.Successf("✓ Found history append command in history file")
 
@@ -151,7 +155,7 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	historyStr = string(historyContent)
 
-	utils.LogReadableFileContents(logger, string(historyContent), "History file content after second append:")
+	utils.LogReadableFileContents(logger, string(historyContent), "History file content after second append:", filepath.Base(historyFile))
 
 	// Verify counts haven't increased (excluding history -a command)
 
