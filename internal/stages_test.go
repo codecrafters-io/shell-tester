@@ -90,6 +90,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/history/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"history_persistence_pass_bash": {
+			StageSlugs:          []string{"za2", "in3", "sx3", "kz7", "zp4"},
+			CodePath:            "./test_helpers/bash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/bash/history_persistence/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"base_pass_ash": {
 			UntilStageSlug:      "ip1",
 			CodePath:            "./test_helpers/ash",
