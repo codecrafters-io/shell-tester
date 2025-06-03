@@ -31,6 +31,7 @@ Debug = true
 [33m[your-program] [0m$ echo hello
 [33m[your-program] [0mhello
 [33m[stage-5] [0m[92m✓ Received "hello"[0m
+[33m[your-program] [0m$ 
 [33m[stage-5] [0m[94mTearing down shell[0m
 [33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-5] [0m[92m✓ Received prompt ($ )[0m
