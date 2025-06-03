@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -153,10 +154,17 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	utils.LogReadableFileContents(logger, string(historyContent), "History file content after second append:")
 
 	// Verify counts haven't increased (excluding history -a command)
-	for cmd, initialCount := range initialCounts {
-		if cmd == historyAppendCmd {
-			continue // Skip history -a command
+
+	// Sort the commands to ensure consistent order (for testing)
+	var cmds []string
+	for cmd := range initialCounts {
+		if cmd != historyAppendCmd {
+			cmds = append(cmds, cmd)
 		}
+	}
+	sort.Strings(cmds)
+	for _, cmd := range cmds {
+		initialCount := initialCounts[cmd]
 		newCount := strings.Count(historyStr, cmd)
 		if newCount > initialCount {
 			logger.Errorf("Command %q appears %d times in history file (was %d)", cmd, newCount, initialCount)
