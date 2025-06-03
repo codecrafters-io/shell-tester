@@ -109,11 +109,11 @@ Debug = true
 [33m[stage-3] [0mhistory
 [33m[stage-3] [0mhistory -a /tmp/grape_shell_history_test
 [33m[stage-3] [0mhistory -a /tmp/grape_shell_history_test
-[33m[stage-3] [0m[92m✓ Command "echo pineapple banana pear" count preserved (1)[0m
 [33m[stage-3] [0m[92m✓ Command "echo grape pear" count preserved (1)[0m
-[33m[stage-3] [0m[92m✓ Command "echo strawberry pineapple blueberry" count preserved (1)[0m
 [33m[stage-3] [0m[92m✓ Command "echo orange pineapple apple" count preserved (1)[0m
 [33m[stage-3] [0m[92m✓ Command "echo pineapple apple mango" count preserved (1)[0m
+[33m[stage-3] [0m[92m✓ Command "echo pineapple banana pear" count preserved (1)[0m
+[33m[stage-3] [0m[92m✓ Command "echo strawberry pineapple blueberry" count preserved (1)[0m
 [33m[your-program] [0m$ 
 [33m[stage-3] [0m[92mTest passed.[0m
 
