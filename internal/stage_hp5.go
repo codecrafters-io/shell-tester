@@ -27,7 +27,7 @@ func testHP5(stageHarness *test_case_harness.TestCaseHarness) error {
 	defer os.Remove(historyFile)
 
 	// Create initial history file content
-	nInitialCommands := random.RandomInt(2, 5)
+	nInitialCommands := 4
 	initialCommands := make([]string, nInitialCommands)
 	for i := 0; i < nInitialCommands; i++ {
 		initialCommands[i] = "echo " + strings.Join(random.RandomWords(random.RandomInt(2, 4)), " ")

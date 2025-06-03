@@ -42,7 +42,7 @@ func testHP4(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Step 3: Run some commands in the shell
-	nShellCommands := random.RandomInt(2, 4)
+	nShellCommands := 3 // Fixed number of shell commands
 	commandTestCases := make([]test_cases.CommandResponseTestCase, nShellCommands)
 	for i := 0; i < nShellCommands; i++ {
 		cmdWords := random.RandomWords(random.RandomInt(2, 4))

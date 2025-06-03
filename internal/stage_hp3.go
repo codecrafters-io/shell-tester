@@ -27,7 +27,7 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_test")
 
 	// Create initial history file content (randomized, like in HP1/HP2)
-	nInitialCommands := random.RandomInt(2, 5)
+	nInitialCommands := 3 // Fixed number of initial commands
 	initialCommands := make([]string, nInitialCommands)
 	for i := 0; i < nInitialCommands; i++ {
 		initialCommands[i] = "echo " + strings.Join(random.RandomWords(random.RandomInt(2, 4)), " ")
@@ -47,7 +47,7 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Step 2: Run some commands in the shell
-	nShellCommands := random.RandomInt(2, 4)
+	nShellCommands := 3 // Fixed number of shell commands
 	commandTestCases := make([]test_cases.CommandResponseTestCase, nShellCommands)
 	for i := 0; i < nShellCommands; i++ {
 		cmdWords := random.RandomWords(random.RandomInt(2, 4))

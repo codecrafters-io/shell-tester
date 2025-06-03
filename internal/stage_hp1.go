@@ -34,7 +34,7 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Step 1: Create history file with random commands
-	nFileCommands := random.RandomInt(2, 5)
+	nFileCommands := 3 // Fixed number of initial commands
 	fileCommands := make([]string, nFileCommands)
 	for i := 0; i < nFileCommands; i++ {
 		fileCommands[i] = "echo " + strings.Join(random.RandomWords(random.RandomInt(2, 4)), " ")
@@ -54,7 +54,7 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger.Debugf("History file content: \n%s", string(content))
 
 	// Step 2: Run some commands in the shell
-	nShellCommands := random.RandomInt(2, 4)
+	nShellCommands := 2 // Fixed number of shell commands
 	commandTestCases := make([]test_cases.CommandResponseTestCase, nShellCommands)
 	for i := 0; i < nShellCommands; i++ {
 		cmdWords := random.RandomWords(random.RandomInt(2, 4))

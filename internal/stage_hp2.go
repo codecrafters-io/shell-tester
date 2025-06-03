@@ -34,7 +34,7 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Generate some random commands
-	nCommands := random.RandomInt(2, 5)
+	nCommands := 3
 	commandTestCases := make([]test_cases.CommandResponseTestCase, nCommands)
 	for i := 0; i < nCommands; i++ {
 		randomWords := strings.Join(random.RandomWords(2), " ")
