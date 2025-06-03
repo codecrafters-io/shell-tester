@@ -12,8 +12,8 @@ Debug = true
 [33m[your-program] [0m$ echo example     shell
 [33m[your-program] [0mexample shell
 [33m[stage-6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo 'hello     test' 'shell''script'
-[33m[your-program] [0mhello     test shellscript
+[33m[your-program] [0m$ echo 'hello     test' 'shell''script' example''world
+[33m[your-program] [0mhello     test shellscript exampleworld
 [33m[stage-6] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ cat '/tmp/foo/f   24' '/tmp/foo/f   61' '/tmp/foo/f   80'
 [33m[your-program] [0mpineapple grape.pineapple orange.blueberry strawberry.
@@ -33,8 +33,8 @@ Debug = true
 [33m[your-program] [0m$ echo "world  example"  "script""shell"
 [33m[your-program] [0mworld  example scriptshell
 [33m[stage-5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo "script"  "hello's"  "world"
-[33m[your-program] [0mscript hello's world
+[33m[your-program] [0m$ echo "script"  "hello's"  world""example
+[33m[your-program] [0mscript hello's worldexample
 [33m[stage-5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ cat "/tmp/bar/f 58" "/tmp/bar/f   73" "/tmp/bar/f's38"
 [33m[your-program] [0morange blueberry.grape pineapple.raspberry mango.

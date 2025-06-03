@@ -44,17 +44,17 @@ func testQ1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	L := random.RandomElementsFromArray(LARGE_WORDS, 5)
+	L := random.RandomElementsFromArray(LARGE_WORDS, 6)
 	inputs := []string{
 		fmt.Sprintf(`echo '%s %s'`, L[0], L[1]),
 		fmt.Sprintf(`echo %s     %s`, L[1], L[4]),
-		fmt.Sprintf(`echo '%s     %s' '%s''%s'`, L[2], L[3], L[4], L[0]),
+		fmt.Sprintf(`echo '%s     %s' '%s''%s' %s''%s`, L[2], L[3], L[4], L[0], L[1], L[5]),
 		fmt.Sprintf(`%s '%s' '%s' '%s'`, CUSTOM_CAT_COMMAND, filePaths[0], filePaths[1], filePaths[2]),
 	}
 	expectedOutputs := []string{
 		fmt.Sprintf("%s %s", L[0], L[1]),
 		fmt.Sprintf("%s %s", L[1], L[4]),
-		fmt.Sprintf("%s     %s %s%s", L[2], L[3], L[4], L[0]),
+		fmt.Sprintf("%s     %s %s%s %s%s", L[2], L[3], L[4], L[0], L[1], L[5]),
 		fileContents[0] + fileContents[1] + strings.TrimRight(fileContents[2], "\n"),
 	}
 	if err := writeFiles(filePaths, fileContents, logger); err != nil {

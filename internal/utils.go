@@ -12,6 +12,7 @@ var SMALL_WORDS = []string{"foo", "bar", "baz", "qux", "quz"}
 var LARGE_WORDS = []string{"hello", "world", "test", "example", "shell", "script"}
 
 const CUSTOM_CAT_COMMAND = "cat"
+const CUSTOM_GREP_COMMAND = "grep"
 const CUSTOM_HEAD_COMMAND = "head"
 const CUSTOM_LS_COMMAND = "ls"
 const CUSTOM_TAIL_COMMAND = "tail"
