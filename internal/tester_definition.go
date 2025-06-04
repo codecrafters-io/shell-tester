@@ -195,5 +195,35 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testH6,
 			Timeout:  15 * time.Second,
 		},
+		{
+			Slug:     "za2",
+			TestFunc: testHP1,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "in3",
+			TestFunc: testHP2,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "sx3",
+			TestFunc: testHP3,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "zp4",
+			TestFunc: testHP4,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "kz7",
+			TestFunc: testHP5,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "jv2",
+			TestFunc: testHP6,
+			Timeout:  15 * time.Second,
+		},
 	},
 }

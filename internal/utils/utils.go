@@ -1,8 +1,11 @@
 package utils
 
 import (
+	"regexp"
+	"strings"
 	"unicode"
 
+	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/fatih/color"
 )
 
@@ -38,4 +41,31 @@ func AsBool(T func() error) func() bool {
 	// Returns the function wrapped in a helper such that it returns a bool
 	// in lieu of the error, true if the function execution is a success
 	return func() bool { return T() == nil }
+}
+
+// LogReadableFileContents prints file contents in a readable way, replacing tabs and spaces with visible markers.
+func LogReadableFileContents(l *logger.Logger, fileContents string, logMsg string, fileName string) {
+	l.Infof(logMsg)
+	l.UpdateSecondaryPrefix(fileName)
+	defer l.UpdateSecondaryPrefix("")
+	printableFileContents := strings.ReplaceAll(fileContents, "%", "%%")
+	printableFileContents = strings.ReplaceAll(printableFileContents, "\t", "<|TAB|>")
+
+	regex1 := regexp.MustCompile("[ ]+\n")
+	regex2 := regexp.MustCompile("[ ]+$")
+	printableFileContents = regex1.ReplaceAllString(printableFileContents, "\n")
+	printableFileContents = regex2.ReplaceAllString(printableFileContents, "<|SPACE|>")
+
+	if len(printableFileContents) == 0 {
+		l.Plainf("<|EMPTY FILE|>")
+	} else {
+		lines := strings.Split(printableFileContents, "\n")
+		// If the last line is empty (trailing newline), skip it
+		if len(lines) > 0 && lines[len(lines)-1] == "" {
+			lines = lines[:len(lines)-1]
+		}
+		for _, line := range lines {
+			l.Plainf(line)
+		}
+	}
 }
