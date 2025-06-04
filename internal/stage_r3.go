@@ -63,7 +63,7 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	command1 := fmt.Sprintf("%s -1 %s >> %s", CUSTOM_LS_COMMAND, lsDir, outputFilePath)
 	command2 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath)
 
-	err = test_cases.CommandReflectionTestCase{
+	err = test_cases.CommandWithNoRepsonseTestCase{
 		Command: command1,
 	}.Run(asserter, shell, logger, true)
 	if err != nil {
@@ -89,14 +89,14 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	command5 := fmt.Sprintf("echo '%s' 1>> %s", message2, outputFilePath2)
 	command6 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath2)
 
-	err = test_cases.CommandReflectionTestCase{
+	err = test_cases.CommandWithNoRepsonseTestCase{
 		Command: command4,
 	}.Run(asserter, shell, logger, true)
 	if err != nil {
 		return err
 	}
 
-	err = test_cases.CommandReflectionTestCase{
+	err = test_cases.CommandWithNoRepsonseTestCase{
 		Command: command5,
 	}.Run(asserter, shell, logger, true)
 	if err != nil {
@@ -119,14 +119,14 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 	command8 := fmt.Sprintf("%s -1 %s >> %s", CUSTOM_LS_COMMAND, lsDir, outputFilePath3)
 	command9 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath3)
 
-	err = test_cases.CommandReflectionTestCase{
+	err = test_cases.CommandWithNoRepsonseTestCase{
 		Command: command7,
 	}.Run(asserter, shell, logger, true)
 	if err != nil {
 		return err
 	}
 
-	err = test_cases.CommandReflectionTestCase{
+	err = test_cases.CommandWithNoRepsonseTestCase{
 		Command: command8,
 	}.Run(asserter, shell, logger, true)
 	if err != nil {

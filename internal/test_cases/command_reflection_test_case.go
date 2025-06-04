@@ -9,11 +9,11 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-// CommandReflectionTestCase is a test case that:
+// CommandWithNoRepsonseTestCase is a test case that:
 // Sends a command to the shell
 // Verifies that command is printed to the screen `$ <COMMAND>` (we expect the prompt to also be present)
 // If any error occurs returns the error from the corresponding assertion
-type CommandReflectionTestCase struct {
+type CommandWithNoRepsonseTestCase struct {
 	// Command is the command to send to the shell
 	Command string
 
@@ -24,7 +24,7 @@ type CommandReflectionTestCase struct {
 	SkipPromptAssertion bool
 }
 
-func (t CommandReflectionTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, skipSuccessMessage bool) error {
+func (t CommandWithNoRepsonseTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, skipSuccessMessage bool) error {
 	if err := shell.SendCommand(t.Command); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}

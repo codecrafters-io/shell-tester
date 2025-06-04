@@ -27,7 +27,7 @@ type ExitTestCase struct {
 
 func (t ExitTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, skipSuccessMessage bool) error {
 	// First run a command reflection test to verify the command is sent correctly
-	refTestCase := CommandReflectionTestCase{
+	refTestCase := CommandWithNoRepsonseTestCase{
 		Command:             t.Command,
 		SkipPromptAssertion: true,
 	}

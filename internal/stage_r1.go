@@ -63,7 +63,7 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	command1 := fmt.Sprintf("%s -1 %s > %s", CUSTOM_LS_COMMAND, lsDir, outputFilePath1)
 	command2 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath1)
 
-	err = test_cases.CommandReflectionTestCase{
+	err = test_cases.CommandWithNoRepsonseTestCase{
 		Command: command1,
 	}.Run(asserter, shell, logger, true)
 	if err != nil {
@@ -86,7 +86,7 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 	command3 := fmt.Sprintf("echo '%s' 1> %s", message, outputFilePath2)
 	command4 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath2)
 
-	err = test_cases.CommandReflectionTestCase{
+	err = test_cases.CommandWithNoRepsonseTestCase{
 		Command: command3,
 	}.Run(asserter, shell, logger, true)
 	if err != nil {
