@@ -96,9 +96,9 @@ extensions:
   - slug: "history-persistence"
     name: "History Persistence"
     description_markdown: |
-      In this challenge extension, you'll add support for persisting command history to a file.
+      In this challenge extension, you'll add support for persisting history to a file.
 
-      History persistence allows you to save your command history to a file and load it back when you restart your shell.
+      History persistence allows you to save and load previously entered commands to and from a file.
 
 stages:
   - slug: "oo8"
@@ -1174,9 +1174,10 @@ stages:
 
       1. After typing `xyz_` and pressing Tab, your shell completes to `xyz_foo`.
       2. After typing `_`, the prompt line matches `$ xyz_foo_`.
-      3. After typing `_`, the prompt line matches `$ xyz_foo_bar_`.
-      4. After typing `_` and pressing Tab, your shell completes to `xyz_foo_bar_baz`.
-      5. The prompt line matches `$ xyz_foo_bar_baz ` after the final completion.
+      3. After typing `_` and pressing Tab, your shell completes to `xyz_foo_bar`.
+      4. After typing `_`, the prompt line matches `$ xyz_foo_bar_`.
+      5. After typing `_` and pressing Tab, your shell completes to `xyz_foo_bar_baz`.
+      6. The prompt line matches `$ xyz_foo_bar_baz ` after the final completion.
 
     marketing_md: |-
       In this stage, you'll implement support for handling multiple completions with common prefixes.
@@ -1450,6 +1451,10 @@ stages:
 
       The tester will expect the previous commands to be displayed when the up arrow key is pressed.
 
+      ### Notes
+
+      - We recommend using a library like [readline](https://en.wikipedia.org/wiki/GNU_Readline) for your implementation. Most modern shells and REPLs (like the Python REPL) use readline under the hood. While you may need to override some of its default behaviors, it's typically less work than starting from scratch.
+
     marketing_md: |-
       In this stage, you'll implement support for recalling history with the up arrow key.
 
@@ -1484,6 +1489,10 @@ stages:
       ```
 
       The tester will expect the previous commands to be displayed when the down arrow key is pressed.
+
+      ### Notes
+
+      - We recommend using a library like [readline](https://en.wikipedia.org/wiki/GNU_Readline) for your implementation. Most modern shells and REPLs (like the Python REPL) use readline under the hood. While you may need to override some of its default behaviors, it's typically less work than starting from scratch.
 
     marketing_md: |-
       In this stage, you'll implement support for recalling history with the down arrow key.
@@ -1528,17 +1537,18 @@ stages:
 
   - slug: "za2"
     primary_extension_slug: "history-persistence"
-    name: "Reading history from file"
+    name: "Read history from file"
     difficulty: medium
     description_md: |-
-      In this stage, you will load history from file into the memory using the `history -r` command.
+      In this stage, you will read history from a file using the `history -r <path_to_history_file>` command.
 
-      **Tests**
-      The contents of the history file would look something like:
+      ### Tests
 
-      ```
-      echo hi
-      echo abcd
+      The tester will write the following commands to the history file:
+
+      ```txt
+      echo hello
+      echo world
       ```
 
       The tester will execute your program like this:
@@ -1550,39 +1560,30 @@ stages:
       It will then send the following commands to your shell:
 
       ```bash
-      $ echo hello
-      hello
-      $ echo world
-      world
+      $ history -r <path_to_history_file>
       $ history
       1  echo hello
       2  echo world
-      3  history
-      $ history -r <FILE_NAME>
-      $ history
-      1  echo hello
-      2  echo world
-      3  history
-      4  history -r
-      5  echo hi
-      6  echo abcd
-      7  history
+      3  history -r <path_to_history_file>
+      4  history
       $
       ```
 
-      The tester will expect the commands from the history file to be loaded and displayed when the history command is executed.
+      ### Notes
+      - The tester will expect the history commands to also be present in the history list.
 
     marketing_md: |-
-      In this stage, you'll implement support for reading command history from a file.
+      In this stage, you'll implement support for reading history from a file.
 
   - slug: "in3"
     primary_extension_slug: "history-persistence"
-    name: "Writing history to file"
+    name: "Write history to file"
     difficulty: medium
     description_md: |-
-      In this stage, you will add support for writing commands from memory to the history file using the `history -w` command.
+      In this stage, you will add support for writing commands from memory to the history file using the `history -w <path_to_history_file>` command.
 
-      **Tests**
+      ### Tests
+
       The tester will execute your program like this:
 
       ```bash
@@ -1596,33 +1597,41 @@ stages:
       hello
       $ echo world
       world
-      $ history -w <File_name>
+      $ history -w <path_to_history_file>
       $
       ```
-
+      
       The tester will then expect the history file's contents to look like:
 
-      ```
+      ```txt
       echo hello
       echo world
-      history -w <File_name>
+      history -w <path_to_history_file>
       ```
 
-      **Notes:**
-      - If the file doesn't exist when running `history -w`, your shell should create the file and then write.
-      - If a file does exist, it should be overwritten.
+      ### Notes
+      - If the file doesn't exist when running `history -w`, your shell should create the file and then write the commands to it.
+      - The tester will expect the `history -w` command to also be present in the history file.
 
     marketing_md: |-
-      In this stage, you'll implement support for writing command history to a file.
+      In this stage, you'll implement support for writing history to a file.
 
   - slug: "sx3"
     primary_extension_slug: "history-persistence"
-    name: "Appending history to file"
-    difficulty: medium
+    name: "Append history to file"
+    difficulty: hard
     description_md: |-
-      In this stage, you will add support for appending commands to the history file using the `history -a` command.
+      In this stage, you will add support for appending commands from memory to the history file using the `history -a <path_to_history_file>` command.
 
-      **Tests**
+      ### Tests
+
+      The tester will write the following commands to the history file:
+      
+      ```txt
+      echo initial_command_1
+      echo initial_command_2
+      ```
+
       The tester will execute your program like this:
 
       ```bash
@@ -1632,81 +1641,140 @@ stages:
       It will then send the following commands to your shell:
 
       ```bash
-      $ echo hello
-      hello
-      $ echo world
-      world
-      $ history -a <File_name>
+      $ echo new_command
+      new_command
+      $ history -a <path_to_history_file>
       $
       ```
 
-      The tester will then expect the history file's contents to look like:
+      The tester will then expect the history file's contents to include the new commands:
 
+      ```txt
+      echo initial_command_1
+      echo initial_command_2
+      echo new_command
+      history -a <path_to_history_file>
       ```
-      echo hello
-      echo world
-      history -a <File_name>
-      ```
+
+      ### Notes
+      - The tester will expect the `history -a` command to also be present in the history file.
+      - Running `history -a` multiple times should only append commands that have been executed since the last time `history -a` was run.
 
     marketing_md: |-
-      In this stage, you'll implement support for appending commands to the history file.
-  
-  - slug: "kz7"
-    primary_extension_slug: "history-persistence"
-    name: "Persisting history on exit"
-    difficulty: medium
-    description_md: |-
-      In this stage, you will add support for persisting the history to the file when the shell exits.
-
-      **Tests**
-      The tester will execute your program like this:
-
-      ```bash
-      ./your_program.sh
-      ```
-
-      It will then send the following commands to your shell:
-
-      ```bash
-      $ echo hello
-      hello
-      $ echo world
-      world
-      $ exit
-      ```
-
-      The tester will then expect the history file's contents to look like:
-
-      ```
-      echo hello
-      echo world
-      ```
-
-    marketing_md: |-
-      In this stage, you'll implement support for persisting the history to the file when the shell exits.
+      In this stage, you'll implement support for appending history to a file.
 
   - slug: "zp4"
     primary_extension_slug: "history-persistence"
-    name: "Loading history on startup"
-    difficulty: medium
+    name: "Read history on startup"
+    difficulty: easy
     description_md: |-
-      In this stage, you will add support for loading the history from the file when the shell starts.
+      In this stage, you'll ensure that your shell loads history from the file into memory on startup.
 
-      **Tests**
+      ### The `HISTFILE` environment variable
+
+      The [`HISTFILE` environment variable](https://www.gnu.org/software///bash/manual/bash.html#index-HISTFILE) specifies the path to the history file. 
+      It is the path used to load history from the file into memory on startup and to save the in-memory history to the file when exiting.
+
+
+      ### Tests
+
+      The contents of the history file would look something like:
+
+      ```txt
+      echo hello
+      echo world
+      ```
+
       The tester will execute your program like this:
 
       ```bash
-      ./your_program.sh
+      HISTFILE=<path_to_history_file> ./your_program.sh
       ```
 
       It will then send the following commands to your shell:
-      
+
       ```bash
       $ history
       1  echo hello
       2  echo world
+      3 history
       $
       ```
 
-      The tester will then expect the history file's contents to look like:
+    marketing_md: |-
+      In this stage, you'll ensure that your shell loads history from the file into memory on startup.
+
+  - slug: "kz7"
+    primary_extension_slug: "history-persistence"
+    name: "Write history on exit"
+    difficulty: easy
+    description_md: |-
+      In this stage, you'll add support for writing the in-memory history to the history file when exiting.
+
+      ### Tests
+
+      The tester will execute your program like this:
+
+      ```bash
+      HISTFILE=<path_to_history_file> ./your_program.sh
+      ```
+
+      It will then send the following commands to your shell:
+
+      ```bash
+      $ echo hello
+      hello
+      $ echo world
+      world
+      $ exit 0
+      ```
       
+      The tester will then expect the history file's contents to look like:
+
+      ```txt
+      echo hello
+      echo world
+      exit 0
+      ```
+
+    marketing_md: |-
+      In this stage, you'll implement support for persisting history on exit.
+
+  - slug: "qz2"
+    description_md: |-
+      In this stage, you'll implement support for appending the in-memory history to the history file when exiting.
+
+      ### Tests
+
+      The contents of the history file would look something like:
+
+      ```txt
+      echo initial_command_1
+      echo initial_command_2
+      ```
+
+      The tester will execute your program like this:
+
+      ```bash
+      HISTFILE=<path_to_history_file> ./your_program.sh
+      ```
+
+      It will then send the following commands to your shell:
+
+      ```bash
+      $ echo new_command
+      new_command
+      $ exit 0
+      ```
+
+      The tester will then expect the history file's contents to look like:
+
+      ```txt
+      echo initial_command_1
+      echo initial_command_2
+      echo new_command
+      exit 0
+      ```
+
+    marketing_md: |-
+      In this stage, you'll implement support for appending the in-memory history to the history file when exiting.
