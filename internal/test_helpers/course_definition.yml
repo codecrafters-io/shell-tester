@@ -1740,7 +1740,7 @@ stages:
     marketing_md: |-
       In this stage, you'll implement support for persisting history on exit.
 
-  - slug: "qz2"
+  - slug: "jv2"
     description_md: |-
       In this stage, you'll implement support for appending the in-memory history to the history file when exiting.
 
