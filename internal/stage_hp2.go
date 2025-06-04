@@ -5,7 +5,6 @@
 package internal
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -13,7 +12,6 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
-	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -59,39 +57,20 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	historyTestCase := test_cases.CommandReflectionTestCase{
 		Command:        historyWriteCommand,
-		SuccessMessage: "✓ History -w command executed",
+		SuccessMessage: "✓ Ran history -w command",
 	}
 	if err := historyTestCase.Run(asserter, shell, logger, false); err != nil {
 		return err
 	}
 
 	// Verify first history file contents
-	logger.Infof("Verifying history file contents")
-	historyContent, err := os.ReadFile(historyFile)
-	if err != nil {
-		logger.Errorf("Failed to read history file: %v", err)
+	commandTestCases = append(commandTestCases, test_cases.CommandResponseTestCase{
+		Command:        historyWriteCommand,
+		ExpectedOutput: historyWriteCommand,
+		SuccessMessage: "✓ Found history -w command in history file",
+	})
+	if err := test_cases.AssertFileHasCommandsInOrder(logger, historyFile, commandTestCases); err != nil {
 		return err
-	}
-
-	utils.LogReadableFileContents(logger, string(historyContent), fmt.Sprintf("Reading contents from %s", filepath.Base(historyFile)), filepath.Base(historyFile))
-
-	// Check if all commands are present in the history file in order, allowing for number prefixes
-	historyStr := strings.TrimSpace(string(historyContent))
-	expectedCommands := make([]string, nCommands+1)
-	for i, cmd := range commandTestCases {
-		expectedCommands[i] = cmd.Command
-	}
-	historyLines := strings.Split(historyStr, "\n")
-	expectedCommands[nCommands] = historyWriteCommand
-	for i, cmd := range expectedCommands {
-		if historyLines[i] != cmd {
-			return fmt.Errorf("expected command %q at line %d, got %q", cmd, i+1, historyLines[i])
-		}
-		logger.Successf("✓ Found command %q in history file", cmd)
-	}
-
-	if len(historyLines) != len(expectedCommands) {
-		return fmt.Errorf("history file has %d lines, expected %d", len(historyLines), len(expectedCommands))
 	}
 
 	return logAndQuit(asserter, nil)

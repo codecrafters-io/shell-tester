@@ -74,85 +74,57 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	historyAppendCmd := "history -a " + historyFile
 	historyAppendTest := test_cases.CommandReflectionTestCase{
 		Command:        historyAppendCmd,
-		SuccessMessage: "✓ History appended to file",
+		SuccessMessage: "✓ Ran history -a command",
 	}
 	if err := historyAppendTest.Run(asserter, shell, logger, false); err != nil {
 		return err
 	}
 
-	// Read the updated history file content
-	historyContent, err := os.ReadFile(historyFile)
-	if err != nil {
-		logger.Errorf("Failed to read history file: %v", err)
-		return err
-	}
-
-	utils.LogReadableFileContents(logger, string(historyContent), fmt.Sprintf("Reading contents from %s", filepath.Base(historyFile)), filepath.Base(historyFile))
-
 	// Check if all commands are present in the history file
-	historyStr := strings.TrimSpace(string(historyContent))
-	historyLines := strings.Split(historyStr, "\n")
-
-	i := 0
-	// First verify initial commands are still present
-	for _, cmd := range initialCommands {
-		if historyLines[i] != cmd {
-			return fmt.Errorf("expected initial command %q at line %d, got %q", cmd, i+1, historyLines[i])
+	toCheckCommandTestCases := make([]test_cases.CommandResponseTestCase, len(initialCommands)+len(commandTestCases)+2)
+	for i, cmd := range initialCommands {
+		toCheckCommandTestCases[i] = test_cases.CommandResponseTestCase{
+			Command:        cmd,
+			ExpectedOutput: cmd,
+			SuccessMessage: fmt.Sprintf("✓ Found command %q in history file", cmd),
 		}
-		logger.Successf("✓ Found initial command %q in history file", cmd)
-		i++
+		fmt.Println(toCheckCommandTestCases[i].Command)
 	}
-
-	// Then verify new commands were appended
-	for _, cmd := range commandTestCases {
-		if historyLines[i] != cmd.Command {
-			return fmt.Errorf("expected new command %q at line %d, got %q", cmd.Command, i+1, historyLines[i])
-		}
-		logger.Successf("✓ Found new command %q in history file", cmd.Command)
-		i++
+	for i, cmd := range commandTestCases {
+		toCheckCommandTestCases[i+len(initialCommands)] = cmd
 	}
-
-	// Verify history command itself is present
-	if historyLines[i] != "history" {
-		return fmt.Errorf("history command not found in history file")
+	toCheckCommandTestCases[len(initialCommands)+len(commandTestCases)] = test_cases.CommandResponseTestCase{
+		Command:        "history",
+		ExpectedOutput: "history",
+		SuccessMessage: "✓ Found history command in history file",
 	}
-	logger.Successf("✓ Found history command in history file")
-	i++
-
-	// Verify history -a command itself is present
-	if historyLines[i] != historyAppendCmd {
-		return fmt.Errorf("expected history append command %q at line %d, got %q", historyAppendCmd, i+1, historyLines[i])
+	toCheckCommandTestCases[len(initialCommands)+len(commandTestCases)+1] = test_cases.CommandResponseTestCase{
+		Command:        historyAppendCmd,
+		ExpectedOutput: historyAppendCmd,
+		SuccessMessage: "✓ Found history -a command in history file",
 	}
-	logger.Successf("✓ Found history append command in history file")
-
-	if len(historyLines) != len(initialCommands)+len(commandTestCases)+2 {
-		return fmt.Errorf("history file has %d lines, expected %d", len(historyLines), len(initialCommands)+len(commandTestCases)+2)
+	if err := test_cases.AssertFileHasCommandsInOrder(logger, historyFile, toCheckCommandTestCases); err != nil {
+		return err
 	}
 
 	// Run history -a again
 	historyAppendTest = test_cases.CommandReflectionTestCase{
 		Command:        historyAppendCmd,
-		SuccessMessage: "✓ history -a command executed",
+		SuccessMessage: "✓ Ran history -a command again",
 	}
 	if err := historyAppendTest.Run(asserter, shell, logger, false); err != nil {
 		return err
 	}
 
-	// Read the updated history file content again
-	historyContent, err = os.ReadFile(historyFile)
-	if err != nil {
-		logger.Errorf("Failed to read history file: %v", err)
+	// Check if all commands are present in the history file
+	toCheckCommandTestCases = append(toCheckCommandTestCases, test_cases.CommandResponseTestCase{
+		Command:        historyAppendCmd,
+		ExpectedOutput: historyAppendCmd,
+		SuccessMessage: "✓ Found second history -a command in history file",
+	})
+	if err := test_cases.AssertFileHasCommandsInOrder(logger, historyFile, toCheckCommandTestCases); err != nil {
 		return err
 	}
-	historyStr = string(historyContent)
-	historyLines = strings.Split(historyStr, "\n")
-	utils.LogReadableFileContents(logger, string(historyContent), fmt.Sprintf("Reading contents from %s", filepath.Base(historyFile)), filepath.Base(historyFile))
-
-	if historyLines[i] != fmt.Sprintf("history -a %s", historyFile) {
-		return fmt.Errorf("expected command %q at line %d, got %q", fmt.Sprintf("history -a %s", historyFile), i+1, historyLines[i])
-	}
-	logger.Successf("✓ Found history -a command in history file")
-	i++
 
 	return logAndQuit(asserter, nil)
 }

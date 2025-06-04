@@ -14,7 +14,6 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
-	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -83,15 +82,7 @@ func testHP4(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	asserter.LogRemainingOutput()
 
-	// Step 6: Read the history file content
-	historyContent, err := os.ReadFile(historyFile)
-	if err != nil {
-		return fmt.Errorf("failed to read history file: %v", err)
-	}
-	utils.LogReadableFileContents(logger, string(historyContent), fmt.Sprintf("Reading contents from %s", filepath.Base(historyFile)), filepath.Base(historyFile))
-
-	// Step 7: Check history file contents
-	historyLines := strings.Split(strings.TrimSpace(string(historyContent)), "\n")
+	// Step 6: Check history file contents
 	commandTestCases = append(commandTestCases, test_cases.CommandResponseTestCase{
 		Command:        "history",
 		ExpectedOutput: "history",
@@ -102,16 +93,8 @@ func testHP4(stageHarness *test_case_harness.TestCaseHarness) error {
 		ExpectedOutput: "exit 0",
 		SuccessMessage: "✓ Found command exit 0 in history file",
 	})
-	for i, cmd := range commandTestCases {
-		if historyLines[i] != cmd.Command {
-			return fmt.Errorf("expected command %q at line %d, got %q", cmd.Command, i+1, historyLines[i])
-		}
-		logger.Successf("✓ Found command %q in history file", cmd.Command)
-		i++
-	}
-
-	if len(historyLines) != len(commandTestCases) {
-		return fmt.Errorf("history file has %d lines, expected %d", len(historyLines), len(commandTestCases))
+	if err := test_cases.AssertFileHasCommandsInOrder(logger, historyFile, commandTestCases); err != nil {
+		return err
 	}
 
 	return logAndQuit(asserter, nil)
