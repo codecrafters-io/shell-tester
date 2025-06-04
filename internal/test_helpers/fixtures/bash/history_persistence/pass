@@ -32,6 +32,7 @@ Debug = true
 [33m[stage-4] [0m[94mWriting history to file using command: history -w /tmp/pear_shell_history_test.txt[0m
 [33m[your-program] [0m$ history -w /tmp/pear_shell_history_test.txt
 [33m[stage-4] [0m[92m✓ Ran history -w command[0m
+[33m[stage-4] [0m[92m✓ History file contents have been overwritten[0m
 [33m[stage-4] [0m[94mReading contents from pear_shell_history_test.txt[0m
 [33m[stage-4] [0m[pear_shell_history_test.txt] echo grape apple
 [33m[stage-4] [0m[pear_shell_history_test.txt] echo grape pear
@@ -103,49 +104,48 @@ Debug = true
 [33m[stage-3] [0m[92m✓ Found command "history -a /tmp/pineapple_shell_history_test.txt" in /tmp/pineapple_shell_history_test.txt[0m
 [33m[stage-3] [0m[92m✓ Found command "history -a /tmp/pineapple_shell_history_test.txt" in /tmp/pineapple_shell_history_test.txt[0m
 [33m[stage-3] [0m[92m✓ Found all commands in history file after running history -a command again[0m
+[33m[your-program] [0m$ history -a /tmp/pear_shell_history_create_test.txt
+[33m[stage-3] [0m[92m✓ Ran history -a command to create new file[0m
+[33m[stage-3] [0m[92m✓ History file /tmp/pear_shell_history_create_test.txt exists[0m
 [33m[your-program] [0m$ 
 [33m[stage-3] [0m[92mTest passed.[0m
 
 [33m[stage-2] [0m[94mRunning tests for Stage #2: kz7[0m
 [33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo pineapple strawberry
-[33m[your-program] [0mpineapple strawberry
-[33m[stage-2] [0m[92m✓ Ran echo pineapple strawberry[0m
-[33m[your-program] [0m$ echo strawberry pineapple
-[33m[your-program] [0mstrawberry pineapple
-[33m[stage-2] [0m[92m✓ Ran echo strawberry pineapple[0m
+[33m[your-program] [0m$ echo banana raspberry
+[33m[your-program] [0mbanana raspberry
+[33m[stage-2] [0m[92m✓ Ran echo banana raspberry[0m
+[33m[your-program] [0m$ echo orange banana
+[33m[your-program] [0morange banana
+[33m[stage-2] [0m[92m✓ Ran echo orange banana[0m
 [33m[your-program] [0m$ history
-[33m[your-program] [0m    1  echo pineapple strawberry
-[33m[your-program] [0m    2  echo strawberry pineapple
+[33m[your-program] [0m    1  echo banana raspberry
+[33m[your-program] [0m    2  echo orange banana
 [33m[your-program] [0m    3  history
 [33m[stage-2] [0m[92m✓ History before exiting is correct[0m
 [33m[your-program] [0m$ exit 0
 [33m[your-program] [0mexit
-[33m[stage-2] [0m[94mReading contents from pear_shell_history_test.txt[0m
-[33m[stage-2] [0m[pear_shell_history_test.txt] echo pineapple strawberry
-[33m[stage-2] [0m[pear_shell_history_test.txt] echo strawberry pineapple
-[33m[stage-2] [0m[pear_shell_history_test.txt] history
-[33m[stage-2] [0m[pear_shell_history_test.txt] exit 0
-[33m[stage-2] [0m[92m✓ Found command "echo pineapple strawberry" in /tmp/pear_shell_history_test.txt[0m
-[33m[stage-2] [0m[92m✓ Found command "echo strawberry pineapple" in /tmp/pear_shell_history_test.txt[0m
-[33m[stage-2] [0m[92m✓ Found command "history" in /tmp/pear_shell_history_test.txt[0m
-[33m[stage-2] [0m[92m✓ Found command "exit 0" in /tmp/pear_shell_history_test.txt[0m
+[33m[stage-2] [0m[94mReading contents from mango_shell_history_test.txt[0m
+[33m[stage-2] [0m[mango_shell_history_test.txt] echo banana raspberry
+[33m[stage-2] [0m[mango_shell_history_test.txt] echo orange banana
+[33m[stage-2] [0m[mango_shell_history_test.txt] history
+[33m[stage-2] [0m[mango_shell_history_test.txt] exit 0
+[33m[stage-2] [0m[92m✓ Found command "echo banana raspberry" in /tmp/mango_shell_history_test.txt[0m
+[33m[stage-2] [0m[92m✓ Found command "echo orange banana" in /tmp/mango_shell_history_test.txt[0m
+[33m[stage-2] [0m[92m✓ Found command "history" in /tmp/mango_shell_history_test.txt[0m
+[33m[stage-2] [0m[92m✓ Found command "exit 0" in /tmp/mango_shell_history_test.txt[0m
 [33m[stage-2] [0m[92m✓ Found all commands in history file[0m
 [33m[stage-2] [0m[92mTest passed.[0m
 
 [33m[stage-1] [0m[94mRunning tests for Stage #1: zp4[0m
 [33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
-[33m[stage-1] [0m[94mReading contents from raspberry_shell_history_test.txt[0m
-[33m[stage-1] [0m[raspberry_shell_history_test.txt] echo pineapple banana grape
-[33m[stage-1] [0m[raspberry_shell_history_test.txt] echo pineapple strawberry
-[33m[stage-1] [0m[raspberry_shell_history_test.txt] echo mango raspberry strawberry
-[33m[stage-1] [0m[raspberry_shell_history_test.txt] echo grape pineapple apple
+[33m[stage-1] [0m[94mReading contents from pineapple_shell_history_test.txt[0m
+[33m[stage-1] [0m[pineapple_shell_history_test.txt] echo blueberry pineapple banana
+[33m[stage-1] [0m[pineapple_shell_history_test.txt] echo strawberry orange
 [33m[your-program] [0m$ history
-[33m[your-program] [0m    1  echo pineapple banana grape
-[33m[your-program] [0m    2  echo pineapple strawberry
-[33m[your-program] [0m    3  echo mango raspberry strawberry
-[33m[your-program] [0m    4  echo grape pineapple apple
-[33m[your-program] [0m    5  history
+[33m[your-program] [0m    1  echo blueberry pineapple banana
+[33m[your-program] [0m    2  echo strawberry orange
+[33m[your-program] [0m    3  history
 [33m[stage-1] [0m[92m✓ History loaded from file is correct[0m
 [33m[your-program] [0m$ 
 [33m[stage-1] [0m[92mTest passed.[0m
