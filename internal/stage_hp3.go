@@ -106,6 +106,8 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	logger.Successf("✓ Found all commands in history file")
+
 	// Run history -a again
 	historyAppendTest = test_cases.CommandReflectionTestCase{
 		Command:        historyAppendCmd,
@@ -124,6 +126,8 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err := test_cases.AssertFileHasCommandsInOrder(logger, historyFile, toCheckCommandTestCases); err != nil {
 		return err
 	}
+
+	logger.Successf("✓ Found all commands in history file after running history -a command again")
 
 	return logAndQuit(asserter, nil)
 }
