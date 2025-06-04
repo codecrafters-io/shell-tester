@@ -28,13 +28,24 @@ func testH2(stageHarness *test_case_harness.TestCaseHarness) error {
 	randomWords2 := strings.Join(random.RandomWords(2), " ")
 	randomWords3 := strings.Join(random.RandomWords(2), " ")
 
+	previousCommandsTestCases := []test_cases.CommandResponseTestCase{
+		{Command: "echo " + randomWords1, ExpectedOutput: randomWords1, SuccessMessage: commandSuccessMessage},
+		{Command: "echo " + randomWords2, ExpectedOutput: randomWords2, SuccessMessage: commandSuccessMessage},
+		{Command: "echo " + randomWords3, ExpectedOutput: randomWords3, SuccessMessage: commandSuccessMessage},
+	}
+	for _, command := range previousCommandsTestCases {
+		if err := command.Run(asserter, shell, logger); err != nil {
+			return err
+		}
+	}
+	previousCommands := []string{}
+	for _, command := range previousCommandsTestCases {
+		previousCommands = append(previousCommands, command.Command)
+	}
+
 	testCase := test_cases.HistoryTestCase{
-		CommandsBeforeHistory: []test_cases.CommandResponseTestCase{
-			{Command: "echo " + randomWords1, ExpectedOutput: randomWords1, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords2, ExpectedOutput: randomWords2, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords3, ExpectedOutput: randomWords3, SuccessMessage: commandSuccessMessage},
-		},
-		SuccessMessage: "✓ Received expected response",
+		PreviousCommands: previousCommands,
+		SuccessMessage:   "✓ Received expected response",
 	}
 	if err := testCase.Run(asserter, shell, logger); err != nil {
 		return err

@@ -15,8 +15,8 @@ import (
 // Verifies that the command is printed to the screen
 // Verifies that the history output shows the command in the expected format
 type HistoryTestCase struct {
-	// CommandsBeforeHistory is a list of commands to execute before running history
-	CommandsBeforeHistory []CommandResponseTestCase
+	// PreviousCommands is a list of commands to execute before running history
+	PreviousCommands []string
 
 	// LastNCommands specifies how many of the most recent commands to check in history
 	// If not set, all commands will be checked
@@ -27,49 +27,38 @@ type HistoryTestCase struct {
 }
 
 func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	for _, testCase := range t.CommandsBeforeHistory {
-		if err := testCase.Run(asserter, shell, logger); err != nil {
-			return fmt.Errorf("failed to execute command: %v", err)
-		}
-	}
-
 	historyCommand := "history"
 	if t.LastNCommands > 0 {
 		historyCommand = fmt.Sprintf("history %d", t.LastNCommands)
 	}
-	if err := shell.SendCommand(historyCommand); err != nil {
-		return fmt.Errorf("failed to send history command: %v", err)
+	historyReflectionTest := CommandReflectionTestCase{
+		Command:             historyCommand,
+		SuccessMessage:      "✓ Ran history command",
+		SkipPromptAssertion: true,
 	}
-
-	if t.LastNCommands > 0 {
-		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput: fmt.Sprintf("$ %s", historyCommand),
-		})
-	} else {
-		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput: "$ history",
-		})
+	if err := historyReflectionTest.Run(asserter, shell, logger, false); err != nil {
+		return err
 	}
 
 	// Calculate which commands to check based on LastNCommands
 	startIdx := 0
-	if t.LastNCommands > 0 && t.LastNCommands < len(t.CommandsBeforeHistory) {
-		startIdx = len(t.CommandsBeforeHistory) - t.LastNCommands + 1
+	if t.LastNCommands > 0 && t.LastNCommands < len(t.PreviousCommands) {
+		startIdx = len(t.PreviousCommands) - t.LastNCommands + 1
 	}
 
 	// Check only the specified number of most recent commands
-	for i, testCase := range t.CommandsBeforeHistory[startIdx:] {
+	for i, command := range t.PreviousCommands[startIdx:] {
 		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput: fmt.Sprintf("    %d  %s", startIdx+i+1, testCase.Command),
+			ExpectedOutput: fmt.Sprintf("    %d  %s", startIdx+i+1, command),
 			FallbackPatterns: []*regexp.Regexp{
-				regexp.MustCompile(fmt.Sprintf(`^\s*\d+\s+%s$`, regexp.QuoteMeta(testCase.Command))),
+				regexp.MustCompile(fmt.Sprintf(`^\s*\d+\s+%s$`, regexp.QuoteMeta(command))),
 			},
 		})
 	}
 
 	// Add assertion for the history command itself
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: fmt.Sprintf("    %d  %s", len(t.CommandsBeforeHistory)+1, historyCommand),
+		ExpectedOutput: fmt.Sprintf("    %d  %s", len(t.PreviousCommands)+1, historyCommand),
 		FallbackPatterns: []*regexp.Regexp{
 			regexp.MustCompile(fmt.Sprintf(`^\s*\d+\s+%s$`, regexp.QuoteMeta(historyCommand))),
 		},

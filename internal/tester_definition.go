@@ -211,13 +211,18 @@ var testerDefinition = tester_definition.TesterDefinition{
 			Timeout:  15 * time.Second,
 		},
 		{
-			Slug:     "kz7",
+			Slug:     "zp4",
 			TestFunc: testHP4,
 			Timeout:  15 * time.Second,
 		},
 		{
-			Slug:     "zp4",
+			Slug:     "kz7",
 			TestFunc: testHP5,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "jv2",
+			TestFunc: testHP6,
 			Timeout:  15 * time.Second,
 		},
 	},

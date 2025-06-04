@@ -26,14 +26,26 @@ func testH3(stageHarness *test_case_harness.TestCaseHarness) error {
 	randomWords2 := strings.Join(random.RandomWords(2), " ")
 	randomWords3 := strings.Join(random.RandomWords(2), " ")
 
+	previousCommandsTestCases := []test_cases.CommandResponseTestCase{
+		{Command: "echo " + randomWords1, ExpectedOutput: randomWords1, SuccessMessage: commandSuccessMessage},
+		{Command: "echo " + randomWords2, ExpectedOutput: randomWords2, SuccessMessage: commandSuccessMessage},
+		{Command: "echo " + randomWords3, ExpectedOutput: randomWords3, SuccessMessage: commandSuccessMessage},
+	}
+	for _, command := range previousCommandsTestCases {
+		if err := command.Run(asserter, shell, logger); err != nil {
+			return err
+		}
+	}
+
+	previousCommands := []string{}
+	for _, command := range previousCommandsTestCases {
+		previousCommands = append(previousCommands, command.Command)
+	}
+
 	testCase1 := test_cases.HistoryTestCase{
-		CommandsBeforeHistory: []test_cases.CommandResponseTestCase{
-			{Command: "echo " + randomWords1, ExpectedOutput: randomWords1, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords2, ExpectedOutput: randomWords2, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords3, ExpectedOutput: randomWords3, SuccessMessage: commandSuccessMessage},
-		},
-		LastNCommands:  2,
-		SuccessMessage: "✓ Received expected response",
+		PreviousCommands: previousCommands,
+		LastNCommands:    2,
+		SuccessMessage:   "✓ Received expected response",
 	}
 	if err := testCase1.Run(asserter, shell, logger); err != nil {
 		return err
@@ -46,17 +58,30 @@ func testH3(stageHarness *test_case_harness.TestCaseHarness) error {
 	randomWords8 := strings.Join(random.RandomWords(2), " ")
 	randomWords9 := strings.Join(random.RandomWords(2), " ")
 
+	previousCommandsTestCases = []test_cases.CommandResponseTestCase{
+		{Command: "echo " + randomWords4, ExpectedOutput: randomWords4, SuccessMessage: commandSuccessMessage},
+		{Command: "echo " + randomWords5, ExpectedOutput: randomWords5, SuccessMessage: commandSuccessMessage},
+		{Command: "echo " + randomWords6, ExpectedOutput: randomWords6, SuccessMessage: commandSuccessMessage},
+		{Command: "echo " + randomWords7, ExpectedOutput: randomWords7, SuccessMessage: commandSuccessMessage},
+		{Command: "echo " + randomWords8, ExpectedOutput: randomWords8, SuccessMessage: commandSuccessMessage},
+		{Command: "echo " + randomWords9, ExpectedOutput: randomWords9, SuccessMessage: commandSuccessMessage},
+	}
+
+	for _, command := range previousCommandsTestCases {
+		if err := command.Run(asserter, shell, logger); err != nil {
+			return err
+		}
+	}
+
+	previousCommands = []string{}
+	for _, command := range previousCommandsTestCases {
+		previousCommands = append(previousCommands, command.Command)
+	}
+
 	testCase2 := test_cases.HistoryTestCase{
-		CommandsBeforeHistory: []test_cases.CommandResponseTestCase{
-			{Command: "echo " + randomWords4, ExpectedOutput: randomWords4, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords5, ExpectedOutput: randomWords5, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords6, ExpectedOutput: randomWords6, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords7, ExpectedOutput: randomWords7, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords8, ExpectedOutput: randomWords8, SuccessMessage: commandSuccessMessage},
-			{Command: "echo " + randomWords9, ExpectedOutput: randomWords9, SuccessMessage: commandSuccessMessage},
-		},
-		LastNCommands:  random.RandomInt(3, 5),
-		SuccessMessage: "✓ Received expected response",
+		PreviousCommands: previousCommands,
+		LastNCommands:    random.RandomInt(3, 5),
+		SuccessMessage:   "✓ Received expected response",
 	}
 	if err := testCase2.Run(asserter, shell, logger); err != nil {
 		return err

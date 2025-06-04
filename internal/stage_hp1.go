@@ -64,10 +64,13 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Step 3: Check history after loading from file (should include previous + loaded)
-	afterLoadHistoryTest := test_cases.HistoryPersistenceTestCase{
-		ExpectHistoryRCommand: true,
-		FilePath:              historyFile,
-		SuccessMessage:        "✓ History after loading file is correct",
+	fileCommandsToPass := []string{}
+	fileCommandsToPass = append(fileCommandsToPass, fmt.Sprintf("history -r %s", historyFile))
+	fileCommandsToPass = append(fileCommandsToPass, fileCommands...)
+
+	afterLoadHistoryTest := test_cases.HistoryTestCase{
+		PreviousCommands: fileCommandsToPass,
+		SuccessMessage:   "✓ History after loading file is correct",
 	}
 	if err := afterLoadHistoryTest.Run(asserter, shell, logger); err != nil {
 		return err

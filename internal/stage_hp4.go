@@ -1,6 +1,6 @@
-// Stage HP4: History Persistence Test
-// This test checks if the shell persists command history to a file when exiting.
-// It runs some commands, exits the shell, and verifies the history file contents.
+// Stage HP5: History Load on Startup Test
+// This test checks if the shell loads command history from a file when starting up.
+// It creates a history file with some commands, starts the shell, and verifies the commands are loaded.
 
 package internal
 
@@ -10,10 +10,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -23,77 +23,44 @@ func testHP4(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	// Step 1: Create a temporary history file
+	// Step 1: Create a temporary history file with some initial commands
 	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+".txt")
 	defer os.Remove(historyFile)
 
-	// Create the file
-	if err := os.WriteFile(historyFile, []byte{}, 0644); err != nil {
+	// Create initial history file content
+	nInitialCommands := random.RandomInt(2, 5)
+	initialCommands := make([]string, nInitialCommands)
+	for i := 0; i < nInitialCommands; i++ {
+		initialCommands[i] = "echo " + strings.Join(random.RandomWords(random.RandomInt(2, 4)), " ")
+	}
+	initialContent := strings.Join(initialCommands, "\n") + "\n"
+	if err := os.WriteFile(historyFile, []byte(initialContent), 0644); err != nil {
 		return fmt.Errorf("failed to create history file: %v", err)
 	}
+
+	// Print the history file content
+	historyContent, err := os.ReadFile(historyFile)
+	if err != nil {
+		panic("Codecrafters Internal Error: Failed to read history file")
+	}
+	utils.LogReadableFileContents(logger, string(historyContent), fmt.Sprintf("Writing commands to %s", historyFile), historyFile)
 
 	// Set HISTFILE environment variable before starting the shell
 	shell.Setenv("HISTFILE", historyFile)
 
+	logger.Infof("export HISTFILE=%s", historyFile)
 	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}
 
-	// Step 3: Run some commands in the shell
-	nShellCommands := random.RandomInt(2, 4)
-	commandTestCases := make([]test_cases.CommandResponseTestCase, nShellCommands)
-	for i := 0; i < nShellCommands; i++ {
-		cmdWords := random.RandomWords(random.RandomInt(2, 4))
-		cmd := "echo " + strings.Join(cmdWords, " ")
-		commandTestCases[i] = test_cases.CommandResponseTestCase{
-			Command:        cmd,
-			ExpectedOutput: strings.Join(cmdWords, " "),
-			SuccessMessage: fmt.Sprintf("✓ Ran %s", cmd),
-		}
+	// Step 2: Check history to verify initial commands are loaded
+	historyTest := test_cases.HistoryTestCase{
+		PreviousCommands: initialCommands,
+		SuccessMessage:   "✓ History loaded from file is correct",
 	}
-
-	// Step 4: Check history before exiting
-	historyBefore := test_cases.HistoryTestCase{
-		CommandsBeforeHistory: commandTestCases,
-		SuccessMessage:        "✓ History before exiting is correct",
-	}
-	if err := historyBefore.Run(asserter, shell, logger); err != nil {
+	if err := historyTest.Run(asserter, shell, logger); err != nil {
 		return err
 	}
-
-	// Step 5: Exit the shell
-	shell.SendCommand("exit 0")
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: "$ exit 0",
-	})
-	if err := asserter.AssertWithoutPrompt(); err != nil {
-		return err
-	}
-
-	// Read the output after exit command
-	output := ""
-	if screen := shell.GetScreenState(); len(screen) > 0 {
-		output = strings.TrimSpace(screen[len(screen)-1][0])
-	}
-	// Allow both no output and 'exit' (like bash)
-	if len(output) > 0 && output != "exit" {
-		return fmt.Errorf("Expected no output or 'exit' after exit command, got %q", output)
-	}
-
-	asserter.LogRemainingOutput()
-
-	// Step 6: Check history file contents
-	commands := make([]string, len(commandTestCases))
-	for i, cmd := range commandTestCases {
-		commands[i] = cmd.Command
-	}
-	commands = append(commands, "history")
-	commands = append(commands, "exit 0")
-	if err := test_cases.AssertFileHasCommandsInOrder(logger, historyFile, commands); err != nil {
-		return err
-	}
-
-	logger.Successf("✓ Found all commands in history file")
 
 	return logAndQuit(asserter, nil)
 }
