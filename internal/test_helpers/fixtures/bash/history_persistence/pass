@@ -120,6 +120,7 @@ Debug = true
 [33m[your-program] [0m    3  history
 [33m[stage-2] [0m[92m✓ History before exiting is correct[0m
 [33m[your-program] [0m$ exit 0
+[33m[your-program] [0mexit
 [33m[stage-2] [0m[94mReading contents from pear_shell_history_test.txt[0m
 [33m[stage-2] [0m[pear_shell_history_test.txt] echo pineapple strawberry
 [33m[stage-2] [0m[pear_shell_history_test.txt] echo strawberry pineapple
