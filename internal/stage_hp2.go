@@ -59,7 +59,7 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 		Command:        historyWriteCommand,
 		SuccessMessage: "✓ Ran history -w command",
 	}
-	if err := historyTestCase.Run(asserter, shell, logger, false); err != nil {
+	if err := historyTestCase.Run(asserter, shell, logger, true); err != nil {
 		return err
 	}
 
@@ -70,7 +70,7 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	commands = append(commands, historyWriteCommand)
 
-	if err := test_cases.AssertFileHasCommandsInOrder(logger, historyFile, commands); err != nil {
+	if err := test_cases.AssertHistoryFileHasCommands(logger, historyFile, commands); err != nil {
 		return err
 	}
 

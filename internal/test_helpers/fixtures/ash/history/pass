@@ -20,7 +20,6 @@ Debug = true
 [33m[your-program] [0mblueberry mango
 [33m[stage-4] [0m[92m✓ Command executed successfully[0m
 [33m[your-program] [0m$ history
-[33m[stage-4] [0m[92m✓ Ran history command[0m
 [33m[your-program] [0m   0 echo apple blueberry
 [33m[your-program] [0m   1 echo blueberry raspberry
 [33m[your-program] [0m   2 echo blueberry mango

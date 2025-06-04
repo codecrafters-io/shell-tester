@@ -20,7 +20,6 @@ Debug = true
 [33m[your-program] [0mblueberry mango
 [33m[stage-5] [0m[92m✓ Command executed successfully[0m
 [33m[your-program] [0m$ history
-[33m[stage-5] [0m[92m✓ Ran history command[0m
 [33m[your-program] [0m    1  echo apple blueberry
 [33m[your-program] [0m    2  echo blueberry raspberry
 [33m[your-program] [0m    3  echo blueberry mango
@@ -41,7 +40,6 @@ Debug = true
 [33m[your-program] [0mblueberry apple
 [33m[stage-4] [0m[92m✓ Command executed successfully[0m
 [33m[your-program] [0m$ history 2
-[33m[stage-4] [0m[92m✓ Ran history command[0m
 [33m[your-program] [0m    3  echo blueberry apple
 [33m[your-program] [0m    4  history 2
 [33m[stage-4] [0m[92m✓ Received expected response[0m
@@ -64,7 +62,6 @@ Debug = true
 [33m[your-program] [0mapple raspberry
 [33m[stage-4] [0m[92m✓ Command executed successfully[0m
 [33m[your-program] [0m$ history 3
-[33m[stage-4] [0m[92m✓ Ran history command[0m
 [33m[your-program] [0m    9  echo grape raspberry
 [33m[your-program] [0m   10  echo apple raspberry
 [33m[your-program] [0m   11  history 3

@@ -23,15 +23,18 @@ type ExitTestCase struct {
 
 	// ExpectedExitCode is the expected exit code
 	ExpectedExitCode int
+
+	// ShouldSkipSuccessMessage determines if the success message should be skipped (not used just yet, but can be used in the future)
+	ShouldSkipSuccessMessage bool
 }
 
-func (t ExitTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, skipSuccessMessage bool) error {
+func (t ExitTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	// First run a command reflection test to verify the command is sent correctly
-	refTestCase := CommandWithNoResponseTestCase{
+	commandTestCase := CommandWithNoResponseTestCase{
 		Command:             t.Command,
 		SkipPromptAssertion: true,
 	}
-	if err := refTestCase.Run(asserter, shell, logger, true); err != nil {
+	if err := commandTestCase.Run(asserter, shell, logger, true); err != nil {
 		return err
 	}
 
@@ -70,7 +73,7 @@ func (t ExitTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, s
 		return fmt.Errorf("Expected no output after exit command, got %q", output)
 	}
 
-	if !skipSuccessMessage {
+	if !t.ShouldSkipSuccessMessage {
 		logger.Successf("✓ Program exited successfully")
 	}
 	return nil

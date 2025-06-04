@@ -59,7 +59,7 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 		Command:        fmt.Sprintf("history -r %s", historyFile),
 		SuccessMessage: "✓ Ran history -r command",
 	}
-	if err := historyLoadTest.Run(asserter, shell, logger, false); err != nil {
+	if err := historyLoadTest.Run(asserter, shell, logger, true); err != nil {
 		return err
 	}
 

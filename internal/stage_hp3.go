@@ -74,7 +74,7 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 		Command:        historyAppendCmd,
 		SuccessMessage: "✓ Ran history -a command",
 	}
-	if err := historyAppendTest.Run(asserter, shell, logger, false); err != nil {
+	if err := historyAppendTest.Run(asserter, shell, logger, true); err != nil {
 		return err
 	}
 
@@ -86,7 +86,7 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	commands = append(commands, historyAppendCmd)
 
-	if err := test_cases.AssertFileHasCommandsInOrder(logger, historyFile, commands); err != nil {
+	if err := test_cases.AssertHistoryFileHasCommands(logger, historyFile, commands); err != nil {
 		return err
 	}
 
@@ -109,14 +109,14 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 		Command:        historyAppendCmd,
 		SuccessMessage: "✓ Ran history -a command again",
 	}
-	if err := historyAppendTest.Run(asserter, shell, logger, false); err != nil {
+	if err := historyAppendTest.Run(asserter, shell, logger, true); err != nil {
 		return err
 	}
 
 	// Check if all commands are present in the history file
 	commands = append(commands, echoTest.Command)
 	commands = append(commands, historyAppendCmd)
-	if err := test_cases.AssertFileHasCommandsInOrder(logger, historyFile, commands); err != nil {
+	if err := test_cases.AssertHistoryFileHasCommands(logger, historyFile, commands); err != nil {
 		return err
 	}
 

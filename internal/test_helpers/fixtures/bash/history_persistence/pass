@@ -7,9 +7,7 @@ Debug = true
 [33m[stage-5] [/tmp/pear.txt] [0mecho pineapple grape
 [33m[stage-5] [/tmp/pear.txt] [0mecho grape apple
 [33m[your-program] [0m$ history -r /tmp/pear.txt
-[33m[stage-5] [0m[92m✓ Ran history -r command[0m
 [33m[your-program] [0m$ history
-[33m[stage-5] [0m[92m✓ Ran history command[0m
 [33m[your-program] [0m    1  history -r /tmp/pear.txt
 [33m[your-program] [0m    2  echo blueberry mango
 [33m[your-program] [0m    3  echo pineapple grape
@@ -32,7 +30,6 @@ Debug = true
 [33m[stage-4] [0m[92m✓ Received expected response[0m
 [33m[stage-4] [0m[94mWriting history to file using command: history -w /tmp/pear.txt[0m
 [33m[your-program] [0m$ history -w /tmp/pear.txt
-[33m[stage-4] [0m[92m✓ Ran history -w command[0m
 [33m[stage-4] [0m[92m✓ Found 4 commands in history file[0m
 [33m[your-program] [0m$ 
 [33m[stage-4] [0m[92mTest passed.[0m
@@ -50,13 +47,11 @@ Debug = true
 [33m[your-program] [0morange pineapple apple
 [33m[stage-3] [0m[92m✓ Ran echo orange pineapple apple[0m
 [33m[your-program] [0m$ history -a /tmp/pineapple.txt
-[33m[stage-3] [0m[92m✓ Ran history -a command[0m
 [33m[stage-3] [0m[92m✓ Found 6 commands in history file[0m
 [33m[your-program] [0m$ echo pineapple apple mango
 [33m[your-program] [0mpineapple apple mango
 [33m[stage-3] [0m[92m✓ Ran echo pineapple apple mango[0m
 [33m[your-program] [0m$ history -a /tmp/pineapple.txt
-[33m[stage-3] [0m[92m✓ Ran history -a command again[0m
 [33m[stage-3] [0m[92m✓ Found 8 commands in history file after running history -a command again[0m
 [33m[your-program] [0m$ 
 [33m[stage-3] [0m[92mTest passed.[0m
@@ -74,7 +69,6 @@ Debug = true
 [33m[your-program] [0mpineapple blueberry
 [33m[stage-2] [0m[92m✓ Ran echo pineapple blueberry[0m
 [33m[your-program] [0m$ history
-[33m[stage-2] [0m[92m✓ Ran history command[0m
 [33m[your-program] [0m    1  echo strawberry pineapple
 [33m[your-program] [0m    2  echo apple orange
 [33m[your-program] [0m    3  echo pineapple blueberry
@@ -93,7 +87,6 @@ Debug = true
 [33m[stage-1] [0m[94mexport HISTFILE=/tmp/mango.txt[0m
 [33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ history
-[33m[stage-1] [0m[92m✓ Ran history command[0m
 [33m[your-program] [0m    1  echo mango raspberry strawberry
 [33m[your-program] [0m    2  echo grape pineapple apple
 [33m[your-program] [0m    3  history

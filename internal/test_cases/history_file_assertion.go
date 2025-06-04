@@ -10,9 +10,9 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-// AssertFileHasCommandsInOrder reads the file at filePath, splits it into lines, and checks that each line matches the Command field of the corresponding CommandResponseTestCase.
+// AssertHistoryFileHasCommands reads the file at filePath, splits it into lines, and checks that each line matches the Command field of the corresponding CommandResponseTestCase.
 // It logs a success message for each line and returns a detailed error if any line does not match or if the line count is wrong.
-func AssertFileHasCommandsInOrder(l *logger.Logger, filePath string, commands []string) error {
+func AssertHistoryFileHasCommands(l *logger.Logger, filePath string, commands []string) error {
 	content, err := os.ReadFile(filePath)
 	if err != nil {
 		return fmt.Errorf("failed to read file %s: %v", filePath, err)

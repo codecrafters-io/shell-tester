@@ -36,7 +36,7 @@ func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter
 		SuccessMessage:      "✓ Ran history command",
 		SkipPromptAssertion: true,
 	}
-	if err := historyReflectionTest.Run(asserter, shell, logger, false); err != nil {
+	if err := historyReflectionTest.Run(asserter, shell, logger, true); err != nil {
 		return err
 	}
 
