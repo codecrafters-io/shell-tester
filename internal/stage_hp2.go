@@ -5,6 +5,7 @@
 package internal
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -20,6 +21,7 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
+	const dummyContent = "THIS LINE SHOULD BE OVERWRITTEN\nTHIS LINE SHOULD BE OVERWRITTEN\nTHIS LINE SHOULD BE OVERWRITTEN"
 
 	// Create temporary history file paths
 	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_test.txt")
@@ -69,6 +71,15 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 		ExpectedOutput: historyWriteCommand,
 		SuccessMessage: "✓ Found history -w command in history file",
 	})
+	historyContent, err := os.ReadFile(historyFile)
+	if err != nil {
+		return err
+	}
+	if strings.TrimSpace(dummyContent) == strings.TrimSpace(string(historyContent)) {
+		return fmt.Errorf("history file contents are the same as the dummy content, but they should have been overwritten")
+	}
+	logger.Successf("✓ History file contents have been overwritten")
+
 	if err := test_cases.AssertFileHasCommandsInOrder(logger, historyFile, commandTestCases); err != nil {
 		return err
 	}

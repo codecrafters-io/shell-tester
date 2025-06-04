@@ -129,5 +129,24 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	logger.Successf("✓ Found all commands in history file after running history -a command again")
 
+	// Step 5: Check if the history file is created if it does not exist
+	createHistoryFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_create_test.txt")
+	// ensure the file does not exist
+	if _, err := os.Stat(createHistoryFile); err == nil {
+		os.Remove(createHistoryFile)
+	}
+	historyCreateTest := test_cases.CommandReflectionTestCase{
+		Command:        "history -a " + createHistoryFile,
+		SuccessMessage: "✓ Ran history -a command to create new file",
+	}
+	if err := historyCreateTest.Run(asserter, shell, logger, false); err != nil {
+		return err
+	}
+	// check if the file exists
+	if _, err := os.Stat(createHistoryFile); os.IsNotExist(err) {
+		return fmt.Errorf("history file %s does not exist", createHistoryFile)
+	}
+	logger.Successf("✓ History file %s exists", createHistoryFile)
+
 	return logAndQuit(asserter, nil)
 }
