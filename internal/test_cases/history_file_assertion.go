@@ -4,6 +4,7 @@ package test_cases
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/utils"
@@ -17,7 +18,7 @@ func AssertFileHasCommandsInOrder(l *logger.Logger, filePath string, testCases [
 	if err != nil {
 		return fmt.Errorf("failed to read file %s: %v", filePath, err)
 	}
-	utils.LogReadableFileContents(l, string(content), fmt.Sprintf("Reading contents from %s", filePath), filePath)
+	utils.LogReadableFileContents(l, string(content), fmt.Sprintf("Reading contents from %s", filepath.Base(filePath)), filepath.Base(filePath))
 
 	lines := strings.Split(strings.TrimSpace(string(content)), "\n")
 	for i, tc := range testCases {
