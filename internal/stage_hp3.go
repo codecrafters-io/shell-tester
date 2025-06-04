@@ -90,7 +90,7 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	logger.Successf("✓ Found all commands in history file")
+	logger.Successf("✓ Found %d commands in history file", len(commands))
 
 	// Run one echo command
 	echoString := strings.Join(random.RandomWords(random.RandomInt(2, 4)), " ")
@@ -120,7 +120,7 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	logger.Successf("✓ Found all commands in history file after running history -a command again")
+	logger.Successf("✓ Found %d commands in history file after running history -a command again", len(commands))
 
 	return logAndQuit(asserter, nil)
 }

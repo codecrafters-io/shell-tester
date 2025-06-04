@@ -74,7 +74,7 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	logger.Successf("✓ Found all commands in history file")
+	logger.Successf("✓ Found %d commands in history file", len(commands))
 
 	return logAndQuit(asserter, nil)
 }
