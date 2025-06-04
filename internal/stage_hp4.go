@@ -25,7 +25,7 @@ func testHP4(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	// Step 1: Create a temporary history file
-	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_test")
+	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_test.txt")
 	defer os.Remove(historyFile)
 
 	// Create the file
@@ -88,19 +88,10 @@ func testHP4(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return fmt.Errorf("failed to read history file: %v", err)
 	}
+	utils.LogReadableFileContents(logger, string(historyContent), fmt.Sprintf("Reading contents from %s", filepath.Base(historyFile)), filepath.Base(historyFile))
 
-	// Check if all commands are present in the history file
-	historyStr := strings.TrimSpace(string(historyContent))
-	historyLines := strings.Split(historyStr, "\n")
-
-	utils.LogReadableFileContents(logger, historyStr, "History file content:", filepath.Base(historyFile))
-
-	if len(historyLines) != len(commandTestCases)+2 {
-		return fmt.Errorf("history file has %d lines, expected %d", len(historyLines), len(commandTestCases)+2)
-	}
-	logger.Successf("✓ History file has correct number of lines")
-
-	// Verify new commands were written
+	// Step 7: Check history file contents
+	historyLines := strings.Split(strings.TrimSpace(string(historyContent)), "\n")
 	commandTestCases = append(commandTestCases, test_cases.CommandResponseTestCase{
 		Command:        "history",
 		ExpectedOutput: "history",
@@ -111,14 +102,16 @@ func testHP4(stageHarness *test_case_harness.TestCaseHarness) error {
 		ExpectedOutput: "exit 0",
 		SuccessMessage: "✓ Found command exit 0 in history file",
 	})
-	if len(historyLines) != len(commandTestCases) {
-		return fmt.Errorf("history file has %d lines, expected %d", len(historyLines), len(commandTestCases))
-	}
 	for i, cmd := range commandTestCases {
 		if historyLines[i] != cmd.Command {
 			return fmt.Errorf("expected command %q at line %d, got %q", cmd.Command, i+1, historyLines[i])
 		}
 		logger.Successf("✓ Found command %q in history file", cmd.Command)
+		i++
+	}
+
+	if len(historyLines) != len(commandTestCases) {
+		return fmt.Errorf("history file has %d lines, expected %d", len(historyLines), len(commandTestCases))
 	}
 
 	return logAndQuit(asserter, nil)

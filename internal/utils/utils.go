@@ -44,7 +44,7 @@ func AsBool(T func() error) func() bool {
 	return func() bool { return T() == nil }
 }
 
-// LogReadableFileContents prints file contents in a readable way, replacing tabs and spaces with visible markers and coloring comments yellow.
+// LogReadableFileContents prints file contents in a readable way, replacing tabs and spaces with visible markers.
 func LogReadableFileContents(l *logger.Logger, fileContents string, logMsg string, fileName string) {
 	l.Infof(logMsg)
 

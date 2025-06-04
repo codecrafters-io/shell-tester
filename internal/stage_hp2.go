@@ -24,7 +24,7 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	// Create temporary history file paths
-	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_test")
+	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_test.txt")
 	defer os.Remove(historyFile) // Clean up the history file when done
 
 	// Set HISTFILE to /dev/null before starting the shell
@@ -73,7 +73,7 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	utils.LogReadableFileContents(logger, string(historyContent), "History file content:", filepath.Base(historyFile))
+	utils.LogReadableFileContents(logger, string(historyContent), fmt.Sprintf("Reading contents from %s", filepath.Base(historyFile)), filepath.Base(historyFile))
 
 	// Check if all commands are present in the history file in order, allowing for number prefixes
 	historyStr := strings.TrimSpace(string(historyContent))
@@ -82,16 +82,16 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 		expectedCommands[i] = cmd.Command
 	}
 	historyLines := strings.Split(historyStr, "\n")
-	if len(historyLines) != len(expectedCommands) {
-		return fmt.Errorf("history file has %d lines, expected %d", len(historyLines), len(expectedCommands))
-	}
-	logger.Successf("✓ History file has correct number of lines")
 	expectedCommands[nCommands] = historyWriteCommand
 	for i, cmd := range expectedCommands {
 		if historyLines[i] != cmd {
 			return fmt.Errorf("expected command %q at line %d, got %q", cmd, i+1, historyLines[i])
 		}
 		logger.Successf("✓ Found command %q in history file", cmd)
+	}
+
+	if len(historyLines) != len(expectedCommands) {
+		return fmt.Errorf("history file has %d lines, expected %d", len(historyLines), len(expectedCommands))
 	}
 
 	return logAndQuit(asserter, nil)

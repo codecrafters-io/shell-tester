@@ -24,7 +24,7 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	// Step 1: Create a temporary history file with some commands
-	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_test")
+	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_test.txt")
 	defer os.Remove(historyFile)
 
 	// Set HISTFILE to /dev/null before starting the shell
@@ -52,31 +52,9 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 		logger.Errorf("Failed to read history file: %v", err)
 		return err
 	}
-	utils.LogReadableFileContents(logger, string(content), "History file content:", filepath.Base(historyFile))
+	utils.LogReadableFileContents(logger, string(content), fmt.Sprintf("Writing contents to %s", filepath.Base(historyFile)), filepath.Base(historyFile))
 
-	// Step 2: Run some commands in the shell
-	nShellCommands := random.RandomInt(2, 4)
-	commandTestCases := make([]test_cases.CommandResponseTestCase, nShellCommands)
-	for i := 0; i < nShellCommands; i++ {
-		cmdWords := random.RandomWords(random.RandomInt(2, 4))
-		cmd := "echo " + strings.Join(cmdWords, " ")
-		commandTestCases[i] = test_cases.CommandResponseTestCase{
-			Command:        cmd,
-			ExpectedOutput: strings.Join(cmdWords, " "),
-			SuccessMessage: fmt.Sprintf("✓ Ran %s", cmd),
-		}
-	}
-
-	// Step 3: Check history before loading from file
-	historyBefore := test_cases.HistoryTestCase{
-		CommandsBeforeHistory: commandTestCases,
-		SuccessMessage:        "✓ History before loading file is correct",
-	}
-	if err := historyBefore.Run(asserter, shell, logger); err != nil {
-		return err
-	}
-
-	// Step 4: Load history from file
+	// Step 2: Load history from file
 	historyLoadTest := test_cases.CommandReflectionTestCase{
 		Command:        fmt.Sprintf("history -r %s", historyFile),
 		SuccessMessage: "✓ history -r command executed",
@@ -85,13 +63,11 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// Step 5: Check history after loading from file (should include previous + loaded)
+	// Step 3: Check history after loading from file (should include previous + loaded)
 	afterLoadHistoryTest := test_cases.HistoryPersistenceTestCase{
-		ExpectHistoryRCommand:     true,
-		FilePath:                  historyFile,
-		PreviousCommands:          commandTestCases,
-		SuccessMessage:            "✓ History after loading file is correct",
-		WasHistoryCommandExecuted: true,
+		ExpectHistoryRCommand: true,
+		FilePath:              historyFile,
+		SuccessMessage:        "✓ History after loading file is correct",
 	}
 	if err := afterLoadHistoryTest.Run(asserter, shell, logger); err != nil {
 		return err

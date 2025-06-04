@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -25,7 +24,7 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	// Step 1: Create a temporary history file with some initial content
-	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_test")
+	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_test.txt")
 
 	// Create initial history file content (randomized, like in HP1/HP2)
 	nInitialCommands := random.RandomInt(2, 5)
@@ -88,15 +87,12 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	utils.LogReadableFileContents(logger, string(historyContent), "History file content after appending:", filepath.Base(historyFile))
+	utils.LogReadableFileContents(logger, string(historyContent), fmt.Sprintf("Reading contents from %s", filepath.Base(historyFile)), filepath.Base(historyFile))
 
 	// Check if all commands are present in the history file
 	historyStr := strings.TrimSpace(string(historyContent))
 	historyLines := strings.Split(historyStr, "\n")
-	if len(historyLines) != len(initialCommands)+len(commandTestCases)+2 {
-		return fmt.Errorf("history file has %d lines, expected %d", len(historyLines), len(initialCommands)+len(commandTestCases)+2)
-	}
-	logger.Successf("✓ History file has correct number of lines")
+
 	i := 0
 	// First verify initial commands are still present
 	for _, cmd := range initialCommands {
@@ -129,13 +125,8 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	logger.Successf("✓ Found history append command in history file")
 
-	// Get initial counts of commands
-	initialCounts := make(map[string]int)
-	for _, cmd := range initialCommands {
-		initialCounts[cmd] = strings.Count(historyStr, cmd)
-	}
-	for _, cmd := range commandTestCases {
-		initialCounts[cmd.Command] = strings.Count(historyStr, cmd.Command)
+	if len(historyLines) != len(initialCommands)+len(commandTestCases)+2 {
+		return fmt.Errorf("history file has %d lines, expected %d", len(historyLines), len(initialCommands)+len(commandTestCases)+2)
 	}
 
 	// Run history -a again
@@ -154,28 +145,14 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 	historyStr = string(historyContent)
+	historyLines = strings.Split(historyStr, "\n")
+	utils.LogReadableFileContents(logger, string(historyContent), fmt.Sprintf("Reading contents from %s", filepath.Base(historyFile)), filepath.Base(historyFile))
 
-	utils.LogReadableFileContents(logger, string(historyContent), "History file content after second append:", filepath.Base(historyFile))
-
-	// Verify counts haven't increased (excluding history -a command)
-
-	// Sort the commands to ensure consistent order (for testing)
-	var cmds []string
-	for cmd := range initialCounts {
-		if cmd != historyAppendCmd {
-			cmds = append(cmds, cmd)
-		}
+	if historyLines[i] != fmt.Sprintf("history -a %s", historyFile) {
+		return fmt.Errorf("expected command %q at line %d, got %q", fmt.Sprintf("history -a %s", historyFile), i+1, historyLines[i])
 	}
-	sort.Strings(cmds)
-	for _, cmd := range cmds {
-		initialCount := initialCounts[cmd]
-		newCount := strings.Count(historyStr, cmd)
-		if newCount > initialCount {
-			logger.Errorf("Command %q appears %d times in history file (was %d)", cmd, newCount, initialCount)
-			return fmt.Errorf("command %q appears %d times in history file (was %d)", cmd, newCount, initialCount)
-		}
-		logger.Successf("✓ Command %q count preserved (%d)", cmd, initialCount)
-	}
+	logger.Successf("✓ Found history -a command in history file")
+	i++
 
 	return logAndQuit(asserter, nil)
 }

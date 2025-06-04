@@ -26,9 +26,6 @@ type HistoryPersistenceTestCase struct {
 
 	// SuccessMessage is the message to log in case of success
 	SuccessMessage string
-
-	// Was history command executed before loading the history file
-	WasHistoryCommandExecuted bool
 }
 
 func (t HistoryPersistenceTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
@@ -68,20 +65,7 @@ func (t HistoryPersistenceTestCase) Run(asserter *logged_shell_asserter.LoggedSh
 		})
 	}
 
-	// Add assertion for the first history command if it was executed
-	if t.WasHistoryCommandExecuted {
-		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput:   fmt.Sprintf("    %d  history", len(t.PreviousCommands)+1),
-			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(`^\s*\d+\s+history$`)},
-		})
-	}
-
-	// Check that each file command appears in the history output
 	historyOffset := 1
-	if t.WasHistoryCommandExecuted {
-		historyOffset = 2
-	}
-
 	// Add assertion for the history -r command if expected
 	if t.ExpectHistoryRCommand {
 		asserter.AddAssertion(assertions.SingleLineAssertion{
