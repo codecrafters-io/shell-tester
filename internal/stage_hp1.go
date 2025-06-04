@@ -55,7 +55,7 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	utils.LogReadableFileContents(logger, string(content), fmt.Sprintf("Writing contents to %s", historyFile), historyFile)
 
 	// Step 2: Load history from file
-	historyLoadTest := test_cases.CommandWithNoRepsonseTestCase{
+	historyLoadTest := test_cases.CommandWithNoResponseTestCase{
 		Command:        fmt.Sprintf("history -r %s", historyFile),
 		SuccessMessage: "✓ Ran history -r command",
 	}

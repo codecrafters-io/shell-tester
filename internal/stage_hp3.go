@@ -70,7 +70,7 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Step 4: Append history to file
 	historyAppendCmd := "history -a " + historyFile
-	historyAppendTest := test_cases.CommandWithNoRepsonseTestCase{
+	historyAppendTest := test_cases.CommandWithNoResponseTestCase{
 		Command:        historyAppendCmd,
 		SuccessMessage: "✓ Ran history -a command",
 	}
@@ -105,7 +105,7 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Run history -a again
-	historyAppendTest = test_cases.CommandWithNoRepsonseTestCase{
+	historyAppendTest = test_cases.CommandWithNoResponseTestCase{
 		Command:        historyAppendCmd,
 		SuccessMessage: "✓ Ran history -a command again",
 	}

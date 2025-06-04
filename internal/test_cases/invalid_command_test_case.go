@@ -30,7 +30,7 @@ func (t *InvalidCommandTestCase) Run(asserter *logged_shell_asserter.LoggedShell
 }
 
 func (t *InvalidCommandTestCase) RunWithoutNextPromptAssertion(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	testCase := CommandWithNoRepsonseTestCase{
+	testCase := CommandWithNoResponseTestCase{
 		Command:             t.Command,
 		SkipPromptAssertion: true,
 	}

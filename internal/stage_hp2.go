@@ -55,7 +55,7 @@ func testHP2(stageHarness *test_case_harness.TestCaseHarness) error {
 	historyWriteCommand := "history -w " + historyFile
 	logger.Infof("Writing history to file using command: %s", historyWriteCommand)
 
-	historyTestCase := test_cases.CommandWithNoRepsonseTestCase{
+	historyTestCase := test_cases.CommandWithNoResponseTestCase{
 		Command:        historyWriteCommand,
 		SuccessMessage: "✓ Ran history -w command",
 	}

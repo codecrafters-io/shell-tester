@@ -31,7 +31,7 @@ func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter
 	if t.LastNCommands > 0 {
 		historyCommand = fmt.Sprintf("history %d", t.LastNCommands)
 	}
-	historyReflectionTest := CommandWithNoRepsonseTestCase{
+	historyReflectionTest := CommandWithNoResponseTestCase{
 		Command:             historyCommand,
 		SuccessMessage:      "✓ Ran history command",
 		SkipPromptAssertion: true,
