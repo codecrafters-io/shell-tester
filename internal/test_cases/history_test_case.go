@@ -15,7 +15,7 @@ import (
 // Verifies that the command is printed to the screen
 // Verifies that the history output shows the command in the expected format
 type HistoryTestCase struct {
-	// PreviousCommands is a list of commands to execute before running history
+	// PreviousCommands is a list of previous commands expected to be in the history list
 	PreviousCommands []string
 
 	// LastNCommands specifies how many of the most recent commands to check in history
