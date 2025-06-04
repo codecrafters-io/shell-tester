@@ -88,7 +88,6 @@ func testHP3(stageHarness *test_case_harness.TestCaseHarness) error {
 			ExpectedOutput: cmd,
 			SuccessMessage: fmt.Sprintf("✓ Found command %q in history file", cmd),
 		}
-		fmt.Println(toCheckCommandTestCases[i].Command)
 	}
 	for i, cmd := range commandTestCases {
 		toCheckCommandTestCases[i+len(initialCommands)] = cmd
