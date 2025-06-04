@@ -3,9 +3,9 @@ Debug = true
 [33m[stage-5] [0m[94mRunning tests for Stage #5: za2[0m
 [33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-5] [0m[94mHistory file content:[0m
-[33m[stage-5] [0mecho blueberry mango
-[33m[stage-5] [0mecho pineapple grape
-[33m[stage-5] [0mecho grape apple
+[33m[stage-5] [0m[pear_shell_history_test] echo blueberry mango
+[33m[stage-5] [0m[pear_shell_history_test] echo pineapple grape
+[33m[stage-5] [0m[pear_shell_history_test] echo grape apple
 [33m[your-program] [0m$ echo mango orange pear
 [33m[your-program] [0mmango orange pear
 [33m[stage-5] [0m[92m✓ Ran echo mango orange pear[0m
@@ -53,10 +53,11 @@ Debug = true
 [33m[stage-4] [0m[92m✓ History -w command executed[0m
 [33m[stage-4] [0m[94mVerifying history file contents[0m
 [33m[stage-4] [0m[94mHistory file content:[0m
-[33m[stage-4] [0mecho orange raspberry
-[33m[stage-4] [0mecho apple banana
-[33m[stage-4] [0mecho strawberry pear
-[33m[stage-4] [0mhistory -w /tmp/banana_shell_history_test
+[33m[stage-4] [0m[banana_shell_history_test] echo orange raspberry
+[33m[stage-4] [0m[banana_shell_history_test] echo apple banana
+[33m[stage-4] [0m[banana_shell_history_test] echo strawberry pear
+[33m[stage-4] [0m[banana_shell_history_test] history -w /tmp/banana_shell_history_test
+[33m[stage-4] [0m[92m✓ History file has correct number of lines[0m
 [33m[stage-4] [0m[92m✓ Found command "echo orange raspberry" in history file[0m
 [33m[stage-4] [0m[92m✓ Found command "echo apple banana" in history file[0m
 [33m[stage-4] [0m[92m✓ Found command "echo strawberry pear" in history file[0m
@@ -66,9 +67,9 @@ Debug = true
 
 [33m[stage-3] [0m[94mRunning tests for Stage #3: sx3[0m
 [33m[stage-3] [0m[94mOriginal history file content:[0m
-[33m[stage-3] [0mecho strawberry pineapple blueberry
-[33m[stage-3] [0mecho orange pineapple apple
-[33m[stage-3] [0mecho pineapple apple mango
+[33m[stage-3] [0m[grape_shell_history_test] echo strawberry pineapple blueberry
+[33m[stage-3] [0m[grape_shell_history_test] echo orange pineapple apple
+[33m[stage-3] [0m[grape_shell_history_test] echo pineapple apple mango
 [33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo pineapple banana pear
 [33m[your-program] [0mpineapple banana pear
@@ -84,13 +85,14 @@ Debug = true
 [33m[your-program] [0m$ history -a /tmp/grape_shell_history_test
 [33m[stage-3] [0m[92m✓ History appended to file[0m
 [33m[stage-3] [0m[94mHistory file content after appending:[0m
-[33m[stage-3] [0mecho strawberry pineapple blueberry
-[33m[stage-3] [0mecho orange pineapple apple
-[33m[stage-3] [0mecho pineapple apple mango
-[33m[stage-3] [0mecho pineapple banana pear
-[33m[stage-3] [0mecho grape pear
-[33m[stage-3] [0mhistory
-[33m[stage-3] [0mhistory -a /tmp/grape_shell_history_test
+[33m[stage-3] [0m[grape_shell_history_test] echo strawberry pineapple blueberry
+[33m[stage-3] [0m[grape_shell_history_test] echo orange pineapple apple
+[33m[stage-3] [0m[grape_shell_history_test] echo pineapple apple mango
+[33m[stage-3] [0m[grape_shell_history_test] echo pineapple banana pear
+[33m[stage-3] [0m[grape_shell_history_test] echo grape pear
+[33m[stage-3] [0m[grape_shell_history_test] history
+[33m[stage-3] [0m[grape_shell_history_test] history -a /tmp/grape_shell_history_test
+[33m[stage-3] [0m[92m✓ History file has correct number of lines[0m
 [33m[stage-3] [0m[92m✓ Found initial command "echo strawberry pineapple blueberry" in history file[0m
 [33m[stage-3] [0m[92m✓ Found initial command "echo orange pineapple apple" in history file[0m
 [33m[stage-3] [0m[92m✓ Found initial command "echo pineapple apple mango" in history file[0m
@@ -101,14 +103,14 @@ Debug = true
 [33m[your-program] [0m$ history -a /tmp/grape_shell_history_test
 [33m[stage-3] [0m[92m✓ history -a command executed[0m
 [33m[stage-3] [0m[94mHistory file content after second append:[0m
-[33m[stage-3] [0mecho strawberry pineapple blueberry
-[33m[stage-3] [0mecho orange pineapple apple
-[33m[stage-3] [0mecho pineapple apple mango
-[33m[stage-3] [0mecho pineapple banana pear
-[33m[stage-3] [0mecho grape pear
-[33m[stage-3] [0mhistory
-[33m[stage-3] [0mhistory -a /tmp/grape_shell_history_test
-[33m[stage-3] [0mhistory -a /tmp/grape_shell_history_test
+[33m[stage-3] [0m[grape_shell_history_test] echo strawberry pineapple blueberry
+[33m[stage-3] [0m[grape_shell_history_test] echo orange pineapple apple
+[33m[stage-3] [0m[grape_shell_history_test] echo pineapple apple mango
+[33m[stage-3] [0m[grape_shell_history_test] echo pineapple banana pear
+[33m[stage-3] [0m[grape_shell_history_test] echo grape pear
+[33m[stage-3] [0m[grape_shell_history_test] history
+[33m[stage-3] [0m[grape_shell_history_test] history -a /tmp/grape_shell_history_test
+[33m[stage-3] [0m[grape_shell_history_test] history -a /tmp/grape_shell_history_test
 [33m[stage-3] [0m[92m✓ Command "echo grape pear" count preserved (1)[0m
 [33m[stage-3] [0m[92m✓ Command "echo orange pineapple apple" count preserved (1)[0m
 [33m[stage-3] [0m[92m✓ Command "echo pineapple apple mango" count preserved (1)[0m
@@ -133,20 +135,23 @@ Debug = true
 [33m[your-program] [0m$ exit 0
 [33m[your-program] [0mexit
 [33m[stage-2] [0m[94mHistory file content:[0m
-[33m[stage-2] [0mecho mango banana apple
-[33m[stage-2] [0mecho strawberry pear
-[33m[stage-2] [0mhistory
-[33m[stage-2] [0mexit 0
+[33m[stage-2] [0m[strawberry_shell_history_test] echo mango banana apple
+[33m[stage-2] [0m[strawberry_shell_history_test] echo strawberry pear
+[33m[stage-2] [0m[strawberry_shell_history_test] history
+[33m[stage-2] [0m[strawberry_shell_history_test] exit 0
+[33m[stage-2] [0m[92m✓ History file has correct number of lines[0m
 [33m[stage-2] [0m[92m✓ Found command "echo mango banana apple" in history file[0m
 [33m[stage-2] [0m[92m✓ Found command "echo strawberry pear" in history file[0m
+[33m[stage-2] [0m[92m✓ Found command "history" in history file[0m
+[33m[stage-2] [0m[92m✓ Found command "exit 0" in history file[0m
 [33m[stage-2] [0m[92mTest passed.[0m
 
 [33m[stage-1] [0m[94mRunning tests for Stage #1: zp4[0m
 [33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-1] [0m[94mHistory file content:[0m
-[33m[stage-1] [0mecho apple strawberry
-[33m[stage-1] [0mecho mango apple raspberry
-[33m[stage-1] [0mecho orange pineapple grape
+[33m[stage-1] [0m[mango_shell_history_test] echo apple strawberry
+[33m[stage-1] [0m[mango_shell_history_test] echo mango apple raspberry
+[33m[stage-1] [0m[mango_shell_history_test] echo orange pineapple grape
 [33m[your-program] [0m$ history
 [33m[your-program] [0m    1  echo apple strawberry
 [33m[your-program] [0m    2  echo mango apple raspberry
