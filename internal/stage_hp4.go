@@ -24,7 +24,7 @@ func testHP4(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	// Step 1: Create a temporary history file
-	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_test.txt")
+	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+".txt")
 	defer os.Remove(historyFile)
 
 	// Create the file
@@ -83,17 +83,13 @@ func testHP4(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter.LogRemainingOutput()
 
 	// Step 6: Check history file contents
-	commandTestCases = append(commandTestCases, test_cases.CommandResponseTestCase{
-		Command:        "history",
-		ExpectedOutput: "history",
-		SuccessMessage: "✓ Found command history in history file",
-	})
-	commandTestCases = append(commandTestCases, test_cases.CommandResponseTestCase{
-		Command:        "exit 0",
-		ExpectedOutput: "exit 0",
-		SuccessMessage: "✓ Found command exit 0 in history file",
-	})
-	if err := test_cases.AssertFileHasCommandsInOrder(logger, historyFile, commandTestCases); err != nil {
+	commands := make([]string, len(commandTestCases))
+	for i, cmd := range commandTestCases {
+		commands[i] = cmd.Command
+	}
+	commands = append(commands, "history")
+	commands = append(commands, "exit 0")
+	if err := test_cases.AssertFileHasCommandsInOrder(logger, historyFile, commands); err != nil {
 		return err
 	}
 

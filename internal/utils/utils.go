@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 	"unicode"
@@ -47,7 +46,8 @@ func AsBool(T func() error) func() bool {
 // LogReadableFileContents prints file contents in a readable way, replacing tabs and spaces with visible markers.
 func LogReadableFileContents(l *logger.Logger, fileContents string, logMsg string, fileName string) {
 	l.Infof(logMsg)
-
+	l.UpdateSecondaryPrefix(fileName)
+	defer l.UpdateSecondaryPrefix("")
 	printableFileContents := strings.ReplaceAll(fileContents, "%", "%%")
 	printableFileContents = strings.ReplaceAll(printableFileContents, "\t", "<|TAB|>")
 
@@ -57,7 +57,7 @@ func LogReadableFileContents(l *logger.Logger, fileContents string, logMsg strin
 	printableFileContents = regex2.ReplaceAllString(printableFileContents, "<|SPACE|>")
 
 	if len(printableFileContents) == 0 {
-		l.Plainf("[%s] <|EMPTY FILE|>", fileName)
+		l.Plainf("<|EMPTY FILE|>")
 	} else {
 		lines := strings.Split(printableFileContents, "\n")
 		// If the last line is empty (trailing newline), skip it
@@ -65,14 +65,7 @@ func LogReadableFileContents(l *logger.Logger, fileContents string, logMsg strin
 			lines = lines[:len(lines)-1]
 		}
 		for _, line := range lines {
-			if strings.Contains(line, "//") {
-				code := strings.Split(line, "//")[0]
-				comment := "//" + strings.Split(line, "//")[1]
-				formattedLine := fmt.Sprintf("[%s] %s%s", fileName, code, ColorizeString(color.FgYellow, comment))
-				l.Plainf(formattedLine)
-			} else {
-				l.Plainf("[%s] %s", fileName, line)
-			}
+			l.Plainf(line)
 		}
 	}
 }

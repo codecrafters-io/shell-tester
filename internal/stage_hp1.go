@@ -24,7 +24,7 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	// Step 1: Create a temporary history file with some commands
-	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+"_shell_history_test.txt")
+	historyFile := filepath.Join(os.TempDir(), random.RandomWord()+".txt")
 	defer os.Remove(historyFile)
 
 	// Set HISTFILE to /dev/null before starting the shell
@@ -52,7 +52,7 @@ func testHP1(stageHarness *test_case_harness.TestCaseHarness) error {
 		logger.Errorf("Failed to read history file: %v", err)
 		return err
 	}
-	utils.LogReadableFileContents(logger, string(content), fmt.Sprintf("Writing contents to %s", filepath.Base(historyFile)), filepath.Base(historyFile))
+	utils.LogReadableFileContents(logger, string(content), fmt.Sprintf("Writing contents to %s", historyFile), historyFile)
 
 	// Step 2: Load history from file
 	historyLoadTest := test_cases.CommandReflectionTestCase{
