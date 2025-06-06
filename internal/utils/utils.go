@@ -60,10 +60,6 @@ func LogReadableFileContents(l *logger.Logger, fileContents string, logMsg strin
 		l.Plainf("<|EMPTY FILE|>")
 	} else {
 		lines := strings.Split(printableFileContents, "\n")
-		// If the last line is empty (trailing newline), skip it
-		if len(lines) > 0 && lines[len(lines)-1] == "" {
-			lines = lines[:len(lines)-1]
-		}
 		for _, line := range lines {
 			l.Plainf(line)
 		}

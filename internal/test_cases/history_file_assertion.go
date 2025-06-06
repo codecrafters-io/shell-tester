@@ -18,7 +18,12 @@ func AssertHistoryFileHasCommands(l *logger.Logger, filePath string, commands []
 		return fmt.Errorf("failed to read file %s: %v", filePath, err)
 	}
 
-	lines := strings.Split(strings.TrimSpace(string(content)), "\n") // TODO: Remove the TrimSpace
+	lines := strings.Split(string(content), "\n")
+	if lines[len(lines)-1] != "" {
+		utils.LogReadableFileContents(l, string(content), fmt.Sprintf("Reading contents from %s", filePath), filePath)
+		return fmt.Errorf("file %s has no trailing newline", filePath)
+	}
+	lines = lines[:len(lines)-1]
 	found_commands := []string{}
 	for i, command := range commands {
 		if i >= len(lines) {

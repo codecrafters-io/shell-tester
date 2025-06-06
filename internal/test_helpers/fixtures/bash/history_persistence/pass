@@ -6,6 +6,7 @@ Debug = true
 [33m[stage-5] [/tmp/pear.txt] [0mecho blueberry mango
 [33m[stage-5] [/tmp/pear.txt] [0mecho pineapple grape
 [33m[stage-5] [/tmp/pear.txt] [0mecho grape apple
+[33m[stage-5] [/tmp/pear.txt] [0m
 [33m[your-program] [0m$ history -r /tmp/pear.txt
 [33m[your-program] [0m$ history
 [33m[your-program] [0m    1  history -r /tmp/pear.txt
@@ -39,6 +40,7 @@ Debug = true
 [33m[stage-3] [/tmp/pineapple.txt] [0mecho pear raspberry
 [33m[stage-3] [/tmp/pineapple.txt] [0mecho apple banana
 [33m[stage-3] [/tmp/pineapple.txt] [0mecho pineapple apple pear
+[33m[stage-3] [/tmp/pineapple.txt] [0m
 [33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo strawberry pineapple blueberry
 [33m[your-program] [0mstrawberry pineapple blueberry
@@ -84,6 +86,7 @@ Debug = true
 [33m[stage-1] [0m[94mWriting commands to /tmp/mango.txt[0m
 [33m[stage-1] [/tmp/mango.txt] [0mecho mango raspberry strawberry
 [33m[stage-1] [/tmp/mango.txt] [0mecho grape pineapple apple
+[33m[stage-1] [/tmp/mango.txt] [0m
 [33m[stage-1] [0m[94mexport HISTFILE=/tmp/mango.txt[0m
 [33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ history
