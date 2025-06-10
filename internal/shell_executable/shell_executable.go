@@ -97,6 +97,10 @@ func (b *ShellExecutable) GetScreenState() [][]string {
 	return b.vt.GetScreenState()
 }
 
+func (b *ShellExecutable) GetCursorPosition() (int, int) {
+	return b.vt.GetCursorPosition()
+}
+
 func (b *ShellExecutable) LogOutput(output []byte) {
 	b.programLogger.Plainln(string(output))
 }

@@ -59,8 +59,7 @@ func (vt *VirtualTerminal) GetScreenState() [][]string {
 	if vt == nil {
 		return [][]string{}
 	}
-	cursorPosition := vt.vt.CursorPosition()
-	cursorRow, cursorCol := cursorPosition.Y, cursorPosition.X
+	cursorRow, cursorCol := vt.GetCursorPosition()
 
 	// For the row where the cursor is present
 	// We intend to keep all characters upto the cursor position
@@ -77,6 +76,12 @@ func (vt *VirtualTerminal) GetScreenState() [][]string {
 		}
 	}
 	return screenState
+}
+
+func (vt *VirtualTerminal) GetCursorPosition() (int, int) {
+	cursorPosition := vt.vt.CursorPosition()
+	cursorRow, cursorCol := cursorPosition.Y, cursorPosition.X
+	return cursorRow, cursorCol
 }
 
 func (vt *VirtualTerminal) GetColumnCount() int {
