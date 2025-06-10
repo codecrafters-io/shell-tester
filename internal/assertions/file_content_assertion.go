@@ -27,7 +27,7 @@ func (t FileContentAssertion) Run(screenState [][]string, startRowIndex int) (pr
 		return processedRowCount, &AssertionError{
 			StartRowIndex: startRowIndex,
 			ErrorRowIndex: startRowIndex,
-			Message:       fmt.Sprintf("Expected file %q to exist: %v", t.FilePath, readErr),
+			Message:       fmt.Sprintf("Failed to read file (%q): %v", t.FilePath, readErr),
 		}
 	}
 
