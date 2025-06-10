@@ -19,8 +19,13 @@ func BuildColoredErrorMessage(expectedPatternExplanation string, output string) 
 	errorMsg += " \"" + expectedPatternExplanation + "\""
 	errorMsg += "\n"
 	errorMsg += ColorizeString(color.FgRed, "Received:")
-	errorMsg += " \"" + RemoveNonPrintableCharacters(output) + "\""
 
+	cleanedOutput := RemoveNonPrintableCharacters(output)
+	quotedOutput := "\"" + cleanedOutput + "\""
+	if cleanedOutput == "" {
+		quotedOutput += " (empty line)"
+	}
+	errorMsg += " " + quotedOutput
 	return errorMsg
 }
 

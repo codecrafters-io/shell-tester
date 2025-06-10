@@ -132,9 +132,22 @@ func (a *LoggedShellAsserter) logRows(startRowIndex int, endRowIndex int) {
 	for i := startRowIndex; i <= endRowIndex; i++ {
 		rawRow := a.Shell.GetScreenState()[i]
 		cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
-		if len(cleanedRow) > 0 {
-			a.Shell.LogOutput([]byte(cleanedRow))
+
+		// Stop if all remaining rows are empty
+		if cleanedRow == "" && i < endRowIndex {
+			allRemainingEmpty := true
+			for j := i + 1; j <= endRowIndex; j++ {
+				line := virtual_terminal.BuildCleanedRow(a.Shell.GetScreenState()[j])
+				if line != "" {
+					allRemainingEmpty = false
+					break
+				}
+			}
+			if allRemainingEmpty {
+				return
+			}
 		}
+		a.Shell.LogOutput([]byte(cleanedRow))
 	}
 }
 
