@@ -135,7 +135,7 @@ func (a *LoggedShellAsserter) logRows(startRowIndex int, endRowIndex int) {
 
 		cursorRow, _ := a.Shell.GetCursorPosition()
 		if cleanedRow == "" && i >= cursorRow {
-			return // No need to log empty rows beyond the current cursor row
+			return // No need to log empty rows beyond the cursor row
 		}
 
 		a.Shell.LogOutput([]byte(cleanedRow))
