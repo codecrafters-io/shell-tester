@@ -134,8 +134,10 @@ func (a *LoggedShellAsserter) logRows(startRowIndex int, endRowIndex int) {
 		cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
 
 		cursorRow, _ := a.Shell.GetCursorPosition()
-		if cleanedRow == "" && i >= cursorRow {
-			return // No need to log empty rows beyond the cursor row
+		hasntReachedEnd := i < endRowIndex
+		beyondCursorRow := i >= cursorRow
+		if cleanedRow == "" && hasntReachedEnd && beyondCursorRow {
+			return
 		}
 
 		a.Shell.LogOutput([]byte(cleanedRow))
