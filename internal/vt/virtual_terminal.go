@@ -75,6 +75,12 @@ func (vt *VirtualTerminal) GetScreenState() [][]string {
 				screenState[i][j] = c.Content
 			}
 		}
+		// If there is an empty row somewhere in the middle,
+		// artificially add a sentinel character
+		emptyRowRepresentation := strings.Repeat(" ", vt.cols)
+		if i < cursorRow && strings.Join(screenState[i], "") == emptyRowRepresentation {
+			screenState[i][0] = utils.VT_SENTINEL_CHARACTER
+		}
 	}
 	return screenState
 }
