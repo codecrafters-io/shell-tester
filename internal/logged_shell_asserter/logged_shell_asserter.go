@@ -2,6 +2,7 @@ package logged_shell_asserter
 
 import (
 	"fmt"
+	"math"
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertion_collection"
@@ -118,6 +119,8 @@ func (a *LoggedShellAsserter) LogRemainingOutput() {
 }
 
 func (a *LoggedShellAsserter) logRowsUntilAndIncluding(endRowIndex int) {
+	endRowIndex = int(math.Min(float64(endRowIndex), float64(a.Shell.GetScreenState().GetLastLoggableRowIndex())))
+
 	for i := a.lastLoggedRowIndex + 1; i <= endRowIndex; i++ {
 		row := a.Shell.GetScreenState().GetRow(i)
 		a.Shell.LogOutput([]byte(row.String()))
