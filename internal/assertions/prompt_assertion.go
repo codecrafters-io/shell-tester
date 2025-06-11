@@ -21,7 +21,13 @@ func (t PromptAssertion) Run(screenState [][]string, startRowIndex int) (process
 	// We don't want to count the processed prompt as a complete row
 	processedRowCount = 0
 
-	rawRow := screenState[startRowIndex] // Could be nil?
+	rawRow := []string{}
+
+	// screenState might not have a row for the row we're looking at yet
+	if startRowIndex < len(screenState) {
+		rawRow = screenState[startRowIndex]
+	}
+
 	cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
 
 	if !strings.EqualFold(cleanedRow, t.ExpectedPrompt) {

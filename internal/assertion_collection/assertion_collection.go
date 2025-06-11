@@ -48,10 +48,6 @@ func (c *AssertionCollection) runWithExtraAssertions(screenState [][]string, ext
 			panic("CodeCrafters internal error: expected screen to have at least one row, but it was empty")
 		}
 
-		if currentRowIndex >= len(screenState) {
-			panic("CodeCrafters internal error: startRowIndex is larger than screenState rows")
-		}
-
 		processedRowCount, err := assertion.Run(screenState, currentRowIndex)
 		if err != nil {
 			return err

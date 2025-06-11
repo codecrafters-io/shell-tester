@@ -1,6 +1,7 @@
 package virtual_terminal
 
 import (
+	"math"
 	"strings"
 
 	"github.com/charmbracelet/x/vt"
@@ -59,22 +60,35 @@ func (vt *VirtualTerminal) GetScreenState() [][]string {
 	if vt == nil {
 		return [][]string{}
 	}
-	cursorRow, cursorCol := vt.GetCursorPosition()
+	cursorRowIndex, cursorColIndex := vt.GetCursorPosition()
 
-	// For the row where the cursor is present
-	// We intend to keep all characters upto the cursor position
-	screenState := make([][]string, vt.rows)
-	for i := 0; i < vt.rows; i++ {
+	lastNonEmptyRowIndex := 0
+	for i := vt.rows - 1; i >= 0; i-- {
+		row := vt.GetRow(i)
+		if strings.TrimSpace(strings.Join(row, "")) != "" {
+			lastNonEmptyRowIndex = i
+			break
+		}
+	}
+
+	// Only consider rows until (a) the last none empty row or (b) the cursor row, whichever comes later
+	lastRowIndex := int(math.Max(float64(lastNonEmptyRowIndex), float64(cursorRowIndex)))
+
+	screenState := make([][]string, lastRowIndex+1)
+	for i := 0; i <= lastRowIndex; i++ {
 		screenState[i] = make([]string, vt.cols)
 		for j := 0; j < vt.cols; j++ {
 			c := vt.vt.Cell(j, i)
-			if i == cursorRow && j < cursorCol && c.Content == " " {
+
+			// For the row where the cursor is present, keep all characters until the cursor position
+			if i == cursorRowIndex && j < cursorColIndex && c.Content == " " {
 				screenState[i][j] = utils.VT_SENTINEL_CHARACTER
 			} else {
 				screenState[i][j] = c.Content
 			}
 		}
 	}
+
 	return screenState
 }
 

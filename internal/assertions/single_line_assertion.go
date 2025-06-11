@@ -36,7 +36,13 @@ func (a SingleLineAssertion) Run(screenState [][]string, startRowIndex int) (pro
 		processedRowCount = 0
 	}
 
-	rawRow := screenState[startRowIndex]
+	rawRow := []string{}
+
+	// screenState might not have a row for the row we're looking at yet
+	if startRowIndex < len(screenState) {
+		rawRow = screenState[startRowIndex]
+	}
+
 	cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
 
 	for _, pattern := range a.FallbackPatterns {
