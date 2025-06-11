@@ -76,10 +76,11 @@ func (vt *VirtualTerminal) GetScreenState() [][]string {
 			}
 		}
 		// If there is an empty row somewhere in the middle,
-		// artificially add a sentinel character
+		// artificially add a new-line sentinel character
+		// So that we can mention it in the error message
 		emptyRowRepresentation := strings.Repeat(" ", vt.cols)
 		if i < cursorRow && strings.Join(screenState[i], "") == emptyRowRepresentation {
-			screenState[i][0] = utils.VT_SENTINEL_CHARACTER
+			screenState[i][0] = utils.VT_EMPTY_LINE_CHARACTER
 		}
 	}
 	return screenState
