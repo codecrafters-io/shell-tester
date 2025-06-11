@@ -9,7 +9,6 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/utils"
-	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
@@ -42,7 +41,7 @@ func (t ExitTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, s
 		return asserter.AssertionCollection.RunWithPromptAssertion(shell.GetScreenState())
 	}
 	readErr := shell.ReadUntilConditionOrTimeout(utils.AsBool(assertFn), logged_shell_asserter.SUBSEQUENT_READ_TIMEOUT)
-	output := virtual_terminal.BuildCleanedRow(shell.GetScreenState()[asserter.GetLastLoggedRowIndex()+1])
+	output := shell.GetScreenState().GetRow(asserter.GetLastLoggedRowIndex() + 1).String()
 
 	asserter.LogRemainingOutput()
 

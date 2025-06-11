@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/condition_reader"
+	"github.com/codecrafters-io/shell-tester/internal/screen_state"
 	"github.com/codecrafters-io/shell-tester/internal/utils"
 	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 	"github.com/codecrafters-io/tester-utils/executable"
@@ -93,7 +94,7 @@ func (b *ShellExecutable) Start(args ...string) error {
 	return nil
 }
 
-func (b *ShellExecutable) GetScreenState() [][]string {
+func (b *ShellExecutable) GetScreenState() screen_state.ScreenState {
 	return b.vt.GetScreenState()
 }
 

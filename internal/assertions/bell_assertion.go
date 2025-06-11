@@ -1,5 +1,7 @@
 package assertions
 
+import "github.com/codecrafters-io/shell-tester/internal/screen_state"
+
 // BellAssertion asserts that the bell callback function is called
 // by the virtual terminal, this can only happen if the user sends
 // /U0007 to the shell.
@@ -12,7 +14,7 @@ func (a BellAssertion) Inspect() string {
 	return "BellAssertion"
 }
 
-func (a BellAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err *AssertionError) {
+func (a BellAssertion) Run(screenState screen_state.ScreenState, startRowIndex int) (processedRowCount int, err *AssertionError) {
 	if checkIfBellReceived(a.BellChannel) {
 		return 0, nil
 	}

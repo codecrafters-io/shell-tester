@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/codecrafters-io/shell-tester/internal/screen_state"
 	"github.com/codecrafters-io/shell-tester/internal/utils"
-	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 )
 
 // SingleLineAssertion asserts that a single line of output matches a given string or regex pattern(s)
@@ -26,7 +26,7 @@ func (a SingleLineAssertion) Inspect() string {
 	return fmt.Sprintf("SingleLineAssertion (%q)", a.ExpectedOutput)
 }
 
-func (a SingleLineAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err *AssertionError) {
+func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowIndex int) (processedRowCount int, err *AssertionError) {
 	if a.ExpectedOutput == "" && len(a.FallbackPatterns) == 0 {
 		panic("CodeCrafters Internal Error: ExpectedOutput or fallbackPatterns must be provided")
 	}
@@ -36,17 +36,16 @@ func (a SingleLineAssertion) Run(screenState [][]string, startRowIndex int) (pro
 		processedRowCount = 0
 	}
 
-	rawRow := screenState[startRowIndex]
-	cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
+	rowString := screenState.GetRow(startRowIndex).String()
 
 	for _, pattern := range a.FallbackPatterns {
-		if pattern.Match([]byte(cleanedRow)) {
+		if pattern.Match([]byte(rowString)) {
 			return processedRowCount, nil
 		}
 	}
 
-	if cleanedRow != a.ExpectedOutput {
-		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, cleanedRow)
+	if rowString != a.ExpectedOutput {
+		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, rowString)
 		return 0, &AssertionError{
 			StartRowIndex: startRowIndex,
 			ErrorRowIndex: startRowIndex,

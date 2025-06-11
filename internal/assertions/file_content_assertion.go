@@ -3,6 +3,8 @@ package assertions
 import (
 	"fmt"
 	"os"
+
+	"github.com/codecrafters-io/shell-tester/internal/screen_state"
 )
 
 // FileContentAssertion verifies a prompt exists, and that there's no extra output after it.
@@ -18,7 +20,7 @@ func (t FileContentAssertion) Inspect() string {
 	return fmt.Sprintf("FileContentAssertion (%q) with expected content (%q)", t.FilePath, t.ExpectedContent)
 }
 
-func (t FileContentAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err *AssertionError) {
+func (t FileContentAssertion) Run(screenState screen_state.ScreenState, startRowIndex int) (processedRowCount int, err *AssertionError) {
 	// We don't want to count the processed prompt as a complete row
 	processedRowCount = 0
 
