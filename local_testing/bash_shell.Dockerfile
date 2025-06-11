@@ -14,9 +14,6 @@ RUN GODEBUG="installgoroot=all" go install std
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy the rest of the project files
-COPY . .
-
 # Set the default shell to bash
 SHELL ["/bin/bash", "-c"]
 
