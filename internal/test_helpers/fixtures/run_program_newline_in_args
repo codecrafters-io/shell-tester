@@ -10,9 +10,9 @@ Debug = true
 [33m[your-program] [0mArg #0 (program name): custom_exe_4458
 [33m[your-program] [0mArg #1: Emily
 [33m[your-program] [0m
-[33m[tester::#IP1] [0m[91mOutput does not match expected value.[0m
+[33m[tester::#IP1] [0m[91m^ Line does not match expected value.[0m
 [33m[tester::#IP1] [0m[91m[32mExpected:[0m "Program Signature: 3842155998"[0m
-[33m[tester::#IP1] [0m[91m[31mReceived:[0m ""[0m
+[33m[tester::#IP1] [0m[91m[31mReceived:[0m "" [31m(empty line)[0m[0m
 [33m[your-program] [0mProgram Signature: 3842155998
 [33m[tester::#IP1] [0m[91mAssertion failed.[0m
 [33m[tester::#IP1] [0m[91mTest failed[0m
