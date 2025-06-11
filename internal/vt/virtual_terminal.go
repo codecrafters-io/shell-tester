@@ -60,8 +60,7 @@ func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 //
 // The last visible row is whichever of the following is the last:
 // (a) The last non-empty row
-// (b) The row before the cursor if the cursor is at the start of the row
-// (c) The row with the cursor if the cursor is not at the start of the row
+// (b) The row with the cursor
 func (vt *VirtualTerminal) GetLastVisibleRowIndex() int {
 	lastNonEmptyRowIndex := 0
 	for i := vt.rows - 1; i >= 0; i-- {
@@ -72,15 +71,8 @@ func (vt *VirtualTerminal) GetLastVisibleRowIndex() int {
 		}
 	}
 
-	cursorRowIndex, cursorColIndex := vt.GetCursorPosition()
-
-	// If the cursor is at the start of the row, we consider the row before the cursor
-	// Otherwise we consider the row with the cursor
-	if cursorColIndex == 0 {
-		return int(math.Max(float64(lastNonEmptyRowIndex), float64(cursorRowIndex-1)))
-	} else {
-		return int(math.Max(float64(lastNonEmptyRowIndex), float64(cursorRowIndex)))
-	}
+	cursorRowIndex, _ := vt.GetCursorPosition()
+	return int(math.Max(float64(lastNonEmptyRowIndex), float64(cursorRowIndex)))
 }
 
 func (vt *VirtualTerminal) GetScreenState() [][]string {

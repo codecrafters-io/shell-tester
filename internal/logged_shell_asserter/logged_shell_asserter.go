@@ -117,7 +117,17 @@ func (a *LoggedShellAsserter) logAssertionError(err assertions.AssertionError) {
 }
 
 func (a *LoggedShellAsserter) LogRemainingOutput() {
-	a.logRowsUntil(len(a.Shell.GetScreenState()) - 1)
+	screenState := a.Shell.GetScreenState()
+	cursorRowIndex, cursorColIndex := a.Shell.GetCursorPosition()
+	lastRowIndex := len(screenState) - 1
+	lastRowContents := virtual_terminal.BuildCleanedRow(screenState[lastRowIndex])
+
+	// If the last row is (a) empty and (b) has the cursor at the start we can skip logging it
+	if lastRowContents == "" && cursorRowIndex == lastRowIndex && cursorColIndex == 0 {
+		a.logRowsUntil(lastRowIndex - 1)
+	} else {
+		a.logRowsUntil(lastRowIndex)
+	}
 }
 
 func (a *LoggedShellAsserter) logRowsUntil(endRowIndex int) {
