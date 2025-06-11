@@ -56,15 +56,13 @@ func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 	return vt.vt.Write(p)
 }
 
-// LastVisibleRowIndex returns the index of the last "visible" row in the terminal
+// GetLastVisibleRowIndex returns the index of the last "visible" row in the terminal
 //
 // The last visible row is whichever of the following is the last:
 // (a) The last non-empty row
 // (b) The row before the cursor if the cursor is at the start of the row
 // (c) The row with the cursor if the cursor is not at the start of the row
 func (vt *VirtualTerminal) GetLastVisibleRowIndex() int {
-	cursorRowIndex, cursorColIndex := vt.GetCursorPosition()
-
 	lastNonEmptyRowIndex := 0
 	for i := vt.rows - 1; i >= 0; i-- {
 		row := vt.GetRow(i)
@@ -74,8 +72,10 @@ func (vt *VirtualTerminal) GetLastVisibleRowIndex() int {
 		}
 	}
 
-	// Only consider rows until (a) the last non-empty row or (b) the cursor row, whichever comes later
-	// "cursor row" is the row with the cursor if cursor is not at the start of the row, else the previous row
+	cursorRowIndex, cursorColIndex := vt.GetCursorPosition()
+
+	// If the cursor is at the start of the row, we consider the row before the cursor
+	// Otherwise we consider the row with the cursor
 	if cursorColIndex == 0 {
 		return int(math.Max(float64(lastNonEmptyRowIndex), float64(cursorRowIndex-1)))
 	} else {
