@@ -168,10 +168,4 @@ Debug = true
 [33m[tester::#OO8] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
 [33m[tester::#OO8] [0m[92m✓ Received prompt[0m
-[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
-[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
-[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
-[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
-[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
-[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
 [33m[tester::#OO8] [0m[92mTest passed.[0m
