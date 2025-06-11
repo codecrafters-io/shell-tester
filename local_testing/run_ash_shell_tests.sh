@@ -7,4 +7,4 @@ cd "$(dirname "$0")/.."
 
 # Build and run
 docker build -t shell-tester-ash -f local_testing/ash_shell.Dockerfile .
-docker run --rm -it shell-tester-ash make test_ash
+docker run --rm -it -v $(pwd):/app shell-tester-ash make test_ash

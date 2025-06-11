@@ -7,4 +7,4 @@ cd "$(dirname "$0")/.."
 
 # Build and run
 docker build -t shell-tester -f local_testing/zsh_shell.Dockerfile .
-docker run --rm -it shell-tester make test_zsh
+docker run --rm -it -v $(pwd):/app shell-tester make test_zsh
