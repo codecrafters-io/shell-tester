@@ -48,7 +48,7 @@ Debug = true
 [33m[your-program] [0mpwd is a shell builtin
 [33m[tester::#EI0] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ pwd
-[33m[your-program] [0m/Users/ryang/Developer/work/course-testers/shell-tester/internal
+[33m[your-program] [0m/home/runner/work/shell-tester/shell-tester/internal
 [33m[tester::#EI0] [0m[92m✓ Received current working directory response[0m
 [33m[your-program] [0m$ 
 [33m[tester::#EI0] [0m[92mTest passed.[0m
@@ -70,7 +70,7 @@ Debug = true
 [33m[tester::#MG5] [0m[94mRunning tests for Stage #MG5 (mg5)[0m
 [33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/foo:$PATH[0m
 [33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
-[33m[tester::#MG5] [setup] [0m[94mPATH is now: /tmp/quz:/tmp/foo:...[0m
+[33m[tester::#MG5] [setup] [0m[94mPATH is now: /tmp/quz:/tmp/foo:/usr/lib/go/bin:...[0m
 [33m[tester::#MG5] [setup] [0m[94mAvailable executables:[0m
 [33m[tester::#MG5] [setup] [0m[94m- my_exe[0m
 [33m[tester::#MG5] [0m[94mRunning ./your_shell.sh[0m

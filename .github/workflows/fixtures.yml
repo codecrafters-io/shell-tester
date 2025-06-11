@@ -15,15 +15,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Setup Alpine
+        uses: jirutka/setup-alpine@v1
+        with:
+          branch: latest-stable
+
+      - name: Setup Alpine dependencies
+        run: |
+          cat /etc/alpine-release
+          apk add git go make bash dash zsh binutils-gold python3
+        shell: alpine.sh --root {0}
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.RYAN_FIXTURE_GEN_PAT }}
-
-      - name: Set up Go
-        uses: actions/setup-go@v1
-        with:
-          go-version: 1.22.x
+          token: ${{ secrets.TESTER_FIXTURE_GENERATION_GITHUB_TOKEN }}
 
       - uses: actions-ecosystem/action-create-comment@v1
         with:
@@ -36,14 +42,21 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: regenerate-fixtures
 
+      - name: Setup git config
+        run: |
+          git config --global --add safe.directory /home/runner/work/shell-tester/shell-tester
+          # repo is owned by user and we intend to execute as root
+        shell: alpine.sh --root {0}
+
       - name: Regenerate Fixtures
-        run: CODECRAFTERS_RECORD_FIXTURES=true make test 
+        run: CODECRAFTERS_RECORD_FIXTURES=true make test
+        shell: alpine.sh --root {0}
 
       - name: Update Fixtures
         run: |
           git config --global user.email "ryan-gg@outlook.com"
           git config --global user.name "Ryan Gang"
-          git remote set-url origin https://ryan-gang:${{ secrets.RYAN_FIXTURE_GEN_PAT }}@github.com/codecrafters-io/shell-tester.git
+          git remote set-url origin https://ryan-gang:${{ secrets.TESTER_FIXTURE_GENERATION_GITHUB_TOKEN }}@github.com/codecrafters-io/shell-tester.git
           git fetch origin ${{ github.head_ref }}
           git checkout ${{ github.head_ref }}
           git diff --quiet || (git add . && git commit -m "ci: add regenerated fixtures" && git push)
