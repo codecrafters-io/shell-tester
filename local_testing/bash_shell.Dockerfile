@@ -1,36 +1,14 @@
-FROM ubuntu:latest
-
-# Set Go version
-ARG GO_VERSION=1.24.0
-ENV GO_VERSION=${GO_VERSION}
+FROM golang:1.24-bookworm
 
 # Install required packages
-RUN apt-get update && apt-get install -y \
-    wget \
-    git \
-    gcc \
-    make \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Go
-RUN wget -P /tmp "https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz" && \
-    tar -C /usr/local -xzf "/tmp/go${GO_VERSION}.linux-amd64.tar.gz" && \
-    rm "/tmp/go${GO_VERSION}.linux-amd64.tar.gz"
-
-# Set up Go environment
-ENV GOPATH=/go
-ENV PATH=$GOPATH/bin:/usr/local/go/bin:$PATH
-RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
+RUN apt-get update && apt-get install -y zsh make
 
 # Set working directory
 WORKDIR /app
 
-# Set Go environment variables to handle certificate issues
-ENV GOPROXY=direct
-ENV GOSUMDB=off
-ENV GOINSECURE=*
-ENV GOTOOLCHAIN=local
+# Starting from Go 1.20, the go standard library is no longer compiled.
+# Setting GODEBUG to "installgoroot=all" restores the old behavior
+RUN GODEBUG="installgoroot=all" go install std
 
 # Copy go.mod and go.sum first to cache dependencies
 COPY go.mod go.sum ./
