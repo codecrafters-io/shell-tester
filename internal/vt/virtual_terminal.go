@@ -58,11 +58,6 @@ func (vt *VirtualTerminal) GetScreenState() screen_state.ScreenState {
 		return screen_state.ScreenState{}
 	}
 
-	cursorPosition := screen_state.CursorPosition{
-		RowIndex:    vt.vt.CursorPosition().Y,
-		ColumnIndex: vt.vt.CursorPosition().X,
-	}
-
 	cellMatrix := make([][]string, vt.rows)
 
 	for i := 0; i < vt.rows; i++ {
@@ -72,7 +67,10 @@ func (vt *VirtualTerminal) GetScreenState() screen_state.ScreenState {
 		}
 	}
 
-	return screen_state.NewScreenState(cellMatrix, cursorPosition)
+	return screen_state.NewScreenState(cellMatrix, screen_state.CursorPosition{
+		RowIndex:    vt.vt.CursorPosition().Y,
+		ColumnIndex: vt.vt.CursorPosition().X,
+	})
 }
 
 func (vt *VirtualTerminal) GetColumnCount() int {
