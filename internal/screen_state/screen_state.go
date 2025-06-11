@@ -1,7 +1,5 @@
 package screen_state
 
-import "math"
-
 type CursorPosition struct {
 	RowIndex    int
 	ColumnIndex int
@@ -53,5 +51,5 @@ func (s ScreenState) GetLastLoggableRowIndex() int {
 		}
 	}
 
-	return int(math.Max(float64(s.cursorPosition.RowIndex-1), float64(lastNonEmptyRowIndex)))
+	return max(s.cursorPosition.RowIndex-1, lastNonEmptyRowIndex)
 }
