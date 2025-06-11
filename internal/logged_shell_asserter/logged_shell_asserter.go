@@ -103,7 +103,7 @@ func (a *LoggedShellAsserter) assert(withoutPrompt bool, readTimeout time.Durati
 
 func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRowCount int) {
 	if processedRowCount > 0 {
-		a.logRowsUntilAndIncluding(startRowIndex + processedRowCount)
+		a.logRowsUntilAndIncluding(startRowIndex + processedRowCount - 1)
 	}
 }
 
