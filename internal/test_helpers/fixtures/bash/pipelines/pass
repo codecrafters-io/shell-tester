@@ -1,51 +1,51 @@
 Debug = true
 
-[33m[stage-3] [0m[94mRunning tests for Stage #3: br6[0m
-[33m[stage-3] [setup] [0m[94mexport PATH=/tmp/blueberry/mango/banana:$PATH[0m
-[33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
-[33m[stage-3] [setup] [0m[94mecho -n "orange raspberry\npear mango\napple grape\nstrawberry pineapple\nbanana blueberry" > "/tmp/foo/file-39"[0m
-[33m[your-program] [0m$ cat /tmp/foo/file-39 | wc
+[33m[tester::#BR6] [0m[94mRunning tests for Stage #BR6 (br6)[0m
+[33m[tester::#BR6] [setup] [0m[94mexport PATH=/tmp/pear/orange/raspberry:$PATH[0m
+[33m[tester::#BR6] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#BR6] [setup] [0m[94mecho -n "strawberry apple\npear banana\nraspberry mango\nblueberry pineapple\norange grape" > "/tmp/foo/file-24"[0m
+[33m[your-program] [0m$ cat /tmp/foo/file-24 | wc
 [33m[your-program] [0m       5      10      77
-[33m[stage-3] [0m[92m✓ Received expected response[0m
-[33m[stage-3] [setup] [0m[94mecho -n "1. strawberry orange\n2. raspberry banana\n3. pineapple grape" > "/tmp/qux/file-60"[0m
-[33m[your-program] [0m$ tail -f /tmp/qux/file-60 | head -n 5
-[33m[your-program] [0m1. strawberry orange
-[33m[your-program] [0m2. raspberry banana
-[33m[your-program] [0m3. pineapple grape
-[33m[stage-3] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m4. strawberry blueberry
-[33m[stage-3] [0m[92m✓ Received appended line 4[0m
-[33m[your-program] [0m5. grape blueberry
-[33m[stage-3] [0m[92m✓ Received appended line 5[0m
-[33m[stage-3] [0m[92mTest passed.[0m
+[33m[tester::#BR6] [0m[92m✓ Received expected response[0m
+[33m[tester::#BR6] [setup] [0m[94mecho -n "1. orange blueberry\n2. strawberry pineapple\n3. banana mango" > "/tmp/baz/file-3"[0m
+[33m[your-program] [0m$ tail -f /tmp/baz/file-3 | head -n 5
+[33m[your-program] [0m1. orange blueberry
+[33m[your-program] [0m2. strawberry pineapple
+[33m[your-program] [0m3. banana mango
+[33m[tester::#BR6] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m4. grape pineapple
+[33m[tester::#BR6] [0m[92m✓ Received appended line 4[0m
+[33m[your-program] [0m5. blueberry apple
+[33m[tester::#BR6] [0m[92m✓ Received appended line 5[0m
+[33m[tester::#BR6] [0m[92mTest passed.[0m
 
-[33m[stage-2] [0m[94mRunning tests for Stage #2: ny9[0m
-[33m[stage-2] [setup] [0m[94mexport PATH=/tmp/pear/blueberry/orange:$PATH[0m
-[33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo pineapple-apple | wc
-[33m[your-program] [0m       1       1      16
-[33m[stage-2] [0m[92m✓ Received expected output[0m
+[33m[tester::#NY9] [0m[94mRunning tests for Stage #NY9 (ny9)[0m
+[33m[tester::#NY9] [setup] [0m[94mexport PATH=/tmp/apple/blueberry/banana:$PATH[0m
+[33m[tester::#NY9] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$ echo blueberry-orange | wc
+[33m[your-program] [0m       1       1      17
+[33m[tester::#NY9] [0m[92m✓ Received expected output[0m
 [33m[your-program] [0m$ ls | type exit
 [33m[your-program] [0mexit is a shell builtin
-[33m[stage-2] [0m[92m✓ Received expected output[0m
+[33m[tester::#NY9] [0m[92m✓ Received expected output[0m
 [33m[your-program] [0m$ 
-[33m[stage-2] [0m[92mTest passed.[0m
+[33m[tester::#NY9] [0m[92mTest passed.[0m
 
-[33m[stage-1] [0m[94mRunning tests for Stage #1: xk3[0m
-[33m[stage-1] [setup] [0m[94mexport PATH=/tmp/pineapple/grape/blueberry:$PATH[0m
-[33m[stage-1] [setup] [0m[94mecho -n "orange\nstrawberry\ngrape\napple\nraspberry" > "/tmp/baz/file-6"[0m
-[33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ cat /tmp/baz/file-6 | head -n 5 | wc
-[33m[your-program] [0m       5       5      39
-[33m[stage-1] [0m[92m✓ Received expected output[0m
-[33m[stage-1] [setup] [0m[94mecho -n "pineapple" > "/tmp/quz/f-39"[0m
-[33m[stage-1] [setup] [0m[94mecho -n "raspberry" > "/tmp/quz/f-76"[0m
-[33m[stage-1] [setup] [0m[94mecho -n "banana" > "/tmp/quz/f-52"[0m
-[33m[stage-1] [setup] [0m[94mecho -n "apple" > "/tmp/quz/f-18"[0m
-[33m[stage-1] [setup] [0m[94mecho -n "grape" > "/tmp/quz/f-22"[0m
-[33m[stage-1] [setup] [0m[94mecho -n "strawberry" > "/tmp/quz/f-41"[0m
-[33m[your-program] [0m$ ls /tmp/quz | tail -n 5 | head -n 3 | grep "f-41"
-[33m[your-program] [0mf-41
-[33m[stage-1] [0m[92m✓ Received expected output[0m
+[33m[tester::#XK3] [0m[94mRunning tests for Stage #XK3 (xk3)[0m
+[33m[tester::#XK3] [setup] [0m[94mexport PATH=/tmp/orange/pineapple/orange:$PATH[0m
+[33m[tester::#XK3] [setup] [0m[94mecho -n "pineapple\nraspberry\nblueberry\ngrape\norange" > "/tmp/quz/file-26"[0m
+[33m[tester::#XK3] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m$ cat /tmp/quz/file-26 | head -n 5 | wc
+[33m[your-program] [0m       5       5      42
+[33m[tester::#XK3] [0m[92m✓ Received expected output[0m
+[33m[tester::#XK3] [setup] [0m[94mecho -n "raspberry" > "/tmp/baz/f-35"[0m
+[33m[tester::#XK3] [setup] [0m[94mecho -n "banana" > "/tmp/baz/f-51"[0m
+[33m[tester::#XK3] [setup] [0m[94mecho -n "pineapple" > "/tmp/baz/f-10"[0m
+[33m[tester::#XK3] [setup] [0m[94mecho -n "mango" > "/tmp/baz/f-56"[0m
+[33m[tester::#XK3] [setup] [0m[94mecho -n "grape" > "/tmp/baz/f-19"[0m
+[33m[tester::#XK3] [setup] [0m[94mecho -n "blueberry" > "/tmp/baz/f-42"[0m
+[33m[your-program] [0m$ ls /tmp/baz | tail -n 5 | head -n 3 | grep "f-42"
+[33m[your-program] [0mf-42
+[33m[tester::#XK3] [0m[92m✓ Received expected output[0m
 [33m[your-program] [0m$ 
-[33m[stage-1] [0m[92mTest passed.[0m
+[33m[tester::#XK3] [0m[92mTest passed.[0m
