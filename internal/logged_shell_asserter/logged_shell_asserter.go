@@ -132,14 +132,6 @@ func (a *LoggedShellAsserter) logRows(startRowIndex int, endRowIndex int) {
 	for i := startRowIndex; i <= endRowIndex; i++ {
 		rawRow := a.Shell.GetScreenState()[i]
 		cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
-
-		cursorRow, _ := a.Shell.GetCursorPosition()
-		hasntReachedEnd := i < endRowIndex
-		beyondCursorRow := i >= cursorRow
-		if cleanedRow == "" && hasntReachedEnd && beyondCursorRow {
-			return
-		}
-
 		a.Shell.LogOutput([]byte(cleanedRow))
 	}
 }
