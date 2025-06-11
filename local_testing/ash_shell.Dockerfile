@@ -1,5 +1,8 @@
 FROM golang:1.24-alpine
 
+# Install required packages
+RUN apk add --no-cache make
+
 # Set working directory
 WORKDIR /app
 

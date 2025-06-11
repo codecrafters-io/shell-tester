@@ -1,5 +1,8 @@
 FROM golang:1.24-bookworm
 
+# Install required packages
+RUN apt-get update && apt-get install -y zsh make
+
 # Set working directory
 WORKDIR /app
 
