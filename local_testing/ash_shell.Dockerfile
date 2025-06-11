@@ -1,7 +1,15 @@
 FROM golang:1.24-alpine
 
 # Install required packages
-RUN apk add --no-cache make
+RUN apk add --no-cache \
+    # Required for make test
+    make \
+    # Required to run bash tests
+    bash \
+    # Required to run zsh tests
+    zsh \
+    # Required for fixtures
+    python3
 
 # Set working directory
 WORKDIR /app
