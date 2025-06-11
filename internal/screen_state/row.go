@@ -11,6 +11,10 @@ func (r Row) HasCursor() bool {
 	return r.cursorCellIndex != -1
 }
 
+func (r Row) IsEmpty() bool {
+	return r.String() == ""
+}
+
 func (r Row) String() string {
 	if r.HasCursor() {
 		// If the cursor is on the line, we need to preserve the spaces before the cursor
@@ -22,8 +26,4 @@ func (r Row) String() string {
 		// If the cursor isn't on the line, we can safely trim spaces from the right
 		return strings.TrimRight(strings.Join(r.rawCells, ""), " ")
 	}
-}
-
-func (r Row) IsEmpty() bool {
-	return r.String() == ""
 }
