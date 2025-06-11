@@ -41,6 +41,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/exit_error",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"run_program_newline_in_args": {
+			StageSlugs:          []string{"ip1"},
+			CodePath:            "./test_helpers/scenarios/run_program_newline_in_args",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/run_program_newline_in_args",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"base_pass_bash": {
 			UntilStageSlug:      "ip1",
 			CodePath:            "./test_helpers/bash",
