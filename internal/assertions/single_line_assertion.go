@@ -45,6 +45,11 @@ func (a SingleLineAssertion) Run(screenState [][]string, startRowIndex int) (pro
 		}
 	}
 
+	// If row is empty and expected output is empty, it's a valid case
+	if cleanedRow == utils.VT_EMPTY_LINE_CHARACTER && a.ExpectedOutput == "" {
+		return processedRowCount, nil
+	}
+
 	if cleanedRow != a.ExpectedOutput {
 		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, cleanedRow)
 		return 0, &AssertionError{
