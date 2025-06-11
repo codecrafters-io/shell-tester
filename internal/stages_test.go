@@ -14,28 +14,28 @@ func TestStages(t *testing.T) {
 
 	testCases := map[string]testerUtilsTesting.TesterOutputTestCase{
 		"missing_command_fail": {
-			UntilStageSlug:      "cz2",
+			StageSlugs:          []string{"cz2"},
 			CodePath:            "./test_helpers/scenarios/wrong_output",
 			ExpectedExitCode:    1,
 			StdoutFixturePath:   "./test_helpers/fixtures/wrong_output",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"no_command_fail": {
-			UntilStageSlug:      "cz2",
+			StageSlugs:          []string{"cz2"},
 			CodePath:            "./test_helpers/scenarios/no_output",
 			ExpectedExitCode:    1,
 			StdoutFixturePath:   "./test_helpers/fixtures/no_output",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"escape_codes_pass": {
-			UntilStageSlug:      "cz2",
+			StageSlugs:          []string{"cz2"},
 			CodePath:            "./test_helpers/scenarios/escape_codes",
 			ExpectedExitCode:    0,
 			StdoutFixturePath:   "./test_helpers/fixtures/escape_codes",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"exit_error_fail": {
-			UntilStageSlug:      "pn5",
+			StageSlugs:          []string{"pn5"},
 			CodePath:            "./test_helpers/scenarios/exit_error",
 			ExpectedExitCode:    1,
 			StdoutFixturePath:   "./test_helpers/fixtures/exit_error",
