@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 	"unicode"
@@ -14,12 +15,16 @@ func ColorizeString(colorToUse color.Attribute, msg string) string {
 	return c.Sprint(msg)
 }
 
-func BuildColoredErrorMessage(expectedPatternExplanation string, output string) string {
+func BuildColoredErrorMessage(expectedPatternExplanation string, output string, outputDescription string) string {
 	errorMsg := ColorizeString(color.FgGreen, "Expected:")
 	errorMsg += " \"" + expectedPatternExplanation + "\""
 	errorMsg += "\n"
 	errorMsg += ColorizeString(color.FgRed, "Received:")
 	errorMsg += " \"" + RemoveNonPrintableCharacters(output) + "\""
+
+	if outputDescription != "" {
+		errorMsg += " " + ColorizeString(color.FgRed, fmt.Sprintf("(%s)", outputDescription))
+	}
 
 	return errorMsg
 }

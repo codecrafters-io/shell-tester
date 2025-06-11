@@ -27,16 +27,16 @@ func (t FileContentAssertion) Run(screenState screen_state.ScreenState, startRow
 	fileContent, readErr := os.ReadFile(t.FilePath)
 	if readErr != nil {
 		return processedRowCount, &AssertionError{
-			StartRowIndex: startRowIndex,
-			ErrorRowIndex: startRowIndex,
+			StartRowIndex: -1,
+			ErrorRowIndex: -1,
 			Message:       fmt.Sprintf("Expected file %q to exist. Error: %v", t.FilePath, readErr),
 		}
 	}
 
 	if string(fileContent) != t.ExpectedContent {
 		return processedRowCount, &AssertionError{
-			StartRowIndex: startRowIndex,
-			ErrorRowIndex: startRowIndex,
+			StartRowIndex: -1,
+			ErrorRowIndex: -1,
 			Message:       fmt.Sprintf("Expected %s to contain %q but received %q", t.FilePath, t.ExpectedContent, fileContent),
 		}
 	}

@@ -36,7 +36,8 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 		processedRowCount = 0
 	}
 
-	rowString := screenState.GetRow(startRowIndex).String()
+	row := screenState.GetRow(startRowIndex)
+	rowString := row.String()
 
 	for _, pattern := range a.FallbackPatterns {
 		if pattern.Match([]byte(rowString)) {
@@ -44,12 +45,18 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 		}
 	}
 
-	if rowString != a.ExpectedOutput {
-		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, rowString)
+	rowDescription := ""
+
+	if row.IsEmpty() {
+		rowDescription = "empty line"
+	}
+
+	if row.String() != a.ExpectedOutput {
+		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, row.String(), rowDescription)
 		return 0, &AssertionError{
 			StartRowIndex: startRowIndex,
 			ErrorRowIndex: startRowIndex,
-			Message:       "Output does not match expected value.\n" + detailedErrorMessage,
+			Message:       "Line does not match expected value.\n" + detailedErrorMessage,
 		}
 	} else {
 		return processedRowCount, nil
