@@ -27,6 +27,10 @@ func BuildColoredErrorMessage(expectedPatternExplanation string, output string) 
 func RemoveNonPrintableCharacters(output string) string {
 	result := ""
 	for _, r := range output {
+		if string(r) == VT_EMPTY_LINE_CHARACTER {
+			result += "(empty line)"
+			continue
+		}
 		if unicode.IsPrint(r) {
 			result += string(r)
 		} else {

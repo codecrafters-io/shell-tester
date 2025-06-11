@@ -7,6 +7,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/assertion_collection"
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 )
 
@@ -132,6 +133,10 @@ func (a *LoggedShellAsserter) logRows(startRowIndex int, endRowIndex int) {
 	for i := startRowIndex; i <= endRowIndex; i++ {
 		rawRow := a.Shell.GetScreenState()[i]
 		cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
+		if cleanedRow == utils.VT_EMPTY_LINE_CHARACTER {
+			a.Shell.LogOutput([]byte("(empty line)"))
+			continue
+		}
 		if len(cleanedRow) > 0 {
 			a.Shell.LogOutput([]byte(cleanedRow))
 		}
