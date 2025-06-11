@@ -1,13 +1,9 @@
 package assertions
 
 type AssertionError struct {
-	StartRowIndex int // Will be -1 if the error doesn't affect a specific line range (e.g. bell)
 	ErrorRowIndex int // Will be -1 if the error doesn't affect a specific line range (e.g. bell)
 	Message       string
-}
-
-func (e AssertionError) Error() string {
-	return `CodeCrafters Internal Error: AssertionError#Error() should not be called`
+	StartRowIndex int // Will be -1 if the error doesn't affect a specific line range (e.g. bell)
 }
 
 func (e AssertionError) AffectsLineRange() bool {
@@ -16,6 +12,10 @@ func (e AssertionError) AffectsLineRange() bool {
 
 func (e AssertionError) AffectsSingleLine() bool {
 	return e.AffectsLineRange() && e.StartRowIndex == e.ErrorRowIndex
+}
+
+func (e AssertionError) Error() string {
+	return `CodeCrafters Internal Error: AssertionError#Error() should not be called`
 }
 
 func (e AssertionError) ErrorMessage() string {
