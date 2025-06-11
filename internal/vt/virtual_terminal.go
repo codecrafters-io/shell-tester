@@ -71,8 +71,15 @@ func (vt *VirtualTerminal) GetScreenState() [][]string {
 		}
 	}
 
-	// Only consider rows until (a) the last none empty row or (b) the cursor row, whichever comes later
-	lastRowIndex := int(math.Max(float64(lastNonEmptyRowIndex), float64(cursorRowIndex)))
+	var lastRowIndex int
+
+	// Only consider rows until (a) the last non-empty row or (b) the cursor row, whichever comes later
+	// "cursor row" is the row with the cursor if cursor is not at the start of the row, else the previous row
+	if cursorColIndex == 0 {
+		lastRowIndex = int(math.Max(float64(lastNonEmptyRowIndex), float64(cursorRowIndex-1)))
+	} else {
+		lastRowIndex = int(math.Max(float64(lastNonEmptyRowIndex), float64(cursorRowIndex)))
+	}
 
 	screenState := make([][]string, lastRowIndex+1)
 	for i := 0; i <= lastRowIndex; i++ {
