@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 # Set Go version
-ARG GO_VERSION=1.23.0
+ARG GO_VERSION=1.24.0
 ENV GO_VERSION=${GO_VERSION}
 
 # Install required packages
@@ -43,4 +43,4 @@ COPY . .
 SHELL ["/bin/ash", "-c"]
 
 # Default command
-CMD ["/bin/ash"] 
+CMD ["/bin/ash"]

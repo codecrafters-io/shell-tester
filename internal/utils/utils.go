@@ -45,7 +45,7 @@ func AsBool(T func() error) func() bool {
 
 // LogReadableFileContents prints file contents in a readable way, replacing tabs and spaces with visible markers.
 func LogReadableFileContents(l *logger.Logger, fileContents string, logMsg string, fileName string) {
-	l.Infof(logMsg)
+	l.Infof("%s", logMsg)
 	l.UpdateSecondaryPrefix(fileName)
 	defer l.UpdateSecondaryPrefix("")
 	printableFileContents := strings.ReplaceAll(fileContents, "%", "%%")
@@ -61,7 +61,7 @@ func LogReadableFileContents(l *logger.Logger, fileContents string, logMsg strin
 	} else {
 		lines := strings.Split(printableFileContents, "\n")
 		for _, line := range lines {
-			l.Plainf(line)
+			l.Plainf("%s", line)
 		}
 	}
 }

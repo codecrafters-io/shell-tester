@@ -1,98 +1,98 @@
 Debug = true
 
-[33m[stage-5] [0m[94mRunning tests for Stage #5: za2[0m
-[33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
-[33m[stage-5] [0m[94mWriting contents to /tmp/pear.txt[0m
-[33m[stage-5] [/tmp/pear.txt] [0mecho blueberry mango
-[33m[stage-5] [/tmp/pear.txt] [0mecho pineapple grape
-[33m[stage-5] [/tmp/pear.txt] [0mecho grape apple
-[33m[stage-5] [/tmp/pear.txt] [0m
-[33m[your-program] [0m$ history -r /tmp/pear.txt
+[33m[tester::#ZA2] [0m[94mRunning tests for Stage #ZA2 (za2)[0m
+[33m[tester::#ZA2] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#ZA2] [0m[94mWriting contents to /var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/pear.txt[0m
+[33m[tester::#ZA2] [/var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/pear.txt] [0mecho blueberry mango
+[33m[tester::#ZA2] [/var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/pear.txt] [0mecho pineapple grape
+[33m[tester::#ZA2] [/var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/pear.txt] [0mecho grape apple
+[33m[tester::#ZA2] [/var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/pear.txt] [0m
+[33m[your-program] [0m$ history -r /var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/pear.txt
 [33m[your-program] [0m$ history
-[33m[your-program] [0m    1  history -r /tmp/pear.txt
+[33m[your-program] [0m    1  history -r /var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/pear.txt
 [33m[your-program] [0m    2  echo blueberry mango
 [33m[your-program] [0m    3  echo pineapple grape
 [33m[your-program] [0m    4  echo grape apple
 [33m[your-program] [0m    5  history
-[33m[stage-5] [0m[92m✓ History after loading file is correct[0m
+[33m[tester::#ZA2] [0m[92m✓ History after loading file is correct[0m
 [33m[your-program] [0m$ 
-[33m[stage-5] [0m[92mTest passed.[0m
+[33m[tester::#ZA2] [0m[92mTest passed.[0m
 
-[33m[stage-4] [0m[94mRunning tests for Stage #4: in3[0m
-[33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#IN3] [0m[94mRunning tests for Stage #IN3 (in3)[0m
+[33m[tester::#IN3] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo grape apple
 [33m[your-program] [0mgrape apple
-[33m[stage-4] [0m[92m✓ Received expected response[0m
+[33m[tester::#IN3] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ echo grape pear
 [33m[your-program] [0mgrape pear
-[33m[stage-4] [0m[92m✓ Received expected response[0m
+[33m[tester::#IN3] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ echo mango blueberry
 [33m[your-program] [0mmango blueberry
-[33m[stage-4] [0m[92m✓ Received expected response[0m
-[33m[stage-4] [0m[94mWriting history to file using command: history -w /tmp/pear.txt[0m
-[33m[your-program] [0m$ history -w /tmp/pear.txt
-[33m[stage-4] [0m[92m✓ Found 4 commands in history file[0m
+[33m[tester::#IN3] [0m[92m✓ Received expected response[0m
+[33m[tester::#IN3] [0m[94mWriting history to file using command: history -w /var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/pear.txt[0m
+[33m[your-program] [0m$ history -w /var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/pear.txt
+[33m[tester::#IN3] [0m[92m✓ Found 4 commands in history file[0m
 [33m[your-program] [0m$ 
-[33m[stage-4] [0m[92mTest passed.[0m
+[33m[tester::#IN3] [0m[92mTest passed.[0m
 
-[33m[stage-3] [0m[94mRunning tests for Stage #3: sx3[0m
-[33m[stage-3] [0m[94mOriginal history file content:[0m
-[33m[stage-3] [/tmp/pineapple.txt] [0mecho pear raspberry
-[33m[stage-3] [/tmp/pineapple.txt] [0mecho apple banana
-[33m[stage-3] [/tmp/pineapple.txt] [0mecho pineapple apple pear
-[33m[stage-3] [/tmp/pineapple.txt] [0m
-[33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#SX3] [0m[94mRunning tests for Stage #SX3 (sx3)[0m
+[33m[tester::#SX3] [0m[94mOriginal history file content:[0m
+[33m[tester::#SX3] [/var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/pineapple.txt] [0mecho pear raspberry
+[33m[tester::#SX3] [/var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/pineapple.txt] [0mecho apple banana
+[33m[tester::#SX3] [/var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/pineapple.txt] [0mecho pineapple apple pear
+[33m[tester::#SX3] [/var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/pineapple.txt] [0m
+[33m[tester::#SX3] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo strawberry pineapple blueberry
 [33m[your-program] [0mstrawberry pineapple blueberry
-[33m[stage-3] [0m[92m✓ Ran echo strawberry pineapple blueberry[0m
+[33m[tester::#SX3] [0m[92m✓ Ran echo strawberry pineapple blueberry[0m
 [33m[your-program] [0m$ echo orange pineapple apple
 [33m[your-program] [0morange pineapple apple
-[33m[stage-3] [0m[92m✓ Ran echo orange pineapple apple[0m
-[33m[your-program] [0m$ history -a /tmp/pineapple.txt
-[33m[stage-3] [0m[92m✓ Found 6 commands in history file[0m
+[33m[tester::#SX3] [0m[92m✓ Ran echo orange pineapple apple[0m
+[33m[your-program] [0m$ history -a /var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/pineapple.txt
+[33m[tester::#SX3] [0m[92m✓ Found 6 commands in history file[0m
 [33m[your-program] [0m$ echo pineapple apple mango
 [33m[your-program] [0mpineapple apple mango
-[33m[stage-3] [0m[92m✓ Ran echo pineapple apple mango[0m
-[33m[your-program] [0m$ history -a /tmp/pineapple.txt
-[33m[stage-3] [0m[92m✓ Found 8 commands in history file after running history -a command again[0m
+[33m[tester::#SX3] [0m[92m✓ Ran echo pineapple apple mango[0m
+[33m[your-program] [0m$ history -a /var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/pineapple.txt
+[33m[tester::#SX3] [0m[92m✓ Found 8 commands in history file after running history -a command again[0m
 [33m[your-program] [0m$ 
-[33m[stage-3] [0m[92mTest passed.[0m
+[33m[tester::#SX3] [0m[92mTest passed.[0m
 
-[33m[stage-2] [0m[94mRunning tests for Stage #2: kz7[0m
-[33m[stage-2] [0m[94mexport HISTFILE=/tmp/raspberry.txt[0m
-[33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#KZ7] [0m[94mRunning tests for Stage #KZ7 (kz7)[0m
+[33m[tester::#KZ7] [0m[94mexport HISTFILE=/var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/raspberry.txt[0m
+[33m[tester::#KZ7] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo strawberry pineapple
 [33m[your-program] [0mstrawberry pineapple
-[33m[stage-2] [0m[92m✓ Ran echo strawberry pineapple[0m
+[33m[tester::#KZ7] [0m[92m✓ Ran echo strawberry pineapple[0m
 [33m[your-program] [0m$ echo apple orange
 [33m[your-program] [0mapple orange
-[33m[stage-2] [0m[92m✓ Ran echo apple orange[0m
+[33m[tester::#KZ7] [0m[92m✓ Ran echo apple orange[0m
 [33m[your-program] [0m$ echo pineapple blueberry
 [33m[your-program] [0mpineapple blueberry
-[33m[stage-2] [0m[92m✓ Ran echo pineapple blueberry[0m
+[33m[tester::#KZ7] [0m[92m✓ Ran echo pineapple blueberry[0m
 [33m[your-program] [0m$ history
 [33m[your-program] [0m    1  echo strawberry pineapple
 [33m[your-program] [0m    2  echo apple orange
 [33m[your-program] [0m    3  echo pineapple blueberry
 [33m[your-program] [0m    4  history
-[33m[stage-2] [0m[92m✓ History before exiting is correct[0m
+[33m[tester::#KZ7] [0m[92m✓ History before exiting is correct[0m
 [33m[your-program] [0m$ exit 0
 [33m[your-program] [0mexit
-[33m[stage-2] [0m[92m✓ Program exited successfully[0m
-[33m[stage-2] [0m[92m✓ Found 5 commands in history file[0m
-[33m[stage-2] [0m[92mTest passed.[0m
+[33m[tester::#KZ7] [0m[92m✓ Program exited successfully[0m
+[33m[tester::#KZ7] [0m[92m✓ Found 5 commands in history file[0m
+[33m[tester::#KZ7] [0m[92mTest passed.[0m
 
-[33m[stage-1] [0m[94mRunning tests for Stage #1: zp4[0m
-[33m[stage-1] [0m[94mWriting commands to /tmp/mango.txt[0m
-[33m[stage-1] [/tmp/mango.txt] [0mecho mango raspberry strawberry
-[33m[stage-1] [/tmp/mango.txt] [0mecho grape pineapple apple
-[33m[stage-1] [/tmp/mango.txt] [0m
-[33m[stage-1] [0m[94mexport HISTFILE=/tmp/mango.txt[0m
-[33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#ZP4] [0m[94mRunning tests for Stage #ZP4 (zp4)[0m
+[33m[tester::#ZP4] [0m[94mWriting commands to /var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/mango.txt[0m
+[33m[tester::#ZP4] [/var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/mango.txt] [0mecho mango raspberry strawberry
+[33m[tester::#ZP4] [/var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/mango.txt] [0mecho grape pineapple apple
+[33m[tester::#ZP4] [/var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/mango.txt] [0m
+[33m[tester::#ZP4] [0m[94mexport HISTFILE=/var/folders/5l/z5y3dkwn68sgb6htzc5w7vnm0000gn/T/mango.txt[0m
+[33m[tester::#ZP4] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ history
 [33m[your-program] [0m    1  echo mango raspberry strawberry
 [33m[your-program] [0m    2  echo grape pineapple apple
 [33m[your-program] [0m    3  history
-[33m[stage-1] [0m[92m✓ History loaded from file is correct[0m
+[33m[tester::#ZP4] [0m[92m✓ History loaded from file is correct[0m
 [33m[your-program] [0m$ 
-[33m[stage-1] [0m[92mTest passed.[0m
+[33m[tester::#ZP4] [0m[92mTest passed.[0m

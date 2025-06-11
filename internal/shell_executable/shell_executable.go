@@ -67,7 +67,7 @@ func (b *ShellExecutable) GetPath() string {
 }
 
 func (b *ShellExecutable) Start(args ...string) error {
-	b.stageLogger.Infof(b.getInitialLogLine(args...))
+	b.stageLogger.Infof("%s", b.getInitialLogLine(args...))
 
 	b.Setenv("PS1", utils.PROMPT)
 	// b.Setenv("TERM", "dumb") // test_all_success works without this too, do we need it?
@@ -98,7 +98,7 @@ func (b *ShellExecutable) GetScreenState() [][]string {
 }
 
 func (b *ShellExecutable) LogOutput(output []byte) {
-	b.programLogger.Plainln(string(output))
+	b.programLogger.Plainf("%s", string(output))
 }
 
 func (b *ShellExecutable) VTBellChannel() chan bool {

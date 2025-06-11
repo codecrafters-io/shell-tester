@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 
 # Set Go version
-ARG GO_VERSION=1.23.0
+ARG GO_VERSION=1.24.0
 ENV GO_VERSION=${GO_VERSION}
 
 # Install required packages
@@ -43,4 +43,4 @@ COPY . .
 SHELL ["/bin/bash", "-c"]
 
 # Default command
-CMD ["/bin/bash"] 
+CMD ["/bin/bash"]

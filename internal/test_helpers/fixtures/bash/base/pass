@@ -1,118 +1,118 @@
 Debug = true
 
-[33m[stage-8] [0m[94mRunning tests for Stage #8: ip1[0m
-[33m[stage-8] [setup] [0m[94mexport PATH=/tmp/qux:$PATH[0m
-[33m[stage-8] [setup] [0m[94mAvailable executables:[0m
-[33m[stage-8] [setup] [0m[94m- custom_exe_4458[0m
-[33m[stage-8] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#IP1] [0m[94mRunning tests for Stage #IP1 (ip1)[0m
+[33m[tester::#IP1] [setup] [0m[94mexport PATH=/tmp/qux:$PATH[0m
+[33m[tester::#IP1] [setup] [0m[94mAvailable executables:[0m
+[33m[tester::#IP1] [setup] [0m[94m- custom_exe_4458[0m
+[33m[tester::#IP1] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ custom_exe_4458 Emily
 [33m[your-program] [0mProgram was passed 2 args (including program name).
 [33m[your-program] [0mArg #0 (program name): custom_exe_4458
 [33m[your-program] [0mArg #1: Emily
 [33m[your-program] [0mProgram Signature: 3842155998
-[33m[stage-8] [0m[92m✓ Received expected response[0m
+[33m[tester::#IP1] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
-[33m[stage-8] [0m[92mTest passed.[0m
+[33m[tester::#IP1] [0m[92mTest passed.[0m
 
-[33m[stage-7] [0m[94mRunning tests for Stage #7: mg5[0m
-[33m[stage-7] [setup] [0m[94mexport PATH=/tmp/baz:$PATH[0m
-[33m[stage-7] [setup] [0m[94mexport PATH=/tmp/foo:$PATH[0m
-[33m[stage-7] [setup] [0m[94mPATH is now: /tmp/foo:/tmp/baz:/usr/local/go/bin:...[0m
-[33m[stage-7] [setup] [0m[94mAvailable executables:[0m
-[33m[stage-7] [setup] [0m[94m- my_exe[0m
-[33m[stage-7] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#MG5] [0m[94mRunning tests for Stage #MG5 (mg5)[0m
+[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/baz:$PATH[0m
+[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/foo:$PATH[0m
+[33m[tester::#MG5] [setup] [0m[94mPATH is now: /tmp/foo:/tmp/baz:...[0m
+[33m[tester::#MG5] [setup] [0m[94mAvailable executables:[0m
+[33m[tester::#MG5] [setup] [0m[94m- my_exe[0m
+[33m[tester::#MG5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ type cat
-[33m[your-program] [0mcat is /usr/bin/cat
-[33m[stage-7] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0mcat is /bin/cat
+[33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type cp
-[33m[your-program] [0mcp is /usr/bin/cp
-[33m[stage-7] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0mcp is /bin/cp
+[33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type mkdir
-[33m[your-program] [0mmkdir is /usr/bin/mkdir
-[33m[stage-7] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0mmkdir is /bin/mkdir
+[33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type my_exe
 [33m[your-program] [0mmy_exe is /tmp/foo/my_exe
-[33m[stage-7] [0m[92m✓ Received expected response[0m
+[33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type invalid_raspberry_command
 [33m[your-program] [0mbash: type: invalid_raspberry_command: not found
-[33m[stage-7] [0m[92m✓ Received expected response[0m
+[33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type invalid_orange_command
 [33m[your-program] [0mbash: type: invalid_orange_command: not found
-[33m[stage-7] [0m[92m✓ Received expected response[0m
+[33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
-[33m[stage-7] [0m[92mTest passed.[0m
+[33m[tester::#MG5] [0m[92mTest passed.[0m
 
-[33m[stage-6] [0m[94mRunning tests for Stage #6: ez5[0m
-[33m[stage-6] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#EZ5] [0m[94mRunning tests for Stage #EZ5 (ez5)[0m
+[33m[tester::#EZ5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ type echo
 [33m[your-program] [0mecho is a shell builtin
-[33m[stage-6] [0m[92m✓ Received expected response[0m
+[33m[tester::#EZ5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type exit
 [33m[your-program] [0mexit is a shell builtin
-[33m[stage-6] [0m[92m✓ Received expected response[0m
+[33m[tester::#EZ5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type type
 [33m[your-program] [0mtype is a shell builtin
-[33m[stage-6] [0m[92m✓ Received expected response[0m
+[33m[tester::#EZ5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type invalid_pineapple_command
 [33m[your-program] [0mbash: type: invalid_pineapple_command: not found
-[33m[stage-6] [0m[92m✓ Received expected response[0m
+[33m[tester::#EZ5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type invalid_mango_command
 [33m[your-program] [0mbash: type: invalid_mango_command: not found
-[33m[stage-6] [0m[92m✓ Received expected response[0m
+[33m[tester::#EZ5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
-[33m[stage-6] [0m[92mTest passed.[0m
+[33m[tester::#EZ5] [0m[92mTest passed.[0m
 
-[33m[stage-5] [0m[94mRunning tests for Stage #5: iz3[0m
-[33m[stage-5] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#IZ3] [0m[94mRunning tests for Stage #IZ3 (iz3)[0m
+[33m[tester::#IZ3] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo raspberry orange
 [33m[your-program] [0mraspberry orange
-[33m[stage-5] [0m[92m✓ Received expected response[0m
+[33m[tester::#IZ3] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ echo strawberry orange mango
 [33m[your-program] [0mstrawberry orange mango
-[33m[stage-5] [0m[92m✓ Received expected response[0m
+[33m[tester::#IZ3] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
-[33m[stage-5] [0m[92mTest passed.[0m
+[33m[tester::#IZ3] [0m[92mTest passed.[0m
 
-[33m[stage-4] [0m[94mRunning tests for Stage #4: pn5[0m
-[33m[stage-4] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#PN5] [0m[94mRunning tests for Stage #PN5 (pn5)[0m
+[33m[tester::#PN5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ invalid_strawberry_command
 [33m[your-program] [0mbash: invalid_strawberry_command: command not found
-[33m[stage-4] [0m[92m✓ Received command not found message[0m
+[33m[tester::#PN5] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ exit 0
 [33m[your-program] [0mexit
-[33m[stage-4] [0m[92m✓ Program exited successfully[0m
-[33m[stage-4] [0m[92m✓ No output after exit command[0m
-[33m[stage-4] [0m[92mTest passed.[0m
+[33m[tester::#PN5] [0m[92m✓ Program exited successfully[0m
+[33m[tester::#PN5] [0m[92m✓ No output after exit command[0m
+[33m[tester::#PN5] [0m[92mTest passed.[0m
 
-[33m[stage-3] [0m[94mRunning tests for Stage #3: ff0[0m
-[33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#FF0] [0m[94mRunning tests for Stage #FF0 (ff0)[0m
+[33m[tester::#FF0] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ invalid_command_1
 [33m[your-program] [0mbash: invalid_command_1: command not found
-[33m[stage-3] [0m[92m✓ Received command not found message[0m
+[33m[tester::#FF0] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ invalid_command_2
 [33m[your-program] [0mbash: invalid_command_2: command not found
-[33m[stage-3] [0m[92m✓ Received command not found message[0m
+[33m[tester::#FF0] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ invalid_command_3
 [33m[your-program] [0mbash: invalid_command_3: command not found
-[33m[stage-3] [0m[92m✓ Received command not found message[0m
+[33m[tester::#FF0] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ invalid_command_4
 [33m[your-program] [0mbash: invalid_command_4: command not found
-[33m[stage-3] [0m[92m✓ Received command not found message[0m
+[33m[tester::#FF0] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ invalid_command_5
 [33m[your-program] [0mbash: invalid_command_5: command not found
-[33m[stage-3] [0m[92m✓ Received command not found message[0m
+[33m[tester::#FF0] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ 
-[33m[stage-3] [0m[92mTest passed.[0m
+[33m[tester::#FF0] [0m[92mTest passed.[0m
 
-[33m[stage-2] [0m[94mRunning tests for Stage #2: cz2[0m
-[33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#CZ2] [0m[94mRunning tests for Stage #CZ2 (cz2)[0m
+[33m[tester::#CZ2] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ invalid_pineapple_command
 [33m[your-program] [0mbash: invalid_pineapple_command: command not found
-[33m[stage-2] [0m[92m✓ Received command not found message[0m
-[33m[stage-2] [0m[92mTest passed.[0m
+[33m[tester::#CZ2] [0m[92m✓ Received command not found message[0m
+[33m[tester::#CZ2] [0m[92mTest passed.[0m
 
-[33m[stage-1] [0m[94mRunning tests for Stage #1: oo8[0m
-[33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#OO8] [0m[94mRunning tests for Stage #OO8 (oo8)[0m
+[33m[tester::#OO8] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
-[33m[stage-1] [0m[92m✓ Received prompt[0m
-[33m[stage-1] [0m[92mTest passed.[0m
+[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
+[33m[tester::#OO8] [0m[92mTest passed.[0m

@@ -175,6 +175,7 @@ func normalizeTesterOutput(testerOutput []byte) []byte {
 		"[your-program] <cwd>":            {regexp.MustCompile(`\[your-program\] .{4}/(workspaces|home|Users)/.*`)},
 		"ls-la-output-line":               {regexp.MustCompile(`-rw-r--r-- .*`)},
 		"PATH is now: <path>":             {regexp.MustCompile(`PATH is now: .*`)},
+		"/tmp/":                           {regexp.MustCompile(`/var/folders/.*/.*/.*/`)},
 	}
 
 	for replacement, regexes := range replacements {
