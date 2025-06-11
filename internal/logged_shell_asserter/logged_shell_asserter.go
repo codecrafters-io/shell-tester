@@ -127,11 +127,6 @@ func (a *LoggedShellAsserter) logRowsUntil(endRowIndex int) {
 			return
 		}
 
-		// If the row has already been logged we can skip logging it
-		if i <= a.lastLoggedRowIndex {
-			continue
-		}
-
 		rawRow := a.Shell.GetScreenState()[i]
 		cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
 		a.Shell.LogOutput([]byte(cleanedRow))
