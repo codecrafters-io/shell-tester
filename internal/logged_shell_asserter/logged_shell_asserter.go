@@ -107,38 +107,35 @@ func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRow
 		return
 	}
 
-	for i := 0; i < processedRowCount; i++ {
-		row := a.Shell.GetScreenState()[a.lastLoggedRowIndex+i+1]
-		a.Shell.LogOutput([]byte(virtual_terminal.BuildCleanedRow(row)))
-	}
-
-	a.lastLoggedRowIndex += processedRowCount
+	a.logRowsUntil(a.lastLoggedRowIndex + processedRowCount)
 }
 
 func (a *LoggedShellAsserter) logAssertionError(err assertions.AssertionError) {
-	a.logRows(a.lastLoggedRowIndex+1, err.ErrorRowIndex)
+	a.logRowsUntil(err.ErrorRowIndex)
 	a.Shell.GetLogger().Errorf("%s", err.Message)
-	a.logRows(err.ErrorRowIndex+1, len(a.Shell.GetScreenState())-1)
+	a.LogRemainingOutput()
 }
 
 func (a *LoggedShellAsserter) LogRemainingOutput() {
-	startRowIndex := a.lastLoggedRowIndex + 1
-
-	// No more output to log yet
-	if startRowIndex > len(a.Shell.GetScreenState())-1 {
-		return
-	}
-
-	endRowIndex := len(a.Shell.GetScreenState()) - 1
-	a.logRows(startRowIndex, endRowIndex)
-	a.lastLoggedRowIndex = endRowIndex
+	a.logRowsUntil(len(a.Shell.GetScreenState()) - 1)
 }
 
-func (a *LoggedShellAsserter) logRows(startRowIndex int, endRowIndex int) {
-	for i := startRowIndex; i <= endRowIndex; i++ {
+func (a *LoggedShellAsserter) logRowsUntil(endRowIndex int) {
+	for i := a.lastLoggedRowIndex + 1; i <= endRowIndex; i++ {
+		// If we've reached the end of the screen state we can stop logging
+		if i > len(a.Shell.GetScreenState())-1 {
+			return
+		}
+
+		// If the row has already been logged we can skip logging it
+		if i <= a.lastLoggedRowIndex {
+			continue
+		}
+
 		rawRow := a.Shell.GetScreenState()[i]
 		cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
 		a.Shell.LogOutput([]byte(cleanedRow))
+		a.lastLoggedRowIndex = i
 	}
 }
 
