@@ -123,6 +123,12 @@ func (a *LoggedShellAsserter) logAssertionError(err assertions.AssertionError) {
 
 func (a *LoggedShellAsserter) LogRemainingOutput() {
 	startRowIndex := a.lastLoggedRowIndex + 1
+
+	// No more output to log yet
+	if startRowIndex > len(a.Shell.GetScreenState())-1 {
+		return
+	}
+
 	endRowIndex := len(a.Shell.GetScreenState()) - 1
 	a.logRows(startRowIndex, endRowIndex)
 	a.lastLoggedRowIndex = endRowIndex
