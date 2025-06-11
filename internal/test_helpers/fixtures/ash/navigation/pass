@@ -48,7 +48,7 @@ Debug = true
 [33m[your-program] [0mpwd is a shell builtin
 [33m[tester::#EI0] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ pwd
-[33m[your-program] [0m/workspaces/shell-tester/internal
+[33m[your-program] [0m/home/runner/work/shell-tester/shell-tester/internal
 [33m[tester::#EI0] [0m[92m✓ Received current working directory response[0m
 [33m[your-program] [0m$ 
 [33m[tester::#EI0] [0m[92mTest passed.[0m
@@ -166,5 +166,11 @@ Debug = true
 [33m[tester::#OO8] [0m[94mRunning tests for Stage #OO8 (oo8)[0m
 [33m[tester::#OO8] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
+[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
+[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
+[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
+[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
+[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
+[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
 [33m[tester::#OO8] [0m[92m✓ Received prompt[0m
 [33m[tester::#OO8] [0m[92mTest passed.[0m

@@ -17,7 +17,7 @@ Debug = true
 [33m[tester::#MG5] [0m[94mRunning tests for Stage #MG5 (mg5)[0m
 [33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/baz:$PATH[0m
 [33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/foo:$PATH[0m
-[33m[tester::#MG5] [setup] [0m[94mPATH is now: /tmp/foo:/tmp/baz:...[0m
+[33m[tester::#MG5] [setup] [0m[94mPATH is now: /tmp/foo:/tmp/baz:/usr/lib/go/bin:...[0m
 [33m[tester::#MG5] [setup] [0m[94mAvailable executables:[0m
 [33m[tester::#MG5] [setup] [0m[94m- my_exe[0m
 [33m[tester::#MG5] [0m[94mRunning ./your_shell.sh[0m
@@ -114,5 +114,11 @@ Debug = true
 [33m[tester::#OO8] [0m[94mRunning tests for Stage #OO8 (oo8)[0m
 [33m[tester::#OO8] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ 
+[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
+[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
+[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
+[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
+[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
+[33m[tester::#OO8] [0m[92m✓ Received prompt[0m
 [33m[tester::#OO8] [0m[92m✓ Received prompt[0m
 [33m[tester::#OO8] [0m[92mTest passed.[0m
