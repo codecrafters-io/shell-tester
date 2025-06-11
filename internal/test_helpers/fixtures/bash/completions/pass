@@ -58,25 +58,25 @@ Debug = true
 [33m[stage-4] [0m[92mTest passed.[0m
 
 [33m[stage-3] [0m[94mRunning tests for Stage #3: gy5[0m
-[33m[stage-3] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
+[33m[stage-3] [setup] [0m[94mexport PATH=/tmp/foo:$PATH[0m
 [33m[stage-3] [setup] [0m[94mAvailable executables:[0m
-[33m[stage-3] [setup] [0m[94m- custom_exe_1357[0m
+[33m[stage-3] [setup] [0m[94m- custom_exe_9755[0m
 [33m[stage-3] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-3] [0m[92m✓ Received prompt ($ )[0m
 [33m[stage-3] [0m[94mTyped "custom"[0m
 [33m[stage-3] [0m[92m✓ Prompt line matches "$ custom"[0m
-[33m[stage-3] [0m[94mPressed "<TAB>" (expecting autocomplete to "custom_exe_1357")[0m
-[33m[stage-3] [0m[92m✓ Prompt line matches "custom_exe_1357"[0m
-[33m[your-program] [0m$ custom_exe_1357 
+[33m[stage-3] [0m[94mPressed "<TAB>" (expecting autocomplete to "custom_exe_9755")[0m
+[33m[stage-3] [0m[92m✓ Prompt line matches "custom_exe_9755"[0m
+[33m[your-program] [0m$ custom_exe_9755 
 [33m[stage-3] [0m[92mTest passed.[0m
 
 [33m[stage-2] [0m[94mRunning tests for Stage #2: wh6[0m
-[33m[stage-2] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
-[33m[stage-2] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
 [33m[stage-2] [setup] [0m[94mexport PATH=/tmp/baz:$PATH[0m
+[33m[stage-2] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
+[33m[stage-2] [setup] [0m[94mexport PATH=/tmp/foo:$PATH[0m
 [33m[stage-2] [setup] [0m[94mAvailable executables:[0m
+[33m[stage-2] [setup] [0m[94m- xyz_foo[0m
 [33m[stage-2] [setup] [0m[94m- xyz_bar[0m
-[33m[stage-2] [setup] [0m[94m- xyz_quz[0m
 [33m[stage-2] [setup] [0m[94m- xyz_qux[0m
 [33m[stage-2] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-2] [0m[92m✓ Received prompt ($ )[0m
@@ -84,36 +84,36 @@ Debug = true
 [33m[your-program] [0m$ xyz_
 [33m[stage-2] [0m[92m✓ Prompt line matches "$ xyz_"[0m
 [33m[stage-2] [0m[94mPressed "<TAB>" (expecting bell to ring)[0m
-[33m[stage-2] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_bar  xyz_qux  xyz_quz")[0m
+[33m[stage-2] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_bar  xyz_foo  xyz_qux")[0m
 [33m[stage-2] [0m[92m✓ Received bell[0m
-[33m[your-program] [0mxyz_bar  xyz_qux  xyz_quz
-[33m[stage-2] [0m[92m✓ Prompt line matches "xyz_bar  xyz_qux  xyz_quz"[0m
+[33m[your-program] [0mxyz_bar  xyz_foo  xyz_qux
+[33m[stage-2] [0m[92m✓ Prompt line matches "xyz_bar  xyz_foo  xyz_qux"[0m
 [33m[stage-2] [0m[92mReceived completion for "xyz_"[0m
 [33m[your-program] [0m$ xyz_
 [33m[stage-2] [0m[92mTest passed.[0m
 
 [33m[stage-1] [0m[94mRunning tests for Stage #1: wt6[0m
-[33m[stage-1] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
-[33m[stage-1] [setup] [0m[94mexport PATH=/tmp/qux:$PATH[0m
 [33m[stage-1] [setup] [0m[94mexport PATH=/tmp/baz:$PATH[0m
+[33m[stage-1] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
+[33m[stage-1] [setup] [0m[94mexport PATH=/tmp/qux:$PATH[0m
 [33m[stage-1] [setup] [0m[94mAvailable executables:[0m
-[33m[stage-1] [setup] [0m[94m- xyz_quz[0m
-[33m[stage-1] [setup] [0m[94m- xyz_quz_baz[0m
-[33m[stage-1] [setup] [0m[94m- xyz_quz_baz_qux[0m
+[33m[stage-1] [setup] [0m[94m- xyz_baz[0m
+[33m[stage-1] [setup] [0m[94m- xyz_baz_quz[0m
+[33m[stage-1] [setup] [0m[94m- xyz_baz_quz_bar[0m
 [33m[stage-1] [0m[94mRunning ./your_shell.sh[0m
 [33m[stage-1] [0m[92m✓ Received prompt ($ )[0m
 [33m[stage-1] [0m[94mTyped "xyz_"[0m
 [33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_"[0m
-[33m[stage-1] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_quz")[0m
-[33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_quz"[0m
+[33m[stage-1] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_baz")[0m
+[33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_baz"[0m
 [33m[stage-1] [0m[94mTyped "_"[0m
-[33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_quz_"[0m
-[33m[stage-1] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_quz_baz")[0m
-[33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_quz_baz"[0m
+[33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_baz_"[0m
+[33m[stage-1] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_baz_quz")[0m
+[33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_baz_quz"[0m
 [33m[stage-1] [0m[94mTyped "_"[0m
-[33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_quz_baz_"[0m
-[33m[stage-1] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_quz_baz_qux")[0m
-[33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_quz_baz_qux "[0m
-[33m[stage-1] [0m[92mReceived all partial completions for "xyz_quz_baz_qux"[0m
-[33m[your-program] [0m$ xyz_quz_baz_qux 
+[33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_baz_quz_"[0m
+[33m[stage-1] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_baz_quz_bar")[0m
+[33m[stage-1] [0m[92m✓ Prompt line matches "$ xyz_baz_quz_bar "[0m
+[33m[stage-1] [0m[92mReceived all partial completions for "xyz_baz_quz_bar"[0m
+[33m[your-program] [0m$ xyz_baz_quz_bar 
 [33m[stage-1] [0m[92mTest passed.[0m
