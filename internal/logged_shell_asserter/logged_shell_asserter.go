@@ -106,7 +106,9 @@ func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRow
 }
 
 func (a *LoggedShellAsserter) logAssertionError(err assertions.AssertionError) {
-	a.logRowsUntilAndIncluding(err.ErrorRowIndex)
+	if err.AffectsLineRange() {
+		a.logRowsUntilAndIncluding(err.ErrorRowIndex)
+	}
 
 	// If we did log the errored line, let's point to it with a caret
 	if err.AffectsSingleLine() && err.ErrorRowIndex == a.lastLoggedRowIndex {

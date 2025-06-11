@@ -44,19 +44,30 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 		}
 	}
 
-	rowDescription := ""
-
-	if row.IsEmpty() {
-		rowDescription = "empty line"
-	}
-
 	if row.String() != a.ExpectedOutput {
+		rowDescription := ""
+
+		if startRowIndex > screenState.GetLastLoggableRowIndex() {
+			rowDescription = "no line received"
+		} else if row.IsEmpty() {
+			rowDescription = "empty line"
+		}
+
 		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, row.String(), rowDescription)
 
-		return 0, &AssertionError{
-			StartRowIndex: startRowIndex,
-			ErrorRowIndex: startRowIndex,
-			Message:       "Line does not match expected value.\n" + detailedErrorMessage,
+		// If the line won't be logged, we say "didn't find line ..." instead of "line does not match expected ..."
+		if startRowIndex > screenState.GetLastLoggableRowIndex() {
+			return 0, &AssertionError{
+				StartRowIndex: startRowIndex,
+				ErrorRowIndex: startRowIndex,
+				Message:       "Didn't find expected line.\n" + detailedErrorMessage,
+			}
+		} else {
+			return 0, &AssertionError{
+				StartRowIndex: startRowIndex,
+				ErrorRowIndex: startRowIndex,
+				Message:       "Line does not match expected value.\n" + detailedErrorMessage,
+			}
 		}
 	} else {
 		return processedRowCount, nil

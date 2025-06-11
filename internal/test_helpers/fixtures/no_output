@@ -3,8 +3,8 @@ Debug = true
 [33m[tester::#CZ2] [0m[94mRunning tests for Stage #CZ2 (cz2)[0m
 [33m[tester::#CZ2] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ invalid_apple_command
-[33m[tester::#CZ2] [0m[91mOutput does not match expected value.[0m
+[33m[tester::#CZ2] [0m[91mDidn't find expected line.[0m
 [33m[tester::#CZ2] [0m[91m[32mExpected:[0m "invalid_apple_command: command not found"[0m
-[33m[tester::#CZ2] [0m[91m[31mReceived:[0m ""[0m
+[33m[tester::#CZ2] [0m[91m[31mReceived:[0m "" [31m(no line received)[0m[0m
 [33m[tester::#CZ2] [0m[91mAssertion failed.[0m
 [33m[tester::#CZ2] [0m[91mTest failed[0m
