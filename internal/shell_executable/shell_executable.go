@@ -98,7 +98,7 @@ func (b *ShellExecutable) GetScreenState() [][]string {
 }
 
 func (b *ShellExecutable) LogOutput(output []byte) {
-	b.programLogger.Plainln(string(output))
+	b.programLogger.Plainf("%s", string(output))
 }
 
 func (b *ShellExecutable) VTBellChannel() chan bool {
