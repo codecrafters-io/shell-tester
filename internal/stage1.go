@@ -29,12 +29,6 @@ func testPrompt(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	asserter.LogRemainingOutput()
 	logger.Successf("✓ Received prompt")
-	logger.Successf("✓ Received prompt")
-	logger.Successf("✓ Received prompt")
-	logger.Successf("✓ Received prompt")
-	logger.Successf("✓ Received prompt")
-	logger.Successf("✓ Received prompt")
-	logger.Successf("✓ Received prompt")
 
 	return nil
 }
