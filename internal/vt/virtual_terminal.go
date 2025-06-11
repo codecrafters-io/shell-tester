@@ -54,10 +54,6 @@ func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 }
 
 func (vt *VirtualTerminal) GetScreenState() screen_state.ScreenState {
-	if vt == nil {
-		return screen_state.ScreenState{}
-	}
-
 	cellMatrix := make([][]string, vt.rows)
 
 	for i := 0; i < vt.rows; i++ {
