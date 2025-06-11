@@ -79,8 +79,8 @@ func (b *ShellExecutable) Start(args ...string) error {
 	b.vt = virtual_terminal.NewStandardVT()
 
 	winsize := &ptylib.Winsize{
-		Rows: uint16(b.vt.GetRowCount()),
-		Cols: uint16(b.vt.GetColumnCount()),
+		Rows: uint16(b.vt.GetMaxRowCount()),
+		Cols: uint16(b.vt.GetMaxColumnCount()),
 	}
 	pty, err := ptylib.StartWithSize(cmd, winsize)
 	if err != nil {

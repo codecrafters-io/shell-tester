@@ -56,10 +56,13 @@ func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 	return vt.vt.Write(p)
 }
 
-func (vt *VirtualTerminal) GetScreenState() [][]string {
-	if vt == nil {
-		return [][]string{}
-	}
+// LastVisibleRowIndex returns the index of the last "visible" row in the terminal
+//
+// The last visible row is whichever of the following is the last:
+// (a) The last non-empty row
+// (b) The row before the cursor if the cursor is at the start of the row
+// (c) The row with the cursor if the cursor is not at the start of the row
+func (vt *VirtualTerminal) GetLastVisibleRowIndex() int {
 	cursorRowIndex, cursorColIndex := vt.GetCursorPosition()
 
 	lastNonEmptyRowIndex := 0
@@ -71,18 +74,25 @@ func (vt *VirtualTerminal) GetScreenState() [][]string {
 		}
 	}
 
-	var lastRowIndex int
-
 	// Only consider rows until (a) the last non-empty row or (b) the cursor row, whichever comes later
 	// "cursor row" is the row with the cursor if cursor is not at the start of the row, else the previous row
 	if cursorColIndex == 0 {
-		lastRowIndex = int(math.Max(float64(lastNonEmptyRowIndex), float64(cursorRowIndex-1)))
+		return int(math.Max(float64(lastNonEmptyRowIndex), float64(cursorRowIndex-1)))
 	} else {
-		lastRowIndex = int(math.Max(float64(lastNonEmptyRowIndex), float64(cursorRowIndex)))
+		return int(math.Max(float64(lastNonEmptyRowIndex), float64(cursorRowIndex)))
+	}
+}
+
+func (vt *VirtualTerminal) GetScreenState() [][]string {
+	if vt == nil {
+		return [][]string{}
 	}
 
-	screenState := make([][]string, lastRowIndex+1)
-	for i := 0; i <= lastRowIndex; i++ {
+	cursorRowIndex, cursorColIndex := vt.GetCursorPosition()
+	lastVisibleRowIndex := vt.GetLastVisibleRowIndex()
+
+	screenState := make([][]string, lastVisibleRowIndex+1)
+	for i := 0; i <= lastVisibleRowIndex; i++ {
 		screenState[i] = make([]string, vt.cols)
 		for j := 0; j < vt.cols; j++ {
 			c := vt.vt.Cell(j, i)
@@ -105,11 +115,11 @@ func (vt *VirtualTerminal) GetCursorPosition() (int, int) {
 	return cursorRow, cursorCol
 }
 
-func (vt *VirtualTerminal) GetColumnCount() int {
+func (vt *VirtualTerminal) GetMaxColumnCount() int {
 	return vt.cols
 }
 
-func (vt *VirtualTerminal) GetRowCount() int {
+func (vt *VirtualTerminal) GetMaxRowCount() int {
 	return vt.rows
 }
 
@@ -118,14 +128,6 @@ func (vt *VirtualTerminal) GetRow(row int) []string {
 	for j := 0; j < vt.cols; j++ {
 		c := vt.vt.Cell(j, row)
 		screenState[j] = c.Content
-	}
-	return screenState
-}
-
-func (vt *VirtualTerminal) GetRowsTillEnd(startingRow int) [][]string {
-	screenState := make([][]string, vt.rows)
-	for i := startingRow; i < vt.rows; i++ {
-		screenState[i] = vt.GetRow(i)
 	}
 	return screenState
 }
