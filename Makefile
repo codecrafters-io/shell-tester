@@ -187,7 +187,7 @@ define _HISTORY_STAGES_ASH
 	{"slug":"rh7","tester_log_prefix":"tester::#rh7","title":"Stage#4: UP Arrow Navigation"}, \
 	{"slug":"vq0","tester_log_prefix":"tester::#vq0","title":"Stage#5: DOWN Arrow Navigation"}, \
 	{"slug":"dm2","tester_log_prefix":"tester::#dm2","title":"Stage#6: Test Enter with Arrow Navigation"} \
-] 
+]
 endef
 
 define _HISTORY_PERSISTENCE_STAGES
