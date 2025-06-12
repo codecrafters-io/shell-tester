@@ -25,7 +25,6 @@ func (t PromptAssertion) Run(screenState screen_state.ScreenState, startRowIndex
 
 	if !strings.EqualFold(rowAsString, t.ExpectedPrompt) {
 		return processedRowCount, &AssertionError{
-			StartRowIndex: startRowIndex,
 			ErrorRowIndex: startRowIndex,
 			Message:       fmt.Sprintf("Expected prompt (%q) but received %q", t.ExpectedPrompt, rowAsString),
 		}
