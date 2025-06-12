@@ -2,6 +2,7 @@ package assertion_collection
 
 import (
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
+	"github.com/codecrafters-io/shell-tester/internal/screen_state"
 	"github.com/codecrafters-io/shell-tester/internal/utils"
 )
 
@@ -29,26 +30,26 @@ func (c *AssertionCollection) PopAssertion() assertions.Assertion {
 	return lastAssertion
 }
 
-func (c *AssertionCollection) RunWithPromptAssertion(screenState [][]string) *assertions.AssertionError {
+func (c *AssertionCollection) RunWithPromptAssertion(screenState screen_state.ScreenState) *assertions.AssertionError {
 	return c.runWithExtraAssertions(screenState, []assertions.Assertion{
 		assertions.PromptAssertion{ExpectedPrompt: utils.PROMPT},
 	})
 }
 
-func (c *AssertionCollection) RunWithoutPromptAssertion(screenState [][]string) *assertions.AssertionError {
+func (c *AssertionCollection) RunWithoutPromptAssertion(screenState screen_state.ScreenState) *assertions.AssertionError {
 	return c.runWithExtraAssertions(screenState, nil)
 }
 
-func (c *AssertionCollection) runWithExtraAssertions(screenState [][]string, extraAssertions []assertions.Assertion) *assertions.AssertionError {
+func (c *AssertionCollection) runWithExtraAssertions(screenState screen_state.ScreenState, extraAssertions []assertions.Assertion) *assertions.AssertionError {
 	allAssertions := append(c.Assertions, extraAssertions...)
 	currentRowIndex := 0
 
 	for _, assertion := range allAssertions {
-		if len(screenState) == 0 {
+		if screenState.GetRowCount() == 0 {
 			panic("CodeCrafters internal error: expected screen to have at least one row, but it was empty")
 		}
 
-		if currentRowIndex >= len(screenState) {
+		if currentRowIndex > screenState.GetRowCount()-1 {
 			panic("CodeCrafters internal error: startRowIndex is larger than screenState rows")
 		}
 

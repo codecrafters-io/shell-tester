@@ -7,7 +7,6 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/assertion_collection"
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
-	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 )
 
 // INITIAL_READ_TIMEOUT is used for the first prompt read, where we want
@@ -103,38 +102,26 @@ func (a *LoggedShellAsserter) assert(withoutPrompt bool, readTimeout time.Durati
 }
 
 func (a *LoggedShellAsserter) onAssertionSuccess(startRowIndex int, processedRowCount int) {
-	if processedRowCount == 0 || startRowIndex <= a.lastLoggedRowIndex {
-		return
-	}
-
-	for i := 0; i < processedRowCount; i++ {
-		row := a.Shell.GetScreenState()[a.lastLoggedRowIndex+i+1]
-		a.Shell.LogOutput([]byte(virtual_terminal.BuildCleanedRow(row)))
-	}
-
-	a.lastLoggedRowIndex += processedRowCount
+	a.logRowsUntilAndIncluding(startRowIndex + processedRowCount - 1)
 }
 
 func (a *LoggedShellAsserter) logAssertionError(err assertions.AssertionError) {
-	a.logRows(a.lastLoggedRowIndex+1, err.ErrorRowIndex)
+	a.logRowsUntilAndIncluding(err.ErrorRowIndex)
 	a.Shell.GetLogger().Errorf("%s", err.Message)
-	a.logRows(err.ErrorRowIndex+1, len(a.Shell.GetScreenState())-1)
+	a.LogRemainingOutput()
 }
 
 func (a *LoggedShellAsserter) LogRemainingOutput() {
-	startRowIndex := a.lastLoggedRowIndex + 1
-	endRowIndex := len(a.Shell.GetScreenState()) - 1
-	a.logRows(startRowIndex, endRowIndex)
-	a.lastLoggedRowIndex = endRowIndex
+	a.logRowsUntilAndIncluding(a.Shell.GetScreenState().GetLastLoggableRowIndex())
 }
 
-func (a *LoggedShellAsserter) logRows(startRowIndex int, endRowIndex int) {
-	for i := startRowIndex; i <= endRowIndex; i++ {
-		rawRow := a.Shell.GetScreenState()[i]
-		cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
-		if len(cleanedRow) > 0 {
-			a.Shell.LogOutput([]byte(cleanedRow))
-		}
+func (a *LoggedShellAsserter) logRowsUntilAndIncluding(endRowIndex int) {
+	endRowIndex = min(endRowIndex, a.Shell.GetScreenState().GetLastLoggableRowIndex())
+
+	for i := a.lastLoggedRowIndex + 1; i <= endRowIndex; i++ {
+		row := a.Shell.GetScreenState().GetRow(i)
+		a.Shell.LogOutput([]byte(row.String()))
+		a.lastLoggedRowIndex = i
 	}
 }
 

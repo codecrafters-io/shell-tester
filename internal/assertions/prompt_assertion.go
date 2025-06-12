@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
+	"github.com/codecrafters-io/shell-tester/internal/screen_state"
 )
 
 // PromptAssertion verifies a prompt exists, and that there's no extra output after it.
@@ -17,18 +17,17 @@ func (t PromptAssertion) Inspect() string {
 	return fmt.Sprintf("PromptAssertion (%q)", t.ExpectedPrompt)
 }
 
-func (t PromptAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err *AssertionError) {
+func (t PromptAssertion) Run(screenState screen_state.ScreenState, startRowIndex int) (processedRowCount int, err *AssertionError) {
 	// We don't want to count the processed prompt as a complete row
 	processedRowCount = 0
 
-	rawRow := screenState[startRowIndex] // Could be nil?
-	cleanedRow := virtual_terminal.BuildCleanedRow(rawRow)
+	rowAsString := screenState.GetRow(startRowIndex).String()
 
-	if !strings.EqualFold(cleanedRow, t.ExpectedPrompt) {
+	if !strings.EqualFold(rowAsString, t.ExpectedPrompt) {
 		return processedRowCount, &AssertionError{
 			StartRowIndex: startRowIndex,
 			ErrorRowIndex: startRowIndex,
-			Message:       fmt.Sprintf("Expected prompt (%q) but received %q", t.ExpectedPrompt, cleanedRow),
+			Message:       fmt.Sprintf("Expected prompt (%q) but received %q", t.ExpectedPrompt, rowAsString),
 		}
 	}
 

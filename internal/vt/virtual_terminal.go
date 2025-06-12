@@ -1,10 +1,8 @@
 package virtual_terminal
 
 import (
-	"strings"
-
 	"github.com/charmbracelet/x/vt"
-	"github.com/codecrafters-io/shell-tester/internal/utils"
+	"github.com/codecrafters-io/shell-tester/internal/screen_state"
 )
 
 type VirtualTerminal struct {
@@ -55,28 +53,20 @@ func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 	return vt.vt.Write(p)
 }
 
-func (vt *VirtualTerminal) GetScreenState() [][]string {
-	if vt == nil {
-		return [][]string{}
-	}
-	cursorPosition := vt.vt.CursorPosition()
-	cursorRow, cursorCol := cursorPosition.Y, cursorPosition.X
+func (vt *VirtualTerminal) GetScreenState() screen_state.ScreenState {
+	cellMatrix := make([][]string, vt.rows)
 
-	// For the row where the cursor is present
-	// We intend to keep all characters upto the cursor position
-	screenState := make([][]string, vt.rows)
 	for i := 0; i < vt.rows; i++ {
-		screenState[i] = make([]string, vt.cols)
+		cellMatrix[i] = make([]string, vt.cols)
 		for j := 0; j < vt.cols; j++ {
-			c := vt.vt.Cell(j, i)
-			if i == cursorRow && j < cursorCol && c.Content == " " {
-				screenState[i][j] = utils.VT_SENTINEL_CHARACTER
-			} else {
-				screenState[i][j] = c.Content
-			}
+			cellMatrix[i][j] = vt.vt.Cell(j, i).Content
 		}
 	}
-	return screenState
+
+	return screen_state.NewScreenState(cellMatrix, screen_state.CursorPosition{
+		RowIndex:    vt.vt.CursorPosition().Y,
+		ColumnIndex: vt.vt.CursorPosition().X,
+	})
 }
 
 func (vt *VirtualTerminal) GetColumnCount() int {
@@ -85,30 +75,4 @@ func (vt *VirtualTerminal) GetColumnCount() int {
 
 func (vt *VirtualTerminal) GetRowCount() int {
 	return vt.rows
-}
-
-func (vt *VirtualTerminal) GetRow(row int) []string {
-	screenState := make([]string, vt.cols)
-	for j := 0; j < vt.cols; j++ {
-		c := vt.vt.Cell(j, row)
-		screenState[j] = c.Content
-	}
-	return screenState
-}
-
-func (vt *VirtualTerminal) GetRowsTillEnd(startingRow int) [][]string {
-	screenState := make([][]string, vt.rows)
-	for i := startingRow; i < vt.rows; i++ {
-		screenState[i] = vt.GetRow(i)
-	}
-	return screenState
-}
-
-func BuildCleanedRow(row []string) string {
-	result := strings.Join(row, "")
-	result = strings.TrimRight(result, " ")
-
-	// VT_SENTINEL_CHARACTER is the representation of " " that we intend to preserve
-	result = strings.ReplaceAll(result, utils.VT_SENTINEL_CHARACTER, " ")
-	return result
 }

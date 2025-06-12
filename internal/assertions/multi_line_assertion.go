@@ -3,6 +3,8 @@ package assertions
 import (
 	"fmt"
 	"regexp"
+
+	"github.com/codecrafters-io/shell-tester/internal/screen_state"
 )
 
 // MultiLineAssertion asserts that multiple lines of output matches against a given array of strings
@@ -45,7 +47,7 @@ func (a *MultiLineAssertion) Inspect() string {
 	return fmt.Sprintf("MultiLineAssertion (%v)", a.SingleLineAssertions)
 }
 
-func (a *MultiLineAssertion) Run(screenState [][]string, startRowIndex int) (processedRowCount int, err *AssertionError) {
+func (a *MultiLineAssertion) Run(screenState screen_state.ScreenState, startRowIndex int) (processedRowCount int, err *AssertionError) {
 	totalProcessedRowCount := 0
 
 	for _, singleLineAssertion := range a.SingleLineAssertions {
