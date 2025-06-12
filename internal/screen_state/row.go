@@ -4,7 +4,7 @@ import "strings"
 
 type Row struct {
 	rawCells        []string
-	cursorCellIndex int
+	cursorCellIndex int // cursorCellIndex will be -1 if the cursor is not on the line
 }
 
 func (r Row) HasCursor() bool {
