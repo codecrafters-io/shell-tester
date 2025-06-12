@@ -76,20 +76,3 @@ func (vt *VirtualTerminal) GetColumnCount() int {
 func (vt *VirtualTerminal) GetRowCount() int {
 	return vt.rows
 }
-
-func (vt *VirtualTerminal) GetRow(row int) []string {
-	screenState := make([]string, vt.cols)
-	for j := 0; j < vt.cols; j++ {
-		c := vt.vt.Cell(j, row)
-		screenState[j] = c.Content
-	}
-	return screenState
-}
-
-func (vt *VirtualTerminal) GetRowsTillEnd(startingRow int) [][]string {
-	screenState := make([][]string, vt.rows)
-	for i := startingRow; i < vt.rows; i++ {
-		screenState[i] = vt.GetRow(i)
-	}
-	return screenState
-}
