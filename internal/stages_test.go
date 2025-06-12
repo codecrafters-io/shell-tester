@@ -14,31 +14,38 @@ func TestStages(t *testing.T) {
 
 	testCases := map[string]testerUtilsTesting.TesterOutputTestCase{
 		"missing_command_fail": {
-			UntilStageSlug:      "cz2",
+			StageSlugs:          []string{"cz2"},
 			CodePath:            "./test_helpers/scenarios/wrong_output",
 			ExpectedExitCode:    1,
 			StdoutFixturePath:   "./test_helpers/fixtures/wrong_output",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"no_command_fail": {
-			UntilStageSlug:      "cz2",
+			StageSlugs:          []string{"cz2"},
 			CodePath:            "./test_helpers/scenarios/no_output",
 			ExpectedExitCode:    1,
 			StdoutFixturePath:   "./test_helpers/fixtures/no_output",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"escape_codes_pass": {
-			UntilStageSlug:      "cz2",
+			StageSlugs:          []string{"cz2"},
 			CodePath:            "./test_helpers/scenarios/escape_codes",
 			ExpectedExitCode:    0,
 			StdoutFixturePath:   "./test_helpers/fixtures/escape_codes",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"exit_error_fail": {
-			UntilStageSlug:      "pn5",
+			StageSlugs:          []string{"pn5"},
 			CodePath:            "./test_helpers/scenarios/exit_error",
 			ExpectedExitCode:    1,
 			StdoutFixturePath:   "./test_helpers/fixtures/exit_error",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"run_program_newline_in_args": {
+			StageSlugs:          []string{"ip1"},
+			CodePath:            "./test_helpers/scenarios/run_program_newline_in_args",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/run_program_newline_in_args",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"base_pass_bash": {
@@ -172,7 +179,7 @@ func normalizeTesterOutput(testerOutput []byte) []byte {
 	replacements := map[string][]*regexp.Regexp{
 		"/bin/$1":                         {regexp.MustCompile(`\/usr/bin/(\w+)`)},
 		"[your-program] my_exe is <path>": {regexp.MustCompile(`\[your-program\] .{4}my_exe is .*`)},
-		"[your-program] <cwd>":            {regexp.MustCompile(`\[your-program\] .{4}/(workspaces|home|Users|app)/.*`)},
+		"[your-program] <cwd>":            {regexp.MustCompile(`\[your-program\] .{0,4}/(workspace|workspaces|home|Users|app)/.*`)},
 		"ls-la-output-line":               {regexp.MustCompile(`-rw-r--r-- .*`)},
 		"PATH is now: <path>":             {regexp.MustCompile(`PATH is now: .*`)},
 		"/tmp/":                           {regexp.MustCompile(`/var/folders/.*/.*/.*/`)},

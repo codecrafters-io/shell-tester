@@ -36,20 +36,36 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 		processedRowCount = 0
 	}
 
-	rowAsString := screenState.GetRow(startRowIndex).String()
+	row := screenState.GetRow(startRowIndex)
 
 	for _, pattern := range a.FallbackPatterns {
-		if pattern.Match([]byte(rowAsString)) {
+		if pattern.Match([]byte(row.String())) {
 			return processedRowCount, nil
 		}
 	}
 
-	if rowAsString != a.ExpectedOutput {
-		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, rowAsString)
-		return 0, &AssertionError{
-			StartRowIndex: startRowIndex,
-			ErrorRowIndex: startRowIndex,
-			Message:       "Output does not match expected value.\n" + detailedErrorMessage,
+	if row.String() != a.ExpectedOutput {
+		rowDescription := ""
+
+		if startRowIndex > screenState.GetLastLoggableRowIndex() {
+			rowDescription = "no line received"
+		} else if row.IsEmpty() {
+			rowDescription = "empty line"
+		}
+
+		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, row.String(), rowDescription)
+
+		// If the line won't be logged, we say "didn't find line ..." instead of "line does not match expected ..."
+		if startRowIndex > screenState.GetLastLoggableRowIndex() {
+			return 0, &AssertionError{
+				ErrorRowIndex: startRowIndex,
+				Message:       "Didn't find expected line.\n" + detailedErrorMessage,
+			}
+		} else {
+			return 0, &AssertionError{
+				ErrorRowIndex: startRowIndex,
+				Message:       "Line does not match expected value.\n" + detailedErrorMessage,
+			}
 		}
 	} else {
 		return processedRowCount, nil
