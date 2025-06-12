@@ -59,13 +59,11 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 		// If the line won't be logged, we say "didn't find line ..." instead of "line does not match expected ..."
 		if startRowIndex > screenState.GetLastLoggableRowIndex() {
 			return 0, &AssertionError{
-				StartRowIndex: startRowIndex,
 				ErrorRowIndex: startRowIndex,
 				Message:       "Didn't find expected line.\n" + detailedErrorMessage,
 			}
 		} else {
 			return 0, &AssertionError{
-				StartRowIndex: startRowIndex,
 				ErrorRowIndex: startRowIndex,
 				Message:       "Line does not match expected value.\n" + detailedErrorMessage,
 			}

@@ -1,17 +1,12 @@
 package assertions
 
 type AssertionError struct {
-	ErrorRowIndex int // Will be -1 if the error doesn't affect a specific line range (e.g. bell)
+	ErrorRowIndex int // Will be -1 if the error doesn't affect a specific line
 	Message       string
-	StartRowIndex int // Will be -1 if the error doesn't affect a specific line range (e.g. bell)
 }
 
-func (e AssertionError) AffectsLineRange() bool {
-	return e.ErrorRowIndex != -1 && e.StartRowIndex != -1
-}
-
-func (e AssertionError) AffectsSingleLine() bool {
-	return e.AffectsLineRange() && e.StartRowIndex == e.ErrorRowIndex
+func (e AssertionError) AffectsLine() bool {
+	return e.ErrorRowIndex != -1
 }
 
 func (e AssertionError) Error() string {
