@@ -36,16 +36,16 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 		processedRowCount = 0
 	}
 
-	rowString := screenState.GetRow(startRowIndex).String()
+	rowAsString := screenState.GetRow(startRowIndex).String()
 
 	for _, pattern := range a.FallbackPatterns {
-		if pattern.Match([]byte(rowString)) {
+		if pattern.Match([]byte(rowAsString)) {
 			return processedRowCount, nil
 		}
 	}
 
-	if rowString != a.ExpectedOutput {
-		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, rowString)
+	if rowAsString != a.ExpectedOutput {
+		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, rowAsString)
 		return 0, &AssertionError{
 			StartRowIndex: startRowIndex,
 			ErrorRowIndex: startRowIndex,
