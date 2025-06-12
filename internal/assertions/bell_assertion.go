@@ -19,7 +19,6 @@ func (a BellAssertion) Run(screenState screen_state.ScreenState, startRowIndex i
 		return 0, nil
 	}
 	return 0, &AssertionError{
-		StartRowIndex: -1,
 		ErrorRowIndex: -1,
 		Message:       "Expected bell to ring, but it didn't",
 	}
