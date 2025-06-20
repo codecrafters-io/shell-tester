@@ -17,65 +17,55 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 
-	randomCode1 := getRandomString()
-	randomCode2 := getRandomString()
+	randomCodes := []string{
+		getRandomString(),
+		getRandomString(),
+	}
 
-	randomName1 := getRandomName()
-	randomName2 := getRandomName()
-	randomName3 := getRandomName()
-
-	randomExecutableName1 := "custom_exe_" + strconv.Itoa(random.RandomInt(1000, 9999))
-	randomExecutableName2 := "custom_exe_" + strconv.Itoa(random.RandomInt(1000, 9999))
+	randomExecutableNames := []string{
+		"custom_exe_" + strconv.Itoa(random.RandomInt(1000, 9999)),
+		"custom_exe_" + strconv.Itoa(random.RandomInt(1000, 9999)),
+	}
 
 	_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
-		{CommandType: "signature_printer", CommandName: randomExecutableName1, CommandMetadata: randomCode1},
-		{CommandType: "signature_printer", CommandName: randomExecutableName2, CommandMetadata: randomCode2},
+		{CommandType: "signature_printer", CommandName: randomExecutableNames[0], CommandMetadata: randomCodes[0]},
+		{CommandType: "signature_printer", CommandName: randomExecutableNames[1], CommandMetadata: randomCodes[1]},
 	}, true)
 	if err != nil {
 		return err
 	}
-	logAvailableExecutables(logger, []string{randomExecutableName1, randomExecutableName2})
+	logAvailableExecutables(logger, randomExecutableNames)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}
 
-	command1 := []string{
-		randomExecutableName1, randomName1,
-	}
+	argCounts := random.RandomInts(1, 4, 2)
 
-	testCase := test_cases.CommandWithMultilineResponseTestCase{
-		Command: strings.Join(command1, " "),
-		MultiLineAssertion: assertions.NewMultiLineAssertion([]string{
-			fmt.Sprintf("Program was passed %d args (including program name).", len(command1)),
-			fmt.Sprintf("Arg #0 (program name): %s", command1[0]),
-			fmt.Sprintf("Arg #1: %s", command1[1]),
-			fmt.Sprintf("Program Signature: %s", randomCode1),
-		}),
-		SuccessMessage: "✓ Received expected response",
-	}
-	if err := testCase.Run(asserter, shell, logger); err != nil {
-		return err
-	}
+	for i, argCount := range argCounts {
+		command := []string{randomExecutableNames[i]}
+		for range argCount {
+			command = append(command, getRandomName())
+		}
 
-	command2 := []string{
-		randomExecutableName2, randomName2, randomName3,
-	}
+		expectedLines := []string{
+			fmt.Sprintf("Program was passed %d args (including program name).", len(command)),
+			fmt.Sprintf("Arg #0 (program name): %s", command[0]),
+		}
+		for j, arg := range command[1:] {
+			expectedLines = append(expectedLines, fmt.Sprintf("Arg #%d: %s", j+1, arg))
+		}
+		expectedLines = append(expectedLines, fmt.Sprintf("Program Signature: %s", randomCodes[i]))
 
-	testCase2 := test_cases.CommandWithMultilineResponseTestCase{
-		Command: strings.Join(command2, " "),
-		MultiLineAssertion: assertions.NewMultiLineAssertion([]string{
-			fmt.Sprintf("Program was passed %d args (including program name).", len(command2)),
-			fmt.Sprintf("Arg #0 (program name): %s", command2[0]),
-			fmt.Sprintf("Arg #1: %s", command2[1]),
-			fmt.Sprintf("Arg #2: %s", command2[2]),
-			fmt.Sprintf("Program Signature: %s", randomCode2),
-		}),
-		SuccessMessage: "✓ Received expected response",
-	}
-	if err := testCase2.Run(asserter, shell, logger); err != nil {
-		return err
+		testCase := test_cases.CommandWithMultilineResponseTestCase{
+			Command:            strings.Join(command, " "),
+			MultiLineAssertion: assertions.NewMultiLineAssertion(expectedLines),
+			SuccessMessage:     "✓ Received expected response",
+		}
+		if err := testCase.Run(asserter, shell, logger); err != nil {
+			return err
+		}
 	}
 
 	return logAndQuit(asserter, nil)
