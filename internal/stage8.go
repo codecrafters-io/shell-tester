@@ -35,14 +35,13 @@ func testRun(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 	logAvailableExecutables(logger, randomExecutableNames)
-	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
+	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}
 
 	argCounts := random.RandomInts(1, 4, 2)
-
 	for i, argCount := range argCounts {
 		command := []string{randomExecutableNames[i]}
 		for range argCount {
