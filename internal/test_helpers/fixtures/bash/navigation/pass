@@ -6,6 +6,9 @@ Debug = true
 [33m[your-program] [0m$ pwd
 [33m[your-program] [0m/tmp/mango/pear/banana
 [33m[tester::#GP4] [0m[92mReceived current working directory response[0m
+[33m[your-program] [0m$ echo ~
+[33m[your-program] [0m/tmp/pear/orange/raspberry
+[33m[tester::#GP4] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ cd ~
 [33m[your-program] [0m$ pwd
 [33m[your-program] [0m/tmp/pear/orange/raspberry

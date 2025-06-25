@@ -27,14 +27,24 @@ func testCd3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	testCase1 := test_cases.CDAndPWDTestCase{Directory: directory, Response: directory}
-	err = testCase1.Run(asserter, shell, logger)
+	cdTestCase1 := test_cases.CDAndPWDTestCase{Directory: directory, Response: directory}
+	err = cdTestCase1.Run(asserter, shell, logger)
 	if err != nil {
 		return err
 	}
 
-	testCase2 := test_cases.CDAndPWDTestCase{Directory: "~", Response: tmpHomeDir}
-	err = testCase2.Run(asserter, shell, logger)
+	echoTestCase := test_cases.CommandResponseTestCase{
+		Command:          "echo ~",
+		ExpectedOutput:   tmpHomeDir,
+		FallbackPatterns: nil,
+		SuccessMessage:   "✓ Received expected response",
+	}
+	if err := echoTestCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	cdTestCase2 := test_cases.CDAndPWDTestCase{Directory: "~", Response: tmpHomeDir}
+	err = cdTestCase2.Run(asserter, shell, logger)
 	if err != nil {
 		return err
 	}
