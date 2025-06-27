@@ -28,11 +28,11 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Expected behavior:
 	// - When the command is executed, the shell should skip myExe1 (not executable)
 	// - The shell should continue searching PATH and find/execute myExe2
-	// - The purpose of myExe3 is to prevent a wrong solution which traverses PATH in reverse
+	// - The purpose of myExe3 is to catch a wrong solution which traverses PATH in reverse
 	// - This verifies proper PATH traversal and permission checking
 
 	// e3
-	if err := setUpNonExecutable(stageHarness, shell, myExeCommandName); err != nil {
+	if _, err := setUpNonExecutable(stageHarness, shell, myExeCommandName); err != nil {
 		return err
 	}
 
@@ -45,7 +45,8 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// e1
-	if err := setUpNonExecutable(stageHarness, shell, myExeCommandName); err != nil {
+	nonExePath, err := setUpNonExecutable(stageHarness, shell, myExeCommandName)
+	if err != nil {
 		return err
 	}
 
@@ -67,6 +68,11 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		var expectedPath = ""
 		if executable == "my_exe" {
 			expectedPath = filepath.Join(executableDir, myExeCommandName)
+
+			// Alpine Busybox has a bug where it doesn't check permissions
+			if isTestingTesterUsingBusyboxOnAlpine() {
+				expectedPath = nonExePath
+			}
 		}
 
 		if err := testCase.RunForExecutable(asserter, shell, logger, expectedPath); err != nil {
@@ -112,17 +118,17 @@ func logPath(shell *shell_executable.ShellExecutable, logger *logger.Logger, pre
 	logger.ResetSecondaryPrefix()
 }
 
-func setUpNonExecutable(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, commandName string) error {
+func setUpNonExecutable(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, commandName string) (string, error) {
 	nonExeDir, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
 		{CommandType: "signature_printer", CommandName: commandName, CommandMetadata: getRandomString()},
 	}, true)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	nonExePath := filepath.Join(nonExeDir, commandName)
 	currentPerms, _ := os.Stat(nonExePath)
 	os.Chmod(nonExePath, currentPerms.Mode() & ^os.FileMode(0o111))
 
-	return nil
+	return nonExePath, nil
 }
