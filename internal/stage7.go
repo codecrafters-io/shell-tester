@@ -31,12 +31,12 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// - The purpose of myExe3 is to catch a wrong solution which traverses PATH in reverse
 	// - This verifies proper PATH traversal and permission checking
 
-	// e3
+	// myExe3
 	if _, err := setUpNonExecutable(stageHarness, shell, myExeCommandName); err != nil {
 		return err
 	}
 
-	// e2
+	// myExe2
 	executableDir, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
 		{CommandType: "signature_printer", CommandName: myExeCommandName, CommandMetadata: getRandomString()},
 	}, true)
@@ -44,7 +44,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// e1
+	// myExe1
 	nonExePath, err := setUpNonExecutable(stageHarness, shell, myExeCommandName)
 	if err != nil {
 		return err
