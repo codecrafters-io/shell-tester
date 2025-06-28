@@ -79,7 +79,8 @@ Debug = true
 [33m[tester::#MG5] [0m[94mRunning tests for Stage #MG5 (mg5)[0m
 [33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
 [33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
-[33m[tester::#MG5] [setup] [0m[94mPATH is now: /tmp/bar:/tmp/quz:/usr/lib/go/bin:...[0m
+[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/baz:$PATH[0m
+[33m[tester::#MG5] [setup] [0m[94mPATH is now: /tmp/baz:/tmp/bar:/tmp/quz:...[0m
 [33m[tester::#MG5] [setup] [0m[94mAvailable executables:[0m
 [33m[tester::#MG5] [setup] [0m[94m- my_exe[0m
 [33m[tester::#MG5] [0m[94mRunning ./your_shell.sh[0m
@@ -93,13 +94,13 @@ Debug = true
 [33m[your-program] [0mmkdir is /bin/mkdir
 [33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type my_exe
-[33m[your-program] [0mmy_exe is /tmp/bar/my_exe
+[33m[your-program] [0mmy_exe is /tmp/baz/my_exe
 [33m[tester::#MG5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type invalid_raspberry_command
-[33m[your-program] [0minvalid_raspberry_command: not found
+[33m[your-program] [0m$ type invalid_strawberry_command
+[33m[your-program] [0minvalid_strawberry_command: not found
 [33m[tester::#MG5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type invalid_blueberry_command
-[33m[your-program] [0minvalid_blueberry_command: not found
+[33m[your-program] [0m$ type invalid_orange_command
+[33m[your-program] [0minvalid_orange_command: not found
 [33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[tester::#MG5] [0m[92mTest passed.[0m
@@ -118,30 +119,27 @@ Debug = true
 [33m[your-program] [0m$ type invalid_strawberry_command
 [33m[your-program] [0minvalid_strawberry_command: not found
 [33m[tester::#EZ5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type invalid_orange_command
-[33m[your-program] [0minvalid_orange_command: not found
+[33m[your-program] [0m$ type invalid_pear_command
+[33m[your-program] [0minvalid_pear_command: not found
 [33m[tester::#EZ5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[tester::#EZ5] [0m[92mTest passed.[0m
 
 [33m[tester::#IZ3] [0m[94mRunning tests for Stage #IZ3 (iz3)[0m
 [33m[tester::#IZ3] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo banana blueberry
-[33m[your-program] [0mbanana blueberry
+[33m[your-program] [0m$ echo grape pear raspberry
+[33m[your-program] [0mgrape pear raspberry
 [33m[tester::#IZ3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo grape orange
-[33m[your-program] [0mgrape orange
-[33m[tester::#IZ3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo orange strawberry apple
-[33m[your-program] [0morange strawberry apple
+[33m[your-program] [0m$ echo mango orange
+[33m[your-program] [0mmango orange
 [33m[tester::#IZ3] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[tester::#IZ3] [0m[92mTest passed.[0m
 
 [33m[tester::#PN5] [0m[94mRunning tests for Stage #PN5 (pn5)[0m
 [33m[tester::#PN5] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ invalid_mango_command
-[33m[your-program] [0mash: invalid_mango_command: not found
+[33m[your-program] [0m$ invalid_banana_command
+[33m[your-program] [0mash: invalid_banana_command: not found
 [33m[tester::#PN5] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ exit 0
 [33m[tester::#PN5] [0m[92m✓ Program exited successfully[0m
@@ -167,8 +165,8 @@ Debug = true
 
 [33m[tester::#CZ2] [0m[94mRunning tests for Stage #CZ2 (cz2)[0m
 [33m[tester::#CZ2] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ invalid_raspberry_command
-[33m[your-program] [0mash: invalid_raspberry_command: not found
+[33m[your-program] [0m$ invalid_strawberry_command
+[33m[your-program] [0mash: invalid_strawberry_command: not found
 [33m[tester::#CZ2] [0m[92m✓ Received command not found message[0m
 [33m[tester::#CZ2] [0m[92mTest passed.[0m
 
