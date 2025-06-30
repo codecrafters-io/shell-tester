@@ -21,7 +21,7 @@ func testA2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	inputArgsAndCompletion := []inputArgsAndCompletion{
 		{Input: "ech", Completion: "echo", CompletionEndsWithNoSpace: false, Args: []string{"hello"}, Response: "hello"},
-		{Input: "exi", Completion: "exit", CompletionEndsWithNoSpace: false, Args: []string{"0"}, Response: ""},
+		{Input: "typ", Completion: "type", CompletionEndsWithNoSpace: true, Args: []string{" type"}, Response: "type is a shell builtin"},
 	}
 
 	for _, inputArgsAndCompletion := range inputArgsAndCompletion {
