@@ -21,13 +21,14 @@ func testA2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	inputArgsAndCompletion := []inputArgsAndCompletion{
 		{Input: "ech", Completion: "echo", CompletionEndsWithNoSpace: false, Args: []string{"hello"}, Response: "hello"},
-		{Input: "typ", Completion: "type", CompletionEndsWithNoSpace: true, Args: []string{" type"}, Response: "type is a shell builtin"},
+		{Input: "typ", Completion: "type", CompletionEndsWithNoSpace: false, Args: []string{"type"}, Response: "type is a shell builtin"},
 	}
 
-	// Another Busybox oddity
-	if isTestingTesterUsingBusyboxOnAlpine(stageHarness) {
-		inputArgsAndCompletion[1].CompletionEndsWithNoSpace = false
-		inputArgsAndCompletion[1].Args = []string{"type"}
+	// Busybox: completion ends with a space 'type '
+	// Bash   : completion ends with no space 'type'
+	if !isTestingTesterUsingBusyboxOnAlpine(stageHarness) {
+		inputArgsAndCompletion[1].CompletionEndsWithNoSpace = true
+		inputArgsAndCompletion[1].Args = []string{" type"}
 	}
 
 	for _, inputArgsAndCompletion := range inputArgsAndCompletion {
