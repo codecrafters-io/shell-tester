@@ -24,6 +24,12 @@ func testA2(stageHarness *test_case_harness.TestCaseHarness) error {
 		{Input: "typ", Completion: "type", CompletionEndsWithNoSpace: true, Args: []string{" type"}, Response: "type is a shell builtin"},
 	}
 
+	// Another Busybox oddity
+	if isTestingTesterUsingBusyboxOnAlpine(stageHarness) {
+		inputArgsAndCompletion[1].CompletionEndsWithNoSpace = false
+		inputArgsAndCompletion[1].Args = []string{"type"}
+	}
+
 	for _, inputArgsAndCompletion := range inputArgsAndCompletion {
 		err := a2Helper(stageHarness, stageLogger, inputArgsAndCompletion.Input, inputArgsAndCompletion.Completion, inputArgsAndCompletion.CompletionEndsWithNoSpace, inputArgsAndCompletion.Args, inputArgsAndCompletion.Response)
 		if err != nil {
