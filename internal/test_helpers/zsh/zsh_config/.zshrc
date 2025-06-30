@@ -6,6 +6,9 @@ compinit -u
 # zstyle ':completion:*' completer _complete _match _approximate
 zstyle ':completion:*' ignored-patterns 'echotc' 'echoti'
 
+# Set prompt to match bash for consistent testing
+PS1='$ '
+
 typeset -A zle_bracketed_paste # Disable bracketed paste mode
 unsetopt prompt_cr # Remove PROMPT_EOL_MARK + cursor movement
 # setopt autolist
