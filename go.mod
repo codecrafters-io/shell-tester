@@ -6,7 +6,7 @@ toolchain go1.24.2
 
 require (
 	github.com/charmbracelet/x/vt v0.0.0-20250122132629-a969ddeb820d
-	github.com/codecrafters-io/tester-utils v0.4.2
+	github.com/codecrafters-io/tester-utils v0.2.38
 	github.com/creack/pty v1.1.24
 	github.com/fatih/color v1.18.0
 	go.chromium.org/luci v0.0.0-20250611085002-a5741c865576
@@ -30,7 +30,7 @@ require (
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/stretchr/testify v1.10.0 // indirect
 	golang.org/x/exp v0.0.0-20250606033433-dcc06ee1d476 // indirect
-	golang.org/x/sys v0.33.0 // indirect
+	golang.org/x/sys v0.34.0 // indirect
 	golang.org/x/term v0.32.0 // indirect
 	golang.org/x/text v0.24.0 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
