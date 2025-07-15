@@ -92,7 +92,7 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// Assert this one after the command response test case
+	// Assert file is empty after the command response test case
 	// to avoid printing the error message before the command is reflected
 	asserter.AddAssertion(assertions.FileContentAssertion{
 		FilePath:        outputFilePath2,

@@ -52,13 +52,20 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 		FallbackPatterns: nil,
 		SuccessMessage:   "✓ Received error message",
 	}
+	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	// Assert file is empty after the command response test case
+	// to avoid printing the error message before the command is reflected
 	asserter.AddAssertion(assertions.FileContentAssertion{
 		FilePath:        outputFilePath1,
 		ExpectedContent: "",
 	})
-	if err := responseTestCase.Run(asserter, shell, logger); err != nil {
+	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
 	}
+
 	logger.Successf("✓ File: %s is empty", outputFilePath1)
 
 	// Test2:
