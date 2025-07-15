@@ -52,7 +52,7 @@ func AsBool(T func() error) func() bool {
 func LogReadableFileContents(l *logger.Logger, fileContents string, logMsg string, fileName string) {
 	l.Infof("%s", logMsg)
 	l.UpdateLastSecondaryPrefix(fileName)
-	defer l.UpdateLastSecondaryPrefix("")
+	defer l.ResetSecondaryPrefixes()
 	printableFileContents := strings.ReplaceAll(fileContents, "%", "%%")
 	printableFileContents = strings.ReplaceAll(printableFileContents, "\t", "<|TAB|>")
 
