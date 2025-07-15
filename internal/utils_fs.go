@@ -126,9 +126,9 @@ func appendFile(filePath string, content string) error {
 // writeFiles writes a list of files to the given paths with the given contents
 func writeFiles(paths []string, contents []string, logger *logger.Logger) error {
 	for i, content := range contents {
-		logger.UpdateSecondaryPrefix("setup")
+		logger.UpdateLastSecondaryPrefix("setup")
 		logger.Infof("echo -n %q > %q", strings.TrimRight(content, "\n"), paths[i])
-		logger.ResetSecondaryPrefix()
+		logger.ResetSecondaryPrefixes()
 
 		if err := writeFile(paths[i], content); err != nil {
 			logger.Errorf("Error writing file %s: %v", paths[i], err)

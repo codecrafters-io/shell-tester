@@ -52,10 +52,10 @@ func testA6(stageHarness *test_case_harness.TestCaseHarness) error {
 
 // TODO: Think of how to encapsulate this inside SetupExecutable function
 func logAvailableExecutables(logger *logger.Logger, executableNames []string) {
-	logger.UpdateSecondaryPrefix("setup")
+	logger.UpdateLastSecondaryPrefix("setup")
 	logger.Infof("Available executables:")
 	for _, executableName := range executableNames {
 		logger.Infof("- %s", executableName)
 	}
-	logger.ResetSecondaryPrefix()
+	logger.ResetSecondaryPrefixes()
 }

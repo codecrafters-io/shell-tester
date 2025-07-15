@@ -113,9 +113,9 @@ func logPath(shell *shell_executable.ShellExecutable, logger *logger.Logger, pre
 		}
 	}
 
-	logger.UpdateSecondaryPrefix("setup")
+	logger.UpdateLastSecondaryPrefix("setup")
 	logger.Infof("PATH is now: %s", path)
-	logger.ResetSecondaryPrefix()
+	logger.ResetSecondaryPrefixes()
 }
 
 func setUpNonExecutable(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, commandName string) (string, error) {
