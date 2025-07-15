@@ -26,7 +26,7 @@ type CommandDetails struct {
 }
 
 func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell *shell_executable.ShellExecutable, commands []CommandDetails, useShorterDirectory bool) (string, error) {
-	stageHarness.Logger.UpdateSecondaryPrefix("setup")
+	stageHarness.Logger.UpdateLastSecondaryPrefix("setup")
 	createExecutableDirFunc := GetRandomDirectory
 	if useShorterDirectory {
 		createExecutableDirFunc = GetShortRandomDirectory
@@ -95,7 +95,7 @@ func SetUpCustomCommands(stageHarness *test_case_harness.TestCaseHarness, shell 
 			panic(fmt.Sprintf("CodeCrafters Internal Error: unknown command type %s", commandDetail.CommandType))
 		}
 	}
-	stageHarness.Logger.ResetSecondaryPrefix()
+	stageHarness.Logger.ResetSecondaryPrefixes()
 
 	return executableDir, nil
 }
