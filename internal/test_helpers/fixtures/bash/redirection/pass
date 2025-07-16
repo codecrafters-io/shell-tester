@@ -35,7 +35,7 @@ Debug = true
 [33m[tester::#VZ4] [0m[92m✓ Received redirected error message[0m
 [33m[your-program] [0m$ echo 'James file cannot be found' 2> /tmp/foo/baz.md
 [33m[your-program] [0mJames file cannot be found
-[33m[tester::#VZ4] [0m[92m✓ Received redirected error message[0m
+[33m[tester::#VZ4] [0m[92m✓ Received expected response[0m
 [33m[tester::#VZ4] [0m[92m✓ File: /tmp/foo/baz.md is empty[0m
 [33m[your-program] [0m$ cat /tmp/quz/raspberry nonexistent 2> /tmp/foo/foo.md
 [33m[your-program] [0mraspberry
