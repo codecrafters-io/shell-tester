@@ -111,23 +111,19 @@ func main() {
 func countReader(r io.Reader, countLines, countWords, countBytes bool) (counts, error) {
 	var c counts
 
-	// Read all data first for accurate counting
 	data, err := io.ReadAll(r)
 	if err != nil {
 		return counts{}, err
 	}
 
-	// Count lines (newline characters)
 	if countLines {
 		c.lines = int64(strings.Count(string(data), "\n"))
 	}
 
-	// Count words
 	if countWords {
 		c.words = int64(len(strings.Fields(string(data))))
 	}
 
-	// Count bytes
 	if countBytes {
 		c.bytes = int64(len(data))
 	}

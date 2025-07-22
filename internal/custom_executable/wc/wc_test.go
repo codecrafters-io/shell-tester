@@ -440,13 +440,11 @@ func TestWcFileWithoutTrailingNewline(t *testing.T) {
 	}
 	createTestFiles(t, tmpDir, testFiles)
 
-	// Test default wc (should count lines, words, and bytes)
 	output, exitCode, err := runWc(t, "no_trailing_newline.txt")
 	if err != nil {
 		t.Fatalf("Expected no error, got: %v", err)
 	}
 
-	// Expected: 4 lines, 10 words, 52 bytes (no trailing newline)
 	expected := "       4      10      56 no_trailing_newline.txt\n"
 	if output != expected {
 		t.Errorf("Expected output %q, got %q", expected, output)
