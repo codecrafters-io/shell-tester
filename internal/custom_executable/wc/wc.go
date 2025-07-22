@@ -10,16 +10,6 @@ import (
 	"strings"
 )
 
-// byteCounter implements io.Writer to count bytes written to it.
-type byteCounter struct {
-	count int64
-}
-
-func (bc *byteCounter) Write(p []byte) (int, error) {
-	bc.count += int64(len(p))
-	return len(p), nil
-}
-
 // counts holds the counts for lines, words, and bytes.
 type counts struct {
 	lines, words, bytes int64
