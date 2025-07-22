@@ -106,18 +106,6 @@ func writeFile(filePath string, content string) error {
 	return os.WriteFile(filePath, []byte(content), 0644)
 }
 
-func writeFileWithLog(filePath string, content string, logContent string, logger *logger.Logger) error {
-	logger.UpdateLastSecondaryPrefix("setup")
-	logger.Infof("echo -n %q > %q", logContent, filePath)
-	logger.ResetSecondaryPrefixes()
-
-	if err := writeFile(filePath, content); err != nil {
-		logger.Errorf("Error writing file %s: %v", filePath, err)
-		return err
-	}
-	return nil
-}
-
 func appendFile(filePath string, content string) error {
 	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
@@ -135,21 +123,24 @@ func appendFile(filePath string, content string) error {
 	return nil
 }
 
-// writeFiles writes a list of files to the given paths with the given contents
-// A more proper name would be writeFilesWithTrimmedLog
-func writeFiles(paths []string, contents []string, logger *logger.Logger) error {
-	for i, content := range contents {
-		logContent := strings.TrimRight(content, "\n")
-		if err := writeFileWithLog(paths[i], content, logContent, logger); err != nil {
-			return err
-		}
-	}
-	return nil
+type WriteFilesOptions struct {
+	EchoWithoutFlagN bool
 }
 
-func writeFilesWithRawLog(paths []string, contents []string, logger *logger.Logger) error {
+// writeFiles writes a list of files to the given paths with the given contents
+func writeFiles(paths []string, contents []string, logger *logger.Logger, options *WriteFilesOptions) error {
 	for i, content := range contents {
-		if err := writeFileWithLog(paths[i], content, content, logger); err != nil {
+		logger.UpdateLastSecondaryPrefix("setup")
+		trimmedContent := strings.TrimRight(content, "\n")
+		if options != nil && options.EchoWithoutFlagN {
+			logger.Infof("echo %q > %q", trimmedContent, paths[i])
+		} else {
+			logger.Infof("echo -n %q > %q", trimmedContent, paths[i])
+		}
+		logger.ResetSecondaryPrefixes()
+
+		if err := writeFile(paths[i], content); err != nil {
+			logger.Errorf("Error writing file %s: %v", paths[i], err)
 			return err
 		}
 	}

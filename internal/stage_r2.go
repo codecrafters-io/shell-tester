@@ -43,7 +43,7 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 	fileContents := []string{
 		randomWords[0] + "\n",
 	}
-	if err := writeFiles(filePaths, fileContents, logger); err != nil {
+	if err := writeFiles(filePaths, fileContents, logger, nil); err != nil {
 		return err
 	}
 

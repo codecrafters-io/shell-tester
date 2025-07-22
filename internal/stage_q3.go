@@ -39,7 +39,7 @@ func testQ3(stageHarness *test_case_harness.TestCaseHarness) error {
 		strings.Join(random.RandomWords(2), " ") + ".",
 		strings.Join(random.RandomWords(2), " ") + "." + "\n",
 	}
-	if err := writeFiles(filePaths, fileContents, logger); err != nil {
+	if err := writeFiles(filePaths, fileContents, logger, nil); err != nil {
 		return err
 	}
 
