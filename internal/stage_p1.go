@@ -36,7 +36,7 @@ func testP1(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	filePath := path.Join(randomDir, fmt.Sprintf("file-%d", random.RandomInt(1, 100)))
 	randomWords := random.RandomWords(10)
-	fileContent := fmt.Sprintf("%s %s\n%s %s\n%s %s\n%s %s\n%s %s", randomWords[0], randomWords[1], randomWords[2], randomWords[3], randomWords[4], randomWords[5], randomWords[6], randomWords[7], randomWords[8], randomWords[9])
+	fileContent := fmt.Sprintf("%s %s\n%s %s\n%s %s\n%s %s\n%s %s\n", randomWords[0], randomWords[1], randomWords[2], randomWords[3], randomWords[4], randomWords[5], randomWords[6], randomWords[7], randomWords[8], randomWords[9])
 
 	lines := strings.Count(fileContent, "\n")
 	words := strings.Count(strings.ReplaceAll(fileContent, "\n", " "), " ")

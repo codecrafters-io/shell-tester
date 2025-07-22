@@ -129,14 +129,14 @@ type WriteFilesOptions struct {
 
 // writeFiles writes a list of files to the given paths with the given contents
 func writeFiles(paths []string, contents []string, logger *logger.Logger, options *WriteFilesOptions) error {
+	echoFlag := "-n "
+	if options != nil && options.EchoWithoutFlagN {
+		echoFlag = ""
+	}
+
 	for i, content := range contents {
 		logger.UpdateLastSecondaryPrefix("setup")
-		trimmedContent := strings.TrimRight(content, "\n")
-		if options != nil && options.EchoWithoutFlagN {
-			logger.Infof("echo %q > %q", trimmedContent, paths[i])
-		} else {
-			logger.Infof("echo -n %q > %q", trimmedContent, paths[i])
-		}
+		logger.Infof("echo %s%q > %q", echoFlag, strings.TrimRight(content, "\n"), paths[i])
 		logger.ResetSecondaryPrefixes()
 
 		if err := writeFile(paths[i], content); err != nil {
