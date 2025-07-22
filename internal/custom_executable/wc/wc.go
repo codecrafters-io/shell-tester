@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"errors"
 	"flag"
 	"fmt"
@@ -123,17 +122,9 @@ func countReader(r io.Reader, countLines, countWords, countBytes bool) (counts, 
 		c.lines = int64(strings.Count(string(data), "\n"))
 	}
 
-	// Count words and bytes
-	if countWords || countBytes {
-		scanner := bufio.NewScanner(strings.NewReader(string(data)))
-		for scanner.Scan() {
-			if countWords {
-				c.words += int64(len(strings.Fields(scanner.Text())))
-			}
-		}
-		if err := scanner.Err(); err != nil {
-			return counts{}, err
-		}
+	// Count words
+	if countWords {
+		c.words = int64(len(strings.Fields(string(data))))
 	}
 
 	// Count bytes
