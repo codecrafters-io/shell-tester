@@ -106,6 +106,18 @@ func writeFile(filePath string, content string) error {
 	return os.WriteFile(filePath, []byte(content), 0644)
 }
 
+func writeFileWithLog(filePath string, content string, logContent string, logger *logger.Logger) error {
+	logger.UpdateLastSecondaryPrefix("setup")
+	logger.Infof("echo -n %q > %q", logContent, filePath)
+	logger.ResetSecondaryPrefixes()
+
+	if err := writeFile(filePath, content); err != nil {
+		logger.Errorf("Error writing file %s: %v", filePath, err)
+		return err
+	}
+	return nil
+}
+
 func appendFile(filePath string, content string) error {
 	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
@@ -124,14 +136,20 @@ func appendFile(filePath string, content string) error {
 }
 
 // writeFiles writes a list of files to the given paths with the given contents
+// A more proper name would be writeFilesWithTrimmedLog
 func writeFiles(paths []string, contents []string, logger *logger.Logger) error {
 	for i, content := range contents {
-		logger.UpdateLastSecondaryPrefix("setup")
-		logger.Infof("echo -n %q > %q", strings.TrimRight(content, "\n"), paths[i])
-		logger.ResetSecondaryPrefixes()
+		logContent := strings.TrimRight(content, "\n")
+		if err := writeFileWithLog(paths[i], content, logContent, logger); err != nil {
+			return err
+		}
+	}
+	return nil
+}
 
-		if err := writeFile(paths[i], content); err != nil {
-			logger.Errorf("Error writing file %s: %v", paths[i], err)
+func writeFilesWithRawLog(paths []string, contents []string, logger *logger.Logger) error {
+	for i, content := range contents {
+		if err := writeFileWithLog(paths[i], content, content, logger); err != nil {
 			return err
 		}
 	}
