@@ -123,20 +123,17 @@ func appendFile(filePath string, content string) error {
 	return nil
 }
 
-type WriteFilesOptions struct {
-	EchoWithoutFlagN bool
-}
-
 // writeFiles writes a list of files to the given paths with the given contents
-func writeFiles(paths []string, contents []string, logger *logger.Logger, options *WriteFilesOptions) error {
-	echoFlag := "-n "
-	if options != nil && options.EchoWithoutFlagN {
-		echoFlag = ""
-	}
-
+func writeFiles(paths []string, contents []string, logger *logger.Logger) error {
 	for i, content := range contents {
 		logger.UpdateLastSecondaryPrefix("setup")
-		logger.Infof("echo %s%q > %q", echoFlag, strings.TrimRight(content, "\n"), paths[i])
+
+		if strings.HasSuffix(content, "\n") {
+			logger.Infof("echo %q > %q", content[:len(content)-1], paths[i])
+		} else {
+			logger.Infof("echo -n %q > %q", content, paths[i])
+		}
+
 		logger.ResetSecondaryPrefixes()
 
 		if err := writeFile(paths[i], content); err != nil {

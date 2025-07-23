@@ -48,7 +48,7 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 		path.Join(executableDir, "f2"),
 		path.Join(executableDir, "f3"),
 		path.Join(executableDir, "f4"),
-	}, []string{fileContents[0] + "\n", fileContents[1] + "\n", fileContents[2] + "\n", fileContents[3] + "\n"}, logger, nil); err != nil {
+	}, []string{fileContents[0] + "\n", fileContents[1] + "\n", fileContents[2] + "\n", fileContents[3] + "\n"}, logger); err != nil {
 		return err
 	}
 

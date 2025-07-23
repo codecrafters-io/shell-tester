@@ -49,7 +49,7 @@ func testP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	input := fmt.Sprintf(`cat %s | wc`, filePath)
 	expectedOutput := fmt.Sprintf("%8d%8d%8d", lines, words, bytes)
 
-	if err := writeFiles([]string{filePath}, []string{fileContent}, logger, &WriteFilesOptions{EchoWithoutFlagN: true}); err != nil {
+	if err := writeFiles([]string{filePath}, []string{fileContent}, logger); err != nil {
 		return err
 	}
 
@@ -71,7 +71,7 @@ func testP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	filePath = path.Join(randomDir, fmt.Sprintf("file-%d", random.RandomInt(1, 100)))
 	randomWords = random.RandomWords(6)
 	fileContent = fmt.Sprintf("1. %s %s\n2. %s %s\n3. %s %s\n", randomWords[0], randomWords[1], randomWords[2], randomWords[3], randomWords[4], randomWords[5])
-	if err := writeFiles([]string{filePath}, []string{fileContent}, logger, &WriteFilesOptions{EchoWithoutFlagN: true}); err != nil {
+	if err := writeFiles([]string{filePath}, []string{fileContent}, logger); err != nil {
 		return err
 	}
 
