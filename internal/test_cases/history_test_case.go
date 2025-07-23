@@ -15,12 +15,16 @@ import (
 // Verifies that the command is printed to the screen
 // Verifies that the history output shows the command in the expected format
 type HistoryTestCase struct {
-	// PreviousCommands is a list of previous commands expected to be in the history list
-	PreviousCommands []string
+	// HistoryOffset specifies the starting line number offset for the PreviousCommands
+	// This accounts for commands that were executed before the PreviousCommands in the same session
+	HistoryOffset int
 
 	// LastNCommands specifies how many of the most recent commands to check in history
 	// If not set, all commands will be checked
 	LastNCommands int
+
+	// PreviousCommands is a list of previous commands expected to be in the history list
+	PreviousCommands []string
 
 	// SuccessMessage is the message to log in case of success
 	SuccessMessage string
@@ -48,19 +52,21 @@ func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter
 
 	// Check only the specified number of most recent commands
 	for i, command := range t.PreviousCommands[startIdx:] {
+		expectedLineNumber := t.HistoryOffset + startIdx + i + 1
 		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput: fmt.Sprintf("    %d  %s", startIdx+i+1, command),
+			ExpectedOutput: fmt.Sprintf("    %d  %s", expectedLineNumber, command),
 			FallbackPatterns: []*regexp.Regexp{
-				regexp.MustCompile(fmt.Sprintf(`^\s*\d+\s+%s$`, regexp.QuoteMeta(command))),
+				regexp.MustCompile(fmt.Sprintf(`^\s*%d\s+%s$`, expectedLineNumber, regexp.QuoteMeta(command))),
 			},
 		})
 	}
 
 	// Add assertion for the history command itself
+	expectedHistoryLineNumber := t.HistoryOffset + len(t.PreviousCommands) + 1
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: fmt.Sprintf("    %d  %s", len(t.PreviousCommands)+1, historyCommand),
+		ExpectedOutput: fmt.Sprintf("    %d  %s", expectedHistoryLineNumber, historyCommand),
 		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(fmt.Sprintf(`^\s*\d+\s+%s$`, regexp.QuoteMeta(historyCommand))),
+			regexp.MustCompile(fmt.Sprintf(`^\s*%d\s+%s$`, expectedHistoryLineNumber, regexp.QuoteMeta(historyCommand))),
 		},
 	})
 
