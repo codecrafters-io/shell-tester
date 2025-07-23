@@ -57,6 +57,7 @@ func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter
 			ExpectedOutput: fmt.Sprintf("    %d  %s", expectedLineNumber, command),
 			FallbackPatterns: []*regexp.Regexp{
 				regexp.MustCompile(fmt.Sprintf(`^\s*%d\s+%s$`, expectedLineNumber, regexp.QuoteMeta(command))),
+				regexp.MustCompile(fmt.Sprintf(`^\s*%d\s+%s$`, expectedLineNumber-1, regexp.QuoteMeta(command))), // 0-based for ash
 			},
 		})
 	}
@@ -67,6 +68,7 @@ func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter
 		ExpectedOutput: fmt.Sprintf("    %d  %s", expectedHistoryLineNumber, historyCommand),
 		FallbackPatterns: []*regexp.Regexp{
 			regexp.MustCompile(fmt.Sprintf(`^\s*%d\s+%s$`, expectedHistoryLineNumber, regexp.QuoteMeta(historyCommand))),
+			regexp.MustCompile(fmt.Sprintf(`^\s*%d\s+%s$`, expectedHistoryLineNumber-1, regexp.QuoteMeta(historyCommand))), // 0-based for ash
 		},
 	})
 
