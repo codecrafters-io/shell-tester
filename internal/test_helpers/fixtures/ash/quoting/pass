@@ -5,7 +5,7 @@ Debug = true
 [33m[tester::#NI6] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#NI6] [setup] [0m[94mecho -n "pineapple grape." > "/tmp/foo/f   24"[0m
 [33m[tester::#NI6] [setup] [0m[94mecho -n "pineapple orange." > "/tmp/foo/f   61"[0m
-[33m[tester::#NI6] [setup] [0m[94mecho -n "blueberry strawberry." > "/tmp/foo/f   80"[0m
+[33m[tester::#NI6] [setup] [0m[94mecho "blueberry strawberry." > "/tmp/foo/f   80"[0m
 [33m[your-program] [0m$ echo 'script example'
 [33m[your-program] [0mscript example
 [33m[tester::#NI6] [0m[92m✓ Received expected response[0m
@@ -26,7 +26,7 @@ Debug = true
 [33m[tester::#TG6] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#TG6] [setup] [0m[94mecho -n "orange blueberry." > "/tmp/bar/f 58"[0m
 [33m[tester::#TG6] [setup] [0m[94mecho -n "grape pineapple." > "/tmp/bar/f   73"[0m
-[33m[tester::#TG6] [setup] [0m[94mecho -n "raspberry mango." > "/tmp/bar/f's38"[0m
+[33m[tester::#TG6] [setup] [0m[94mecho "raspberry mango." > "/tmp/bar/f's38"[0m
 [33m[your-program] [0m$ echo "shell world"
 [33m[your-program] [0mshell world
 [33m[tester::#TG6] [0m[92m✓ Received expected response[0m
@@ -46,7 +46,7 @@ Debug = true
 [33m[tester::#YT5] [setup] [0m[94mexport PATH=/tmp/banana/blueberry/grape:$PATH[0m
 [33m[tester::#YT5] [setup] [0m[94mecho -n "mango pear." > "/tmp/baz/f\\n31"[0m
 [33m[tester::#YT5] [setup] [0m[94mecho -n "apple pear." > "/tmp/baz/f\\64"[0m
-[33m[tester::#YT5] [setup] [0m[94mecho -n "pineapple apple." > "/tmp/baz/f'\\'72"[0m
+[33m[tester::#YT5] [setup] [0m[94mecho "pineapple apple." > "/tmp/baz/f'\\'72"[0m
 [33m[tester::#YT5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo example\ \ \ \ \ \ shell
 [33m[your-program] [0mexample      shell
@@ -68,7 +68,7 @@ Debug = true
 [33m[tester::#LE5] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#LE5] [setup] [0m[94mecho -n "strawberry apple." > "/tmp/qux/'f 87'"[0m
 [33m[tester::#LE5] [setup] [0m[94mecho -n "raspberry orange." > "/tmp/qux/'f  \\52'"[0m
-[33m[tester::#LE5] [setup] [0m[94mecho -n "banana pineapple." > "/tmp/qux/'f \\6\\'"[0m
+[33m[tester::#LE5] [setup] [0m[94mecho "banana pineapple." > "/tmp/qux/'f \\6\\'"[0m
 [33m[your-program] [0m$ echo 'world\\nscript'
 [33m[your-program] [0mworld\\nscript
 [33m[tester::#LE5] [0m[92m✓ Received expected response[0m
@@ -88,7 +88,7 @@ Debug = true
 [33m[tester::#GU3] [setup] [0m[94mexport PATH=/tmp/pineapple/strawberry/strawberry:$PATH[0m
 [33m[tester::#GU3] [setup] [0m[94mecho -n "grape strawberry." > "/tmp/quz/\"f 30\""[0m
 [33m[tester::#GU3] [setup] [0m[94mecho -n "mango strawberry." > "/tmp/quz/\"f\\57\""[0m
-[33m[tester::#GU3] [setup] [0m[94mecho -n "strawberry blueberry." > "/tmp/quz/f97"[0m
+[33m[tester::#GU3] [setup] [0m[94mecho "strawberry blueberry." > "/tmp/quz/f97"[0m
 [33m[tester::#GU3] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo "world'example'\\'hello"
 [33m[your-program] [0mworld'example'\'hello
@@ -113,10 +113,10 @@ Debug = true
 [33m[tester::#QJ0] [setup] [0m[94m- "exe with \'single quotes\'"[0m
 [33m[tester::#QJ0] [setup] [0m[94m- 'exe with \n newline'[0m
 [33m[tester::#QJ0] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#QJ0] [setup] [0m[94mecho -n "banana pineapple." > "/tmp/foo/f1"[0m
-[33m[tester::#QJ0] [setup] [0m[94mecho -n "raspberry strawberry." > "/tmp/foo/f2"[0m
-[33m[tester::#QJ0] [setup] [0m[94mecho -n "pineapple pear." > "/tmp/foo/f3"[0m
-[33m[tester::#QJ0] [setup] [0m[94mecho -n "pineapple orange." > "/tmp/foo/f4"[0m
+[33m[tester::#QJ0] [setup] [0m[94mecho "banana pineapple." > "/tmp/foo/f1"[0m
+[33m[tester::#QJ0] [setup] [0m[94mecho "raspberry strawberry." > "/tmp/foo/f2"[0m
+[33m[tester::#QJ0] [setup] [0m[94mecho "pineapple pear." > "/tmp/foo/f3"[0m
+[33m[tester::#QJ0] [setup] [0m[94mecho "pineapple orange." > "/tmp/foo/f4"[0m
 [33m[your-program] [0m$ 'exe  with  space' /tmp/foo/f1
 [33m[your-program] [0mbanana pineapple.
 [33m[tester::#QJ0] [0m[92m✓ Received expected response[0m
