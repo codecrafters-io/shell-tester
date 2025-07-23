@@ -33,10 +33,10 @@ Debug = true
 
 [33m[tester::#XK3] [0m[94mRunning tests for Stage #XK3 (xk3)[0m
 [33m[tester::#XK3] [setup] [0m[94mexport PATH=/tmp/orange/pineapple/orange:$PATH[0m
-[33m[tester::#XK3] [setup] [0m[94mecho -n "pineapple\nraspberry\nblueberry\ngrape\norange" > "/tmp/quz/file-26"[0m
+[33m[tester::#XK3] [setup] [0m[94mecho "pineapple\nraspberry\nblueberry\ngrape\norange" > "/tmp/quz/file-26"[0m
 [33m[tester::#XK3] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ cat /tmp/quz/file-26 | head -n 5 | wc
-[33m[your-program] [0m       5       5      42
+[33m[your-program] [0m       5       5      43
 [33m[tester::#XK3] [0m[92m✓ Received expected output[0m
 [33m[tester::#XK3] [setup] [0m[94mecho -n "raspberry" > "/tmp/baz/f-35"[0m
 [33m[tester::#XK3] [setup] [0m[94mecho -n "banana" > "/tmp/baz/f-51"[0m

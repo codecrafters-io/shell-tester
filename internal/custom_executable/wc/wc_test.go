@@ -418,6 +418,43 @@ func TestWcWithPipedInput(t *testing.T) {
 	}
 }
 
+func TestWcFileWithoutTrailingNewline(t *testing.T) {
+	tmpDir, err := os.MkdirTemp("", "wc-test-*")
+	if err != nil {
+		t.Fatal(err)
+	}
+	currentDir, err := os.Getwd()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatal(err)
+	}
+	defer os.Chdir(currentDir)
+	defer cleanupDirectories([]string{tmpDir})
+
+	// Content with 5 lines but only 4 newlines (no trailing newline)
+	content := "First line\nSecond line\nThird line\nFourth line\nFifth line"
+	testFiles := []testFile{
+		{name: "no_trailing_newline.txt", content: []byte(content), mode: 0644},
+	}
+	createTestFiles(t, tmpDir, testFiles)
+
+	output, exitCode, err := runWc(t, "no_trailing_newline.txt")
+	if err != nil {
+		t.Fatalf("Expected no error, got: %v", err)
+	}
+
+	expected := "       4      10      56 no_trailing_newline.txt\n"
+	if output != expected {
+		t.Errorf("Expected output %q, got %q", expected, output)
+	}
+
+	if exitCode != 0 {
+		t.Errorf("Expected exit code 0, got %d", exitCode)
+	}
+}
+
 func cleanupDirectories(dirs []string) {
 	for _, dir := range dirs {
 		if err := os.RemoveAll(dir); err != nil {
