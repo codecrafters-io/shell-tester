@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"errors"
 	"flag"
 	"fmt"
@@ -9,16 +8,6 @@ import (
 	"os"
 	"strings"
 )
-
-// byteCounter implements io.Writer to count bytes written to it.
-type byteCounter struct {
-	count int64
-}
-
-func (bc *byteCounter) Write(p []byte) (int, error) {
-	bc.count += int64(len(p))
-	return len(p), nil
-}
 
 // counts holds the counts for lines, words, and bytes.
 type counts struct {
@@ -121,38 +110,22 @@ func main() {
 // countReader now accepts flags to potentially optimize (e.g., skip word count if !wFlag)
 func countReader(r io.Reader, countLines, countWords, countBytes bool) (counts, error) {
 	var c counts
-	var readerForScanner = r // Start with the original reader
 
-	// Setup byte counter only if needed
-	var counter *byteCounter
+	data, err := io.ReadAll(r)
+	if err != nil {
+		return counts{}, err
+	}
+
+	if countLines {
+		c.lines = int64(strings.Count(string(data), "\n"))
+	}
+
+	if countWords {
+		c.words = int64(len(strings.Fields(string(data))))
+	}
+
 	if countBytes {
-		counter = &byteCounter{}
-		// If we need bytes, tee the original reader
-		readerForScanner = io.TeeReader(r, counter)
-	}
-
-	// Scanner reads from the (potentially tee'd) reader
-	scanner := bufio.NewScanner(readerForScanner)
-
-	for scanner.Scan() {
-		// Always count lines if requested or if words are needed (scanner works line by line)
-		if countLines || countWords {
-			c.lines++
-		}
-		// Only count words if requested
-		if countWords {
-			c.words += int64(len(strings.Fields(scanner.Text())))
-		}
-		// Byte counting happens via the TeeReader automatically if countBytes is true
-	}
-
-	if err := scanner.Err(); err != nil {
-		return counts{}, err // Return zero counts and the error
-	}
-
-	// Assign byte count if it was calculated
-	if countBytes && counter != nil {
-		c.bytes = counter.count
+		c.bytes = int64(len(data))
 	}
 
 	return c, nil

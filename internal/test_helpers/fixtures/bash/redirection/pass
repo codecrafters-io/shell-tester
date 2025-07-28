@@ -3,9 +3,9 @@ Debug = true
 [33m[tester::#JV1] [0m[94mRunning tests for Stage #JV1 (jv1)[0m
 [33m[tester::#JV1] [setup] [0m[94mexport PATH=/tmp/pear/orange/raspberry:$PATH[0m
 [33m[tester::#JV1] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#JV1] [setup] [0m[94mecho -n "banana" > "/tmp/bar/banana"[0m
-[33m[tester::#JV1] [setup] [0m[94mecho -n "blueberry" > "/tmp/bar/blueberry"[0m
-[33m[tester::#JV1] [setup] [0m[94mecho -n "grape" > "/tmp/bar/grape"[0m
+[33m[tester::#JV1] [setup] [0m[94mecho "banana" > "/tmp/bar/banana"[0m
+[33m[tester::#JV1] [setup] [0m[94mecho "blueberry" > "/tmp/bar/blueberry"[0m
+[33m[tester::#JV1] [setup] [0m[94mecho "grape" > "/tmp/bar/grape"[0m
 [33m[your-program] [0m$ ls -1 /tmp/bar > /tmp/foo/foo.md
 [33m[your-program] [0m$ cat /tmp/foo/foo.md
 [33m[your-program] [0mbanana
@@ -28,14 +28,14 @@ Debug = true
 [33m[tester::#VZ4] [0m[94mRunning tests for Stage #VZ4 (vz4)[0m
 [33m[tester::#VZ4] [setup] [0m[94mexport PATH=/tmp/apple/apple/mango:$PATH[0m
 [33m[tester::#VZ4] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#VZ4] [setup] [0m[94mecho -n "raspberry" > "/tmp/quz/raspberry"[0m
+[33m[tester::#VZ4] [setup] [0m[94mecho "raspberry" > "/tmp/quz/raspberry"[0m
 [33m[your-program] [0m$ ls -1 nonexistent 2> /tmp/foo/bar.md
 [33m[your-program] [0m$ cat /tmp/foo/bar.md
 [33m[your-program] [0mls: nonexistent: No such file or directory
 [33m[tester::#VZ4] [0m[92m✓ Received redirected error message[0m
 [33m[your-program] [0m$ echo 'James file cannot be found' 2> /tmp/foo/baz.md
 [33m[your-program] [0mJames file cannot be found
-[33m[tester::#VZ4] [0m[92m✓ Received redirected error message[0m
+[33m[tester::#VZ4] [0m[92m✓ Received expected response[0m
 [33m[tester::#VZ4] [0m[92m✓ File: /tmp/foo/baz.md is empty[0m
 [33m[your-program] [0m$ cat /tmp/quz/raspberry nonexistent 2> /tmp/foo/foo.md
 [33m[your-program] [0mraspberry
@@ -49,9 +49,9 @@ Debug = true
 [33m[tester::#EL9] [0m[94mRunning tests for Stage #EL9 (el9)[0m
 [33m[tester::#EL9] [setup] [0m[94mexport PATH=/tmp/banana/blueberry/apple:$PATH[0m
 [33m[tester::#EL9] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#EL9] [setup] [0m[94mecho -n "blueberry" > "/tmp/qux/blueberry"[0m
-[33m[tester::#EL9] [setup] [0m[94mecho -n "mango" > "/tmp/qux/mango"[0m
-[33m[tester::#EL9] [setup] [0m[94mecho -n "pear" > "/tmp/qux/pear"[0m
+[33m[tester::#EL9] [setup] [0m[94mecho "blueberry" > "/tmp/qux/blueberry"[0m
+[33m[tester::#EL9] [setup] [0m[94mecho "mango" > "/tmp/qux/mango"[0m
+[33m[tester::#EL9] [setup] [0m[94mecho "pear" > "/tmp/qux/pear"[0m
 [33m[your-program] [0m$ ls -1 /tmp/qux >> /tmp/baz/bar.md
 [33m[your-program] [0m$ cat /tmp/baz/bar.md
 [33m[your-program] [0mblueberry

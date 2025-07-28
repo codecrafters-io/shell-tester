@@ -43,8 +43,9 @@ func testH3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	testCase1 := test_cases.HistoryTestCase{
-		PreviousCommands: previousCommands,
+		HistoryOffset:    0, // These are the first commands in history
 		LastNCommands:    2,
+		PreviousCommands: previousCommands,
 		SuccessMessage:   "✓ Received expected response",
 	}
 	if err := testCase1.Run(asserter, shell, logger); err != nil {
@@ -79,8 +80,9 @@ func testH3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	testCase2 := test_cases.HistoryTestCase{
-		PreviousCommands: previousCommands,
+		HistoryOffset:    4, // 3 initial commands + 1 history command
 		LastNCommands:    random.RandomInt(3, 5),
+		PreviousCommands: previousCommands,
 		SuccessMessage:   "✓ Received expected response",
 	}
 	if err := testCase2.Run(asserter, shell, logger); err != nil {
