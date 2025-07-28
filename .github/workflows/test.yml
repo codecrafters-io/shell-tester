@@ -75,7 +75,7 @@ jobs:
 
       - name: Run tests against all shells on alpine
         run: |
-          sudo make test_zsh
+          script -q -c "make test_zsh" /dev/null
         shell: bash
 
   test-alpine:
