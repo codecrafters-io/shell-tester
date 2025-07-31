@@ -8,6 +8,7 @@ zstyle ':completion:*' ignored-patterns 'echotc' 'echoti'
 
 # Set prompt to match bash for consistent testing
 PS1='$ '
+TERM=xterm
 
 typeset -A zle_bracketed_paste # Disable bracketed paste mode
 unsetopt prompt_cr # Remove PROMPT_EOL_MARK + cursor movement
