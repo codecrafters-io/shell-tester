@@ -73,7 +73,7 @@ jobs:
           sudo apt remove bpfcc-tools
           zsh --version
 
-      - name: Run tests against all shells on alpine
+      - name: Run zsh tests with proper terminal setup
         run: |
           sudo make test_zsh
         shell: bash
