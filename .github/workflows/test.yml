@@ -73,9 +73,12 @@ jobs:
           sudo apt remove bpfcc-tools
           zsh --version
 
-      - name: Run tests against all shells on alpine
+      - name: Run zsh tests with proper terminal setup
         run: |
-          make test_zsh
+          echo 'export PS1="$ "' > ~/.zshrc
+          echo 'export TERM=xterm' >> ~/.zshrc
+          echo 'stty -echo' >> ~/.zshrc
+          sudo make test_zsh
         shell: bash
 
   test-alpine:
