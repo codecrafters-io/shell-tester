@@ -59,9 +59,6 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 		fmt.Sprintf(`%s %s's %s%s`, L[3], L[4], L[1], L[2]),
 		fileContents[0] + fileContents[1] + strings.TrimRight(fileContents[2], "\n"),
 	}
-	if err := writeFiles(filePaths, fileContents, logger); err != nil {
-		return err
-	}
 
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
@@ -75,6 +72,10 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 		if err := testCase.Run(asserter, shell, logger); err != nil {
 			return err
 		}
+	}
+
+	if err := writeFiles(filePaths, fileContents, logger); err != nil {
+		return err
 	}
 
 	testCase := test_cases.CommandResponseTestCase{
