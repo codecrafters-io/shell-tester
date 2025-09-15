@@ -24,9 +24,6 @@ Debug = true
 [33m[tester::#TG6] [0m[94mRunning tests for Stage #TG6 (tg6)[0m
 [33m[tester::#TG6] [setup] [0m[94mexport PATH=/tmp/raspberry/banana/blueberry:$PATH[0m
 [33m[tester::#TG6] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#TG6] [setup] [0m[94mecho -n "orange blueberry." > "/tmp/bar/f 58"[0m
-[33m[tester::#TG6] [setup] [0m[94mecho -n "grape pineapple." > "/tmp/bar/f   73"[0m
-[33m[tester::#TG6] [setup] [0m[94mecho "raspberry mango." > "/tmp/bar/f's38"[0m
 [33m[your-program] [0m$ echo "shell world"
 [33m[your-program] [0mshell world
 [33m[tester::#TG6] [0m[92m✓ Received expected response[0m
@@ -36,6 +33,9 @@ Debug = true
 [33m[your-program] [0m$ echo "script"  "hello's"  world""example
 [33m[your-program] [0mscript hello's worldexample
 [33m[tester::#TG6] [0m[92m✓ Received expected response[0m
+[33m[tester::#TG6] [setup] [0m[94mecho -n "orange blueberry." > "/tmp/bar/f 58"[0m
+[33m[tester::#TG6] [setup] [0m[94mecho -n "grape pineapple." > "/tmp/bar/f   73"[0m
+[33m[tester::#TG6] [setup] [0m[94mecho "raspberry mango." > "/tmp/bar/f's38"[0m
 [33m[your-program] [0m$ cat "/tmp/bar/f 58" "/tmp/bar/f   73" "/tmp/bar/f's38"
 [33m[your-program] [0morange blueberry.grape pineapple.raspberry mango.
 [33m[tester::#TG6] [0m[92m✓ Received expected response[0m
