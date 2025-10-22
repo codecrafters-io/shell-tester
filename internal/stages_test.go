@@ -48,6 +48,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/run_program_newline_in_args",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"stage_1_only_prompt_pass": {
+			StageSlugs:          []string{"oo8"},
+			CodePath:            "./test_helpers/scenarios/stage_1_only_prompt",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/stage_1_only_prompt",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"base_pass_bash": {
 			UntilStageSlug:      "ip1",
 			CodePath:            "./test_helpers/bash",
