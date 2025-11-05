@@ -3,11 +3,11 @@ Debug = true
 [33m[tester::#BR6] [0m[94mRunning tests for Stage #BR6 (br6)[0m
 [33m[tester::#BR6] [setup] [0m[94mexport PATH=/tmp/pear/orange/raspberry:$PATH[0m
 [33m[tester::#BR6] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#BR6] [setup] [0m[94mecho -e "strawberry apple\npear banana\nraspberry mango\nblueberry pineapple\norange grape\n" > "/tmp/foo/file-24"[0m
+[33m[tester::#BR6] [setup] [0m[94mecho -e "strawberry apple\npear banana\nraspberry mango\nblueberry pineapple\norange grape" > "/tmp/foo/file-24"[0m
 [33m[your-program] [0m$ cat /tmp/foo/file-24 | wc
 [33m[your-program] [0m       5      10      78
 [33m[tester::#BR6] [0m[92m✓ Received expected response[0m
-[33m[tester::#BR6] [setup] [0m[94mecho -e "1. orange blueberry\n2. strawberry pineapple\n3. banana mango\n" > "/tmp/baz/file-3"[0m
+[33m[tester::#BR6] [setup] [0m[94mecho -e "1. orange blueberry\n2. strawberry pineapple\n3. banana mango" > "/tmp/baz/file-3"[0m
 [33m[your-program] [0m$ tail -f /tmp/baz/file-3 | head -n 5
 [33m[your-program] [0m1. orange blueberry
 [33m[your-program] [0m2. strawberry pineapple
@@ -33,7 +33,7 @@ Debug = true
 
 [33m[tester::#XK3] [0m[94mRunning tests for Stage #XK3 (xk3)[0m
 [33m[tester::#XK3] [setup] [0m[94mexport PATH=/tmp/orange/pineapple/orange:$PATH[0m
-[33m[tester::#XK3] [setup] [0m[94mecho -e "pineapple\nraspberry\nblueberry\ngrape\norange\n" > "/tmp/quz/file-26"[0m
+[33m[tester::#XK3] [setup] [0m[94mecho -e "pineapple\nraspberry\nblueberry\ngrape\norange" > "/tmp/quz/file-26"[0m
 [33m[tester::#XK3] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ cat /tmp/quz/file-26 | head -n 5 | wc
 [33m[your-program] [0m       5       5      43
