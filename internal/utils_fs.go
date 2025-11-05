@@ -135,7 +135,11 @@ func writeFiles(paths []string, contents []string, logger *logger.Logger) error 
 				logger.Infof("echo -e %q > %q", content[:len(content)-1], paths[i])
 			}
 		} else {
-			logger.Infof("echo -n %q > %q", content, paths[i])
+			if strings.Contains(content, "\n") {
+				logger.Infof("echo -ne %q > %q", content, paths[i])
+			} else {
+				logger.Infof("echo -n %q > %q", content, paths[i])
+			}
 		}
 
 		logger.ResetSecondaryPrefixes()
