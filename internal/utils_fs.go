@@ -129,10 +129,10 @@ func writeFiles(paths []string, contents []string, logger *logger.Logger) error 
 		logger.UpdateLastSecondaryPrefix("setup")
 
 		if strings.HasSuffix(content, "\n") {
-			if strings.Count(content, "\n") > 1 {
-				logger.Infof("echo -e %q > %q", content, paths[i])
-			} else {
+			if strings.Count(content, "\n") == 1 {
 				logger.Infof("echo %q > %q", content[:len(content)-1], paths[i])
+			} else {
+				logger.Infof("echo -e %q > %q", content[:len(content)-1], paths[i])
 			}
 		} else {
 			logger.Infof("echo -n %q > %q", content, paths[i])
