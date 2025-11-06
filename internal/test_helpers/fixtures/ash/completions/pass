@@ -57,49 +57,49 @@ Debug = true
 [33m[tester::#QM8] [0m[92mTest passed.[0m
 
 [33m[tester::#WH6] [0m[94mRunning tests for Stage #WH6 (wh6)[0m
-[33m[tester::#WH6] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
-[33m[tester::#WH6] [setup] [0m[94mexport PATH=/tmp/quz:$PATH[0m
-[33m[tester::#WH6] [setup] [0m[94mexport PATH=/tmp/baz:$PATH[0m
+[33m[tester::#WH6] [setup] [0m[94mexport PATH=/tmp/vix:$PATH[0m
+[33m[tester::#WH6] [setup] [0m[94mexport PATH=/tmp/doe:$PATH[0m
+[33m[tester::#WH6] [setup] [0m[94mexport PATH=/tmp/qux:$PATH[0m
 [33m[tester::#WH6] [setup] [0m[94mAvailable executables:[0m
 [33m[tester::#WH6] [setup] [0m[94m- xyz_foo[0m
-[33m[tester::#WH6] [setup] [0m[94m- xyz_baz[0m
-[33m[tester::#WH6] [setup] [0m[94m- xyz_qux[0m
+[33m[tester::#WH6] [setup] [0m[94m- xyz_ace[0m
+[33m[tester::#WH6] [setup] [0m[94m- xyz_vix[0m
 [33m[tester::#WH6] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#WH6] [0m[92m✓ Received prompt ($ )[0m
 [33m[tester::#WH6] [0m[94mTyped "xyz_"[0m
 [33m[your-program] [0m$ xyz_
 [33m[tester::#WH6] [0m[92m✓ Prompt line matches "$ xyz_"[0m
 [33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting bell to ring)[0m
-[33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_baz  xyz_foo  xyz_qux")[0m
+[33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_ace  xyz_foo  xyz_vix")[0m
 [33m[tester::#WH6] [0m[92m✓ Received bell[0m
-[33m[your-program] [0mxyz_baz  xyz_foo  xyz_qux
-[33m[tester::#WH6] [0m[92m✓ Prompt line matches "xyz_baz  xyz_foo  xyz_qux"[0m
+[33m[your-program] [0mxyz_ace  xyz_foo  xyz_vix
+[33m[tester::#WH6] [0m[92m✓ Prompt line matches "xyz_ace  xyz_foo  xyz_vix"[0m
 [33m[tester::#WH6] [0m[92mReceived completion for "xyz_"[0m
 [33m[your-program] [0m$ xyz_
 [33m[tester::#WH6] [0m[92mTest passed.[0m
 
 [33m[tester::#WT6] [0m[94mRunning tests for Stage #WT6 (wt6)[0m
 [33m[tester::#WT6] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
-[33m[tester::#WT6] [setup] [0m[94mexport PATH=/tmp/baz:$PATH[0m
+[33m[tester::#WT6] [setup] [0m[94mexport PATH=/tmp/ace:$PATH[0m
 [33m[tester::#WT6] [setup] [0m[94mexport PATH=/tmp/foo:$PATH[0m
 [33m[tester::#WT6] [setup] [0m[94mAvailable executables:[0m
-[33m[tester::#WT6] [setup] [0m[94m- xyz_quz[0m
-[33m[tester::#WT6] [setup] [0m[94m- xyz_quz_bar[0m
-[33m[tester::#WT6] [setup] [0m[94m- xyz_quz_bar_qux[0m
+[33m[tester::#WT6] [setup] [0m[94m- xyz_qux[0m
+[33m[tester::#WT6] [setup] [0m[94m- xyz_qux_vix[0m
+[33m[tester::#WT6] [setup] [0m[94m- xyz_qux_vix_doe[0m
 [33m[tester::#WT6] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#WT6] [0m[92m✓ Received prompt ($ )[0m
 [33m[tester::#WT6] [0m[94mTyped "xyz_"[0m
 [33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_"[0m
-[33m[tester::#WT6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_quz")[0m
-[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_quz"[0m
+[33m[tester::#WT6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_qux")[0m
+[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_qux"[0m
 [33m[tester::#WT6] [0m[94mTyped "_"[0m
-[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_quz_"[0m
-[33m[tester::#WT6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_quz_bar")[0m
-[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_quz_bar"[0m
+[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_qux_"[0m
+[33m[tester::#WT6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_qux_vix")[0m
+[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_qux_vix"[0m
 [33m[tester::#WT6] [0m[94mTyped "_"[0m
-[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_quz_bar_"[0m
-[33m[tester::#WT6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_quz_bar_qux")[0m
-[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_quz_bar_qux "[0m
-[33m[tester::#WT6] [0m[92mReceived all partial completions for "xyz_quz_bar_qux"[0m
-[33m[your-program] [0m$ xyz_quz_bar_qux 
+[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_qux_vix_"[0m
+[33m[tester::#WT6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_qux_vix_doe")[0m
+[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_qux_vix_doe "[0m
+[33m[tester::#WT6] [0m[92mReceived all partial completions for "xyz_qux_vix_doe"[0m
+[33m[your-program] [0m$ xyz_qux_vix_doe 
 [33m[tester::#WT6] [0m[92mTest passed.[0m

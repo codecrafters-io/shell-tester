@@ -3,42 +3,42 @@ Debug = true
 [33m[tester::#JV1] [0m[94mRunning tests for Stage #JV1 (jv1)[0m
 [33m[tester::#JV1] [setup] [0m[94mexport PATH=/tmp/pear/orange/raspberry:$PATH[0m
 [33m[tester::#JV1] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#JV1] [setup] [0m[94mecho "banana" > "/tmp/bar/banana"[0m
-[33m[tester::#JV1] [setup] [0m[94mecho "blueberry" > "/tmp/bar/blueberry"[0m
-[33m[tester::#JV1] [setup] [0m[94mecho "grape" > "/tmp/bar/grape"[0m
-[33m[your-program] [0m$ ls -1 /tmp/bar > /tmp/foo/foo.md
+[33m[tester::#JV1] [setup] [0m[94mecho "apple" > "/tmp/bar/apple"[0m
+[33m[tester::#JV1] [setup] [0m[94mecho "pear" > "/tmp/bar/pear"[0m
+[33m[tester::#JV1] [setup] [0m[94mecho "strawberry" > "/tmp/bar/strawberry"[0m
+[33m[your-program] [0m$ ls -1 /tmp/bar > /tmp/foo/ace.md
+[33m[your-program] [0m$ cat /tmp/foo/ace.md
+[33m[your-program] [0mapple
+[33m[your-program] [0mpear
+[33m[your-program] [0mstrawberry
+[33m[tester::#JV1] [0m[92m✓ Received redirected file content[0m
+[33m[your-program] [0m$ echo 'Hello Alice' 1> /tmp/foo/foo.md
 [33m[your-program] [0m$ cat /tmp/foo/foo.md
-[33m[your-program] [0mbanana
-[33m[your-program] [0mblueberry
-[33m[your-program] [0mgrape
+[33m[your-program] [0mHello Alice
 [33m[tester::#JV1] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m$ echo 'Hello James' 1> /tmp/foo/qux.md
-[33m[your-program] [0m$ cat /tmp/foo/qux.md
-[33m[your-program] [0mHello James
-[33m[tester::#JV1] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m$ cat /tmp/bar/blueberry nonexistent 1> /tmp/foo/quz.md
+[33m[your-program] [0m$ cat /tmp/bar/pear nonexistent 1> /tmp/foo/vix.md
 [33m[your-program] [0mcat: nonexistent: No such file or directory
 [33m[tester::#JV1] [0m[92m✓ Received error message[0m
-[33m[your-program] [0m$ cat /tmp/foo/quz.md
-[33m[your-program] [0mblueberry
+[33m[your-program] [0m$ cat /tmp/foo/vix.md
+[33m[your-program] [0mpear
 [33m[tester::#JV1] [0m[92m✓ Received redirected file content[0m
 [33m[your-program] [0m$ 
 [33m[tester::#JV1] [0m[92mTest passed.[0m
 
 [33m[tester::#VZ4] [0m[94mRunning tests for Stage #VZ4 (vz4)[0m
-[33m[tester::#VZ4] [setup] [0m[94mexport PATH=/tmp/apple/apple/mango:$PATH[0m
+[33m[tester::#VZ4] [setup] [0m[94mexport PATH=/tmp/mango/banana/pear:$PATH[0m
 [33m[tester::#VZ4] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#VZ4] [setup] [0m[94mecho "raspberry" > "/tmp/quz/raspberry"[0m
+[33m[tester::#VZ4] [setup] [0m[94mecho "pineapple" > "/tmp/bar/pineapple"[0m
 [33m[your-program] [0m$ ls -1 nonexistent 2> /tmp/foo/bar.md
 [33m[your-program] [0m$ cat /tmp/foo/bar.md
 [33m[your-program] [0mls: nonexistent: No such file or directory
 [33m[tester::#VZ4] [0m[92m✓ Received redirected error message[0m
-[33m[your-program] [0m$ echo 'James file cannot be found' 2> /tmp/foo/baz.md
-[33m[your-program] [0mJames file cannot be found
+[33m[your-program] [0m$ echo 'Emily file cannot be found' 2> /tmp/foo/doe.md
+[33m[your-program] [0mEmily file cannot be found
 [33m[tester::#VZ4] [0m[92m✓ Received expected response[0m
-[33m[tester::#VZ4] [0m[92m✓ File: /tmp/foo/baz.md is empty[0m
-[33m[your-program] [0m$ cat /tmp/quz/raspberry nonexistent 2> /tmp/foo/foo.md
-[33m[your-program] [0mraspberry
+[33m[tester::#VZ4] [0m[92m✓ File: /tmp/foo/doe.md is empty[0m
+[33m[your-program] [0m$ cat /tmp/bar/pineapple nonexistent 2> /tmp/foo/foo.md
+[33m[your-program] [0mpineapple
 [33m[tester::#VZ4] [0m[92m✓ Received file content[0m
 [33m[your-program] [0m$ cat /tmp/foo/foo.md
 [33m[your-program] [0mcat: nonexistent: No such file or directory
@@ -47,51 +47,51 @@ Debug = true
 [33m[tester::#VZ4] [0m[92mTest passed.[0m
 
 [33m[tester::#EL9] [0m[94mRunning tests for Stage #EL9 (el9)[0m
-[33m[tester::#EL9] [setup] [0m[94mexport PATH=/tmp/banana/blueberry/apple:$PATH[0m
+[33m[tester::#EL9] [setup] [0m[94mexport PATH=/tmp/grape/grape/strawberry:$PATH[0m
 [33m[tester::#EL9] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#EL9] [setup] [0m[94mecho "blueberry" > "/tmp/qux/blueberry"[0m
-[33m[tester::#EL9] [setup] [0m[94mecho "mango" > "/tmp/qux/mango"[0m
-[33m[tester::#EL9] [setup] [0m[94mecho "pear" > "/tmp/qux/pear"[0m
-[33m[your-program] [0m$ ls -1 /tmp/qux >> /tmp/baz/bar.md
-[33m[your-program] [0m$ cat /tmp/baz/bar.md
+[33m[tester::#EL9] [setup] [0m[94mecho "blueberry" > "/tmp/ace/blueberry"[0m
+[33m[tester::#EL9] [setup] [0m[94mecho "orange" > "/tmp/ace/orange"[0m
+[33m[tester::#EL9] [setup] [0m[94mecho "pineapple" > "/tmp/ace/pineapple"[0m
+[33m[your-program] [0m$ ls -1 /tmp/ace >> /tmp/qux/bar.md
+[33m[your-program] [0m$ cat /tmp/qux/bar.md
 [33m[your-program] [0mblueberry
-[33m[your-program] [0mmango
-[33m[your-program] [0mpear
+[33m[your-program] [0morange
+[33m[your-program] [0mpineapple
 [33m[tester::#EL9] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m$ echo 'Hello Emily' 1>> /tmp/baz/qux.md
-[33m[your-program] [0m$ echo 'Hello Alice' 1>> /tmp/baz/qux.md
-[33m[your-program] [0m$ cat /tmp/baz/qux.md
+[33m[your-program] [0m$ echo 'Hello Emily' 1>> /tmp/qux/doe.md
+[33m[your-program] [0m$ echo 'Hello James' 1>> /tmp/qux/doe.md
+[33m[your-program] [0m$ cat /tmp/qux/doe.md
 [33m[your-program] [0mHello Emily
-[33m[your-program] [0mHello Alice
+[33m[your-program] [0mHello James
 [33m[tester::#EL9] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m$ echo "List of files: " > /tmp/baz/quz.md
-[33m[your-program] [0m$ ls -1 /tmp/qux >> /tmp/baz/quz.md
-[33m[your-program] [0m$ cat /tmp/baz/quz.md
+[33m[your-program] [0m$ echo "List of files: " > /tmp/qux/vix.md
+[33m[your-program] [0m$ ls -1 /tmp/ace >> /tmp/qux/vix.md
+[33m[your-program] [0m$ cat /tmp/qux/vix.md
 [33m[your-program] [0mList of files:
 [33m[your-program] [0mblueberry
-[33m[your-program] [0mmango
-[33m[your-program] [0mpear
+[33m[your-program] [0morange
+[33m[your-program] [0mpineapple
 [33m[tester::#EL9] [0m[92m✓ Received redirected file content[0m
 [33m[your-program] [0m$ 
 [33m[tester::#EL9] [0m[92mTest passed.[0m
 
 [33m[tester::#UN3] [0m[94mRunning tests for Stage #UN3 (un3)[0m
-[33m[tester::#UN3] [setup] [0m[94mexport PATH=/tmp/blueberry/blueberry/strawberry:$PATH[0m
+[33m[tester::#UN3] [setup] [0m[94mexport PATH=/tmp/raspberry/blueberry/blueberry:$PATH[0m
 [33m[tester::#UN3] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ ls -1 nonexistent >> /tmp/qux/baz.md
+[33m[your-program] [0m$ ls -1 nonexistent >> /tmp/bar/bar.md
 [33m[your-program] [0mls: nonexistent: No such file or directory
 [33m[tester::#UN3] [0m[92m✓ Received error message[0m
-[33m[tester::#UN3] [0m[92m✓ File: /tmp/qux/baz.md is empty[0m
-[33m[your-program] [0m$ ls -1 nonexistent 2>> /tmp/qux/qux.md
-[33m[your-program] [0m$ cat /tmp/qux/qux.md
+[33m[tester::#UN3] [0m[92m✓ File: /tmp/bar/bar.md is empty[0m
+[33m[your-program] [0m$ ls -1 nonexistent 2>> /tmp/bar/doe.md
+[33m[your-program] [0m$ cat /tmp/bar/doe.md
 [33m[your-program] [0mls: nonexistent: No such file or directory
 [33m[tester::#UN3] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m$ echo "David says Error" 2>> /tmp/qux/quz.md
-[33m[your-program] [0mDavid says Error
+[33m[your-program] [0m$ echo "Emily says Error" 2>> /tmp/bar/qux.md
+[33m[your-program] [0mEmily says Error
 [33m[tester::#UN3] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m$ cat nonexistent 2>> /tmp/qux/quz.md
-[33m[your-program] [0m$ ls -1 nonexistent 2>> /tmp/qux/quz.md
-[33m[your-program] [0m$ cat /tmp/qux/quz.md
+[33m[your-program] [0m$ cat nonexistent 2>> /tmp/bar/qux.md
+[33m[your-program] [0m$ ls -1 nonexistent 2>> /tmp/bar/qux.md
+[33m[your-program] [0m$ cat /tmp/bar/qux.md
 [33m[your-program] [0mcat: nonexistent: No such file or directory
 [33m[your-program] [0mls: nonexistent: No such file or directory
 [33m[tester::#UN3] [0m[92m✓ Received redirected file content[0m
