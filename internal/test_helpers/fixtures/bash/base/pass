@@ -1,7 +1,7 @@
 Debug = true
 
 [33m[tester::#IP1] [0m[94mRunning tests for Stage #IP1 (ip1)[0m
-[33m[tester::#IP1] [setup] [0m[94mexport PATH=/tmp/ace:$PATH[0m
+[33m[tester::#IP1] [setup] [0m[94mexport PATH=/tmp/cow:$PATH[0m
 [33m[tester::#IP1] [setup] [0m[94mAvailable executables:[0m
 [33m[tester::#IP1] [setup] [0m[94m- custom_exe_4549[0m
 [33m[tester::#IP1] [setup] [0m[94m- custom_exe_5979[0m
@@ -23,10 +23,10 @@ Debug = true
 [33m[tester::#IP1] [0m[92mTest passed.[0m
 
 [33m[tester::#MG5] [0m[94mRunning tests for Stage #MG5 (mg5)[0m
-[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/doe:$PATH[0m
-[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/qux:$PATH[0m
-[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/bar:$PATH[0m
-[33m[tester::#MG5] [setup] [0m[94mPATH is now: /tmp/bar:/tmp/qux:/tmp/doe:...[0m
+[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/dog:$PATH[0m
+[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/fox:$PATH[0m
+[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/cat:$PATH[0m
+[33m[tester::#MG5] [setup] [0m[94mPATH is now: /tmp/cat:/tmp/fox:/tmp/dog:...[0m
 [33m[tester::#MG5] [setup] [0m[94mAvailable executables:[0m
 [33m[tester::#MG5] [setup] [0m[94m- my_exe[0m
 [33m[tester::#MG5] [0m[94mRunning ./your_shell.sh[0m
@@ -40,7 +40,7 @@ Debug = true
 [33m[your-program] [0mmkdir is /bin/mkdir
 [33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type my_exe
-[33m[your-program] [0mmy_exe is /tmp/qux/my_exe
+[33m[your-program] [0mmy_exe is /tmp/fox/my_exe
 [33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type invalid_mango_command
 [33m[your-program] [0mbash: type: invalid_mango_command: not found

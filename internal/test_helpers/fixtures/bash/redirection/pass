@@ -3,23 +3,23 @@ Debug = true
 [33m[tester::#JV1] [0m[94mRunning tests for Stage #JV1 (jv1)[0m
 [33m[tester::#JV1] [setup] [0m[94mexport PATH=/tmp/pear/orange/raspberry:$PATH[0m
 [33m[tester::#JV1] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#JV1] [setup] [0m[94mecho "apple" > "/tmp/bar/apple"[0m
-[33m[tester::#JV1] [setup] [0m[94mecho "pear" > "/tmp/bar/pear"[0m
-[33m[tester::#JV1] [setup] [0m[94mecho "strawberry" > "/tmp/bar/strawberry"[0m
-[33m[your-program] [0m$ ls -1 /tmp/bar > /tmp/foo/ace.md
-[33m[your-program] [0m$ cat /tmp/foo/ace.md
+[33m[tester::#JV1] [setup] [0m[94mecho "apple" > "/tmp/cat/apple"[0m
+[33m[tester::#JV1] [setup] [0m[94mecho "pear" > "/tmp/cat/pear"[0m
+[33m[tester::#JV1] [setup] [0m[94mecho "strawberry" > "/tmp/cat/strawberry"[0m
+[33m[your-program] [0m$ ls -1 /tmp/cat > /tmp/ant/ant.md
+[33m[your-program] [0m$ cat /tmp/ant/ant.md
 [33m[your-program] [0mapple
 [33m[your-program] [0mpear
 [33m[your-program] [0mstrawberry
 [33m[tester::#JV1] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m$ echo 'Hello Alice' 1> /tmp/foo/foo.md
-[33m[your-program] [0m$ cat /tmp/foo/foo.md
+[33m[your-program] [0m$ echo 'Hello Alice' 1> /tmp/ant/cow.md
+[33m[your-program] [0m$ cat /tmp/ant/cow.md
 [33m[your-program] [0mHello Alice
 [33m[tester::#JV1] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m$ cat /tmp/bar/pear nonexistent 1> /tmp/foo/vix.md
+[33m[your-program] [0m$ cat /tmp/cat/pear nonexistent 1> /tmp/ant/owl.md
 [33m[your-program] [0mcat: nonexistent: No such file or directory
 [33m[tester::#JV1] [0m[92m✓ Received error message[0m
-[33m[your-program] [0m$ cat /tmp/foo/vix.md
+[33m[your-program] [0m$ cat /tmp/ant/owl.md
 [33m[your-program] [0mpear
 [33m[tester::#JV1] [0m[92m✓ Received redirected file content[0m
 [33m[your-program] [0m$ 
@@ -28,19 +28,19 @@ Debug = true
 [33m[tester::#VZ4] [0m[94mRunning tests for Stage #VZ4 (vz4)[0m
 [33m[tester::#VZ4] [setup] [0m[94mexport PATH=/tmp/mango/banana/pear:$PATH[0m
 [33m[tester::#VZ4] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#VZ4] [setup] [0m[94mecho "pineapple" > "/tmp/bar/pineapple"[0m
-[33m[your-program] [0m$ ls -1 nonexistent 2> /tmp/foo/bar.md
-[33m[your-program] [0m$ cat /tmp/foo/bar.md
+[33m[tester::#VZ4] [setup] [0m[94mecho "pineapple" > "/tmp/cat/pineapple"[0m
+[33m[your-program] [0m$ ls -1 nonexistent 2> /tmp/ant/ant.md
+[33m[your-program] [0m$ cat /tmp/ant/ant.md
 [33m[your-program] [0mls: nonexistent: No such file or directory
 [33m[tester::#VZ4] [0m[92m✓ Received redirected error message[0m
-[33m[your-program] [0m$ echo 'Emily file cannot be found' 2> /tmp/foo/doe.md
+[33m[your-program] [0m$ echo 'Emily file cannot be found' 2> /tmp/ant/cat.md
 [33m[your-program] [0mEmily file cannot be found
 [33m[tester::#VZ4] [0m[92m✓ Received expected response[0m
-[33m[tester::#VZ4] [0m[92m✓ File: /tmp/foo/doe.md is empty[0m
-[33m[your-program] [0m$ cat /tmp/bar/pineapple nonexistent 2> /tmp/foo/foo.md
+[33m[tester::#VZ4] [0m[92m✓ File: /tmp/ant/cat.md is empty[0m
+[33m[your-program] [0m$ cat /tmp/cat/pineapple nonexistent 2> /tmp/ant/dog.md
 [33m[your-program] [0mpineapple
 [33m[tester::#VZ4] [0m[92m✓ Received file content[0m
-[33m[your-program] [0m$ cat /tmp/foo/foo.md
+[33m[your-program] [0m$ cat /tmp/ant/dog.md
 [33m[your-program] [0mcat: nonexistent: No such file or directory
 [33m[tester::#VZ4] [0m[92m✓ Received redirected error message[0m
 [33m[your-program] [0m$ 
@@ -49,24 +49,24 @@ Debug = true
 [33m[tester::#EL9] [0m[94mRunning tests for Stage #EL9 (el9)[0m
 [33m[tester::#EL9] [setup] [0m[94mexport PATH=/tmp/grape/grape/strawberry:$PATH[0m
 [33m[tester::#EL9] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#EL9] [setup] [0m[94mecho "blueberry" > "/tmp/ace/blueberry"[0m
-[33m[tester::#EL9] [setup] [0m[94mecho "orange" > "/tmp/ace/orange"[0m
-[33m[tester::#EL9] [setup] [0m[94mecho "pineapple" > "/tmp/ace/pineapple"[0m
-[33m[your-program] [0m$ ls -1 /tmp/ace >> /tmp/qux/bar.md
-[33m[your-program] [0m$ cat /tmp/qux/bar.md
+[33m[tester::#EL9] [setup] [0m[94mecho "blueberry" > "/tmp/cow/blueberry"[0m
+[33m[tester::#EL9] [setup] [0m[94mecho "orange" > "/tmp/cow/orange"[0m
+[33m[tester::#EL9] [setup] [0m[94mecho "pineapple" > "/tmp/cow/pineapple"[0m
+[33m[your-program] [0m$ ls -1 /tmp/cow >> /tmp/fox/cat.md
+[33m[your-program] [0m$ cat /tmp/fox/cat.md
 [33m[your-program] [0mblueberry
 [33m[your-program] [0morange
 [33m[your-program] [0mpineapple
 [33m[tester::#EL9] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m$ echo 'Hello Emily' 1>> /tmp/qux/doe.md
-[33m[your-program] [0m$ echo 'Hello James' 1>> /tmp/qux/doe.md
-[33m[your-program] [0m$ cat /tmp/qux/doe.md
+[33m[your-program] [0m$ echo 'Hello Emily' 1>> /tmp/fox/dog.md
+[33m[your-program] [0m$ echo 'Hello James' 1>> /tmp/fox/dog.md
+[33m[your-program] [0m$ cat /tmp/fox/dog.md
 [33m[your-program] [0mHello Emily
 [33m[your-program] [0mHello James
 [33m[tester::#EL9] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m$ echo "List of files: " > /tmp/qux/vix.md
-[33m[your-program] [0m$ ls -1 /tmp/ace >> /tmp/qux/vix.md
-[33m[your-program] [0m$ cat /tmp/qux/vix.md
+[33m[your-program] [0m$ echo "List of files: " > /tmp/fox/owl.md
+[33m[your-program] [0m$ ls -1 /tmp/cow >> /tmp/fox/owl.md
+[33m[your-program] [0m$ cat /tmp/fox/owl.md
 [33m[your-program] [0mList of files:
 [33m[your-program] [0mblueberry
 [33m[your-program] [0morange
@@ -78,20 +78,20 @@ Debug = true
 [33m[tester::#UN3] [0m[94mRunning tests for Stage #UN3 (un3)[0m
 [33m[tester::#UN3] [setup] [0m[94mexport PATH=/tmp/raspberry/blueberry/blueberry:$PATH[0m
 [33m[tester::#UN3] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ ls -1 nonexistent >> /tmp/bar/bar.md
+[33m[your-program] [0m$ ls -1 nonexistent >> /tmp/cat/cat.md
 [33m[your-program] [0mls: nonexistent: No such file or directory
 [33m[tester::#UN3] [0m[92m✓ Received error message[0m
-[33m[tester::#UN3] [0m[92m✓ File: /tmp/bar/bar.md is empty[0m
-[33m[your-program] [0m$ ls -1 nonexistent 2>> /tmp/bar/doe.md
-[33m[your-program] [0m$ cat /tmp/bar/doe.md
+[33m[tester::#UN3] [0m[92m✓ File: /tmp/cat/cat.md is empty[0m
+[33m[your-program] [0m$ ls -1 nonexistent 2>> /tmp/cat/dog.md
+[33m[your-program] [0m$ cat /tmp/cat/dog.md
 [33m[your-program] [0mls: nonexistent: No such file or directory
 [33m[tester::#UN3] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m$ echo "Emily says Error" 2>> /tmp/bar/qux.md
+[33m[your-program] [0m$ echo "Emily says Error" 2>> /tmp/cat/fox.md
 [33m[your-program] [0mEmily says Error
 [33m[tester::#UN3] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m$ cat nonexistent 2>> /tmp/bar/qux.md
-[33m[your-program] [0m$ ls -1 nonexistent 2>> /tmp/bar/qux.md
-[33m[your-program] [0m$ cat /tmp/bar/qux.md
+[33m[your-program] [0m$ cat nonexistent 2>> /tmp/cat/fox.md
+[33m[your-program] [0m$ ls -1 nonexistent 2>> /tmp/cat/fox.md
+[33m[your-program] [0m$ cat /tmp/cat/fox.md
 [33m[your-program] [0mcat: nonexistent: No such file or directory
 [33m[your-program] [0mls: nonexistent: No such file or directory
 [33m[tester::#UN3] [0m[92m✓ Received redirected file content[0m

@@ -3,9 +3,9 @@ Debug = true
 [33m[tester::#NI6] [0m[94mRunning tests for Stage #NI6 (ni6)[0m
 [33m[tester::#NI6] [setup] [0m[94mexport PATH=/tmp/pear/orange/raspberry:$PATH[0m
 [33m[tester::#NI6] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#NI6] [setup] [0m[94mecho -n "strawberry apple." > "/tmp/foo/f   61"[0m
-[33m[tester::#NI6] [setup] [0m[94mecho -n "raspberry grape." > "/tmp/foo/f   80"[0m
-[33m[tester::#NI6] [setup] [0m[94mecho "raspberry orange." > "/tmp/foo/f   54"[0m
+[33m[tester::#NI6] [setup] [0m[94mecho -n "strawberry apple." > "/tmp/ant/f   61"[0m
+[33m[tester::#NI6] [setup] [0m[94mecho -n "raspberry grape." > "/tmp/ant/f   80"[0m
+[33m[tester::#NI6] [setup] [0m[94mecho "raspberry orange." > "/tmp/ant/f   54"[0m
 [33m[your-program] [0m$ echo 'script test'
 [33m[your-program] [0mscript test
 [33m[tester::#NI6] [0m[92m✓ Received expected response[0m
@@ -15,7 +15,7 @@ Debug = true
 [33m[your-program] [0m$ echo 'hello     example' 'shell''script' test''world
 [33m[your-program] [0mhello     example shellscript testworld
 [33m[tester::#NI6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ cat '/tmp/foo/f   61' '/tmp/foo/f   80' '/tmp/foo/f   54'
+[33m[your-program] [0m$ cat '/tmp/ant/f   61' '/tmp/ant/f   80' '/tmp/ant/f   54'
 [33m[your-program] [0mstrawberry apple.raspberry grape.raspberry orange.
 [33m[tester::#NI6] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -33,10 +33,10 @@ Debug = true
 [33m[your-program] [0m$ echo "test"  "hello's"  example""shell
 [33m[your-program] [0mtest hello's exampleshell
 [33m[tester::#TG6] [0m[92m✓ Received expected response[0m
-[33m[tester::#TG6] [setup] [0m[94mecho -n "banana pineapple." > "/tmp/vix/f 38"[0m
-[33m[tester::#TG6] [setup] [0m[94mecho -n "orange raspberry." > "/tmp/vix/f   35"[0m
-[33m[tester::#TG6] [setup] [0m[94mecho "apple banana." > "/tmp/vix/f's80"[0m
-[33m[your-program] [0m$ cat "/tmp/vix/f 38" "/tmp/vix/f   35" "/tmp/vix/f's80"
+[33m[tester::#TG6] [setup] [0m[94mecho -n "banana pineapple." > "/tmp/owl/f 38"[0m
+[33m[tester::#TG6] [setup] [0m[94mecho -n "orange raspberry." > "/tmp/owl/f   35"[0m
+[33m[tester::#TG6] [setup] [0m[94mecho "apple banana." > "/tmp/owl/f's80"[0m
+[33m[your-program] [0m$ cat "/tmp/owl/f 38" "/tmp/owl/f   35" "/tmp/owl/f's80"
 [33m[your-program] [0mbanana pineapple.orange raspberry.apple banana.
 [33m[tester::#TG6] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -44,9 +44,9 @@ Debug = true
 
 [33m[tester::#YT5] [0m[94mRunning tests for Stage #YT5 (yt5)[0m
 [33m[tester::#YT5] [setup] [0m[94mexport PATH=/tmp/grape/raspberry/pear:$PATH[0m
-[33m[tester::#YT5] [setup] [0m[94mecho -n "banana raspberry." > "/tmp/bar/f\\n90"[0m
-[33m[tester::#YT5] [setup] [0m[94mecho -n "raspberry orange." > "/tmp/bar/f\\80"[0m
-[33m[tester::#YT5] [setup] [0m[94mecho "banana raspberry." > "/tmp/bar/f'\\'44"[0m
+[33m[tester::#YT5] [setup] [0m[94mecho -n "banana raspberry." > "/tmp/cat/f\\n90"[0m
+[33m[tester::#YT5] [setup] [0m[94mecho -n "raspberry orange." > "/tmp/cat/f\\80"[0m
+[33m[tester::#YT5] [setup] [0m[94mecho "banana raspberry." > "/tmp/cat/f'\\'44"[0m
 [33m[tester::#YT5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo world\ \ \ \ \ \ script
 [33m[your-program] [0mworld      script
@@ -57,7 +57,7 @@ Debug = true
 [33m[your-program] [0m$ echo shell\nexample
 [33m[your-program] [0mshellnexample
 [33m[tester::#YT5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ cat "/tmp/bar/f\n90" "/tmp/bar/f\80" "/tmp/bar/f'\'44"
+[33m[your-program] [0m$ cat "/tmp/cat/f\n90" "/tmp/cat/f\80" "/tmp/cat/f'\'44"
 [33m[your-program] [0mbanana raspberry.raspberry orange.banana raspberry.
 [33m[tester::#YT5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -66,9 +66,9 @@ Debug = true
 [33m[tester::#LE5] [0m[94mRunning tests for Stage #LE5 (le5)[0m
 [33m[tester::#LE5] [setup] [0m[94mexport PATH=/tmp/strawberry/grape/strawberry:$PATH[0m
 [33m[tester::#LE5] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#LE5] [setup] [0m[94mecho -n "pineapple strawberry." > "/tmp/bar/'f 62'"[0m
-[33m[tester::#LE5] [setup] [0m[94mecho -n "strawberry pear." > "/tmp/bar/'f  \\75'"[0m
-[33m[tester::#LE5] [setup] [0m[94mecho "apple banana." > "/tmp/bar/'f \\28\\'"[0m
+[33m[tester::#LE5] [setup] [0m[94mecho -n "pineapple strawberry." > "/tmp/cat/'f 62'"[0m
+[33m[tester::#LE5] [setup] [0m[94mecho -n "strawberry pear." > "/tmp/cat/'f  \\75'"[0m
+[33m[tester::#LE5] [setup] [0m[94mecho "apple banana." > "/tmp/cat/'f \\28\\'"[0m
 [33m[your-program] [0m$ echo 'example\\nworld'
 [33m[your-program] [0mexample\\nworld
 [33m[tester::#LE5] [0m[92m✓ Received expected response[0m
@@ -78,7 +78,7 @@ Debug = true
 [33m[your-program] [0m$ echo 'script\\nworld'
 [33m[your-program] [0mscript\\nworld
 [33m[tester::#LE5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ cat "/tmp/bar/'f 62'" "/tmp/bar/'f  \75'" "/tmp/bar/'f \28\'"
+[33m[your-program] [0m$ cat "/tmp/cat/'f 62'" "/tmp/cat/'f  \75'" "/tmp/cat/'f \28\'"
 [33m[your-program] [0mpineapple strawberry.strawberry pear.apple banana.
 [33m[tester::#LE5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
@@ -86,9 +86,9 @@ Debug = true
 
 [33m[tester::#GU3] [0m[94mRunning tests for Stage #GU3 (gu3)[0m
 [33m[tester::#GU3] [setup] [0m[94mexport PATH=/tmp/blueberry/raspberry/banana:$PATH[0m
-[33m[tester::#GU3] [setup] [0m[94mecho -n "strawberry raspberry." > "/tmp/bar/\"f 92\""[0m
-[33m[tester::#GU3] [setup] [0m[94mecho -n "grape pear." > "/tmp/bar/\"f\\26\""[0m
-[33m[tester::#GU3] [setup] [0m[94mecho "apple grape." > "/tmp/bar/f93"[0m
+[33m[tester::#GU3] [setup] [0m[94mecho -n "strawberry raspberry." > "/tmp/cat/\"f 92\""[0m
+[33m[tester::#GU3] [setup] [0m[94mecho -n "grape pear." > "/tmp/cat/\"f\\26\""[0m
+[33m[tester::#GU3] [setup] [0m[94mecho "apple grape." > "/tmp/cat/f93"[0m
 [33m[tester::#GU3] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo "world'test'\\'example"
 [33m[your-program] [0mworld'test'\'example
@@ -99,34 +99,34 @@ Debug = true
 [33m[your-program] [0m$ echo "mixed\"quote'shell'\\"
 [33m[your-program] [0mmixed"quote'shell'\
 [33m[tester::#GU3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ cat '/tmp/bar/"f 92"' '/tmp/bar/"f\26"' '/tmp/bar/f93'
+[33m[your-program] [0m$ cat '/tmp/cat/"f 92"' '/tmp/cat/"f\26"' '/tmp/cat/f93'
 [33m[your-program] [0mstrawberry raspberry.grape pear.apple grape.
 [33m[tester::#GU3] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[tester::#GU3] [0m[92mTest passed.[0m
 
 [33m[tester::#QJ0] [0m[94mRunning tests for Stage #QJ0 (qj0)[0m
-[33m[tester::#QJ0] [setup] [0m[94mexport PATH=/tmp/ace:$PATH[0m
+[33m[tester::#QJ0] [setup] [0m[94mexport PATH=/tmp/cow:$PATH[0m
 [33m[tester::#QJ0] [setup] [0m[94mAvailable executables:[0m
 [33m[tester::#QJ0] [setup] [0m[94m- 'exe  with  space'[0m
 [33m[tester::#QJ0] [setup] [0m[94m- 'exe with "quotes"'[0m
 [33m[tester::#QJ0] [setup] [0m[94m- "exe with \'single quotes\'"[0m
 [33m[tester::#QJ0] [setup] [0m[94m- 'exe with \n newline'[0m
 [33m[tester::#QJ0] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#QJ0] [setup] [0m[94mecho "mango pineapple." > "/tmp/ace/f1"[0m
-[33m[tester::#QJ0] [setup] [0m[94mecho "grape orange." > "/tmp/ace/f2"[0m
-[33m[tester::#QJ0] [setup] [0m[94mecho "mango orange." > "/tmp/ace/f3"[0m
-[33m[tester::#QJ0] [setup] [0m[94mecho "apple banana." > "/tmp/ace/f4"[0m
-[33m[your-program] [0m$ 'exe  with  space' /tmp/ace/f1
+[33m[tester::#QJ0] [setup] [0m[94mecho "mango pineapple." > "/tmp/cow/f1"[0m
+[33m[tester::#QJ0] [setup] [0m[94mecho "grape orange." > "/tmp/cow/f2"[0m
+[33m[tester::#QJ0] [setup] [0m[94mecho "mango orange." > "/tmp/cow/f3"[0m
+[33m[tester::#QJ0] [setup] [0m[94mecho "apple banana." > "/tmp/cow/f4"[0m
+[33m[your-program] [0m$ 'exe  with  space' /tmp/cow/f1
 [33m[your-program] [0mmango pineapple.
 [33m[tester::#QJ0] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 'exe with "quotes"' /tmp/ace/f2
+[33m[your-program] [0m$ 'exe with "quotes"' /tmp/cow/f2
 [33m[your-program] [0mgrape orange.
 [33m[tester::#QJ0] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ "exe with \'single quotes\'" /tmp/ace/f3
+[33m[your-program] [0m$ "exe with \'single quotes\'" /tmp/cow/f3
 [33m[your-program] [0mmango orange.
 [33m[tester::#QJ0] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 'exe with \n newline' /tmp/ace/f4
+[33m[your-program] [0m$ 'exe with \n newline' /tmp/cow/f4
 [33m[your-program] [0mapple banana.
 [33m[tester::#QJ0] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 

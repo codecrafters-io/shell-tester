@@ -1,7 +1,7 @@
 Debug = true
 
 [33m[tester::#IP1] [0m[94mRunning tests for Stage #IP1 (ip1)[0m
-[33m[tester::#IP1] [setup] [0m[94mexport PATH=/tmp/ace:$PATH[0m
+[33m[tester::#IP1] [setup] [0m[94mexport PATH=/tmp/cow:$PATH[0m
 [33m[tester::#IP1] [setup] [0m[94mAvailable executables:[0m
 [33m[tester::#IP1] [setup] [0m[94m- custom_exe_4549[0m
 [33m[tester::#IP1] [setup] [0m[94m- custom_exe_5979[0m
