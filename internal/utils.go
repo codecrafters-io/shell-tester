@@ -8,7 +8,7 @@ import (
 	"github.com/codecrafters-io/tester-utils/random"
 )
 
-var SMALL_WORDS = []string{"foo", "bar", "ace", "doe", "qux", "vix"}
+var SMALL_WORDS = []string{"ant", "cat", "cow", "dog", "fox", "owl"}
 var LARGE_WORDS = []string{"hello", "world", "test", "example", "shell", "script"}
 
 const CUSTOM_CAT_COMMAND = "cat"
