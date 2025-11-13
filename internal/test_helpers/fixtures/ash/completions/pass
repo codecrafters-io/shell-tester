@@ -57,35 +57,35 @@ Debug = true
 [33m[tester::#QM8] [0m[92mTest passed.[0m
 
 [33m[tester::#WH6] [0m[94mRunning tests for Stage #WH6 (wh6)[0m
-[33m[tester::#WH6] [setup] [0m[94mexport PATH=/tmp/owl:$PATH[0m
 [33m[tester::#WH6] [setup] [0m[94mexport PATH=/tmp/dog:$PATH[0m
-[33m[tester::#WH6] [setup] [0m[94mexport PATH=/tmp/fox:$PATH[0m
+[33m[tester::#WH6] [setup] [0m[94mexport PATH=/tmp/ant:$PATH[0m
+[33m[tester::#WH6] [setup] [0m[94mexport PATH=/tmp/cow:$PATH[0m
 [33m[tester::#WH6] [setup] [0m[94mAvailable executables:[0m
 [33m[tester::#WH6] [setup] [0m[94m- xyz_ant[0m
 [33m[tester::#WH6] [setup] [0m[94m- xyz_cow[0m
-[33m[tester::#WH6] [setup] [0m[94m- xyz_owl[0m
+[33m[tester::#WH6] [setup] [0m[94m- xyz_rat[0m
 [33m[tester::#WH6] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#WH6] [0m[92m✓ Received prompt ($ )[0m
 [33m[tester::#WH6] [0m[94mTyped "xyz_"[0m
 [33m[your-program] [0m$ xyz_
 [33m[tester::#WH6] [0m[92m✓ Prompt line matches "$ xyz_"[0m
 [33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting bell to ring)[0m
-[33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_ant  xyz_cow  xyz_owl")[0m
+[33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_ant  xyz_cow  xyz_rat")[0m
 [33m[tester::#WH6] [0m[92m✓ Received bell[0m
-[33m[your-program] [0mxyz_ant  xyz_cow  xyz_owl
-[33m[tester::#WH6] [0m[92m✓ Prompt line matches "xyz_ant  xyz_cow  xyz_owl"[0m
+[33m[your-program] [0mxyz_ant  xyz_cow  xyz_rat
+[33m[tester::#WH6] [0m[92m✓ Prompt line matches "xyz_ant  xyz_cow  xyz_rat"[0m
 [33m[tester::#WH6] [0m[92mReceived completion for "xyz_"[0m
 [33m[your-program] [0m$ xyz_
 [33m[tester::#WH6] [0m[92mTest passed.[0m
 
 [33m[tester::#WT6] [0m[94mRunning tests for Stage #WT6 (wt6)[0m
-[33m[tester::#WT6] [setup] [0m[94mexport PATH=/tmp/cat:$PATH[0m
-[33m[tester::#WT6] [setup] [0m[94mexport PATH=/tmp/cow:$PATH[0m
-[33m[tester::#WT6] [setup] [0m[94mexport PATH=/tmp/ant:$PATH[0m
+[33m[tester::#WT6] [setup] [0m[94mexport PATH=/tmp/fox:$PATH[0m
+[33m[tester::#WT6] [setup] [0m[94mexport PATH=/tmp/dog:$PATH[0m
+[33m[tester::#WT6] [setup] [0m[94mexport PATH=/tmp/pig:$PATH[0m
 [33m[tester::#WT6] [setup] [0m[94mAvailable executables:[0m
 [33m[tester::#WT6] [setup] [0m[94m- xyz_fox[0m
-[33m[tester::#WT6] [setup] [0m[94m- xyz_fox_owl[0m
-[33m[tester::#WT6] [setup] [0m[94m- xyz_fox_owl_dog[0m
+[33m[tester::#WT6] [setup] [0m[94m- xyz_fox_cow[0m
+[33m[tester::#WT6] [setup] [0m[94m- xyz_fox_cow_ant[0m
 [33m[tester::#WT6] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#WT6] [0m[92m✓ Received prompt ($ )[0m
 [33m[tester::#WT6] [0m[94mTyped "xyz_"[0m
@@ -94,12 +94,12 @@ Debug = true
 [33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_fox"[0m
 [33m[tester::#WT6] [0m[94mTyped "_"[0m
 [33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_fox_"[0m
-[33m[tester::#WT6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_fox_owl")[0m
-[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_fox_owl"[0m
+[33m[tester::#WT6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_fox_cow")[0m
+[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_fox_cow"[0m
 [33m[tester::#WT6] [0m[94mTyped "_"[0m
-[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_fox_owl_"[0m
-[33m[tester::#WT6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_fox_owl_dog")[0m
-[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_fox_owl_dog "[0m
-[33m[tester::#WT6] [0m[92mReceived all partial completions for "xyz_fox_owl_dog"[0m
-[33m[your-program] [0m$ xyz_fox_owl_dog 
+[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_fox_cow_"[0m
+[33m[tester::#WT6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_fox_cow_ant")[0m
+[33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_fox_cow_ant "[0m
+[33m[tester::#WT6] [0m[92mReceived all partial completions for "xyz_fox_cow_ant"[0m
+[33m[your-program] [0m$ xyz_fox_cow_ant 
 [33m[tester::#WT6] [0m[92mTest passed.[0m

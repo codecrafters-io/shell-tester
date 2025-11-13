@@ -59,28 +59,29 @@ Debug = true
 [33m[tester::#IP1] [setup] [0m[94m- custom_exe_5934[0m
 [33m[tester::#IP1] [setup] [0m[94m- custom_exe_3861[0m
 [33m[tester::#IP1] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ custom_exe_5934 Emily
-[33m[your-program] [0mProgram was passed 2 args (including program name).
+[33m[your-program] [0m$ custom_exe_5934 Emily James Alice
+[33m[your-program] [0mProgram was passed 4 args (including program name).
 [33m[your-program] [0mArg #0 (program name): custom_exe_5934
 [33m[your-program] [0mArg #1: Emily
+[33m[your-program] [0mArg #2: James
+[33m[your-program] [0mArg #3: Alice
 [33m[your-program] [0mProgram Signature: 4984931233
 [33m[tester::#IP1] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ custom_exe_3861 James Emily James
-[33m[your-program] [0mProgram was passed 4 args (including program name).
+[33m[your-program] [0m$ custom_exe_3861 Alice Maria
+[33m[your-program] [0mProgram was passed 3 args (including program name).
 [33m[your-program] [0mArg #0 (program name): custom_exe_3861
-[33m[your-program] [0mArg #1: James
-[33m[your-program] [0mArg #2: Emily
-[33m[your-program] [0mArg #3: James
+[33m[your-program] [0mArg #1: Alice
+[33m[your-program] [0mArg #2: Maria
 [33m[your-program] [0mProgram Signature: 4947662716
 [33m[tester::#IP1] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[tester::#IP1] [0m[92mTest passed.[0m
 
 [33m[tester::#MG5] [0m[94mRunning tests for Stage #MG5 (mg5)[0m
+[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/dog:$PATH[0m
 [33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/owl:$PATH[0m
-[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/cat:$PATH[0m
-[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/ant:$PATH[0m
-[33m[tester::#MG5] [setup] [0m[94mPATH is now: /tmp/ant:/tmp/cat:/tmp/owl:...[0m
+[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/bee:$PATH[0m
+[33m[tester::#MG5] [setup] [0m[94mPATH is now: /tmp/bee:/tmp/owl:/tmp/dog:...[0m
 [33m[tester::#MG5] [setup] [0m[94mAvailable executables:[0m
 [33m[tester::#MG5] [setup] [0m[94m- my_exe[0m
 [33m[tester::#MG5] [0m[94mRunning ./your_shell.sh[0m
@@ -94,13 +95,13 @@ Debug = true
 [33m[your-program] [0mmkdir is /bin/mkdir
 [33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type my_exe
-[33m[your-program] [0mmy_exe is /tmp/cat/my_exe
-[33m[tester::#MG5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type invalid_pear_command
-[33m[your-program] [0mbash: type: invalid_pear_command: not found
+[33m[your-program] [0mmy_exe is /tmp/owl/my_exe
 [33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type invalid_raspberry_command
 [33m[your-program] [0mbash: type: invalid_raspberry_command: not found
+[33m[tester::#MG5] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m$ type invalid_mango_command
+[33m[your-program] [0mbash: type: invalid_mango_command: not found
 [33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[tester::#MG5] [0m[92mTest passed.[0m
@@ -116,25 +117,25 @@ Debug = true
 [33m[your-program] [0m$ type type
 [33m[your-program] [0mtype is a shell builtin
 [33m[tester::#EZ5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type invalid_mango_command
-[33m[your-program] [0mbash: type: invalid_mango_command: not found
+[33m[your-program] [0m$ type invalid_grape_command
+[33m[your-program] [0mbash: type: invalid_grape_command: not found
 [33m[tester::#EZ5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type invalid_pineapple_command
-[33m[your-program] [0mbash: type: invalid_pineapple_command: not found
+[33m[your-program] [0m$ type invalid_orange_command
+[33m[your-program] [0mbash: type: invalid_orange_command: not found
 [33m[tester::#EZ5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[tester::#EZ5] [0m[92mTest passed.[0m
 
 [33m[tester::#IZ3] [0m[94mRunning tests for Stage #IZ3 (iz3)[0m
 [33m[tester::#IZ3] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo pineapple apple pear
-[33m[your-program] [0mpineapple apple pear
+[33m[your-program] [0m$ echo grape raspberry orange
+[33m[your-program] [0mgrape raspberry orange
 [33m[tester::#IZ3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo raspberry pineapple
-[33m[your-program] [0mraspberry pineapple
+[33m[your-program] [0m$ echo orange raspberry
+[33m[your-program] [0morange raspberry
 [33m[tester::#IZ3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo orange pineapple
-[33m[your-program] [0morange pineapple
+[33m[your-program] [0m$ echo banana orange
+[33m[your-program] [0mbanana orange
 [33m[tester::#IZ3] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[tester::#IZ3] [0m[92mTest passed.[0m
@@ -161,19 +162,13 @@ Debug = true
 [33m[your-program] [0m$ invalid_command_3
 [33m[your-program] [0mbash: invalid_command_3: command not found
 [33m[tester::#FF0] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ invalid_command_4
-[33m[your-program] [0mbash: invalid_command_4: command not found
-[33m[tester::#FF0] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ invalid_command_5
-[33m[your-program] [0mbash: invalid_command_5: command not found
-[33m[tester::#FF0] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ 
 [33m[tester::#FF0] [0m[92mTest passed.[0m
 
 [33m[tester::#CZ2] [0m[94mRunning tests for Stage #CZ2 (cz2)[0m
 [33m[tester::#CZ2] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ invalid_orange_command
-[33m[your-program] [0mbash: invalid_orange_command: command not found
+[33m[your-program] [0m$ invalid_mango_command
+[33m[your-program] [0mbash: invalid_mango_command: command not found
 [33m[tester::#CZ2] [0m[92m✓ Received command not found message[0m
 [33m[tester::#CZ2] [0m[92mTest passed.[0m
 

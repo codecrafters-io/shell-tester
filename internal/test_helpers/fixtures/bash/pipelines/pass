@@ -3,24 +3,24 @@ Debug = true
 [33m[tester::#BR6] [0m[94mRunning tests for Stage #BR6 (br6)[0m
 [33m[tester::#BR6] [setup] [0m[94mexport PATH=/tmp/pear/orange/raspberry:$PATH[0m
 [33m[tester::#BR6] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#BR6] [setup] [0m[94mecho -e "blueberry raspberry\npineapple apple\nmango grape\npear orange\nbanana strawberry" > "/tmp/ant/file-61"[0m
-[33m[your-program] [0m$ cat /tmp/ant/file-61 | wc
+[33m[tester::#BR6] [setup] [0m[94mecho -e "strawberry apple\nblueberry mango\npineapple raspberry\norange banana\ngrape pear" > "/tmp/rat/file-54"[0m
+[33m[your-program] [0m$ cat /tmp/rat/file-54 | wc
 [33m[your-program] [0m       5      10      78
 [33m[tester::#BR6] [0m[92m✓ Received expected response[0m
-[33m[tester::#BR6] [setup] [0m[94mecho -e "1. apple grape\n2. pineapple strawberry\n3. pear blueberry" > "/tmp/fox/file-52"[0m
-[33m[your-program] [0m$ tail -f /tmp/fox/file-52 | head -n 5
-[33m[your-program] [0m1. apple grape
-[33m[your-program] [0m2. pineapple strawberry
-[33m[your-program] [0m3. pear blueberry
+[33m[tester::#BR6] [setup] [0m[94mecho -e "1. raspberry mango\n2. blueberry banana\n3. orange apple" > "/tmp/bee/file-9"[0m
+[33m[your-program] [0m$ tail -f /tmp/bee/file-9 | head -n 5
+[33m[your-program] [0m1. raspberry mango
+[33m[your-program] [0m2. blueberry banana
+[33m[your-program] [0m3. orange apple
 [33m[tester::#BR6] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m4. mango orange
+[33m[your-program] [0m4. blueberry raspberry
 [33m[tester::#BR6] [0m[92m✓ Received appended line 4[0m
-[33m[your-program] [0m5. banana apple
+[33m[your-program] [0m5. raspberry strawberry
 [33m[tester::#BR6] [0m[92m✓ Received appended line 5[0m
 [33m[tester::#BR6] [0m[92mTest passed.[0m
 
 [33m[tester::#NY9] [0m[94mRunning tests for Stage #NY9 (ny9)[0m
-[33m[tester::#NY9] [setup] [0m[94mexport PATH=/tmp/pear/apple/apple:$PATH[0m
+[33m[tester::#NY9] [setup] [0m[94mexport PATH=/tmp/banana/apple/banana:$PATH[0m
 [33m[tester::#NY9] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo apple-blueberry | wc
 [33m[your-program] [0m       1       1      16
@@ -32,20 +32,20 @@ Debug = true
 [33m[tester::#NY9] [0m[92mTest passed.[0m
 
 [33m[tester::#XK3] [0m[94mRunning tests for Stage #XK3 (xk3)[0m
-[33m[tester::#XK3] [setup] [0m[94mexport PATH=/tmp/banana/blueberry/orange:$PATH[0m
-[33m[tester::#XK3] [setup] [0m[94mecho -e "raspberry\npineapple\nmango\npear\ngrape" > "/tmp/cow/file-88"[0m
+[33m[tester::#XK3] [setup] [0m[94mexport PATH=/tmp/blueberry/strawberry/grape:$PATH[0m
+[33m[tester::#XK3] [setup] [0m[94mecho -e "pineapple\nstrawberry\norange\napple\npear" > "/tmp/cow/file-45"[0m
 [33m[tester::#XK3] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ cat /tmp/cow/file-88 | head -n 5 | wc
-[33m[your-program] [0m       5       5      37
+[33m[your-program] [0m$ cat /tmp/cow/file-45 | head -n 5 | wc
+[33m[your-program] [0m       5       5      39
 [33m[tester::#XK3] [0m[92m✓ Received expected output[0m
-[33m[tester::#XK3] [setup] [0m[94mecho -n "strawberry" > "/tmp/cat/f-88"[0m
-[33m[tester::#XK3] [setup] [0m[94mecho -n "orange" > "/tmp/cat/f-35"[0m
-[33m[tester::#XK3] [setup] [0m[94mecho -n "apple" > "/tmp/cat/f-51"[0m
-[33m[tester::#XK3] [setup] [0m[94mecho -n "raspberry" > "/tmp/cat/f-10"[0m
-[33m[tester::#XK3] [setup] [0m[94mecho -n "mango" > "/tmp/cat/f-56"[0m
-[33m[tester::#XK3] [setup] [0m[94mecho -n "grape" > "/tmp/cat/f-19"[0m
-[33m[your-program] [0m$ ls /tmp/cat | tail -n 5 | head -n 3 | grep "f-51"
-[33m[your-program] [0mf-51
+[33m[tester::#XK3] [setup] [0m[94mecho -n "apple" > "/tmp/bee/f-72"[0m
+[33m[tester::#XK3] [setup] [0m[94mecho -n "raspberry" > "/tmp/bee/f-90"[0m
+[33m[tester::#XK3] [setup] [0m[94mecho -n "pineapple" > "/tmp/bee/f-80"[0m
+[33m[tester::#XK3] [setup] [0m[94mecho -n "blueberry" > "/tmp/bee/f-44"[0m
+[33m[tester::#XK3] [setup] [0m[94mecho -n "orange" > "/tmp/bee/f-2"[0m
+[33m[tester::#XK3] [setup] [0m[94mecho -n "mango" > "/tmp/bee/f-60"[0m
+[33m[your-program] [0m$ ls /tmp/bee | tail -n 5 | head -n 3 | grep "f-72"
+[33m[your-program] [0mf-72
 [33m[tester::#XK3] [0m[92m✓ Received expected output[0m
 [33m[your-program] [0m$ 
 [33m[tester::#XK3] [0m[92mTest passed.[0m
