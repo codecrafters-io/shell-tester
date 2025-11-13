@@ -1,32 +1,34 @@
 Debug = true
 
 [33m[tester::#IP1] [0m[94mRunning tests for Stage #IP1 (ip1)[0m
-[33m[tester::#IP1] [setup] [0m[94mexport PATH=/tmp/baz:$PATH[0m
+[33m[tester::#IP1] [setup] [0m[94mexport PATH=/tmp/rat:$PATH[0m
 [33m[tester::#IP1] [setup] [0m[94mAvailable executables:[0m
 [33m[tester::#IP1] [setup] [0m[94m- custom_exe_4549[0m
 [33m[tester::#IP1] [setup] [0m[94m- custom_exe_5979[0m
 [33m[tester::#IP1] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ custom_exe_4549 James Emily
-[33m[your-program] [0mProgram was passed 3 args (including program name).
+[33m[your-program] [0m$ custom_exe_4549 Alice James Alice
+[33m[your-program] [0mProgram was passed 4 args (including program name).
 [33m[your-program] [0mArg #0 (program name): custom_exe_4549
-[33m[your-program] [0mArg #1: James
-[33m[your-program] [0mArg #2: Emily
+[33m[your-program] [0mArg #1: Alice
+[33m[your-program] [0mArg #2: James
+[33m[your-program] [0mArg #3: Alice
 [33m[your-program] [0mProgram Signature: 3842155998
 [33m[tester::#IP1] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ custom_exe_5979 Alice
-[33m[your-program] [0mProgram was passed 2 args (including program name).
+[33m[your-program] [0m$ custom_exe_5979 Alice David
+[33m[your-program] [0mProgram was passed 3 args (including program name).
 [33m[your-program] [0mArg #0 (program name): custom_exe_5979
 [33m[your-program] [0mArg #1: Alice
+[33m[your-program] [0mArg #2: David
 [33m[your-program] [0mProgram Signature: 5954414571
 [33m[tester::#IP1] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[tester::#IP1] [0m[92mTest passed.[0m
 
 [33m[tester::#MG5] [0m[94mRunning tests for Stage #MG5 (mg5)[0m
-[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/qux:$PATH[0m
-[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/baz:$PATH[0m
-[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/foo:$PATH[0m
-[33m[tester::#MG5] [setup] [0m[94mPATH is now: /tmp/foo:/tmp/baz:/tmp/qux:...[0m
+[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/owl:$PATH[0m
+[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/dog:$PATH[0m
+[33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/bee:$PATH[0m
+[33m[tester::#MG5] [setup] [0m[94mPATH is now: /tmp/bee:/tmp/dog:/tmp/owl:...[0m
 [33m[tester::#MG5] [setup] [0m[94mAvailable executables:[0m
 [33m[tester::#MG5] [setup] [0m[94m- my_exe[0m
 [33m[tester::#MG5] [0m[94mRunning ./your_shell.sh[0m
@@ -40,13 +42,13 @@ Debug = true
 [33m[your-program] [0mmkdir is /bin/mkdir
 [33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type my_exe
-[33m[your-program] [0mmy_exe is /tmp/foo/my_exe
+[33m[your-program] [0mmy_exe is /tmp/bee/my_exe
+[33m[tester::#MG5] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m$ type invalid_pineapple_command
+[33m[your-program] [0minvalid_pineapple_command: not found
 [33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ type invalid_raspberry_command
 [33m[your-program] [0minvalid_raspberry_command: not found
-[33m[tester::#MG5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type invalid_orange_command
-[33m[your-program] [0minvalid_orange_command: not found
 [33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[tester::#MG5] [0m[92mTest passed.[0m
@@ -65,30 +67,30 @@ Debug = true
 [33m[your-program] [0m$ type invalid_blueberry_command
 [33m[your-program] [0minvalid_blueberry_command: not found
 [33m[tester::#EZ5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ type invalid_grape_command
-[33m[your-program] [0minvalid_grape_command: not found
+[33m[your-program] [0m$ type invalid_raspberry_command
+[33m[your-program] [0minvalid_raspberry_command: not found
 [33m[tester::#EZ5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[tester::#EZ5] [0m[92mTest passed.[0m
 
 [33m[tester::#IZ3] [0m[94mRunning tests for Stage #IZ3 (iz3)[0m
 [33m[tester::#IZ3] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo strawberry pear apple
-[33m[your-program] [0mstrawberry pear apple
+[33m[your-program] [0m$ echo grape orange
+[33m[your-program] [0mgrape orange
 [33m[tester::#IZ3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo pineapple strawberry
-[33m[your-program] [0mpineapple strawberry
+[33m[your-program] [0m$ echo orange strawberry apple
+[33m[your-program] [0morange strawberry apple
 [33m[tester::#IZ3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo banana mango
-[33m[your-program] [0mbanana mango
+[33m[your-program] [0m$ echo apple raspberry pineapple
+[33m[your-program] [0mapple raspberry pineapple
 [33m[tester::#IZ3] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
 [33m[tester::#IZ3] [0m[92mTest passed.[0m
 
 [33m[tester::#PN5] [0m[94mRunning tests for Stage #PN5 (pn5)[0m
 [33m[tester::#PN5] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ invalid_mango_command
-[33m[your-program] [0mash: invalid_mango_command: not found
+[33m[your-program] [0m$ invalid_raspberry_command
+[33m[your-program] [0mash: invalid_raspberry_command: not found
 [33m[tester::#PN5] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ exit 0
 [33m[tester::#PN5] [0m[92m✓ Program exited successfully[0m
@@ -106,16 +108,13 @@ Debug = true
 [33m[your-program] [0m$ invalid_command_3
 [33m[your-program] [0mash: invalid_command_3: not found
 [33m[tester::#FF0] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ invalid_command_4
-[33m[your-program] [0mash: invalid_command_4: not found
-[33m[tester::#FF0] [0m[92m✓ Received command not found message[0m
 [33m[your-program] [0m$ 
 [33m[tester::#FF0] [0m[92mTest passed.[0m
 
 [33m[tester::#CZ2] [0m[94mRunning tests for Stage #CZ2 (cz2)[0m
 [33m[tester::#CZ2] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ invalid_raspberry_command
-[33m[your-program] [0mash: invalid_raspberry_command: not found
+[33m[your-program] [0m$ invalid_orange_command
+[33m[your-program] [0mash: invalid_orange_command: not found
 [33m[tester::#CZ2] [0m[92m✓ Received command not found message[0m
 [33m[tester::#CZ2] [0m[92mTest passed.[0m
 
