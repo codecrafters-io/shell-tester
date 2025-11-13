@@ -99,7 +99,7 @@ Debug = true
 [33m[your-program] [0m$ echo "mixed\"quote'script'\\"
 [33m[your-program] [0mmixed"quote'script'\
 [33m[tester::#GU3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ cat '/tmp/rat/"f 38"' '/tmp/rat/"f\93"' '/tmp/rat/f57'
+[33m[your-program] [0m$ cat "/tmp/rat/\"f 38\"" "/tmp/rat/\"f\\93\"" "/tmp/rat/f57"
 [33m[your-program] [0mbanana pineapple.raspberry blueberry.apple pineapple.
 [33m[tester::#GU3] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
