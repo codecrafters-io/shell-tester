@@ -35,13 +35,16 @@ Debug = true
 [33m[tester::#GM9] [0m[94mTearing down shell[0m
 [33m[tester::#GM9] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#GM9] [0m[92m✓ Received prompt ($ )[0m
-[33m[tester::#GM9] [0m[94mTyped "exi"[0m
-[33m[tester::#GM9] [0m[92m✓ Prompt line matches "$ exi"[0m
-[33m[tester::#GM9] [0m[94mPressed "<TAB>" (expecting autocomplete to "exit")[0m
-[33m[tester::#GM9] [0m[92m✓ Prompt line matches "exit"[0m
-[33m[tester::#GM9] [0m[94mTyped "0"[0m
+[33m[tester::#GM9] [0m[94mTyped "ec"[0m
+[33m[tester::#GM9] [0m[92m✓ Prompt line matches "$ ec"[0m
+[33m[tester::#GM9] [0m[94mPressed "<TAB>" (expecting autocomplete to "echo")[0m
+[33m[tester::#GM9] [0m[92m✓ Prompt line matches "echo"[0m
+[33m[tester::#GM9] [0m[94mTyped "foo bar"[0m
 [33m[tester::#GM9] [0m[94mPressed "<ENTER>"[0m
-[33m[your-program] [0m$ exit 0
+[33m[your-program] [0m$ echo foo bar
+[33m[your-program] [0mfoo bar
+[33m[tester::#GM9] [0m[92m✓ Received "foo bar"[0m
+[33m[your-program] [0m$ 
 [33m[tester::#GM9] [0m[94mTearing down shell[0m
 [33m[tester::#GM9] [0m[92mTest passed.[0m
 
