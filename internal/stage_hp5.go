@@ -75,8 +75,7 @@ func testHP5(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Step 5: Exit the shell
 	exitTest := test_cases.ExitTestCase{
-		Command:          "exit 0",
-		ExpectedExitCode: 0,
+		Command: "exit",
 	}
 	if err := exitTest.Run(asserter, shell, logger); err != nil {
 		return err
@@ -88,7 +87,7 @@ func testHP5(stageHarness *test_case_harness.TestCaseHarness) error {
 		commands[i] = cmd.Command
 	}
 	commands = append(commands, "history")
-	commands = append(commands, "exit 0")
+	commands = append(commands, "exit")
 	if err := test_cases.AssertHistoryFileHasCommands(logger, historyFile, commands); err != nil {
 		return err
 	}

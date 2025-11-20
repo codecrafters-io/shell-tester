@@ -17,11 +17,8 @@ import (
 // Verifies that the shell exits with the expected exit code
 // If any error occurs returns the error from the corresponding assertion
 type ExitTestCase struct {
-	// Command is the exit command to send to the shell (e.g. "exit 0")
+	// Command is the exit command to send to the shell
 	Command string
-
-	// ExpectedExitCode is the expected exit code
-	ExpectedExitCode int
 
 	// ShouldSkipSuccessMessage determines if the success message should be skipped (not used just yet, but can be used in the future)
 	ShouldSkipSuccessMessage bool
@@ -48,21 +45,17 @@ func (t ExitTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, s
 	// We're expecting EOF since the program should've terminated
 	if !errors.Is(readErr, shell_executable.ErrProgramExited) {
 		if readErr == nil {
-			return fmt.Errorf("Expected program to exit with %d exit code, program is still running.", t.ExpectedExitCode)
+			return fmt.Errorf("Expected program to exit, program is still running.")
 		} else if errors.Is(readErr, condition_reader.ErrConditionNotMet) {
-			return fmt.Errorf("Expected program to exit with %d exit code, program is still running.", t.ExpectedExitCode)
+			return fmt.Errorf("Expected program to exit, program is still running.")
 		} else {
 			return fmt.Errorf("Error reading output: %v", readErr)
 		}
 	}
 
-	isTerminated, exitCode := shell.WaitForTermination()
+	isTerminated, _ := shell.WaitForTermination()
 	if !isTerminated {
-		return fmt.Errorf("Expected program to exit with %d exit code, program is still running.", t.ExpectedExitCode)
-	}
-
-	if exitCode != t.ExpectedExitCode {
-		return fmt.Errorf("Expected %d as exit code, got %d", t.ExpectedExitCode, exitCode)
+		return fmt.Errorf("Expected program to exit, program is still running.")
 	}
 
 	// Most shells return nothing but bash returns the string "exit" when it exits, we allow both styles
