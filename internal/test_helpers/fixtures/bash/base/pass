@@ -92,7 +92,7 @@ Debug = true
 [33m[your-program] [0m$ invalid_raspberry_command
 [33m[your-program] [0mbash: invalid_raspberry_command: command not found
 [33m[tester::#PN5] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ exit 0
+[33m[your-program] [0m$ exit
 [33m[your-program] [0mexit
 [33m[tester::#PN5] [0m[92m✓ Program exited successfully[0m
 [33m[tester::#PN5] [0m[92m✓ No output after exit command[0m

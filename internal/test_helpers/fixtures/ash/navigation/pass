@@ -145,7 +145,7 @@ Debug = true
 [33m[your-program] [0m$ invalid_mango_command
 [33m[your-program] [0mash: invalid_mango_command: not found
 [33m[tester::#PN5] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ exit 0
+[33m[your-program] [0m$ exit
 [33m[tester::#PN5] [0m[92m✓ Program exited successfully[0m
 [33m[tester::#PN5] [0m[92m✓ No output after exit command[0m
 [33m[tester::#PN5] [0m[92mTest passed.[0m
