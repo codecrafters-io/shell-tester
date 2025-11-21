@@ -213,10 +213,10 @@ stages:
       ```bash
       $ invalid_command_1
       invalid_command_1: command not found
-      $ exit 0
+      $ exit
       ```
 
-      After issuing the `exit 0` command, the tester will verify whether your program terminates with [code/status](https://en.wikipedia.org/wiki/Exit_status) 0.
+      After issuing the `exit` command, the tester will verify whether your program terminates immediately.
 
       ### Notes
 
@@ -1600,7 +1600,7 @@ stages:
       $ history -w <path_to_history_file>
       $
       ```
-      
+
       The tester will then expect the history file's contents to look like:
 
       ```txt
@@ -1626,7 +1626,7 @@ stages:
       ### Tests
 
       The tester will write the following commands to the history file:
-      
+
       ```txt
       echo initial_command_1
       echo initial_command_2
@@ -1726,15 +1726,15 @@ stages:
       hello
       $ echo world
       world
-      $ exit 0
+      $ exit
       ```
-      
+
       The tester will then expect the history file's contents to look like:
 
       ```txt
       echo hello
       echo world
-      exit 0
+      exit
       ```
 
     marketing_md: |-
@@ -1764,7 +1764,7 @@ stages:
       ```bash
       $ echo new_command
       new_command
-      $ exit 0
+      $ exit
       ```
 
       The tester will then expect the history file's contents to look like:
@@ -1773,7 +1773,7 @@ stages:
       echo initial_command_1
       echo initial_command_2
       echo new_command
-      exit 0
+      exit
       ```
 
     marketing_md: |-
