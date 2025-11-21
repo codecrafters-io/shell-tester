@@ -17,9 +17,6 @@ import (
 // Verifies that the shell exits with the expected exit code
 // If any error occurs returns the error from the corresponding assertion
 type ExitTestCase struct {
-	// Command is the exit command to send to the shell
-	Command string
-
 	// ShouldSkipSuccessMessage determines if the success message should be skipped (not used just yet, but can be used in the future)
 	ShouldSkipSuccessMessage bool
 }
@@ -27,7 +24,7 @@ type ExitTestCase struct {
 func (t ExitTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	// First run a command reflection test to verify the command is sent correctly
 	commandTestCase := CommandWithNoResponseTestCase{
-		Command:             t.Command,
+		Command:             "exit",
 		SkipPromptAssertion: true,
 	}
 	if err := commandTestCase.Run(asserter, shell, logger, true); err != nil {
@@ -53,9 +50,12 @@ func (t ExitTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, s
 		}
 	}
 
-	isTerminated, _ := shell.WaitForTermination()
+	isTerminated, exitCode := shell.WaitForTermination()
 	if !isTerminated {
 		return fmt.Errorf("Expected program to exit, program is still running.")
+	}
+	if exitCode != 0 {
+		return fmt.Errorf("Expected 0 as exit code, got %d", exitCode)
 	}
 
 	// Most shells return nothing but bash returns the string "exit" when it exits, we allow both styles

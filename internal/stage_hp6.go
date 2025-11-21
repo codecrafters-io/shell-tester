@@ -85,9 +85,7 @@ func testHP6(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Step 4: Exit the shell
-	exitTest := test_cases.ExitTestCase{
-		Command: "exit",
-	}
+	exitTest := test_cases.ExitTestCase{}
 	if err := exitTest.Run(asserter, shell, logger); err != nil {
 		return err
 	}

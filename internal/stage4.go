@@ -23,9 +23,7 @@ func testExit(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	exitTestCase := test_cases.ExitTestCase{
-		Command: "exit",
-	}
+	exitTestCase := test_cases.ExitTestCase{}
 	if err := exitTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
