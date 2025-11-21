@@ -17,6 +17,8 @@ import (
 // Verifies that the shell exits with the expected exit code
 // If any error occurs returns the error from the corresponding assertion
 type ExitTestCase struct {
+	ExpectedExitCode int
+
 	// ShouldSkipSuccessMessage determines if the success message should be skipped (not used just yet, but can be used in the future)
 	ShouldSkipSuccessMessage bool
 }
@@ -54,8 +56,11 @@ func (t ExitTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, s
 	if !isTerminated {
 		return fmt.Errorf("Expected program to exit, program is still running.")
 	}
-	if exitCode != 0 {
-		return fmt.Errorf("Expected 0 as exit code, got %d", exitCode)
+	// We want to be lenient since:
+	// - calling `exit` without arguments returns the exit status of the last executed command,
+	// - but we don't want to burden users with this requirement.
+	if !(exitCode == 0 || exitCode == t.ExpectedExitCode) {
+		return fmt.Errorf("Expected %d as exit code, got %d", t.ExpectedExitCode, exitCode)
 	}
 
 	// Most shells return nothing but bash returns the string "exit" when it exits, we allow both styles
