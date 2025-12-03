@@ -17,13 +17,13 @@ jobs:
       - name: Unshallow
         run: git fetch --prune --unshallow
       - name: Set up Go
-        uses: actions/setup-go@v1
+        uses: actions/setup-go@v6
         with:
           go-version: 1.22.x
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
-          version: '~> v2'
+          version: "~> v2"
           args: release -f main.goreleaser.yml --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
