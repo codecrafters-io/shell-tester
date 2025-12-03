@@ -70,7 +70,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 			expectedPath = filepath.Join(executableDir, myExeCommandName)
 
 			// Alpine Busybox has a bug where it doesn't check permissions
-			if isTestingTesterUsingBusyboxAshOnAlpine(stageHarness) {
+			if isTestingTesterUsingAshOnAlpine(stageHarness) {
 				expectedPath = nonExePath
 			}
 		}
