@@ -86,8 +86,8 @@ Debug = true
 [33m[your-program] [0m$ xyz_
 [33m[tester::#WH6] [0m[92m✓ Prompt line matches "$ xyz_"[0m
 [33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting bell to ring)[0m
-[33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_fox  xyz_owl  xyz_rat")[0m
 [33m[tester::#WH6] [0m[92m✓ Received bell[0m
+[33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_fox  xyz_owl  xyz_rat")[0m
 [33m[your-program] [0mxyz_fox  xyz_owl  xyz_rat
 [33m[tester::#WH6] [0m[92m✓ Prompt line matches "xyz_fox  xyz_owl  xyz_rat"[0m
 [33m[tester::#WH6] [0m[92mReceived completion for "xyz_"[0m
