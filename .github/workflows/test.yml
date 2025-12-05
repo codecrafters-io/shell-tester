@@ -43,7 +43,7 @@ jobs:
       - name: Setup Alpine
         uses: jirutka/setup-alpine@v1
         with:
-          branch: latest-stable
+          branch: v3.22 # Pinning because dash on newer versions comes with more bugs
 
       - name: Setup Alpine dependencies
         run: |
