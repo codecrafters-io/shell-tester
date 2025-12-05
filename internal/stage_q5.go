@@ -60,9 +60,6 @@ func testQ5(stageHarness *test_case_harness.TestCaseHarness) error {
 		fmt.Sprintf(`mixed"quote'%s'\`, L[4]),
 		fileContents[0] + fileContents[1] + strings.TrimRight(fileContents[2], "\n"),
 	}
-	if isTestingTesterUsingDashOnAlpine(stageHarness) {
-		expectedOutputs[0] = fmt.Sprintf(`%s'%s''%s`, L[0], L[1], L[2])
-	}
 	testCaseContents := newTestCaseContents(inputs, expectedOutputs)
 
 	for _, testCaseContent := range testCaseContents[:3] {

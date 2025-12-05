@@ -62,11 +62,6 @@ func testQ4(stageHarness *test_case_harness.TestCaseHarness) error {
 		fmt.Sprintf(`%s\\n%s`, L[4], L[1]),
 		fileContents[0] + fileContents[1] + strings.TrimRight(fileContents[2], "\n"),
 	}
-
-	if isTestingTesterUsingDashOnAlpine(stageHarness) {
-		expectedOutputs[1] = fmt.Sprintf(`%s"%s%s"%s`, L[2], L[3], L[4], L[0])
-	}
-
 	fallbackPatterns := [][]*regexp.Regexp{
 		{regexp.MustCompile(fmt.Sprintf(`%s\\n%s`, L[0], L[1]))},
 		nil,
