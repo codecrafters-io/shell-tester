@@ -81,7 +81,7 @@ func (t CommandWithAttemptedCompletionTestCase) Run(asserter *logged_shell_asser
 		commandReflection = fmt.Sprintf("$ %s ", t.ExpectedReflection)
 	}
 	// Assert auto-completion
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
 		StayOnSameLine: true,
 	})
@@ -107,13 +107,13 @@ func (t CommandWithAttemptedCompletionTestCase) Run(asserter *logged_shell_asser
 	// Assert the reflection again, after sending the enter key
 	// This time, there won't be a space after the reflection
 	commandReflection = fmt.Sprintf("$ %s", t.ExpectedReflection)
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
 	})
 
 	// If ExpectedOutput is provided, assert that the output matches
 	if t.ExpectedOutput != "" {
-		asserter.AddAssertion(assertions.SingleLineAssertion{
+		asserter.AddAssertion(&assertions.SingleLineAssertion{
 			ExpectedOutput:   t.ExpectedOutput,
 			FallbackPatterns: t.FallbackPatterns,
 		})

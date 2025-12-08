@@ -50,8 +50,8 @@ func (a *MultiLineAssertion) Inspect() string {
 func (a *MultiLineAssertion) Run(screenState screen_state.ScreenState, startRowIndex int) (processedRowCount int, err *AssertionError) {
 	totalProcessedRowCount := 0
 
-	for _, singleLineAssertion := range a.SingleLineAssertions {
-		processedRowCount, err = singleLineAssertion.Run(screenState, startRowIndex+totalProcessedRowCount)
+	for i := range a.SingleLineAssertions {
+		processedRowCount, err = a.SingleLineAssertions[i].Run(screenState, startRowIndex+totalProcessedRowCount)
 		if err != nil {
 			return totalProcessedRowCount, err
 		}

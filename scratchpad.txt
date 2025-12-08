@@ -1,0 +1,24 @@
+[tester::#WH6] Running tests for Stage #WH6 (Autocompletion - Multiple completions)
+[tester::#WH6] [setup] export PATH=/tmp/owl:$PATH
+[tester::#WH6] [setup] export PATH=/tmp/fox:$PATH
+[tester::#WH6] [setup] export PATH=/tmp/ant:$PATH
+[tester::#WH6] [setup] Available executables:
+[tester::#WH6] [setup] - xyz_fox
+[tester::#WH6] [setup] - xyz_bee
+[tester::#WH6] [setup] - xyz_pig
+[tester::#WH6] Running ./your_program.sh
+[tester::#WH6] ✓ Received prompt ($ )
+[tester::#WH6] Typed "xyz_"
+[your-program] $ xyz_
+[tester::#WH6] ✓ Prompt line matches "$ xyz_"
+[tester::#WH6] Pressed "<TAB>" (expecting bell to ring)
+[tester::#WH6] ✓ Received bell
+[tester::#WH6] Pressed "<TAB>" (expecting autocomplete to "xyz_bee  xyz_fox  xyz_pig")
+ 
+[screen] -----------------------Current screen state---------------------------
+[screen] [line 1] $ xyz_xyz_bee  xyz_fox  xyz_pig
+[tester::#WH6] ^ Line should not be modified.
+[tester::#WH6] Expected: "$ xyz_"
+[tester::#WH6] Modified: "$ xyz_xyz_bee  xyz_fox  xyz_pig"
+[tester::#WH6] Assertion failed.
+[tester::#WH6] Test failed

@@ -29,7 +29,7 @@ func (t CommandWithMultilineResponseTestCase) Run(asserter *logged_shell_asserte
 	}
 
 	commandReflection := fmt.Sprintf("$ %s", t.Command)
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
 	})
 
