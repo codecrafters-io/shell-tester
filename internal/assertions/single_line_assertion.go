@@ -20,13 +20,15 @@ type SingleLineAssertion struct {
 	// should stay on the same line after the assertion is run
 	// Most probably because the next assertion will run on the same line
 	StayOnSameLine bool
+
+	hasPassedBefore bool
 }
 
 func (a SingleLineAssertion) Inspect() string {
 	return fmt.Sprintf("SingleLineAssertion (%q)", a.ExpectedOutput)
 }
 
-func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowIndex int) (processedRowCount int, err *AssertionError) {
+func (a *SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowIndex int) (processedRowCount int, err *AssertionError) {
 	if a.ExpectedOutput == "" && len(a.FallbackPatterns) == 0 {
 		panic("CodeCrafters Internal Error: ExpectedOutput or fallbackPatterns must be provided")
 	}
@@ -61,6 +63,11 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 				ErrorRowIndex: startRowIndex,
 				Message:       "Didn't find expected line.\n" + detailedErrorMessage,
 			}
+		} else if a.hasPassedBefore {
+			return 0, &AssertionError{
+				ErrorRowIndex: startRowIndex,
+				Message:       "A previous line should not be modified.\n" + detailedErrorMessage,
+			}
 		} else {
 			return 0, &AssertionError{
 				ErrorRowIndex: startRowIndex,
@@ -68,6 +75,7 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 			}
 		}
 	} else {
+		a.hasPassedBefore = true
 		return processedRowCount, nil
 	}
 }

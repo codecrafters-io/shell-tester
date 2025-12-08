@@ -50,7 +50,7 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 	}
 
 	inputReflection := fmt.Sprintf("$ %s", t.RawCommand)
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput: inputReflection,
 		StayOnSameLine: false,
 	})
@@ -108,7 +108,7 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 	}
 
 	// Assert auto-completion
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
 	})
 	// Run the assertion, before sending the enter key
@@ -122,7 +122,7 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 	// The space at the end of the reflection won't be present, so replace that assertion
 	// asserter.PopAssertion()
 
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput: inputReflection,
 		StayOnSameLine: true,
 	})

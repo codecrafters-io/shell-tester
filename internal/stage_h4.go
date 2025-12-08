@@ -78,7 +78,7 @@ func testH4(stageHarness *test_case_harness.TestCaseHarness) error {
 			return err
 		}
 		stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<UP ARROW>", expected.message)
-		asserter.AddAssertion(assertions.SingleLineAssertion{
+		asserter.AddAssertion(&assertions.SingleLineAssertion{
 			ExpectedOutput: "$ " + expected.command,
 			StayOnSameLine: true,
 		})

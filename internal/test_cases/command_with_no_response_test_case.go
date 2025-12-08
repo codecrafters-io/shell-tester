@@ -30,7 +30,7 @@ func (t CommandWithNoResponseTestCase) Run(asserter *logged_shell_asserter.Logge
 	}
 
 	commandReflection := fmt.Sprintf("$ %s", t.Command)
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
 	})
 

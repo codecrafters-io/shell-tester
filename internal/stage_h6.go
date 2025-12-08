@@ -79,7 +79,7 @@ func testH6(stageHarness *test_case_harness.TestCaseHarness) error {
 			return err
 		}
 		stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<UP ARROW>", expected.message)
-		asserter.AddAssertion(assertions.SingleLineAssertion{
+		asserter.AddAssertion(&assertions.SingleLineAssertion{
 			ExpectedOutput: "$ " + expected.command,
 			FallbackPatterns: []*regexp.Regexp{
 				regexp.MustCompile(`^\s*` + expected.command + `\s*$`),
@@ -98,7 +98,7 @@ func testH6(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 	stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<DOWN ARROW>", echoCommand.Command)
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput: "$ " + echoCommand.Command,
 		FallbackPatterns: []*regexp.Regexp{
 			regexp.MustCompile(`^\s*` + echoCommand.Command + `\s*$`),
@@ -116,10 +116,10 @@ func testH6(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 	stageHarness.Logger.Infof("Executing command %q", echoCommand.Command)
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput: "$ " + echoCommand.Command,
 	})
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput: randomWords3,
 	})
 	if err := asserter.AssertWithPrompt(); err != nil {
