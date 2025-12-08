@@ -42,6 +42,7 @@ func (a *SingleLineAssertion) Run(screenState screen_state.ScreenState, startRow
 
 	for _, pattern := range a.FallbackPatterns {
 		if pattern.Match([]byte(row.String())) {
+			a.hasPassedBefore = true
 			return processedRowCount, nil
 		}
 	}
