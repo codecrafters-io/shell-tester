@@ -35,8 +35,8 @@ Debug = true
 [33m[tester::#XK3] [setup] [0m[94mexport PATH=/tmp/blueberry/strawberry/grape:$PATH[0m
 [33m[tester::#XK3] [setup] [0m[94mecho -e "pineapple\nstrawberry\norange\napple\npear" > "/tmp/cow/file-45"[0m
 [33m[tester::#XK3] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ cat /tmp/cow/file-45 | head -n 5 | wc
-[33m[your-program] [0m       5       5      39
+[33m[your-program] [0m$ cat /tmp/cow/file-45 | head -n 3 | wc
+[33m[your-program] [0m       3       3      28
 [33m[tester::#XK3] [0m[92m✓ Received expected output[0m
 [33m[tester::#XK3] [setup] [0m[94mecho -n "apple" > "/tmp/bee/f-72"[0m
 [33m[tester::#XK3] [setup] [0m[94mecho -n "raspberry" > "/tmp/bee/f-90"[0m
