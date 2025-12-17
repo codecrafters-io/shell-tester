@@ -38,7 +38,7 @@ func (t *InvalidCommandTestCase) RunWithoutNextPromptAssertion(asserter *logged_
 		return err
 	}
 
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput:   t.getExpectedOutput(),
 		FallbackPatterns: t.getFallbackPatterns(),
 	})

@@ -56,7 +56,7 @@ func (t CommandPartialCompletionsTestCase) Run(asserter *logged_shell_asserter.L
 		}
 
 		inputReflection := fmt.Sprintf("$ %s", prevInput+t.Inputs[idx])
-		asserter.AddAssertion(assertions.SingleLineAssertion{
+		asserter.AddAssertion(&assertions.SingleLineAssertion{
 			ExpectedOutput: inputReflection,
 			StayOnSameLine: true,
 		})
@@ -82,7 +82,7 @@ func (t CommandPartialCompletionsTestCase) Run(asserter *logged_shell_asserter.L
 		}
 
 		// Assert auto-completion
-		asserter.AddAssertion(assertions.SingleLineAssertion{
+		asserter.AddAssertion(&assertions.SingleLineAssertion{
 			ExpectedOutput: commandReflection,
 			StayOnSameLine: true,
 		})
