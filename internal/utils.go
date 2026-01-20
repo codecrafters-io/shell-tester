@@ -54,6 +54,13 @@ func escapeBackslashes(input string) string {
 	return strings.ReplaceAll(input, `\`, `\\`)
 }
 
+func escapeForShell(input string) string {
+	// Escape backslashes first, then quotes
+	result := strings.ReplaceAll(input, `\`, `\\`)
+	result = strings.ReplaceAll(result, `"`, `\"`)
+	return result
+}
+
 func getRandomInvalidCommand() string {
 	return getRandomInvalidCommands(1)[0]
 }

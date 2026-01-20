@@ -52,7 +52,7 @@ func testQ5(stageHarness *test_case_harness.TestCaseHarness) error {
 		fmt.Sprintf(`echo "%s'%s'\\'%s"`, L[0], L[1], L[2]),
 		fmt.Sprintf(`echo "%s\"insidequotes"%s\"`, L[0], L[1]),
 		fmt.Sprintf(`echo "mixed\"quote'%s'\\"`, L[4]),
-		fmt.Sprintf(`%s %s %s %s`, CUSTOM_CAT_COMMAND, escapeBackslashes(filePaths[0]), escapeBackslashes(filePaths[1]), escapeBackslashes(filePaths[2])),
+		fmt.Sprintf(`%s %s %s %s`, CUSTOM_CAT_COMMAND, escapeForShell(filePaths[0]), escapeForShell(filePaths[1]), escapeBackslashes(filePaths[2])),
 	}
 	expectedOutputs := []string{
 		fmt.Sprintf(`%s'%s'\'%s`, L[0], L[1], L[2]),
