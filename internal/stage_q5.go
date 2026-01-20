@@ -29,17 +29,22 @@ func testQ5(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	randomUniqueFileNames := random.RandomInts(1, 100, 3)
-	filePaths := []string{
-		path.Join(randomDir, fmt.Sprintf("\"f %d\"", randomUniqueFileNames[0])),
-		path.Join(randomDir, fmt.Sprintf("\"f\\%d\"", randomUniqueFileNames[1])),
-		path.Join(randomDir, fmt.Sprintf("f%d", randomUniqueFileNames[2])),
+	actualFilePaths := []string{
+		path.Join(randomDir, fmt.Sprintf(`number %d`, randomUniqueFileNames[0])),
+		path.Join(randomDir, fmt.Sprintf(`doublequote " %d`, randomUniqueFileNames[0])),
+		path.Join(randomDir, fmt.Sprintf(`backslash \ %d`, randomUniqueFileNames[0])),
+	}
+	testFilePaths := []string{
+		path.Join(randomDir, fmt.Sprintf(`"number %d"`, randomUniqueFileNames[0])),
+		path.Join(randomDir, fmt.Sprintf(`"doublequote \" %d"`, randomUniqueFileNames[0])),
+		path.Join(randomDir, fmt.Sprintf(`"backslash \\ %d"`, randomUniqueFileNames[0])),
 	}
 	fileContents := []string{
 		strings.Join(random.RandomWords(2), " ") + ".",
 		strings.Join(random.RandomWords(2), " ") + ".",
 		strings.Join(random.RandomWords(2), " ") + "." + "\n",
 	}
-	if err := writeFiles(filePaths, fileContents, logger); err != nil {
+	if err := writeFiles(actualFilePaths, fileContents, logger); err != nil {
 		return err
 	}
 
@@ -52,7 +57,7 @@ func testQ5(stageHarness *test_case_harness.TestCaseHarness) error {
 		fmt.Sprintf(`echo "%s'%s'\\'%s"`, L[0], L[1], L[2]),
 		fmt.Sprintf(`echo "%s\"insidequotes"%s\"`, L[0], L[1]),
 		fmt.Sprintf(`echo "mixed\"quote'%s'\\"`, L[4]),
-		fmt.Sprintf(`%s %q %q %q`, CUSTOM_CAT_COMMAND, filePaths[0], filePaths[1], filePaths[2]),
+		fmt.Sprintf(`%s %s %s %s`, CUSTOM_CAT_COMMAND, testFilePaths[0], testFilePaths[1], testFilePaths[2]),
 	}
 	expectedOutputs := []string{
 		fmt.Sprintf(`%s'%s'\'%s`, L[0], L[1], L[2]),
