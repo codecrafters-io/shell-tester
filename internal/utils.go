@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/tester-utils/random"
@@ -47,6 +48,10 @@ func newTestCaseContentsWithFallbackPatterns(inputs []string, expectedOutputs []
 		testCases = append(testCases, newTestCaseContent(input, expectedOutputs[i], fallbackPatterns[i]))
 	}
 	return testCases
+}
+
+func escapeBackslashes(input string) string {
+	return strings.ReplaceAll(input, `\`, `\\`)
 }
 
 func getRandomInvalidCommand() string {
