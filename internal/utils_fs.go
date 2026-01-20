@@ -130,15 +130,15 @@ func writeFiles(paths []string, contents []string, logger *logger.Logger) error 
 
 		if strings.HasSuffix(content, "\n") {
 			if strings.Count(content, "\n") == 1 { // Trailing newline only
-				logger.Infof("echo %q > %q", content[:len(content)-1], paths[i])
+				logger.Infof("echo %q > %s", content[:len(content)-1], paths[i])
 			} else { // Newline(s) in the middle as well
-				logger.Infof("echo -e %q > %q", content[:len(content)-1], paths[i])
+				logger.Infof("echo -e %q > %s", content[:len(content)-1], paths[i])
 			}
 		} else {
 			if strings.Contains(content, "\n") {
-				logger.Infof("echo -ne %q > %q", content, paths[i])
+				logger.Infof("echo -ne %q > %s", content, paths[i])
 			} else {
-				logger.Infof("echo -n %q > %q", content, paths[i])
+				logger.Infof("echo -n %q > %s", content, paths[i])
 			}
 		}
 
