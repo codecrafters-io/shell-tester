@@ -52,7 +52,7 @@ func testQ3(stageHarness *test_case_harness.TestCaseHarness) error {
 		fmt.Sprintf(`echo %s\ \ \ \ \ \ %s`, L[0], L[1]),
 		fmt.Sprintf(`echo \'\"%s %s\"\'`, L[1], L[2]),
 		fmt.Sprintf(`echo %s\n%s`, L[2], L[3]),
-		fmt.Sprintf(`%s %s %s %s`, CUSTOM_CAT_COMMAND, filePaths[0], filePaths[1], filePaths[2]),
+		fmt.Sprintf(`%s "%s" "%s" "%s"`, CUSTOM_CAT_COMMAND, filePaths[0], filePaths[1], filePaths[2]),
 	}
 	expectedOutputs := []string{
 		fmt.Sprintf("%s      %s", L[0], L[1]),
