@@ -87,8 +87,8 @@ Debug = true
 [33m[tester::#GU3] [0m[94mRunning tests for Stage #GU3 (gu3)[0m
 [33m[tester::#GU3] [setup] [0m[94mexport PATH=/tmp/banana/pear/pineapple:$PATH[0m
 [33m[tester::#GU3] [setup] [0m[94mecho -n "banana pineapple." > "/tmp/rat/number 38"[0m
-[33m[tester::#GU3] [setup] [0m[94mecho -n "raspberry blueberry." > "/tmp/rat/doublequote \" 38"[0m
-[33m[tester::#GU3] [setup] [0m[94mecho "apple pineapple." > "/tmp/rat/backslash \\ 38"[0m
+[33m[tester::#GU3] [setup] [0m[94mecho -n "raspberry blueberry." > "/tmp/rat/doublequote \" 93"[0m
+[33m[tester::#GU3] [setup] [0m[94mecho "apple pineapple." > "/tmp/rat/backslash \\ 57"[0m
 [33m[tester::#GU3] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m$ echo "example'world'\\'hello"
 [33m[your-program] [0mexample'world'\'hello
@@ -99,7 +99,7 @@ Debug = true
 [33m[your-program] [0m$ echo "mixed\"quote'script'\\"
 [33m[your-program] [0mmixed"quote'script'\
 [33m[tester::#GU3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ cat /tmp/rat/"number 38" /tmp/rat/"doublequote \" 38" /tmp/rat/"backslash \\ 38"
+[33m[your-program] [0m$ cat /tmp/rat/"number 38" /tmp/rat/"doublequote \" 93" /tmp/rat/"backslash \\ 57"
 [33m[your-program] [0mbanana pineapple.raspberry blueberry.apple pineapple.
 [33m[tester::#GU3] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m$ 
