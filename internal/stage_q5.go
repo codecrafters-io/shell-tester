@@ -31,13 +31,13 @@ func testQ5(stageHarness *test_case_harness.TestCaseHarness) error {
 	randomUniqueFileNames := random.RandomInts(1, 100, 3)
 	actualFilePaths := []string{
 		path.Join(randomDir, fmt.Sprintf(`number %d`, randomUniqueFileNames[0])),
-		path.Join(randomDir, fmt.Sprintf(`doublequote " %d`, randomUniqueFileNames[0])),
-		path.Join(randomDir, fmt.Sprintf(`backslash \ %d`, randomUniqueFileNames[0])),
+		path.Join(randomDir, fmt.Sprintf(`doublequote " %d`, randomUniqueFileNames[1])),
+		path.Join(randomDir, fmt.Sprintf(`backslash \ %d`, randomUniqueFileNames[2])),
 	}
 	testFilePaths := []string{
 		path.Join(randomDir, fmt.Sprintf(`"number %d"`, randomUniqueFileNames[0])),
-		path.Join(randomDir, fmt.Sprintf(`"doublequote \" %d"`, randomUniqueFileNames[0])),
-		path.Join(randomDir, fmt.Sprintf(`"backslash \\ %d"`, randomUniqueFileNames[0])),
+		path.Join(randomDir, fmt.Sprintf(`"doublequote \" %d"`, randomUniqueFileNames[1])),
+		path.Join(randomDir, fmt.Sprintf(`"backslash \\ %d"`, randomUniqueFileNames[2])),
 	}
 	fileContents := []string{
 		strings.Join(random.RandomWords(2), " ") + ".",
