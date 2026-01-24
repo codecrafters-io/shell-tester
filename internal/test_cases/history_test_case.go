@@ -53,7 +53,7 @@ func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter
 	// Check only the specified number of most recent commands
 	for i, command := range t.PreviousCommands[startIdx:] {
 		expectedLineNumber := t.HistoryOffset + startIdx + i + 1
-		asserter.AddAssertion(assertions.SingleLineAssertion{
+		asserter.AddAssertion(&assertions.SingleLineAssertion{
 			ExpectedOutput: fmt.Sprintf("    %d  %s", expectedLineNumber, command),
 			FallbackPatterns: []*regexp.Regexp{
 				regexp.MustCompile(fmt.Sprintf(`^\s*%d\s+%s$`, expectedLineNumber, regexp.QuoteMeta(command))),
@@ -64,7 +64,7 @@ func (t HistoryTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter
 
 	// Add assertion for the history command itself
 	expectedHistoryLineNumber := t.HistoryOffset + len(t.PreviousCommands) + 1
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput: fmt.Sprintf("    %d  %s", expectedHistoryLineNumber, historyCommand),
 		FallbackPatterns: []*regexp.Regexp{
 			regexp.MustCompile(fmt.Sprintf(`^\s*%d\s+%s$`, expectedHistoryLineNumber, regexp.QuoteMeta(historyCommand))),

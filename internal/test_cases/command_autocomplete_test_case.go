@@ -43,7 +43,7 @@ func (t CommandAutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	}
 
 	inputReflection := fmt.Sprintf("$ %s", t.RawCommand)
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput: inputReflection,
 		StayOnSameLine: true,
 	})
@@ -70,7 +70,7 @@ func (t CommandAutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		commandReflection = fmt.Sprintf("$ %s ", t.ExpectedReflection)
 	}
 	// Assert auto-completion
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
 		StayOnSameLine: true,
 	})

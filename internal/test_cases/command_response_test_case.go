@@ -35,11 +35,11 @@ func (t CommandResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShell
 	}
 
 	commandReflection := fmt.Sprintf("$ %s", t.Command)
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
 	})
 
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput:   t.ExpectedOutput,
 		FallbackPatterns: t.FallbackPatterns,
 	})

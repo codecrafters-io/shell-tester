@@ -79,7 +79,7 @@ func testH5(stageHarness *test_case_harness.TestCaseHarness) error {
 			return err
 		}
 		stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<UP ARROW>", expected.message)
-		asserter.AddAssertion(assertions.SingleLineAssertion{
+		asserter.AddAssertion(&assertions.SingleLineAssertion{
 			ExpectedOutput: "$ " + expected.command,
 			FallbackPatterns: []*regexp.Regexp{
 				regexp.MustCompile(`^\s*` + expected.command + `\s*$`),
@@ -98,7 +98,7 @@ func testH5(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 	stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<DOWN ARROW>", echoCommand.Command)
-	asserter.AddAssertion(assertions.SingleLineAssertion{
+	asserter.AddAssertion(&assertions.SingleLineAssertion{
 		ExpectedOutput: "$ " + echoCommand.Command,
 		StayOnSameLine: true,
 	})
