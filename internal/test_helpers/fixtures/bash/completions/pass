@@ -7,7 +7,7 @@ Debug = true
 [33m[tester::#QP2] [0m[92m✓ Prompt line matches "$ ech"[0m
 [33m[tester::#QP2] [0m[94mPressed "<TAB>" (expecting autocomplete to "echo")[0m
 [33m[tester::#QP2] [0m[92m✓ Prompt line matches "echo"[0m
-[33m[your-program] [0m$ echo 
+[33m[your-program] [0m[0m$ echo [0m
 [33m[tester::#QP2] [0m[94mTearing down shell[0m
 [33m[tester::#QP2] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#QP2] [0m[92m✓ Received prompt ($ )[0m
@@ -15,7 +15,7 @@ Debug = true
 [33m[tester::#QP2] [0m[92m✓ Prompt line matches "$ exi"[0m
 [33m[tester::#QP2] [0m[94mPressed "<TAB>" (expecting autocomplete to "exit")[0m
 [33m[tester::#QP2] [0m[92m✓ Prompt line matches "exit"[0m
-[33m[your-program] [0m$ exit 
+[33m[your-program] [0m[0m$ exit [0m
 [33m[tester::#QP2] [0m[94mTearing down shell[0m
 [33m[tester::#QP2] [0m[92mTest passed.[0m
 
@@ -28,10 +28,10 @@ Debug = true
 [33m[tester::#GM9] [0m[92m✓ Prompt line matches "echo"[0m
 [33m[tester::#GM9] [0m[94mTyped "hello"[0m
 [33m[tester::#GM9] [0m[94mPressed "<ENTER>"[0m
-[33m[your-program] [0m$ echo hello
-[33m[your-program] [0mhello
+[33m[your-program] [0m[0m$ echo hello[0m
+[33m[your-program] [0m[0mhello[0m
 [33m[tester::#GM9] [0m[92m✓ Received "hello"[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m[0m$ [0m
 [33m[tester::#GM9] [0m[94mTearing down shell[0m
 [33m[tester::#GM9] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#GM9] [0m[92m✓ Received prompt ($ )[0m
@@ -41,10 +41,10 @@ Debug = true
 [33m[tester::#GM9] [0m[92m✓ Prompt line matches "echo"[0m
 [33m[tester::#GM9] [0m[94mTyped "foo bar"[0m
 [33m[tester::#GM9] [0m[94mPressed "<ENTER>"[0m
-[33m[your-program] [0m$ echo foo bar
-[33m[your-program] [0mfoo bar
+[33m[your-program] [0m[0m$ echo foo bar[0m
+[33m[your-program] [0m[0mfoo bar[0m
 [33m[tester::#GM9] [0m[92m✓ Received "foo bar"[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m[0m$ [0m
 [33m[tester::#GM9] [0m[94mTearing down shell[0m
 [33m[tester::#GM9] [0m[92mTest passed.[0m
 
@@ -56,7 +56,7 @@ Debug = true
 [33m[tester::#QM8] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz")[0m
 [33m[tester::#QM8] [0m[92m✓ Prompt line matches "xyz"[0m
 [33m[tester::#QM8] [0m[92m✓ Received bell[0m
-[33m[your-program] [0m$ xyz
+[33m[your-program] [0m[0m$ xyz[0m
 [33m[tester::#QM8] [0m[92mTest passed.[0m
 
 [33m[tester::#GY5] [0m[94mRunning tests for Stage #GY5 (gy5)[0m
@@ -69,7 +69,7 @@ Debug = true
 [33m[tester::#GY5] [0m[92m✓ Prompt line matches "$ custom"[0m
 [33m[tester::#GY5] [0m[94mPressed "<TAB>" (expecting autocomplete to "custom_exe_1357")[0m
 [33m[tester::#GY5] [0m[92m✓ Prompt line matches "custom_exe_1357"[0m
-[33m[your-program] [0m$ custom_exe_1357 
+[33m[your-program] [0m[0m$ custom_exe_1357 [0m
 [33m[tester::#GY5] [0m[92mTest passed.[0m
 
 [33m[tester::#WH6] [0m[94mRunning tests for Stage #WH6 (wh6)[0m
@@ -83,15 +83,15 @@ Debug = true
 [33m[tester::#WH6] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#WH6] [0m[92m✓ Received prompt ($ )[0m
 [33m[tester::#WH6] [0m[94mTyped "xyz_"[0m
-[33m[your-program] [0m$ xyz_
+[33m[your-program] [0m[0m$ xyz_[0m
 [33m[tester::#WH6] [0m[92m✓ Prompt line matches "$ xyz_"[0m
 [33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting bell to ring)[0m
 [33m[tester::#WH6] [0m[92m✓ Received bell[0m
 [33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_fox  xyz_owl  xyz_rat")[0m
-[33m[your-program] [0mxyz_fox  xyz_owl  xyz_rat
+[33m[your-program] [0m[0mxyz_fox  xyz_owl  xyz_rat[0m
 [33m[tester::#WH6] [0m[92m✓ Prompt line matches "xyz_fox  xyz_owl  xyz_rat"[0m
 [33m[tester::#WH6] [0m[92mReceived completion for "xyz_"[0m
-[33m[your-program] [0m$ xyz_
+[33m[your-program] [0m[0m$ xyz_[0m
 [33m[tester::#WH6] [0m[92mTest passed.[0m
 
 [33m[tester::#WT6] [0m[94mRunning tests for Stage #WT6 (wt6)[0m
@@ -117,5 +117,5 @@ Debug = true
 [33m[tester::#WT6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_cow_owl_bee")[0m
 [33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_cow_owl_bee "[0m
 [33m[tester::#WT6] [0m[92mReceived all partial completions for "xyz_cow_owl_bee"[0m
-[33m[your-program] [0m$ xyz_cow_owl_bee 
+[33m[your-program] [0m[0m$ xyz_cow_owl_bee [0m
 [33m[tester::#WT6] [0m[92mTest passed.[0m

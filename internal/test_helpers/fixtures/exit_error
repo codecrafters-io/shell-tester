@@ -2,11 +2,11 @@ Debug = true
 
 [33m[tester::#PN5] [0m[94mRunning tests for Stage #PN5 (pn5)[0m
 [33m[tester::#PN5] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ invalid_apple_command
-[33m[your-program] [0minvalid_apple_command: command not found
+[33m[your-program] [0m[0m$ invalid_apple_command[0m
+[33m[your-program] [0m[0minvalid_apple_command: command not found[0m
 [33m[tester::#PN5] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ exit
-[33m[your-program] [0mexit: command not found
-[33m[your-program] [0m$ 
+[33m[your-program] [0m[0m$ exit[0m
+[33m[your-program] [0m[0mexit: command not found[0m
+[33m[your-program] [0m[0m$ [0m
 [33m[tester::#PN5] [0m[91mExpected program to exit, program is still running.[0m
 [33m[tester::#PN5] [0m[91mTest failed[0m
