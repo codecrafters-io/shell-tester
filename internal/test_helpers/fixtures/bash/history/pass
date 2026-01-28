@@ -2,86 +2,86 @@ Debug = true
 
 [33m[tester::#BQ4] [0m[94mRunning tests for Stage #BQ4 (bq4)[0m
 [33m[tester::#BQ4] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ type history
-[33m[your-program] [0mhistory is a shell builtin
+[33m[your-program] [0m[0m$ type history[0m
+[33m[your-program] [0m[0mhistory is a shell builtin[0m
 [33m[tester::#BQ4] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m[0m$ [0m
 [33m[tester::#BQ4] [0m[92mTest passed.[0m
 
 [33m[tester::#YF5] [0m[94mRunning tests for Stage #YF5 (yf5)[0m
 [33m[tester::#YF5] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo apple blueberry
-[33m[your-program] [0mapple blueberry
+[33m[your-program] [0m[0m$ echo apple blueberry[0m
+[33m[your-program] [0m[0mapple blueberry[0m
 [33m[tester::#YF5] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ echo blueberry raspberry
-[33m[your-program] [0mblueberry raspberry
+[33m[your-program] [0m[0m$ echo blueberry raspberry[0m
+[33m[your-program] [0m[0mblueberry raspberry[0m
 [33m[tester::#YF5] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ echo blueberry mango
-[33m[your-program] [0mblueberry mango
+[33m[your-program] [0m[0m$ echo blueberry mango[0m
+[33m[your-program] [0m[0mblueberry mango[0m
 [33m[tester::#YF5] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ history
-[33m[your-program] [0m    1  echo apple blueberry
-[33m[your-program] [0m    2  echo blueberry raspberry
-[33m[your-program] [0m    3  echo blueberry mango
-[33m[your-program] [0m    4  history
+[33m[your-program] [0m[0m$ history[0m
+[33m[your-program] [0m[0m    1  echo apple blueberry[0m
+[33m[your-program] [0m[0m    2  echo blueberry raspberry[0m
+[33m[your-program] [0m[0m    3  echo blueberry mango[0m
+[33m[your-program] [0m[0m    4  history[0m
 [33m[tester::#YF5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m[0m$ [0m
 [33m[tester::#YF5] [0m[92mTest passed.[0m
 
 [33m[tester::#AG6] [0m[94mRunning tests for Stage #AG6 (ag6)[0m
 [33m[tester::#AG6] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo orange blueberry
-[33m[your-program] [0morange blueberry
+[33m[your-program] [0m[0m$ echo orange blueberry[0m
+[33m[your-program] [0m[0morange blueberry[0m
 [33m[tester::#AG6] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ echo grape pineapple
-[33m[your-program] [0mgrape pineapple
+[33m[your-program] [0m[0m$ echo grape pineapple[0m
+[33m[your-program] [0m[0mgrape pineapple[0m
 [33m[tester::#AG6] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ echo blueberry apple
-[33m[your-program] [0mblueberry apple
+[33m[your-program] [0m[0m$ echo blueberry apple[0m
+[33m[your-program] [0m[0mblueberry apple[0m
 [33m[tester::#AG6] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ history 2
-[33m[your-program] [0m    3  echo blueberry apple
-[33m[your-program] [0m    4  history 2
+[33m[your-program] [0m[0m$ history 2[0m
+[33m[your-program] [0m[0m    3  echo blueberry apple[0m
+[33m[your-program] [0m[0m    4  history 2[0m
 [33m[tester::#AG6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ echo banana pineapple
-[33m[your-program] [0mbanana pineapple
+[33m[your-program] [0m[0m$ echo banana pineapple[0m
+[33m[your-program] [0m[0mbanana pineapple[0m
 [33m[tester::#AG6] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ echo orange raspberry
-[33m[your-program] [0morange raspberry
+[33m[your-program] [0m[0m$ echo orange raspberry[0m
+[33m[your-program] [0m[0morange raspberry[0m
 [33m[tester::#AG6] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ echo apple banana
-[33m[your-program] [0mapple banana
+[33m[your-program] [0m[0m$ echo apple banana[0m
+[33m[your-program] [0m[0mapple banana[0m
 [33m[tester::#AG6] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ echo strawberry pear
-[33m[your-program] [0mstrawberry pear
+[33m[your-program] [0m[0m$ echo strawberry pear[0m
+[33m[your-program] [0m[0mstrawberry pear[0m
 [33m[tester::#AG6] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ echo grape raspberry
-[33m[your-program] [0mgrape raspberry
+[33m[your-program] [0m[0m$ echo grape raspberry[0m
+[33m[your-program] [0m[0mgrape raspberry[0m
 [33m[tester::#AG6] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ echo apple raspberry
-[33m[your-program] [0mapple raspberry
+[33m[your-program] [0m[0m$ echo apple raspberry[0m
+[33m[your-program] [0m[0mapple raspberry[0m
 [33m[tester::#AG6] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ history 3
-[33m[your-program] [0m    9  echo grape raspberry
-[33m[your-program] [0m   10  echo apple raspberry
-[33m[your-program] [0m   11  history 3
+[33m[your-program] [0m[0m$ history 3[0m
+[33m[your-program] [0m[0m    9  echo grape raspberry[0m
+[33m[your-program] [0m[0m   10  echo apple raspberry[0m
+[33m[your-program] [0m[0m   11  history 3[0m
 [33m[tester::#AG6] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m[0m$ [0m
 [33m[tester::#AG6] [0m[92mTest passed.[0m
 
 [33m[tester::#RH7] [0m[94mRunning tests for Stage #RH7 (rh7)[0m
 [33m[tester::#RH7] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo strawberry grape
-[33m[your-program] [0mstrawberry grape
+[33m[your-program] [0m[0m$ echo strawberry grape[0m
+[33m[your-program] [0m[0mstrawberry grape[0m
 [33m[tester::#RH7] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ echo orange mango
-[33m[your-program] [0morange mango
+[33m[your-program] [0m[0m$ echo orange mango[0m
+[33m[your-program] [0m[0morange mango[0m
 [33m[tester::#RH7] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ invalid_pineapple_command
-[33m[your-program] [0mbash: invalid_pineapple_command: command not found
+[33m[your-program] [0m[0m$ invalid_pineapple_command[0m
+[33m[your-program] [0m[0mbash: invalid_pineapple_command: command not found[0m
 [33m[tester::#RH7] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ echo orange banana
-[33m[your-program] [0morange banana
+[33m[your-program] [0m[0m$ echo orange banana[0m
+[33m[your-program] [0m[0morange banana[0m
 [33m[tester::#RH7] [0m[92m✓ Command executed successfully[0m
 [33m[tester::#RH7] [0m[94mPressed "<UP ARROW>" (expecting to recall "echo orange banana")[0m
 [33m[tester::#RH7] [0m[92m✓ Prompt line matches "echo orange banana"[0m
@@ -89,22 +89,22 @@ Debug = true
 [33m[tester::#RH7] [0m[92m✓ Prompt line matches "invalid_pineapple_command"[0m
 [33m[tester::#RH7] [0m[94mPressed "<UP ARROW>" (expecting to recall "echo orange mango")[0m
 [33m[tester::#RH7] [0m[92m✓ Prompt line matches "echo orange mango"[0m
-[33m[your-program] [0m$ echo orange mango
+[33m[your-program] [0m[0m$ echo orange mango[0m
 [33m[tester::#RH7] [0m[92mTest passed.[0m
 
 [33m[tester::#VQ0] [0m[94mRunning tests for Stage #VQ0 (vq0)[0m
 [33m[tester::#VQ0] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo mango banana
-[33m[your-program] [0mmango banana
+[33m[your-program] [0m[0m$ echo mango banana[0m
+[33m[your-program] [0m[0mmango banana[0m
 [33m[tester::#VQ0] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ echo apple mango
-[33m[your-program] [0mapple mango
+[33m[your-program] [0m[0m$ echo apple mango[0m
+[33m[your-program] [0m[0mapple mango[0m
 [33m[tester::#VQ0] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ invalid_raspberry_command
-[33m[your-program] [0mbash: invalid_raspberry_command: command not found
+[33m[your-program] [0m[0m$ invalid_raspberry_command[0m
+[33m[your-program] [0m[0mbash: invalid_raspberry_command: command not found[0m
 [33m[tester::#VQ0] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ echo orange strawberry
-[33m[your-program] [0morange strawberry
+[33m[your-program] [0m[0m$ echo orange strawberry[0m
+[33m[your-program] [0m[0morange strawberry[0m
 [33m[tester::#VQ0] [0m[92m✓ Command executed successfully[0m
 [33m[tester::#VQ0] [0m[94mPressed "<UP ARROW>" (expecting to recall "echo orange strawberry")[0m
 [33m[tester::#VQ0] [0m[92m✓ Prompt line matches "echo orange strawberry"[0m
@@ -112,22 +112,22 @@ Debug = true
 [33m[tester::#VQ0] [0m[92m✓ Prompt line matches "invalid_raspberry_command"[0m
 [33m[tester::#VQ0] [0m[94mPressed "<DOWN ARROW>" (expecting to recall "echo orange strawberry")[0m
 [33m[tester::#VQ0] [0m[92m✓ Prompt line matches "echo orange strawberry"[0m
-[33m[your-program] [0m$ echo orange strawberry
+[33m[your-program] [0m[0m$ echo orange strawberry[0m
 [33m[tester::#VQ0] [0m[92mTest passed.[0m
 
 [33m[tester::#DM2] [0m[94mRunning tests for Stage #DM2 (dm2)[0m
 [33m[tester::#DM2] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m$ echo apple blueberry
-[33m[your-program] [0mapple blueberry
+[33m[your-program] [0m[0m$ echo apple blueberry[0m
+[33m[your-program] [0m[0mapple blueberry[0m
 [33m[tester::#DM2] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ echo apple blueberry
-[33m[your-program] [0mapple blueberry
+[33m[your-program] [0m[0m$ echo apple blueberry[0m
+[33m[your-program] [0m[0mapple blueberry[0m
 [33m[tester::#DM2] [0m[92m✓ Command executed successfully[0m
-[33m[your-program] [0m$ invalid_raspberry_command
-[33m[your-program] [0mbash: invalid_raspberry_command: command not found
+[33m[your-program] [0m[0m$ invalid_raspberry_command[0m
+[33m[your-program] [0m[0mbash: invalid_raspberry_command: command not found[0m
 [33m[tester::#DM2] [0m[92m✓ Received command not found message[0m
-[33m[your-program] [0m$ echo blueberry apple
-[33m[your-program] [0mblueberry apple
+[33m[your-program] [0m[0m$ echo blueberry apple[0m
+[33m[your-program] [0m[0mblueberry apple[0m
 [33m[tester::#DM2] [0m[92m✓ Command executed successfully[0m
 [33m[tester::#DM2] [0m[94mPressed "<UP ARROW>" (expecting to recall "echo blueberry apple")[0m
 [33m[tester::#DM2] [0m[92m✓ Prompt line matches "echo blueberry apple"[0m
@@ -136,8 +136,8 @@ Debug = true
 [33m[tester::#DM2] [0m[94mPressed "<DOWN ARROW>" (expecting to recall "echo blueberry apple")[0m
 [33m[tester::#DM2] [0m[92m✓ Prompt line matches "echo blueberry apple"[0m
 [33m[tester::#DM2] [0m[94mExecuting command "echo blueberry apple"[0m
-[33m[your-program] [0m$ echo blueberry apple
-[33m[your-program] [0mblueberry apple
+[33m[your-program] [0m[0m$ echo blueberry apple[0m
+[33m[your-program] [0m[0mblueberry apple[0m
 [33m[tester::#DM2] [0m[92m✓ Command executed with expected output[0m
-[33m[your-program] [0m$ 
+[33m[your-program] [0m[0m$ [0m
 [33m[tester::#DM2] [0m[92mTest passed.[0m

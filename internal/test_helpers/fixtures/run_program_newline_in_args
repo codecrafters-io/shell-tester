@@ -6,16 +6,16 @@ Debug = true
 [33m[tester::#IP1] [setup] [0m[94m- custom_exe_4549[0m
 [33m[tester::#IP1] [setup] [0m[94m- custom_exe_5979[0m
 [33m[tester::#IP1] [0m[94mRunning ./your_program.sh[0m
-[33m[your-program] [0m$ custom_exe_4549 Alice James Alice
-[33m[your-program] [0mProgram was passed 4 args (including program name).
-[33m[your-program] [0mArg #0 (program name): custom_exe_4549
-[33m[your-program] [0mArg #1: Alice
-[33m[your-program] [0mArg #2: James
-[33m[your-program] [0mArg #3: Alice
-[33m[your-program] [0m
+[33m[your-program] [0m[0m$ custom_exe_4549 Alice James Alice[0m
+[33m[your-program] [0m[0mProgram was passed 4 args (including program name).[0m
+[33m[your-program] [0m[0mArg #0 (program name): custom_exe_4549[0m
+[33m[your-program] [0m[0mArg #1: Alice[0m
+[33m[your-program] [0m[0mArg #2: James[0m
+[33m[your-program] [0m[0mArg #3: Alice[0m
+[33m[your-program] [0m[0m[0m
 [33m[tester::#IP1] [0m[91m^ Line does not match expected value.[0m
 [33m[tester::#IP1] [0m[91m[32mExpected:[0m "Program Signature: 3842155998"[0m
 [33m[tester::#IP1] [0m[91m[31mReceived:[0m "" [31m(empty line)[0m[0m
-[33m[your-program] [0mProgram Signature: 3842155998
+[33m[your-program] [0m[0mProgram Signature: 3842155998[0m
 [33m[tester::#IP1] [0m[91mAssertion failed.[0m
 [33m[tester::#IP1] [0m[91mTest failed[0m
