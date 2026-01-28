@@ -17,7 +17,7 @@ func testQ6(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	executableName1 := `'exe  with  space'`
 	executableName2 := `'exe with "quotes"'`
-	executableName3 := `"exe with \'single quotes\'"`
+	executableName3 := `"exe with 'single quotes'"`
 	executableName4 := `'exe with \n newline'`
 	executableDir, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
 		{CommandType: "cat", CommandName: CUSTOM_CAT_COMMAND, CommandMetadata: ""},

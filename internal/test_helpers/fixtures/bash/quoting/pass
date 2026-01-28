@@ -110,7 +110,7 @@ Debug = true
 [33m[tester::#QJ0] [setup] [0m[94mAvailable executables:[0m
 [33m[tester::#QJ0] [setup] [0m[94m- 'exe  with  space'[0m
 [33m[tester::#QJ0] [setup] [0m[94m- 'exe with "quotes"'[0m
-[33m[tester::#QJ0] [setup] [0m[94m- "exe with \'single quotes\'"[0m
+[33m[tester::#QJ0] [setup] [0m[94m- "exe with 'single quotes'"[0m
 [33m[tester::#QJ0] [setup] [0m[94m- 'exe with \n newline'[0m
 [33m[tester::#QJ0] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#QJ0] [setup] [0m[94mecho "grape banana." > "/tmp/pig/f1"[0m
@@ -123,7 +123,7 @@ Debug = true
 [33m[your-program] [0m[0m$ 'exe with "quotes"' /tmp/pig/f2[0m
 [33m[your-program] [0m[0mblueberry raspberry.[0m
 [33m[tester::#QJ0] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m[0m$ "exe with \'single quotes\'" /tmp/pig/f3[0m
+[33m[your-program] [0m[0m$ "exe with 'single quotes'" /tmp/pig/f3[0m
 [33m[your-program] [0m[0mmango strawberry.[0m
 [33m[tester::#QJ0] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m[0m$ 'exe with \n newline' /tmp/pig/f4[0m
