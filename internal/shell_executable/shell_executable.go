@@ -90,7 +90,7 @@ func (b *ShellExecutable) Start(args ...string) error {
 	}
 
 	b.ptyReader = condition_reader.NewConditionReader(
-		io.TeeReader(b.executable.GetStdoutStream(), b.vt),
+		io.TeeReader(b.executable.GetStdoutStreamReader(), b.vt),
 	)
 
 	return nil
@@ -126,7 +126,7 @@ func (b *ShellExecutable) SendCommand(command string) error {
 }
 
 func (b *ShellExecutable) SendCommandRaw(command string) error {
-	stdinDevice := b.executable.GetStdinDevice()
+	stdinDevice := b.executable.GetStdinWriter()
 
 	if _, err := stdinDevice.Write([]byte(command)); err != nil {
 		return err
