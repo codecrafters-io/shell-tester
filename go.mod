@@ -6,7 +6,7 @@ toolchain go1.24.2
 
 require (
 	github.com/charmbracelet/x/vt v0.0.0-20250122132629-a969ddeb820d
-	github.com/codecrafters-io/tester-utils v0.4.15-0.20260202095601-7efe907286f9
+	github.com/codecrafters-io/tester-utils v0.4.15-0.20260202095932-fda7931d1d6d
 	github.com/fatih/color v1.18.0
 	go.chromium.org/luci v0.0.0-20260202035034-931dcb9b37de
 )
