@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"os/exec"
 	"path"
 	"strings"
 	"syscall"
@@ -34,7 +33,6 @@ type ShellExecutable struct {
 	env environ.Env
 
 	// Set after starting
-	cmd       *exec.Cmd
 	ptyReader condition_reader.ConditionReader
 	vt        *virtual_terminal.VirtualTerminal
 }
