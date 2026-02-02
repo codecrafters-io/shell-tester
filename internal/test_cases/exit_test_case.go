@@ -53,10 +53,13 @@ func (t ExitTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, s
 		}
 	}
 
-	isTerminated, exitCode := shell.WaitForTermination()
-	if !isTerminated {
-		return fmt.Errorf("Expected program to exit, program is still running.")
+	executableResult, err := shell.Wait()
+
+	if err != nil {
+		return err
 	}
+
+	exitCode := executableResult.ExitCode
 
 	// We want to be lenient since:
 	// - calling `exit` without arguments returns the exit status of the last executed command,

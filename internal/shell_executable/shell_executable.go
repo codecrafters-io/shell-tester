@@ -16,9 +16,9 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/utils"
 	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 	"github.com/codecrafters-io/tester-utils/executable"
+	"github.com/codecrafters-io/tester-utils/executable/stdio_handler"
 	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
-	ptylib "github.com/creack/pty"
 	"go.chromium.org/luci/common/system/environ"
 )
 
@@ -35,14 +35,18 @@ type ShellExecutable struct {
 
 	// Set after starting
 	cmd       *exec.Cmd
-	pty       *os.File
 	ptyReader condition_reader.ConditionReader
 	vt        *virtual_terminal.VirtualTerminal
 }
 
 func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellExecutable {
+	executable := executable.NewVerboseExecutable(
+		stageHarness.Executable.Path,
+		func(s string) {},
+	)
+
 	b := &ShellExecutable{
-		executable:    stageHarness.NewExecutable(),
+		executable:    executable,
 		stageLogger:   stageHarness.Logger,
 		programLogger: logger.GetLogger(stageHarness.Logger.IsDebug, "[your-program] "),
 	}
@@ -73,23 +77,23 @@ func (b *ShellExecutable) Start(args ...string) error {
 	b.Setenv("PS1", utils.PROMPT)
 	// b.Setenv("TERM", "dumb") // test_all_success works without this too, do we need it?
 
-	cmd := exec.Command(b.executable.Path, args...)
-	cmd.Env = b.env.Sorted()
-
-	b.cmd = cmd
 	b.vt = virtual_terminal.NewStandardVT()
 
-	winsize := &ptylib.Winsize{
-		Rows: uint16(b.vt.GetRowCount()),
-		Cols: uint16(b.vt.GetColumnCount()),
-	}
-	pty, err := ptylib.StartWithSize(cmd, winsize)
-	if err != nil {
-		return fmt.Errorf("Failed to execute %s: %v", b.executable.Path, err)
+	// Supply environment variables beore starting the process
+	b.executable.StdioHandler = &stdio_handler.SinglePtyStdioHandler{
+		Width:  uint(b.vt.GetColumnCount()),
+		Height: uint(b.vt.GetRowCount()),
 	}
 
-	b.pty = pty
-	b.ptyReader = condition_reader.NewConditionReader(io.TeeReader(b.pty, b.vt))
+	b.executable.Env = b.env
+
+	if err := b.executable.Start(args...); err != nil {
+		return err
+	}
+
+	b.ptyReader = condition_reader.NewConditionReader(
+		io.TeeReader(b.executable.GetStdoutStream(), b.vt),
+	)
 
 	return nil
 }
@@ -124,48 +128,17 @@ func (b *ShellExecutable) SendCommand(command string) error {
 }
 
 func (b *ShellExecutable) SendCommandRaw(command string) error {
-	if _, err := b.pty.Write([]byte(command)); err != nil {
+	stdinDevice := b.executable.GetStdinDevice()
+
+	if _, err := stdinDevice.Write([]byte(command)); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (b *ShellExecutable) WaitForTermination() (hasTerminated bool, exitCode int) {
-	if b.cmd == nil {
-		panic("CodeCrafters internal error: WaitForTermination called before command was run")
-	}
-
-	waitCompleted := make(chan bool)
-
-	go func() {
-		b.cmd.Wait()
-		waitCompleted <- true
-	}()
-
-	select {
-	case <-waitCompleted:
-		rawExitCode := b.cmd.ProcessState.ExitCode()
-
-		if rawExitCode == -1 {
-			// We can get isTerminated as false if the program is terminated by SIGKILL too, but that seems unlikely here
-			return false, 0
-		} else {
-			return true, rawExitCode
-		}
-	case <-time.After(2 * time.Second):
-		return false, 0
-	}
-}
-
-func (b *ShellExecutable) ExitCode() int {
-	// Calling WaitForTermination multiple times is okay, Wait() would error out, but we will get the exit code
-	exited, exitCode := b.WaitForTermination()
-	if !exited {
-		// fmt.Println("Process has not exited yet.")
-		return -1
-	}
-	return exitCode
+func (b *ShellExecutable) Wait() (executable.ExecutableResult, error) {
+	return b.executable.Wait()
 }
 
 func (b *ShellExecutable) getInitialLogLine(args ...string) string {
