@@ -29,10 +29,10 @@ Debug = true
 [33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/dog:$PATH[0m
 [33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/bee:$PATH[0m
 [33m[tester::#MG5] [setup] [0m[94mPATH is now: /tmp/bee:/tmp/dog:/tmp/owl:...[0m
-[33m[tester::#MG5] [setup] [0m[94mExecutable candidates (not all are executable):[0m
-[33m[tester::#MG5] [setup] [0m[94m- /tmp/owl/exe_candidate[0m
-[33m[tester::#MG5] [setup] [0m[94m- /tmp/dog/exe_candidate[0m
-[33m[tester::#MG5] [setup] [0m[94m- /tmp/bee/exe_candidate[0m
+[33m[tester::#MG5] [setup] [0m[94mFiles created:[0m
+[33m[tester::#MG5] [setup] [0m[94m- /tmp/owl/my_exe (not executable)[0m
+[33m[tester::#MG5] [setup] [0m[94m- /tmp/bee/my_exe (not executable)[0m
+[33m[tester::#MG5] [setup] [0m[94m- /tmp/dog/my_exe (executable)[0m
 [33m[tester::#MG5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ type cat[0m
 [33m[your-program] [0m[0mcat is /bin/cat[0m
@@ -43,8 +43,8 @@ Debug = true
 [33m[your-program] [0m[0m$ type mkdir[0m
 [33m[your-program] [0m[0mmkdir is /bin/mkdir[0m
 [33m[tester::#MG5] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m[0m$ type exe_candidate[0m
-[33m[your-program] [0m[0mexe_candidate is /tmp/dog/exe_candidate[0m
+[33m[your-program] [0m[0m$ type my_exe[0m
+[33m[your-program] [0m[0mmy_exe is /tmp/dog/my_exe[0m
 [33m[tester::#MG5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m[0m$ type invalid_pineapple_command[0m
 [33m[your-program] [0m[0mbash: type: invalid_pineapple_command: not found[0m
