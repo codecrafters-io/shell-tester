@@ -15,11 +15,11 @@ import (
 func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	myExeCommandName := "my_exe"
+	myExeCommandName := "exe_candidate"
 
 	// Test PATH resolution with duplicate executable names
 	//
-	// This test creates three files with identical names ("my_exe") in different directories:
+	// This test creates three files with identical names ("exe_candidate") in different directories:
 	// - myExe3 with execute permissions removed
 	// - myExe2 with normal permissions
 	// - myExe1 with execute permissions removed
@@ -32,7 +32,8 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// - This verifies proper PATH traversal and permission checking
 
 	// myExe3
-	if _, err := setUpNonExecutable(stageHarness, shell, myExeCommandName); err != nil {
+	nonExePath1, err := setUpNonExecutable(stageHarness, shell, myExeCommandName)
+	if err != nil {
 		return err
 	}
 
@@ -45,20 +46,24 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// myExe1
-	nonExePath, err := setUpNonExecutable(stageHarness, shell, myExeCommandName)
+	nonExePath2, err := setUpNonExecutable(stageHarness, shell, myExeCommandName)
 	if err != nil {
 		return err
 	}
 
 	logPath(shell, logger, 36) // Prefix length is 36 characters for this stage
-	logAvailableExecutables(logger, []string{myExeCommandName})
+	logExecutableCandidates(logger, []string{
+		nonExePath1,
+		executableDir + "/" + myExeCommandName,
+		nonExePath2,
+	})
 
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}
 
-	availableExecutables := []string{"cat", "cp", "mkdir", "my_exe"}
+	availableExecutables := []string{"cat", "cp", "mkdir", "exe_candidate"}
 
 	for _, executable := range availableExecutables {
 		testCase := test_cases.TypeOfCommandTestCase{
@@ -66,12 +71,12 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 
 		var expectedPath = ""
-		if executable == "my_exe" {
+		if executable == "exe_candidate" {
 			expectedPath = filepath.Join(executableDir, myExeCommandName)
 
 			// Alpine Busybox has a bug where it doesn't check permissions
 			if isTestingTesterUsingBusyboxOnAlpine(stageHarness) {
-				expectedPath = nonExePath
+				expectedPath = nonExePath2
 			}
 		}
 
@@ -131,4 +136,13 @@ func setUpNonExecutable(stageHarness *test_case_harness.TestCaseHarness, shell *
 	os.Chmod(nonExePath, currentPerms.Mode() & ^os.FileMode(0o111))
 
 	return nonExePath, nil
+}
+
+func logExecutableCandidates(logger *logger.Logger, executableNames []string) {
+	logger.UpdateLastSecondaryPrefix("setup")
+	logger.Infof("Executable candidates (not all are executable):")
+	for _, executableName := range executableNames {
+		logger.Infof("- %s", executableName)
+	}
+	logger.ResetSecondaryPrefixes()
 }
