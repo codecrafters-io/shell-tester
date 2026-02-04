@@ -29,8 +29,10 @@ Debug = true
 [33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/dog:$PATH[0m
 [33m[tester::#MG5] [setup] [0m[94mexport PATH=/tmp/bee:$PATH[0m
 [33m[tester::#MG5] [setup] [0m[94mPATH is now: /tmp/bee:/tmp/dog:/tmp/owl:...[0m
-[33m[tester::#MG5] [setup] [0m[94mAvailable executables:[0m
-[33m[tester::#MG5] [setup] [0m[94m- my_exe[0m
+[33m[tester::#MG5] [setup] [0m[94mFiles created:[0m
+[33m[tester::#MG5] [setup] [0m[94m- /tmp/owl/my_exe (not executable)[0m
+[33m[tester::#MG5] [setup] [0m[94m- /tmp/bee/my_exe (not executable)[0m
+[33m[tester::#MG5] [setup] [0m[94m- /tmp/dog/my_exe (executable)[0m
 [33m[tester::#MG5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ type cat[0m
 [33m[your-program] [0m[0mcat is /bin/cat[0m

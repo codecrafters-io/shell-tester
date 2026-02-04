@@ -32,7 +32,8 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// - This verifies proper PATH traversal and permission checking
 
 	// myExe3
-	if _, err := setUpNonExecutable(stageHarness, shell, myExeCommandName); err != nil {
+	nonExePath1, err := setUpNonExecutable(stageHarness, shell, myExeCommandName)
+	if err != nil {
 		return err
 	}
 
@@ -43,22 +44,27 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
+	executablePath := filepath.Join(executableDir, myExeCommandName)
 
 	// myExe1
-	nonExePath, err := setUpNonExecutable(stageHarness, shell, myExeCommandName)
+	nonExePath2, err := setUpNonExecutable(stageHarness, shell, myExeCommandName)
 	if err != nil {
 		return err
 	}
 
 	logPath(shell, logger, 36) // Prefix length is 36 characters for this stage
-	logAvailableExecutables(logger, []string{myExeCommandName})
+	logMyExeCommands(logger, []string{
+		nonExePath1 + " (not executable)",
+		nonExePath2 + " (not executable)",
+		executablePath + " (executable)",
+	})
 
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}
 
-	availableExecutables := []string{"cat", "cp", "mkdir", "my_exe"}
+	availableExecutables := []string{"cat", "cp", "mkdir", myExeCommandName}
 
 	for _, executable := range availableExecutables {
 		testCase := test_cases.TypeOfCommandTestCase{
@@ -66,12 +72,12 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 
 		var expectedPath = ""
-		if executable == "my_exe" {
-			expectedPath = filepath.Join(executableDir, myExeCommandName)
+		if executable == myExeCommandName {
+			expectedPath = executablePath
 
 			// Alpine Busybox has a bug where it doesn't check permissions
 			if isTestingTesterUsingBusyboxOnAlpine(stageHarness) {
-				expectedPath = nonExePath
+				expectedPath = nonExePath2
 			}
 		}
 
@@ -131,4 +137,13 @@ func setUpNonExecutable(stageHarness *test_case_harness.TestCaseHarness, shell *
 	os.Chmod(nonExePath, currentPerms.Mode() & ^os.FileMode(0o111))
 
 	return nonExePath, nil
+}
+
+func logMyExeCommands(logger *logger.Logger, executableNames []string) {
+	logger.UpdateLastSecondaryPrefix("setup")
+	logger.Infof("Files created:")
+	for _, executableName := range executableNames {
+		logger.Infof("- %s", executableName)
+	}
+	logger.ResetSecondaryPrefixes()
 }
