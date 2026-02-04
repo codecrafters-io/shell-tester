@@ -15,48 +15,48 @@ import (
 func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	exeCandidateName := "exe_candidate"
+	myExeCommandName := "my_exe"
 
 	// Test PATH resolution with duplicate executable names
 	//
-	// This test creates three files with identical names ("exe_candidate") in different directories:
-	// - exeCandidate3 with execute permissions removed
-	// - exeCandidate2 with normal permissions
-	// - exeCandidate1 with execute permissions removed
-	// Since we prepend to PATH, it will look like exeCandidate1:exeCandidate2:exeCandidate3:...
+	// This test creates three files with identical names ("my_exe") in different directories:
+	// - myExe3 with execute permissions removed
+	// - myExe2 with normal permissions
+	// - myExe1 with execute permissions removed
+	// Since we prepend to PATH, it will look like myExe1:myExe2:myExe3:...
 	//
 	// Expected behavior:
-	// - When the command is executed, the shell should skip exeCandidate1 (not executable)
-	// - The shell should continue searching PATH and find/execute exeCandidate2
-	// - The purpose of exeCandidate3 is to catch a wrong solution which traverses PATH in reverse
+	// - When the command is executed, the shell should skip myExe1 (not executable)
+	// - The shell should continue searching PATH and find/execute myExe2
+	// - The purpose of myExe3 is to catch a wrong solution which traverses PATH in reverse
 	// - This verifies proper PATH traversal and permission checking
 
-	// exeCandidate3
-	nonExePath1, err := setUpNonExecutable(stageHarness, shell, exeCandidateName)
+	// myExe3
+	nonExePath1, err := setUpNonExecutable(stageHarness, shell, myExeCommandName)
 	if err != nil {
 		return err
 	}
 
-	// exeCandidate2
+	// myExe2
 	executableDir, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
-		{CommandType: "signature_printer", CommandName: exeCandidateName, CommandMetadata: getRandomString()},
+		{CommandType: "signature_printer", CommandName: myExeCommandName, CommandMetadata: getRandomString()},
 	}, true)
 	if err != nil {
 		return err
 	}
-	executablePath := filepath.Join(executableDir, exeCandidateName)
+	executablePath := filepath.Join(executableDir, myExeCommandName)
 
-	// exeCandidate1
-	nonExePath2, err := setUpNonExecutable(stageHarness, shell, exeCandidateName)
+	// myExe1
+	nonExePath2, err := setUpNonExecutable(stageHarness, shell, myExeCommandName)
 	if err != nil {
 		return err
 	}
 
 	logPath(shell, logger, 36) // Prefix length is 36 characters for this stage
-	logExecutableCandidates(logger, []string{
-		nonExePath1,
-		executablePath,
-		nonExePath2,
+	logMyExeCommands(logger, []string{
+		nonExePath1 + " (not executable)",
+		nonExePath2 + " (not executable)",
+		executablePath + " (executable)",
 	})
 
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
@@ -64,7 +64,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	availableExecutables := []string{"cat", "cp", "mkdir", "exe_candidate"}
+	availableExecutables := []string{"cat", "cp", "mkdir", myExeCommandName}
 
 	for _, executable := range availableExecutables {
 		testCase := test_cases.TypeOfCommandTestCase{
@@ -72,7 +72,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 		}
 
 		var expectedPath = ""
-		if executable == exeCandidateName {
+		if executable == myExeCommandName {
 			expectedPath = executablePath
 
 			// Alpine Busybox has a bug where it doesn't check permissions
@@ -139,9 +139,9 @@ func setUpNonExecutable(stageHarness *test_case_harness.TestCaseHarness, shell *
 	return nonExePath, nil
 }
 
-func logExecutableCandidates(logger *logger.Logger, executableNames []string) {
+func logMyExeCommands(logger *logger.Logger, executableNames []string) {
 	logger.UpdateLastSecondaryPrefix("setup")
-	logger.Infof("Executable candidates (not all are executable):")
+	logger.Infof("Files created:")
 	for _, executableName := range executableNames {
 		logger.Infof("- %s", executableName)
 	}
