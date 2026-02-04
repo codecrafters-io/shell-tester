@@ -54,9 +54,9 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	logPath(shell, logger, 36) // Prefix length is 36 characters for this stage
 	logExecutableCandidates(logger, []string{
-		nonExePath1,
-		executablePath,
 		nonExePath2,
+		executablePath,
+		nonExePath1,
 	})
 
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
