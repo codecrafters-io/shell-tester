@@ -18,6 +18,8 @@ github.com/codecrafters-io/tester-utils v0.4.15-0.20260202095601-7efe907286f9 h1
 github.com/codecrafters-io/tester-utils v0.4.15-0.20260202095601-7efe907286f9/go.mod h1:KfHRL9X0QPumnKXKu3SSAb2hx2OZ5k1IzxzaSxe7Ya4=
 github.com/codecrafters-io/tester-utils v0.4.15-0.20260202095932-fda7931d1d6d h1:WiDsNXKkwFjS0MPG+juH8adHGwl5XFkUzNcJ0soaxSQ=
 github.com/codecrafters-io/tester-utils v0.4.15-0.20260202095932-fda7931d1d6d/go.mod h1:KfHRL9X0QPumnKXKu3SSAb2hx2OZ5k1IzxzaSxe7Ya4=
+github.com/codecrafters-io/tester-utils v0.4.15-0.20260209070515-eece87c26425 h1:HQYC28lajQ1rxwM2Gcxm9ypKgTEbV/dGStdd3UHOteU=
+github.com/codecrafters-io/tester-utils v0.4.15-0.20260209070515-eece87c26425/go.mod h1:KfHRL9X0QPumnKXKu3SSAb2hx2OZ5k1IzxzaSxe7Ya4=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/creack/pty v1.1.24 h1:bJrF4RRfyJnbTJqzRLHzcGaZK1NeM5kTC9jGgovnR1s=
 github.com/creack/pty v1.1.24/go.mod h1:08sCNb52WyoAwi2QDyzUCTgcvVFhUzewun7wtTfvcwE=

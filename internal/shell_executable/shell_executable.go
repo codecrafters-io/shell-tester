@@ -38,13 +38,8 @@ type ShellExecutable struct {
 }
 
 func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellExecutable {
-	executable := executable.NewVerboseExecutable(
-		stageHarness.Executable.Path,
-		func(s string) {},
-	)
-
 	b := &ShellExecutable{
-		executable:    executable,
+		executable:    stageHarness.Executable,
 		stageLogger:   stageHarness.Logger,
 		programLogger: logger.GetLogger(stageHarness.Logger.IsDebug, "[your-program] "),
 	}
@@ -77,10 +72,11 @@ func (b *ShellExecutable) Start(args ...string) error {
 
 	b.vt = virtual_terminal.NewStandardVT()
 
-	// Supply environment variables beore starting the process
+	// Initialize stdio handler for the executable
 	b.executable.StdioHandler = &stdio_handler.SinglePtyStdioHandler{
-		Width:  uint(b.vt.GetColumnCount()),
-		Height: uint(b.vt.GetRowCount()),
+		Width:                   uint(b.vt.GetColumnCount()),
+		Height:                  uint(b.vt.GetRowCount()),
+		DisableAutomaticIORelay: true,
 	}
 
 	b.executable.Env = b.env
@@ -90,7 +86,7 @@ func (b *ShellExecutable) Start(args ...string) error {
 	}
 
 	b.ptyReader = condition_reader.NewConditionReader(
-		io.TeeReader(b.executable.GetStdoutStreamReader(), b.vt),
+		io.TeeReader(b.executable.GetStdoutReader(), b.vt),
 	)
 
 	return nil
