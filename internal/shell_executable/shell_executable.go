@@ -39,7 +39,7 @@ type ShellExecutable struct {
 
 func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellExecutable {
 	b := &ShellExecutable{
-		executable:    stageHarness.Executable,
+		executable:    stageHarness.Executable.Clone(),
 		stageLogger:   stageHarness.Logger,
 		programLogger: logger.GetLogger(stageHarness.Logger.IsDebug, "[your-program] "),
 	}
