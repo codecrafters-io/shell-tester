@@ -19,12 +19,12 @@ func testA3(stageHarness *test_case_harness.TestCaseHarness) error {
 	command := "xyz"
 	completion := "xyz"
 
-	err := test_cases.CommandAutocompleteTestCase{
-		RawCommand:         command,
-		ExpectedReflection: completion,
+	err := test_cases.AutocompleteTestCase{
+		TypedPrefix:                               command,
+		ExpectedPromptLineReflection:              completion,
 		ExpectedAutocompletedReflectionHasNoSpace: true,
-		CheckForBell:        true,
-		SkipPromptAssertion: true,
+		CheckForBell:                              true,
+		SkipPromptAssertion:                       true,
 	}.Run(asserter, shell, logger)
 	if err != nil {
 		return err

@@ -41,7 +41,9 @@ func (t CommandPartialCompletionsTestCase) Run(asserter *logged_shell_asserter.L
 	// The entire flow is repeated for each input & expected reflection
 	for idx := 0; idx < len(t.ExpectedReflections); idx++ {
 		// Log the details of the command before sending it
-		logCommand(logger, t.Inputs[idx])
+		if t.Inputs[idx] != "" {
+			logCommand(logger, t.Inputs[idx])
+		}
 
 		// Send the command to the shell
 		if err := shell.SendCommandRaw(t.Inputs[idx]); err != nil {

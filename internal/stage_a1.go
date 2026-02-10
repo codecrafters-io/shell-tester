@@ -41,9 +41,9 @@ func a1Helper(stageHarness *test_case_harness.TestCaseHarness, logger *logger.Lo
 		return err
 	}
 
-	err := test_cases.CommandAutocompleteTestCase{
-		RawCommand:         command,
-		ExpectedReflection: completion,
+	err := test_cases.AutocompleteTestCase{
+		TypedPrefix:                               command,
+		ExpectedPromptLineReflection:              completion,
 		ExpectedAutocompletedReflectionHasNoSpace: completionEndsWithNoSpace,
 		SkipPromptAssertion:                       true,
 	}.Run(asserter, shell, logger)
