@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/codecrafters-io/tester-utils/logger"
@@ -104,6 +105,65 @@ func GetShortRandomDirectories(stageHarness *test_case_harness.TestCaseHarness, 
 // writeFile writes a file to the given path with the given content
 func writeFile(filePath string, content string) error {
 	return os.WriteFile(filePath, []byte(content), 0644)
+}
+
+// GetRandomFile returns the path and contents of a file created inside /tmp/ with a random name
+func GetRandomFile(stageHarness *test_case_harness.TestCaseHarness, extension string, fileMode os.FileMode) (string, string, error) {
+	filePath := path.Join(
+		"/tmp",
+		fmt.Sprintf("%s-%d.%s", random.RandomWord(), random.RandomInt(1, 1000), extension),
+	)
+
+	content := random.RandomString()
+
+	if err := writeFile(filePath, content); err != nil {
+		return "", "", err
+	}
+
+	stageHarness.RegisterTeardownFunc(func() {
+		os.Remove(filePath)
+	})
+
+	return filePath, content, nil
+}
+
+// CreateRandomFileInDir creates a random file inside the given directory
+// If extension is non empty, it is used as the filename extension
+// Returns file basename, contents and error encountered (if any) during creation
+func CreateRandomFileInDir(stageHarness *test_case_harness.TestCaseHarness, dirPath string, extension string, filemode os.FileMode) (string, string, error) {
+	fileBaseName := fmt.Sprintf("%s-%d", random.RandomWord(), random.RandomInt(1, 100))
+	if extension != "" {
+		fileBaseName += "." + extension
+	}
+	filePath := filepath.Join(dirPath, fileBaseName)
+	contents := random.RandomString()
+
+	if err := os.WriteFile(filePath, []byte(contents), filemode); err != nil {
+		return "", "", err
+	}
+
+	stageHarness.RegisterTeardownFunc(func() {
+		os.Remove(filePath)
+	})
+
+	return fileBaseName, contents, nil
+}
+
+// CreateRandomSubDir creates a random subdirectory inside a given parent directory path
+// It returns the base name of the subdirectory and error encountered (if any) during creation
+func CreateRandomSubDir(stageHarness *test_case_harness.TestCaseHarness, parentDirPath string) (string, error) {
+	dirBaseName := fmt.Sprintf("%s-%d", random.RandomWord(), random.RandomInt(1, 100))
+	dirPath := filepath.Join(parentDirPath, dirBaseName)
+
+	if err := os.Mkdir(dirPath, 0755); err != nil {
+		return "", err
+	}
+
+	stageHarness.RegisterTeardownFunc(func() {
+		os.RemoveAll(dirPath)
+	})
+
+	return dirBaseName, nil
 }
 
 func appendFile(filePath string, content string) error {

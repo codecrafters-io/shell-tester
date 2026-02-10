@@ -12,3 +12,7 @@ anticheat
 notes.md
 shell_notes.md
 .devcontainer
+
+.zcompdump
+
+.vscode/

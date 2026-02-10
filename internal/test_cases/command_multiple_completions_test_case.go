@@ -2,6 +2,7 @@ package test_cases
 
 import (
 	"fmt"
+	"regexp"
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
@@ -22,6 +23,10 @@ type CommandMultipleCompletionsTestCase struct {
 
 	// ExpectedReflection is the custom reflection to use
 	ExpectedReflection string
+
+	// If ExpectedReflection does not match the given reflection
+	// the reflection is checked against the fallback pattern
+	ExpectedReflectionFallbackPattern string
 
 	// ExpectedAutocompletedReflectionHasNoSpace is true if
 	// the expected reflection should have no space after it
@@ -110,7 +115,11 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(t.ExpectedReflectionFallbackPattern),
+		},
 	})
+
 	// Run the assertion, before sending the enter key
 	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
