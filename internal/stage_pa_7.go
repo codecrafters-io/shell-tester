@@ -72,8 +72,8 @@ func testPA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	commands := []string{"ls", "cat", "stat", "file"}
 	typedPrefix := fmt.Sprintf("%s %s", random.RandomElementFromArray(commands), prefix)
 
-	err := test_cases.CommandMultipleCompletionsTestCase{
-		RawCommand:                        typedPrefix,
+	err := test_cases.MultipleCompletionsTestCase{
+		RawPrefix:                         typedPrefix,
 		TabCount:                          2,
 		ExpectedReflection:                strings.Join(allCompletions, "  "),
 		ExpectedReflectionFallbackPattern: "^" + strings.Join(allCompletions, `\s*`) + "$",

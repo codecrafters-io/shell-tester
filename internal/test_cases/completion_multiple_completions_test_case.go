@@ -11,15 +11,15 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-// CommandMultipleCompletionsTestCase is a test case that:
-// Sends a command to the shell
-// Asserts that the prompt line reflects the command
+// MultipleCompletionsTestCase is a test case that:
+// Sends a prefix to the shell
+// Asserts that the prompt line reflects the typed prefix
 // Sends TAB
 // Asserts that the expected reflection is printed to the screen (with a space after it)
 // If any error occurs returns the error from the corresponding assertion
-type CommandMultipleCompletionsTestCase struct {
-	// RawCommand is the command to send to the shell
-	RawCommand string
+type MultipleCompletionsTestCase struct {
+	// RawPrefix is the prefix to send to the shell
+	RawPrefix string
 
 	// ExpectedReflection is the custom reflection to use
 	ExpectedReflection string
@@ -45,16 +45,16 @@ type CommandMultipleCompletionsTestCase struct {
 	SkipPromptAssertion bool
 }
 
-func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
+func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	// Log the details of the command before sending it
-	logTypedText(logger, t.RawCommand)
+	logTypedText(logger, t.RawPrefix)
 
 	// Send the command to the shell
-	if err := shell.SendTextRaw(t.RawCommand); err != nil {
+	if err := shell.SendTextRaw(t.RawPrefix); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
-	inputReflection := fmt.Sprintf("$ %s", t.RawCommand)
+	inputReflection := fmt.Sprintf("$ %s", t.RawPrefix)
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: inputReflection,
 		StayOnSameLine: false,

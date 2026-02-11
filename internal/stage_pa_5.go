@@ -52,7 +52,7 @@ func testPA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	err = test_cases.PartialCompletionsTestCase{
 		Inputs:              []string{initialTypedPrefix, "", ""},
 		ExpectedReflections: reflections,
-		SuccessMessage:      fmt.Sprintf("Received all partial completions for %q", initialTypedPrefix),
+		SuccessMessage:      fmt.Sprintf("Received all path completions for %q", initialTypedPrefix),
 		SkipPromptAssertion: true,
 	}.Run(asserter, shell, stageLogger)
 
