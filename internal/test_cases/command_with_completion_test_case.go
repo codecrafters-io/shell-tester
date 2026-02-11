@@ -71,7 +71,7 @@ func (t CommandWithAttemptedCompletionTestCase) Run(asserter *logged_shell_asser
 	}
 
 	// Send the command to the shell
-	if err := shell.SendCommandRaw(rawCommand); err != nil {
+	if err := shell.SendTextRaw(rawCommand); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
@@ -98,7 +98,7 @@ func (t CommandWithAttemptedCompletionTestCase) Run(asserter *logged_shell_asser
 	asserter.PopAssertion()
 
 	if hasEnterKey {
-		if err := shell.SendCommandRaw("\n"); err != nil {
+		if err := shell.SendTextRaw("\n"); err != nil {
 			return fmt.Errorf("Error sending command to shell: %v", err)
 		}
 	}

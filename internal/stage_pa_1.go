@@ -11,19 +11,20 @@ import (
 )
 
 func testPA1(stageHarness *test_case_harness.TestCaseHarness) error {
+	shell := shell_executable.NewShellExecutable(stageHarness)
+	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
+
 	workingDirPath, err := GetRandomDirectory(stageHarness)
 	if err != nil {
 		return err
 	}
 
+	shell.SetWorkingDirectory(workingDirPath)
 	fileBaseName, _, err := CreateRandomFileInDir(stageHarness, workingDirPath, "txt", 0644)
+
 	if err != nil {
 		return err
 	}
-
-	shell := shell_executable.NewShellExecutable(stageHarness)
-	shell.SetWorkingDirectory(workingDirPath)
-	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err

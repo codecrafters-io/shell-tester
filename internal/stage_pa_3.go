@@ -12,13 +12,20 @@ import (
 )
 
 func testPA3(stageHarness *test_case_harness.TestCaseHarness) error {
-	filePath, _, err := GetRandomFile(stageHarness, "txt", 0644)
+	shell := shell_executable.NewShellExecutable(stageHarness)
+	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
+
+	dirPath, err := GetRandomDirectory(stageHarness)
+
 	if err != nil {
 		return err
 	}
 
-	shell := shell_executable.NewShellExecutable(stageHarness)
-	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
+	fileBaseName, _, err := CreateRandomFileInDir(stageHarness, dirPath, "txt", 0644)
+
+	if err != nil {
+		return err
+	}
 
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err
@@ -30,9 +37,8 @@ func testPA3(stageHarness *test_case_harness.TestCaseHarness) error {
 		"stat",
 	})
 
-	fileDir := filepath.Dir(filePath)
-	fileBaseName := filepath.Base(filePath)
-	filePartialPath := filepath.Join(fileDir, fileBaseName[:len(fileBaseName)/2])
+	filePath := filepath.Join(dirPath, fileBaseName)
+	filePartialPath := filepath.Join(dirPath, fileBaseName[:len(fileBaseName)/2])
 
 	typedPrefix := fmt.Sprintf("%s %s", randomCommand, filePartialPath)
 	completion := fmt.Sprintf("%s %s", randomCommand, filePath)

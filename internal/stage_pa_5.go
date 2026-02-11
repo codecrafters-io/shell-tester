@@ -2,7 +2,7 @@ package internal
 
 import (
 	"fmt"
-	"os"
+	"path/filepath"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -16,14 +16,20 @@ func testPA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	if err := os.MkdirAll("xyz_foo/bar", 0755); err != nil {
+	fileDirPath, err := GetRandomDirectory(stageHarness)
+	if err != nil {
 		return err
 	}
-	defer os.RemoveAll("xyz_foo")
 
-	if err := os.WriteFile("xyz_foo/bar/new.txt", []byte{}, 0644); err != nil {
+	fileBaseName, _, err := CreateRandomFileInDir(stageHarness, fileDirPath, "txt", 0644)
+	if err != nil {
 		return err
 	}
+
+	filePath := filepath.Join(fileDirPath, fileBaseName)
+	fileDirParentPath := filepath.Dir(fileDirPath)
+	fileDirParentBaseName := filepath.Base(fileDirParentPath)
+	fileDirGrandParentPath := filepath.Dir(fileDirParentPath)
 
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err
@@ -31,19 +37,25 @@ func testPA5(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	command := random.RandomElementFromArray([]string{"ls", "stat", "file", "du"})
 
-	initialTypedPrefix := fmt.Sprintf("%s %s", command, "xyz_f")
+	initialTypedPrefix := fmt.Sprintf(
+		"%s %s",
+		command,
+		filepath.Join(fileDirGrandParentPath, fileDirParentBaseName[:len(fileDirParentBaseName)/2]),
+	)
+
 	reflections := []string{
-		fmt.Sprintf("%s xyz_foo/", command),
-		fmt.Sprintf("%s xyz_foo/bar/", command),
-		fmt.Sprintf("%s xyz_foo/bar/new.txt", command),
+		fmt.Sprintf("%s %s/", command, fileDirParentPath),
+		fmt.Sprintf("%s %s/", command, fileDirPath),
+		fmt.Sprintf("%s %s", command, filePath),
 	}
 
-	err := test_cases.CommandPartialCompletionsTestCase{
+	err = test_cases.PartialCompletionsTestCase{
 		Inputs:              []string{initialTypedPrefix, "", ""},
 		ExpectedReflections: reflections,
 		SuccessMessage:      fmt.Sprintf("Received all partial completions for %q", initialTypedPrefix),
 		SkipPromptAssertion: true,
 	}.Run(asserter, shell, stageLogger)
+
 	if err != nil {
 		return err
 	}
