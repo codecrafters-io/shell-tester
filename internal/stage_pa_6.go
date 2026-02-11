@@ -29,8 +29,8 @@ func testPA6(stageHarness *test_case_harness.TestCaseHarness) error {
 	typedPrefix := fmt.Sprintf("%s missing_%d", randomCommand, typedPrefixInteger)
 
 	err := test_cases.AutocompleteTestCase{
-		TypedPrefix:                               typedPrefix,
-		ExpectedPromptLineReflection:              typedPrefix,
+		TypedPrefix:        typedPrefix,
+		ExpectedReflection: typedPrefix,
 		ExpectedAutocompletedReflectionHasNoSpace: true,
 		SkipPromptAssertion:                       true,
 		CheckForBell:                              true,

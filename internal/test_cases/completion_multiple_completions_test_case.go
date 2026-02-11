@@ -18,8 +18,8 @@ import (
 // Asserts that the expected reflection is printed to the screen (with a space after it)
 // If any error occurs returns the error from the corresponding assertion
 type MultipleCompletionsTestCase struct {
-	// RawPrefix is the prefix to send to the shell
-	RawPrefix string
+	// TypedPrefix is the prefix to send to the shell
+	TypedPrefix string
 
 	// ExpectedReflection is the custom reflection to use
 	ExpectedReflection string
@@ -38,7 +38,7 @@ type MultipleCompletionsTestCase struct {
 	// SuccessMessage is the message to log in case of success
 	SuccessMessage string
 
-	// tabCount is the number of tabs to send after the command
+	// tabCount is the number of tabs to send after the prefix
 	TabCount int
 
 	// SkipPromptAssertion is a flag to skip the final prompt assertion
@@ -46,15 +46,15 @@ type MultipleCompletionsTestCase struct {
 }
 
 func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	// Log the details of the command before sending it
-	logTypedText(logger, t.RawPrefix)
+	// Log the details of the text before sending it
+	logTypedText(logger, t.TypedPrefix)
 
-	// Send the command to the shell
-	if err := shell.SendTextRaw(t.RawPrefix); err != nil {
-		return fmt.Errorf("Error sending command to shell: %v", err)
+	// Send the prefix to the shell
+	if err := shell.SendTextRaw(t.TypedPrefix); err != nil {
+		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
-	inputReflection := fmt.Sprintf("$ %s", t.RawPrefix)
+	inputReflection := fmt.Sprintf("$ %s", t.TypedPrefix)
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: inputReflection,
 		StayOnSameLine: false,
@@ -80,7 +80,7 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		time.Sleep(5 * time.Millisecond)
 
 		if err := shell.SendTextRaw("\t"); err != nil {
-			return fmt.Errorf("Error sending command to shell: %v", err)
+			return fmt.Errorf("Error sending text to shell: %v", err)
 		}
 
 		if shouldRingBell {
@@ -106,10 +106,10 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		}
 	}
 
-	commandReflection := t.ExpectedReflection
+	typedPrefixReflection := t.ExpectedReflection
 	// Space after autocomplete
 	if !t.ExpectedAutocompletedReflectionHasNoSpace {
-		commandReflection = fmt.Sprintf("%s ", t.ExpectedReflection)
+		typedPrefixReflection = fmt.Sprintf("%s ", t.ExpectedReflection)
 	}
 
 	fallbackPatterns := []*regexp.Regexp{}
@@ -121,7 +121,7 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput:   commandReflection,
+		ExpectedOutput:   typedPrefixReflection,
 		FallbackPatterns: fallbackPatterns,
 	})
 

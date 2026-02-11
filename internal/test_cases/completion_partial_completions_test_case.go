@@ -20,7 +20,8 @@ import (
 type PartialCompletionsTestCase struct {
 	// TODO refactor: combine input and reflections in one structure
 	// This needs this test case's usage to be changed across the previous extension as well
-	// skipping the refactor for now
+	// skipping the refactor in path completions extension
+	// Will open a new PR
 
 	// ExistingPrefixInPromptLine is the prefix that is already present in the prompt before
 	// the first input is sent to the shell
@@ -83,12 +84,12 @@ func (t PartialCompletionsTestCase) runInputReflectionForIdx(asserter *logged_sh
 		return nil
 	}
 
-	// Log the details of the command before sending it
+	// Log the details of the text before sending it
 	logTypedText(logger, t.Inputs[idx])
 
-	// Send the command to the shell
+	// Send the text to the shell
 	if err := shell.SendTextRaw(t.Inputs[idx]); err != nil {
-		return fmt.Errorf("Error sending command to shell: %v", err)
+		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
 	// The prompt line will not just show the subsequent input,
@@ -117,20 +118,20 @@ func (t PartialCompletionsTestCase) runTabCompletionForIdx(asserter *logged_shel
 	// Send TAB
 	logTab(logger, t.ExpectedReflections[idx], false)
 	if err := shell.SendTextRaw("\t"); err != nil {
-		return fmt.Errorf("Error sending command to shell: %v", err)
+		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
 	// For all partial auto-completions, we expect *NO* space at the end
-	commandReflection := fmt.Sprintf("$ %s", t.ExpectedReflections[idx])
+	typedPrefixReflection := fmt.Sprintf("$ %s", t.ExpectedReflections[idx])
 
 	// For the last auto-completion, we expect a space at the end if specified
 	if idx == len(t.ExpectedReflections)-1 && !t.ExpectedLastReflectionHasNoSpace {
-		commandReflection = fmt.Sprintf("$ %s ", t.ExpectedReflections[idx])
+		typedPrefixReflection = fmt.Sprintf("$ %s ", t.ExpectedReflections[idx])
 	}
 
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: commandReflection,
+		ExpectedOutput: typedPrefixReflection,
 		StayOnSameLine: true,
 	})
 	// Run the assertion, before sending the next tab key
@@ -140,6 +141,6 @@ func (t PartialCompletionsTestCase) runTabCompletionForIdx(asserter *logged_shel
 	asserter.PopAssertion()
 
 	// Only if we attempted to autocomplete, print the success message
-	logger.Successf("✓ Prompt line matches %q", commandReflection)
+	logger.Successf("✓ Prompt line matches %q", typedPrefixReflection)
 	return nil
 }

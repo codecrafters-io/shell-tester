@@ -153,8 +153,8 @@ func (b *ShellExecutable) SendCommand(command string) error {
 	return nil
 }
 
-func (b *ShellExecutable) SendTextRaw(command string) error {
-	if _, err := b.pty.Write([]byte(command)); err != nil {
+func (b *ShellExecutable) SendTextRaw(text string) error {
+	if _, err := b.pty.Write([]byte(text)); err != nil {
 		return err
 	}
 

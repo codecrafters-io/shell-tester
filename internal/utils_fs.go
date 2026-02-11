@@ -136,12 +136,13 @@ func MkdirAllWithTeardown(
 	dirPath string,
 	permissions os.FileMode,
 ) error {
-	abs, err := filepath.Abs(dirPath)
+	dirAbsolutePath, err := filepath.Abs(dirPath)
 	if err != nil {
 		return err
 	}
 
-	toRemove := abs
+	// Walk up from the dirPath given, and mark the directories that do not exist as 'toRemove'
+	toRemove := dirAbsolutePath
 	for {
 		parent := filepath.Dir(toRemove)
 		if parent == toRemove {
@@ -154,7 +155,7 @@ func MkdirAllWithTeardown(
 		}
 	}
 
-	if err := os.MkdirAll(abs, permissions); err != nil {
+	if err := os.MkdirAll(dirAbsolutePath, permissions); err != nil {
 		return err
 	}
 

@@ -55,7 +55,7 @@ func testPA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	typedPrefix := fmt.Sprintf("%s %s", random.RandomElementFromArray(commands), prefix)
 
 	err := test_cases.MultipleCompletionsTestCase{
-		RawPrefix:          typedPrefix,
+		TypedPrefix:        typedPrefix,
 		TabCount:           2,
 		ExpectedReflection: strings.Join(allCompletions, "  "),
 		ExpectedReflectionFallbackPatterns: []string{

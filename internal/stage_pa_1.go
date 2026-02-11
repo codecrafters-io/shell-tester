@@ -41,8 +41,8 @@ func testPA1(stageHarness *test_case_harness.TestCaseHarness) error {
 	completion := fmt.Sprintf("%s %s", randomCommand, fileBaseName)
 
 	err = test_cases.AutocompleteTestCase{
-		TypedPrefix:                               typedPrefix,
-		ExpectedPromptLineReflection:              completion,
+		TypedPrefix:        typedPrefix,
+		ExpectedReflection: completion,
 		ExpectedAutocompletedReflectionHasNoSpace: false,
 		SkipPromptAssertion:                       true,
 	}.Run(asserter, shell, stageHarness.Logger)

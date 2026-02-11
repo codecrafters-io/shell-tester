@@ -16,11 +16,11 @@ import (
 // Asserts that the expected reflection is printed to the screen (with/without a space as designated by ExpectedAutocompletedReflectionHasNoSpace)
 // If any error occurs returns the error from the corresponding assertion
 type AutocompleteTestCase struct {
-	// TypedPrefix is the command to send to the shell
+	// TypedPrefix is the prefix to send to the shell
 	TypedPrefix string
 
-	// ExpectedPromptLineReflection is the custom reflection to use
-	ExpectedPromptLineReflection string
+	// ExpectedReflection is the custom reflection to use
+	ExpectedReflection string
 
 	// ExpectedAutocompletedReflectionHasNoSpace is true if
 	// the expected reflection should have no space after it
@@ -39,7 +39,7 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 
 	// Send the typed text to the shell
 	if err := shell.SendTextRaw(t.TypedPrefix); err != nil {
-		return fmt.Errorf("Error sending command to shell: %v", err)
+		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
 	inputReflection := fmt.Sprintf("$ %s", t.TypedPrefix)
@@ -59,19 +59,19 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 	asserter.PopAssertion()
 
 	// Send TAB
-	logTab(logger, t.ExpectedPromptLineReflection, false)
+	logTab(logger, t.ExpectedReflection, false)
 	if err := shell.SendTextRaw("\t"); err != nil {
-		return fmt.Errorf("Error sending command to shell: %v", err)
+		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
-	commandReflection := fmt.Sprintf("$ %s", t.ExpectedPromptLineReflection)
+	typedPrefixReflection := fmt.Sprintf("$ %s", t.ExpectedReflection)
 	// Space after autocomplete
 	if !t.ExpectedAutocompletedReflectionHasNoSpace {
-		commandReflection = fmt.Sprintf("$ %s ", t.ExpectedPromptLineReflection)
+		typedPrefixReflection = fmt.Sprintf("$ %s ", t.ExpectedReflection)
 	}
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: commandReflection,
+		ExpectedOutput: typedPrefixReflection,
 		StayOnSameLine: true,
 	})
 	// Run the assertion, before sending the enter key
@@ -80,7 +80,7 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 	}
 
 	// Only if we attempted to autocomplete, print the success message
-	logger.Successf("✓ Prompt line matches %q", t.ExpectedPromptLineReflection)
+	logger.Successf("✓ Prompt line matches %q", t.ExpectedReflection)
 	// The space at the end of the reflection won't be present, so replace that assertion
 	asserter.PopAssertion()
 
@@ -125,6 +125,6 @@ func logTab(logger *logger.Logger, expectedReflection string, expectBell bool) {
 	}
 }
 
-func logTypedText(logger *logger.Logger, command string) {
-	logger.Infof("Typed %q", command)
+func logTypedText(logger *logger.Logger, typedPrefix string) {
+	logger.Infof("Typed %q", typedPrefix)
 }
