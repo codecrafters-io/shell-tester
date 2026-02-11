@@ -159,39 +159,47 @@ var testerDefinition = tester_definition.TesterDefinition{
 		{
 			Slug:     "zv2",
 			TestFunc: testPA1,
+			Timeout:  15 * time.Second,
 		},
 		{
 			Slug:     "ue6",
 			TestFunc: testPA2,
+			Timeout:  15 * time.Second,
 		},
 		{
 			Slug:     "lc6",
 			TestFunc: testPA3,
+			Timeout:  15 * time.Second,
 		},
 		{
 			Slug:     "px6",
 			TestFunc: testPA4,
+			Timeout:  15 * time.Second,
 		},
 		{
 			Slug:     "qd1",
 			TestFunc: testPA5,
+			Timeout:  15 * time.Second,
 		},
 		{
 			Slug:     "vs5",
 			TestFunc: testPA6,
+			Timeout:  15 * time.Second,
 		},
 		{
 			Slug:     "no5",
 			TestFunc: testPA7,
+			Timeout:  15 * time.Second,
 		},
 		{
 			Slug:     "jp8",
 			TestFunc: testPA8,
+			Timeout:  15 * time.Second,
 		},
 		{
 			Slug:     "bf8",
 			TestFunc: testPA9,
-			Timeout:  time.Hour,
+			Timeout:  15 * time.Second,
 		},
 		// Pipelines
 		{

@@ -10,7 +10,7 @@ import (
 )
 
 // PartialCompletionsTestCase is a test case that:
-// Sends a prefix to the shell
+// Sends (or appends, if 'ExistingPrefixInPromptLine' is already present) an input to the shell
 // Asserts that the prompt line reflects the typed prefix
 // for each partial auto-completion:
 // Sends TAB
@@ -22,6 +22,9 @@ type PartialCompletionsTestCase struct {
 	// This needs this test case's usage to be changed across the previous extension as well
 	// skipping the refactor for now
 
+	// ExistingPrefixInPromptLine is the prefix that is already present in the prompt before
+	// the first input is sent to the shell
+	ExistingPrefixInPromptLine string
 	// Inputs is the list of inputs to send to the shell
 	// They are send one by one, interleaved with TABs
 	// The shell is expected to auto-complete expected reflections
@@ -90,7 +93,7 @@ func (t PartialCompletionsTestCase) runInputReflectionForIdx(asserter *logged_sh
 
 	// The prompt line will not just show the subsequent input,
 	// but the previous reflection concatenated with the current input, if any
-	prevInput := ""
+	prevInput := t.ExistingPrefixInPromptLine
 	if idx > 0 {
 		prevInput = t.ExpectedReflections[idx-1]
 	}

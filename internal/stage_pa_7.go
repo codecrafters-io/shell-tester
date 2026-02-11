@@ -38,7 +38,7 @@ func testPA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	for _, integerSuffix := range dirSuffixes {
 		dirName := fmt.Sprintf("%s%d", prefix, integerSuffix)
 
-		if err := MkdirWithTeardown(stageHarness, dirName, 0755); err != nil {
+		if err := MkdirAllWithTeardown(stageHarness, dirName, 0755); err != nil {
 			return err
 		}
 
