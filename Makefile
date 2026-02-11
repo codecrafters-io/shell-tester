@@ -369,3 +369,9 @@ test_debug: build
 	$(call run_debug,$(QUOTING_STAGES),debug)
 	$(call run_debug,$(REDIRECTIONS_STAGES),debug)
 	$(call run_debug,$(COMPLETIONS_STAGES),debug)
+
+# This is invoked by regenerate_fixture workflow
+setup:
+	echo "Setting up shell-tester prerequisites for Ubuntu"
+	apt get update && apt install git go make bash dash zsh binutils-gold python3
+	echo "Setup complete!"
