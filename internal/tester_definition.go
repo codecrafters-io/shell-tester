@@ -196,11 +196,6 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testPA8,
 			Timeout:  15 * time.Second,
 		},
-		{
-			Slug:     "bf8",
-			TestFunc: testPA9,
-			Timeout:  15 * time.Second,
-		},
 		// Pipelines
 		{
 			Slug:     "br6",
