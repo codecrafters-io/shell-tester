@@ -26,7 +26,7 @@ type MultipleCompletionsTestCase struct {
 
 	// If ExpectedReflection does not match the given reflection
 	// the reflection is checked against the fallback pattern
-	ExpectedReflectionFallbackPattern string
+	ExpectedReflectionFallbackPatterns []string
 
 	// ExpectedAutocompletedReflectionHasNoSpace is true if
 	// the expected reflection should have no space after it
@@ -112,12 +112,17 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		commandReflection = fmt.Sprintf("%s ", t.ExpectedReflection)
 	}
 
+	fallbackPatterns := []*regexp.Regexp{}
+	if t.ExpectedReflectionFallbackPatterns != nil {
+		for _, fallbackPattern := range t.ExpectedReflectionFallbackPatterns {
+			fallbackPatterns = append(fallbackPatterns, regexp.MustCompile(fallbackPattern))
+		}
+	}
+
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: commandReflection,
-		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(t.ExpectedReflectionFallbackPattern),
-		},
+		ExpectedOutput:   commandReflection,
+		FallbackPatterns: fallbackPatterns,
 	})
 
 	// Run the assertion, before sending the enter key
@@ -126,7 +131,8 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	}
 
 	// Only if we attempted to autocomplete, print the success message
-	logger.Successf("✓ Prompt line matches %q", t.ExpectedReflection)
+	lastLoggedRow := shell.GetScreenState().GetRow(asserter.GetLastLoggedRowIndex())
+	logger.Successf("✓ Prompt line matches %q", lastLoggedRow.String())
 
 	// The space at the end of the reflection won't be present, so replace that assertion
 	// asserter.PopAssertion()
