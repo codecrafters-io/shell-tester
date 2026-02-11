@@ -177,21 +177,6 @@ func WriteFileWithTeardown(stageHarness *test_case_harness.TestCaseHarness, file
 	return nil
 }
 
-type WriteFileSpec struct {
-	FilePath    string
-	FileContent string
-	Permission  os.FileMode
-}
-
-func WriteFilesWithTearDown(stageHarness *test_case_harness.TestCaseHarness, writeFileSpecs []WriteFileSpec) error {
-	for _, spec := range writeFileSpecs {
-		if err := WriteFileWithTeardown(stageHarness, spec.FilePath, spec.FileContent, spec.Permission); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 func appendFile(filePath string, content string) error {
 	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
