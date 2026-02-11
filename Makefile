@@ -373,5 +373,5 @@ test_debug: build
 # This is invoked by regenerate_fixture workflow
 setup:
 	echo "Setting up shell-tester prerequisites for Ubuntu"
-	sudo apt update && sudo apt install git make bash dash zsh binutils-gold python3
+	sudo apt update && sudo apt install -y git make bash dash zsh binutils-gold python3
 	echo "Setup complete!"
