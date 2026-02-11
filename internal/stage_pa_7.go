@@ -70,5 +70,5 @@ func testPA7(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	return nil
+	return logAndQuit(asserter, nil)
 }

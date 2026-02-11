@@ -107,26 +107,6 @@ func writeFile(filePath string, content string) error {
 	return os.WriteFile(filePath, []byte(content), 0644)
 }
 
-// GetRandomFile returns the path and contents of a file created inside /tmp/ with a random name
-func GetRandomFile(stageHarness *test_case_harness.TestCaseHarness, extension string, fileMode os.FileMode) (string, string, error) {
-	filePath := path.Join(
-		"/tmp",
-		fmt.Sprintf("%s-%d.%s", random.RandomWord(), random.RandomInt(1, 1000), extension),
-	)
-
-	content := random.RandomString()
-
-	if err := writeFile(filePath, content); err != nil {
-		return "", "", err
-	}
-
-	stageHarness.RegisterTeardownFunc(func() {
-		os.Remove(filePath)
-	})
-
-	return filePath, content, nil
-}
-
 // CreateRandomFileInDir creates a random file inside the given directory
 // If extension is non empty, it is used as the filename extension
 // Returns file basename, contents and error encountered (if any) during creation
@@ -147,23 +127,6 @@ func CreateRandomFileInDir(stageHarness *test_case_harness.TestCaseHarness, dirP
 	})
 
 	return fileBaseName, contents, nil
-}
-
-// CreateRandomSubDir creates a random subdirectory inside a given parent directory path
-// It returns the base name of the subdirectory and error encountered (if any) during creation
-func CreateRandomSubDir(stageHarness *test_case_harness.TestCaseHarness, parentDirPath string) (string, error) {
-	dirBaseName := fmt.Sprintf("%s-%d", random.RandomWord(), random.RandomInt(1, 100))
-	dirPath := filepath.Join(parentDirPath, dirBaseName)
-
-	if err := os.Mkdir(dirPath, 0755); err != nil {
-		return "", err
-	}
-
-	stageHarness.RegisterTeardownFunc(func() {
-		os.RemoveAll(dirPath)
-	})
-
-	return dirBaseName, nil
 }
 
 // MkdirAllWithTeardown is a wrapper over os.Mkdir that registers teardown to delete the directory using the harness
