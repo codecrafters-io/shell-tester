@@ -166,14 +166,37 @@ func CreateRandomSubDir(stageHarness *test_case_harness.TestCaseHarness, parentD
 	return dirBaseName, nil
 }
 
-// MkdirWithTeardown is a wrapper over os.Mkdir that registers teardown to delete the directory using the harness
-func MkdirWithTeardown(stageHarness *test_case_harness.TestCaseHarness, dirPath string, permissions os.FileMode) error {
-	if err := os.Mkdir(dirPath, permissions); err != nil {
+// MkdirAllWithTeardown is a wrapper over os.Mkdir that registers teardown to delete the directory using the harness
+// It will delete every directory in the hierarchy that was created by it
+func MkdirAllWithTeardown(
+	stageHarness *test_case_harness.TestCaseHarness,
+	dirPath string,
+	permissions os.FileMode,
+) error {
+	abs, err := filepath.Abs(dirPath)
+	if err != nil {
+		return err
+	}
+
+	toRemove := abs
+	for {
+		parent := filepath.Dir(toRemove)
+		if parent == toRemove {
+			break
+		}
+		if _, err := os.Stat(parent); os.IsNotExist(err) {
+			toRemove = parent
+		} else {
+			break
+		}
+	}
+
+	if err := os.MkdirAll(abs, permissions); err != nil {
 		return err
 	}
 
 	stageHarness.RegisterTeardownFunc(func() {
-		os.RemoveAll(dirPath)
+		_ = os.RemoveAll(toRemove)
 	})
 
 	return nil
@@ -188,6 +211,21 @@ func WriteFileWithTeardown(stageHarness *test_case_harness.TestCaseHarness, file
 		os.Remove(filePath)
 	})
 
+	return nil
+}
+
+type WriteFileSpec struct {
+	FilePath    string
+	FileContent string
+	Permission  os.FileMode
+}
+
+func WriteFilesWithTearDown(stageHarness *test_case_harness.TestCaseHarness, writeFileSpecs []WriteFileSpec) error {
+	for _, spec := range writeFileSpecs {
+		if err := WriteFileWithTeardown(stageHarness, spec.FilePath, spec.FileContent, spec.Permission); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

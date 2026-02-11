@@ -25,7 +25,7 @@ func testPA8(stageHarness *test_case_harness.TestCaseHarness) error {
 		dirName := prefix + word
 		prefix = dirName + "_"
 
-		if err := MkdirWithTeardown(stageHarness, dirName, 0755); err != nil {
+		if err := MkdirAllWithTeardown(stageHarness, dirName, 0755); err != nil {
 			return err
 		}
 
