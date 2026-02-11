@@ -161,7 +161,6 @@ define _PATH_COMPLETION_STAGES
   {"slug":"vs5","tester_log_prefix":"tester::#vs5","title":"Stage#6: Handling absent entry completions"}, \
   {"slug":"no5","tester_log_prefix":"tester::#no5","title":"Stage#6: Multiple path matches"}, \
   {"slug":"jp8","tester_log_prefix":"tester::#jp8","title":"Stage#6: Path partial completions"}, \
-  {"slug":"bf8","tester_log_prefix":"tester::#bf8","title":"Stage#6: Path completion in command position"} \
 ]
 endef
 

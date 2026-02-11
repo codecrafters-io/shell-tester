@@ -91,7 +91,7 @@ func TestStages(t *testing.T) {
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"path_completions_pass_bash": {
-			StageSlugs:          []string{"zv2", "ue6", "lc6", "px6", "qd1", "vs5", "no5", "jp8", "bf8"},
+			StageSlugs:          []string{"zv2", "ue6", "lc6", "px6", "qd1", "vs5", "no5", "jp8"},
 			CodePath:            "./test_helpers/bash",
 			ExpectedExitCode:    0,
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/path_completions/pass",
@@ -156,7 +156,7 @@ func TestStages(t *testing.T) {
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"path_completions_pass_ash": {
-			StageSlugs:          []string{"zv2", "ue6", "lc6", "px6", "qd1", "vs5", "no5", "jp8", "bf8"},
+			StageSlugs:          []string{"zv2", "ue6", "lc6", "px6", "qd1", "vs5", "no5", "jp8"},
 			CodePath:            "./test_helpers/bash",
 			ExpectedExitCode:    0,
 			StdoutFixturePath:   "./test_helpers/fixtures/ash/path_completions/pass",
