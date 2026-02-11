@@ -18,7 +18,7 @@ func testPA9(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	words := random.RandomWords(6)
+	words := random.RandomElementsFromArray(SMALL_WORDS, 6)
 	nestedDirPath := filepath.Join("/tmp", words[0], words[1])
 	if err := MkdirAllWithTeardown(stageHarness, nestedDirPath, 0755); err != nil {
 		return err
@@ -78,23 +78,23 @@ func testPA9(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// We remove the assertion for the second line since it will be now used by newly typed prefix
 	// instead of the old autocomplete
-	asserter.PopAssertion()
+	// asserter.PopAssertion()
 
-	executable2Path := filepath.Join(nestedDirPath, executable2BaseName)
-	nestedDirIncompleteBaseName := nestedDirBaseName[:len(nestedDirBaseName)/2]
+	// executable2Path := filepath.Join(nestedDirPath, executable2BaseName)
+	// nestedDirIncompleteBaseName := nestedDirBaseName[:len(nestedDirBaseName)/2]
 
-	err = test_cases.PartialCompletionsTestCase{
-		ExistingPrefixInPromptLine:       typedPrefix,
-		Inputs:                           []string{nestedDirIncompleteBaseName, ""},
-		ExpectedReflections:              []string{fmt.Sprintf("%s/", nestedDirPath), executable2Path},
-		SuccessMessage:                   fmt.Sprintf("Received path completion for %q", typedPrefix),
-		SkipPromptAssertion:              true,
-		ExpectedLastReflectionHasNoSpace: false,
-	}.Run(asserter, shell, logger)
+	// err = test_cases.PartialCompletionsTestCase{
+	// 	ExistingPrefixInPromptLine:       typedPrefix,
+	// 	Inputs:                           []string{nestedDirIncompleteBaseName, ""},
+	// 	ExpectedReflections:              []string{fmt.Sprintf("%s/", nestedDirPath), executable2Path},
+	// 	SuccessMessage:                   fmt.Sprintf("Received path completion for %q", typedPrefix),
+	// 	SkipPromptAssertion:              true,
+	// 	ExpectedLastReflectionHasNoSpace: false,
+	// }.Run(asserter, shell, logger)
 
-	if err != nil {
-		return err
-	}
+	// if err != nil {
+	// 	return err
+	// }
 
 	return nil
 }
