@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"os"
 	"slices"
 	"strings"
 
@@ -20,47 +19,30 @@ func testPA7(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	prefix := "pear_"
 	suffixes := random.RandomInts(1, 10, 3)
+
 	fileSuffixes := suffixes[:2]
 	dirSuffixes := suffixes[2:]
-	fileNames := []string{}
-	dirNames := []string{}
-
-	for _, integerSuffix := range fileSuffixes {
-		fileNames = append(fileNames, fmt.Sprintf("%s%d", prefix, integerSuffix))
-	}
-
-	for _, integerSuffix := range dirSuffixes {
-		dirNames = append(dirNames, fmt.Sprintf("%s%d", prefix, integerSuffix))
-	}
-
-	if err := writeFiles(
-		fileNames,
-		fileNames,
-		logger,
-	); err != nil {
-		return err
-	}
-	defer func() {
-		for _, fileName := range fileNames {
-			os.Remove(fileName)
-		}
-	}()
-
-	for _, dirname := range dirNames {
-		if err := os.Mkdir(dirname, 0755); err != nil {
-			return err
-		}
-		defer os.Remove(dirname)
-	}
 
 	allCompletions := []string{}
 
-	for _, dirname := range dirNames {
-		allCompletions = append(allCompletions, fmt.Sprintf("%s/", dirname))
+	for _, integerSuffix := range fileSuffixes {
+		fileName := fmt.Sprintf("%s%d", prefix, integerSuffix)
+
+		if err := WriteFileWithTeardown(stageHarness, fileName, "", 0644); err != nil {
+			return err
+		}
+
+		allCompletions = append(allCompletions, fileName)
 	}
 
-	for _, filename := range fileNames {
-		allCompletions = append(allCompletions, filename)
+	for _, integerSuffix := range dirSuffixes {
+		dirName := fmt.Sprintf("%s%d", prefix, integerSuffix)
+
+		if err := MkdirWithTeardown(stageHarness, dirName, 0755); err != nil {
+			return err
+		}
+
+		allCompletions = append(allCompletions, fmt.Sprintf("%s/", dirName))
 	}
 
 	slices.Sort(allCompletions)
@@ -73,11 +55,13 @@ func testPA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	typedPrefix := fmt.Sprintf("%s %s", random.RandomElementFromArray(commands), prefix)
 
 	err := test_cases.MultipleCompletionsTestCase{
-		RawPrefix:                         typedPrefix,
-		TabCount:                          2,
-		ExpectedReflection:                strings.Join(allCompletions, "  "),
-		ExpectedReflectionFallbackPattern: "^" + strings.Join(allCompletions, `\s*`) + "$",
-		SuccessMessage:                    fmt.Sprintf("Received completion for %q", typedPrefix),
+		RawPrefix:          typedPrefix,
+		TabCount:           2,
+		ExpectedReflection: strings.Join(allCompletions, "  "),
+		ExpectedReflectionFallbackPatterns: []string{
+			"^" + strings.Join(allCompletions, `\s*`) + "$",
+		},
+		SuccessMessage: fmt.Sprintf("Received completion for %q", typedPrefix),
 		ExpectedAutocompletedReflectionHasNoSpace: true,
 		CheckForBell:        true,
 		SkipPromptAssertion: true,
@@ -86,5 +70,5 @@ func testPA7(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	return logAndQuit(asserter, nil)
+	return nil
 }
