@@ -10,8 +10,8 @@ import (
 )
 
 // PartialCompletionsTestCase is a test case that:
-// Sends a command to the shell
-// Asserts that the prompt line reflects the command
+// Sends a prefix to the shell
+// Asserts that the prompt line reflects the typed prefix
 // for each partial auto-completion:
 // Sends TAB
 // Asserts that the expected reflection is printed to the screen

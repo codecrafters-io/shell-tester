@@ -166,6 +166,31 @@ func CreateRandomSubDir(stageHarness *test_case_harness.TestCaseHarness, parentD
 	return dirBaseName, nil
 }
 
+// MkdirWithTeardown is a wrapper over os.Mkdir that registers teardown to delete the directory using the harness
+func MkdirWithTeardown(stageHarness *test_case_harness.TestCaseHarness, dirPath string, permissions os.FileMode) error {
+	if err := os.Mkdir(dirPath, permissions); err != nil {
+		return err
+	}
+
+	stageHarness.RegisterTeardownFunc(func() {
+		os.RemoveAll(dirPath)
+	})
+
+	return nil
+}
+
+func WriteFileWithTeardown(stageHarness *test_case_harness.TestCaseHarness, filePath string, contents string, permissions os.FileMode) error {
+	if err := os.WriteFile(filePath, []byte(contents), permissions); err != nil {
+		return err
+	}
+
+	stageHarness.RegisterTeardownFunc(func() {
+		os.Remove(filePath)
+	})
+
+	return nil
+}
+
 func appendFile(filePath string, content string) error {
 	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {

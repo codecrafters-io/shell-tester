@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -20,35 +19,28 @@ func testPA8(stageHarness *test_case_harness.TestCaseHarness) error {
 	initialFilePrefix := prefix
 	randomWords := random.RandomElementsFromArray(SMALL_WORDS, 3)
 	entryNames := []string{}
-	for i, word := range randomWords {
-		entryName := prefix + word
-		prefix = entryName + "_"
 
-		// On the last run
-		if i == len(randomWords)-1 {
-			entryName += ".txt"
-		}
+	// Create the directories
+	for _, word := range randomWords[:len(randomWords)-1] {
+		dirName := prefix + word
+		prefix = dirName + "_"
 
-		entryNames = append(entryNames, entryName)
-
-		// Create a file at the end of the completion
-		if i == len(randomWords)-1 {
-			if err := writeFile(entryName, ""); err != nil {
-				return err
-			}
-			defer func() {
-				os.Remove(entryName)
-			}()
-			break
-		}
-
-		if err := os.Mkdir(entryName, 0755); err != nil {
+		if err := MkdirWithTeardown(stageHarness, dirName, 0755); err != nil {
 			return err
 		}
-		defer func() {
-			os.Remove(entryName)
-		}()
+
+		entryNames = append(entryNames, dirName)
 	}
+
+	// Create a file for a completion
+	fileName := fmt.Sprintf("%s%s.txt", prefix, randomWords[len(randomWords)-1])
+
+	if err := WriteFileWithTeardown(stageHarness, fileName, "", 0644); err != nil {
+		return err
+	}
+
+	// Add filename to entry names
+	entryNames = append(entryNames, fileName)
 
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err
