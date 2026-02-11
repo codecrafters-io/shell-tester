@@ -34,11 +34,11 @@ type AutocompleteTestCase struct {
 }
 
 func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	// Log the details of the command before sending it
-	logCommand(logger, t.TypedPrefix)
+	// Log the details of the typed text before sending it
+	logTypedText(logger, t.TypedPrefix)
 
-	// Send the command to the shell
-	if err := shell.SendCommandRaw(t.TypedPrefix); err != nil {
+	// Send the typed text to the shell
+	if err := shell.SendTextRaw(t.TypedPrefix); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
@@ -60,7 +60,7 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 
 	// Send TAB
 	logTab(logger, t.ExpectedPromptLineReflection, false)
-	if err := shell.SendCommandRaw("\t"); err != nil {
+	if err := shell.SendTextRaw("\t"); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
@@ -125,6 +125,6 @@ func logTab(logger *logger.Logger, expectedReflection string, expectBell bool) {
 	}
 }
 
-func logCommand(logger *logger.Logger, command string) {
+func logTypedText(logger *logger.Logger, command string) {
 	logger.Infof("Typed %q", command)
 }

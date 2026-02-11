@@ -63,7 +63,7 @@ func testPA8(stageHarness *test_case_harness.TestCaseHarness) error {
 		reflections = append(reflections, fmt.Sprintf("%s %s", command, entryName))
 	}
 
-	err := test_cases.CommandPartialCompletionsTestCase{
+	err := test_cases.PartialCompletionsTestCase{
 		Inputs:              []string{initialTypedPrefix, "_", "_"},
 		ExpectedReflections: reflections,
 		SuccessMessage:      fmt.Sprintf("Received all partial completions for %q", initialTypedPrefix),

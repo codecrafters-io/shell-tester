@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -11,19 +12,18 @@ import (
 )
 
 func testPA2(stageHarness *test_case_harness.TestCaseHarness) error {
-	workingDirPath, err := GetRandomDirectory(stageHarness)
-	if err != nil {
-		return err
-	}
-
-	directoryBaseName, err := CreateRandomSubDir(stageHarness, workingDirPath)
-	if err != nil {
-		return err
-	}
-
 	shell := shell_executable.NewShellExecutable(stageHarness)
-	shell.SetWorkingDirectory(workingDirPath)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
+
+	dirPath, err := GetRandomDirectory(stageHarness)
+	if err != nil {
+		return err
+	}
+
+	dirParentPath := filepath.Dir(dirPath)
+	dirBaseName := filepath.Base(dirPath)
+
+	shell.SetWorkingDirectory(dirParentPath)
 
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err
@@ -35,9 +35,8 @@ func testPA2(stageHarness *test_case_harness.TestCaseHarness) error {
 		"rmdir",
 	})
 
-	incompleteDirectoryName := directoryBaseName[:len(directoryBaseName)/2]
-	typedPrefix := fmt.Sprintf("%s %s", command, incompleteDirectoryName)
-	completion := fmt.Sprintf("%s %s/", command, directoryBaseName)
+	typedPrefix := fmt.Sprintf("%s %s", command, dirBaseName[:len(dirBaseName)/2])
+	completion := fmt.Sprintf("%s %s/", command, dirBaseName)
 
 	err = test_cases.AutocompleteTestCase{
 		TypedPrefix:                               typedPrefix,

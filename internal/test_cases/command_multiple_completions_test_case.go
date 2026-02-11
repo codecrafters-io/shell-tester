@@ -47,10 +47,10 @@ type CommandMultipleCompletionsTestCase struct {
 
 func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	// Log the details of the command before sending it
-	logCommand(logger, t.RawCommand)
+	logTypedText(logger, t.RawCommand)
 
 	// Send the command to the shell
-	if err := shell.SendCommandRaw(t.RawCommand); err != nil {
+	if err := shell.SendTextRaw(t.RawCommand); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
@@ -79,7 +79,7 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 		// Ref: CC-1689
 		time.Sleep(5 * time.Millisecond)
 
-		if err := shell.SendCommandRaw("\t"); err != nil {
+		if err := shell.SendTextRaw("\t"); err != nil {
 			return fmt.Errorf("Error sending command to shell: %v", err)
 		}
 

@@ -46,10 +46,10 @@ type CommandAutocompleteAndResponseTestCase struct {
 
 func (t CommandAutocompleteAndResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	// Log the details of the command before sending it
-	logCommand(logger, t.RawCommand)
+	logTypedText(logger, t.RawCommand)
 
 	// Send the command to the shell
-	if err := shell.SendCommandRaw(t.RawCommand); err != nil {
+	if err := shell.SendTextRaw(t.RawCommand); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
@@ -71,7 +71,7 @@ func (t CommandAutocompleteAndResponseTestCase) Run(asserter *logged_shell_asser
 
 	// Send TAB
 	logTab(logger, t.ExpectedReflection, false)
-	if err := shell.SendCommandRaw("\t"); err != nil {
+	if err := shell.SendTextRaw("\t"); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
@@ -101,9 +101,9 @@ func (t CommandAutocompleteAndResponseTestCase) Run(asserter *logged_shell_asser
 	if t.Args != nil {
 		nextCommandToSend = strings.Join(t.Args, " ") + "\n"
 	}
-	logCommand(logger, strings.TrimSpace(nextCommandToSend))
+	logTypedText(logger, strings.TrimSpace(nextCommandToSend))
 	logNewLine(logger)
-	if err := shell.SendCommandRaw(nextCommandToSend); err != nil {
+	if err := shell.SendTextRaw(nextCommandToSend); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
