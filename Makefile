@@ -154,14 +154,14 @@ endef
 define _PATH_COMPLETION_STAGES
 [ \
   {"slug":"zv2","tester_log_prefix":"tester::#zv2","title":"Stage#1: Filename Completion"}, \
-  {"slug":"ue6","tester_log_prefix":"tester::#ue6","title":"Stage#3: Directory name completion"}, \
-  {"slug":"lc6","tester_log_prefix":"tester::#lc6","title":"Stage#4: Completion to a file in paths"}, \
-  {"slug":"px6","tester_log_prefix":"tester::#px6","title":"Stage#6: Completion to a directory in paths"}, \
-  {"slug":"qd1","tester_log_prefix":"tester::#qd1","title":"Stage#6: Multiple tab presses"}, \
+  {"slug":"ue6","tester_log_prefix":"tester::#ue6","title":"Stage#2: Directory name completion"}, \
+  {"slug":"lc6","tester_log_prefix":"tester::#lc6","title":"Stage#3: Completion to a file in paths"}, \
+  {"slug":"px6","tester_log_prefix":"tester::#px6","title":"Stage#4: Completion to a directory in paths"}, \
+  {"slug":"qd1","tester_log_prefix":"tester::#qd1","title":"Stage#5: Multiple tab presses"}, \
   {"slug":"vs5","tester_log_prefix":"tester::#vs5","title":"Stage#6: Handling absent entry completions"}, \
-  {"slug":"no5","tester_log_prefix":"tester::#no5","title":"Stage#6: Multiple path matches"}, \
-  {"slug":"jp8","tester_log_prefix":"tester::#jp8","title":"Stage#6: Path partial completions"}, \
-  {"slug":"bf8","tester_log_prefix":"tester::#bf8","title":"Stage#6: Path completion in command position"} \
+  {"slug":"no5","tester_log_prefix":"tester::#no5","title":"Stage#7: Multiple path matches"}, \
+  {"slug":"jp8","tester_log_prefix":"tester::#jp8","title":"Stage#8: Path partial completions"}, \
+  {"slug":"bf8","tester_log_prefix":"tester::#bf8","title":"Stage#9: Path completion in command position"} \
 ]
 endef
 
