@@ -1,0 +1,29 @@
+Debug = true
+
+[33m[tester::#ZV2] [0m[94mRunning tests for Stage #ZV2 (zv2)[0m
+[33m[tester::#ZV2] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#ZV2] [0m[92m✓ Received prompt ($ )[0m
+[33m[tester::#ZV2] [0m[94mTyped "cat mang"[0m
+[33m[tester::#ZV2] [0m[92m✓ Prompt line matches "$ cat mang"[0m
+[33m[tester::#ZV2] [0m[94mPressed "<TAB>" (expecting autocomplete to "cat mango-20")[0m
+[33m[tester::#ZV2] [0m[92m✓ Prompt line matches "cat mango-20"[0m
+[33m[your-program] [0m[0m$ cat mango-20 [0m
+[33m[tester::#ZV2] [0m[92mTest passed.[0m
+
+[33m[tester::#UE6] [0m[94mRunning tests for Stage #UE6 (ue6)[0m
+[33m[tester::#UE6] [0m[92mTest passed.[0m
+
+[33m[tester::#LC6] [0m[94mRunning tests for Stage #LC6 (lc6)[0m
+[33m[tester::#LC6] [0m[92mTest passed.[0m
+
+[33m[tester::#VS5] [0m[94mRunning tests for Stage #VS5 (vs5)[0m
+[33m[tester::#VS5] [0m[92mTest passed.[0m
+
+[33m[tester::#NO5] [0m[94mRunning tests for Stage #NO5 (no5)[0m
+[33m[tester::#NO5] [0m[92mTest passed.[0m
+
+[33m[tester::#JP8] [0m[94mRunning tests for Stage #JP8 (jp8)[0m
+[33m[tester::#JP8] [0m[92mTest passed.[0m
+
+[33m[tester::#BF8] [0m[94mRunning tests for Stage #BF8 (bf8)[0m
+[33m[tester::#BF8] [0m[92mTest passed.[0m

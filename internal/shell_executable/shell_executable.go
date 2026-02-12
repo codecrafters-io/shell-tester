@@ -74,22 +74,6 @@ func (b *ShellExecutable) SetWorkingDirectory(workingDirPath string) {
 	b.workingDir = workingDirPath
 }
 
-func (b *ShellExecutable) GetWorkingDirectory() string {
-	if b.workingDir != "" {
-		return b.workingDir
-	}
-
-	pwd, err := os.Getwd()
-
-	// This is rare: occurs when working directory does not exist/path name too long/insufficient permissions
-	// This means something was made wrong during the setup, so panic here
-	if err != nil {
-		panic(fmt.Errorf("Codecrafters Internal Error - Error retrieving current working directory: %s", err))
-	}
-
-	return pwd
-}
-
 func (b *ShellExecutable) Start(args ...string) error {
 	b.stageLogger.Infof("%s", b.getInitialLogLine(args...))
 
