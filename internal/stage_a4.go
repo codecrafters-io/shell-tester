@@ -31,8 +31,8 @@ func testA4(stageHarness *test_case_harness.TestCaseHarness) error {
 	command := "custom"
 	completion := executableName
 
-	err = test_cases.CommandAutocompleteTestCase{
-		RawCommand:         command,
+	err = test_cases.AutocompleteTestCase{
+		InputRawText:       command,
 		ExpectedReflection: completion,
 		ExpectedAutocompletedReflectionHasNoSpace: false,
 		SkipPromptAssertion:                       true,

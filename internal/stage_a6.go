@@ -37,7 +37,7 @@ func testA6(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	err := test_cases.CommandPartialCompletionsTestCase{
+	err := test_cases.PartialCompletionsTestCase{
 		Inputs:              []string{initialPrefix, "_", "_"},
 		ExpectedReflections: executableNames,
 		SuccessMessage:      fmt.Sprintf("Received all partial completions for %q", executableNames[len(executableNames)-1]),

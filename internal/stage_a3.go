@@ -19,8 +19,8 @@ func testA3(stageHarness *test_case_harness.TestCaseHarness) error {
 	command := "xyz"
 	completion := "xyz"
 
-	err := test_cases.CommandAutocompleteTestCase{
-		RawCommand:         command,
+	err := test_cases.AutocompleteTestCase{
+		InputRawText:       command,
 		ExpectedReflection: completion,
 		ExpectedAutocompletedReflectionHasNoSpace: true,
 		CheckForBell:        true,

@@ -9,15 +9,15 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-// CommandPartialCompletionsTestCase is a test case that:
-// Sends a command to the shell
-// Asserts that the prompt line reflects the command
+// PartialCompletionsTestCase is a test case that:
+// Sends a text to the shell
+// Asserts that the prompt line reflects the text
 // for each partial auto-completion:
 // Sends TAB
 // Asserts that the expected reflection is printed to the screen
 // And sends the subsequent input
 // If any error occurs returns the error from the corresponding assertion
-type CommandPartialCompletionsTestCase struct {
+type PartialCompletionsTestCase struct {
 	// Inputs is the list of inputs to send to the shell
 	// They are send one by one, interleaved with TABs
 	// The shell is expected to auto-complete expected reflections
@@ -33,19 +33,19 @@ type CommandPartialCompletionsTestCase struct {
 	SkipPromptAssertion bool
 }
 
-func (t CommandPartialCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
+func (t PartialCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	if len(t.Inputs) != len(t.ExpectedReflections) {
 		panic("Inputs and ExpectedReflections must have the same length")
 	}
 
 	// The entire flow is repeated for each input & expected reflection
 	for idx := 0; idx < len(t.ExpectedReflections); idx++ {
-		// Log the details of the command before sending it
-		logCommand(logger, t.Inputs[idx])
+		// Log the details of the text before sending it
+		logTypedText(logger, t.Inputs[idx])
 
-		// Send the command to the shell
-		if err := shell.SendCommandRaw(t.Inputs[idx]); err != nil {
-			return fmt.Errorf("Error sending command to shell: %v", err)
+		// Send the text to the shell
+		if err := shell.SendTextRaw(t.Inputs[idx]); err != nil {
+			return fmt.Errorf("Error sending text to shell: %v", err)
 		}
 
 		// The prompt line will not just show the subsequent input,
@@ -70,20 +70,20 @@ func (t CommandPartialCompletionsTestCase) Run(asserter *logged_shell_asserter.L
 
 		// Send TAB
 		logTab(logger, t.ExpectedReflections[idx], false)
-		if err := shell.SendCommandRaw("\t"); err != nil {
-			return fmt.Errorf("Error sending command to shell: %v", err)
+		if err := shell.SendTextRaw("\t"); err != nil {
+			return fmt.Errorf("Error sending text to shell: %v", err)
 		}
 
 		// For all partial auto-completions, we expect *NO* space at the end
-		commandReflection := fmt.Sprintf("$ %s", t.ExpectedReflections[idx])
+		inputTextReflection := fmt.Sprintf("$ %s", t.ExpectedReflections[idx])
 		// For the last auto-completion, we expect a space at the end
 		if idx == len(t.ExpectedReflections)-1 {
-			commandReflection = fmt.Sprintf("$ %s ", t.ExpectedReflections[idx])
+			inputTextReflection = fmt.Sprintf("$ %s ", t.ExpectedReflections[idx])
 		}
 
 		// Assert auto-completion
 		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput: commandReflection,
+			ExpectedOutput: inputTextReflection,
 			StayOnSameLine: true,
 		})
 		// Run the assertion, before sending the next tab key
@@ -93,7 +93,7 @@ func (t CommandPartialCompletionsTestCase) Run(asserter *logged_shell_asserter.L
 		asserter.PopAssertion()
 
 		// Only if we attempted to autocomplete, print the success message
-		logger.Successf("✓ Prompt line matches %q", commandReflection)
+		logger.Successf("✓ Prompt line matches %q", inputTextReflection)
 	}
 
 	var assertFuncToRun func() error

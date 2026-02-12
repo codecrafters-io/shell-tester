@@ -10,15 +10,15 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-// CommandMultipleCompletionsTestCase is a test case that:
-// Sends a command to the shell
-// Asserts that the prompt line reflects the command
+// MultipleCompletionsTestCase is a test case that:
+// Sends a text to the shell
+// Asserts that the prompt line reflects the text
 // Sends TAB
 // Asserts that the expected reflection is printed to the screen (with a space after it)
 // If any error occurs returns the error from the corresponding assertion
-type CommandMultipleCompletionsTestCase struct {
-	// RawCommand is the command to send to the shell
-	RawCommand string
+type MultipleCompletionsTestCase struct {
+	// RawInputText is the text to send to the shell
+	RawInputText string
 
 	// ExpectedReflection is the custom reflection to use
 	ExpectedReflection string
@@ -33,23 +33,23 @@ type CommandMultipleCompletionsTestCase struct {
 	// SuccessMessage is the message to log in case of success
 	SuccessMessage string
 
-	// tabCount is the number of tabs to send after the command
+	// tabCount is the number of tabs to send after the input text
 	TabCount int
 
 	// SkipPromptAssertion is a flag to skip the final prompt assertion
 	SkipPromptAssertion bool
 }
 
-func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	// Log the details of the command before sending it
-	logCommand(logger, t.RawCommand)
+func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
+	// Log the details of the text before sending it
+	logTypedText(logger, t.RawInputText)
 
-	// Send the command to the shell
-	if err := shell.SendCommandRaw(t.RawCommand); err != nil {
-		return fmt.Errorf("Error sending command to shell: %v", err)
+	// Send the text to the shell
+	if err := shell.SendTextRaw(t.RawInputText); err != nil {
+		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
-	inputReflection := fmt.Sprintf("$ %s", t.RawCommand)
+	inputReflection := fmt.Sprintf("$ %s", t.RawInputText)
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: inputReflection,
 		StayOnSameLine: false,
@@ -74,8 +74,8 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 		// Ref: CC-1689
 		time.Sleep(5 * time.Millisecond)
 
-		if err := shell.SendCommandRaw("\t"); err != nil {
-			return fmt.Errorf("Error sending command to shell: %v", err)
+		if err := shell.SendTextRaw("\t"); err != nil {
+			return fmt.Errorf("Error sending text to shell: %v", err)
 		}
 
 		if shouldRingBell {
@@ -101,15 +101,15 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 		}
 	}
 
-	commandReflection := t.ExpectedReflection
+	inputTextReflection := t.ExpectedReflection
 	// Space after autocomplete
 	if !t.ExpectedAutocompletedReflectionHasNoSpace {
-		commandReflection = fmt.Sprintf("%s ", t.ExpectedReflection)
+		inputTextReflection = fmt.Sprintf("%s ", t.ExpectedReflection)
 	}
 
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: commandReflection,
+		ExpectedOutput: inputTextReflection,
 	})
 	// Run the assertion, before sending the enter key
 	if err := asserter.AssertWithoutPrompt(); err != nil {
