@@ -19,7 +19,7 @@ import (
 // The total possible directories is 10^3 = 1000
 // This can be used without cleanup in most cases
 func CreateRandomDirIn(stageHarness *test_case_harness.TestCaseHarness, rootDir string) (string, error) {
-	randomDir := path.Join("/tmp", random.RandomWord(), random.RandomWord(), random.RandomWord())
+	randomDir := path.Join(rootDir, random.RandomWord(), random.RandomWord(), random.RandomWord())
 	for {
 		if _, err := os.Stat(randomDir); os.IsNotExist(err) {
 			if err := os.MkdirAll(randomDir, 0755); err != nil {
@@ -27,7 +27,7 @@ func CreateRandomDirIn(stageHarness *test_case_harness.TestCaseHarness, rootDir 
 			}
 			break
 		}
-		randomDir = path.Join("/tmp", random.RandomWord(), random.RandomWord(), random.RandomWord())
+		randomDir = path.Join(rootDir, random.RandomWord(), random.RandomWord(), random.RandomWord())
 	}
 
 	// Automatically cleanup the directory when the test is completed
