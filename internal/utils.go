@@ -92,3 +92,12 @@ func GetRandomCommandSuitableForFile() string {
 		"wc",
 	})
 }
+
+func GetRandomCommandSuitableForDir() string {
+	return random.RandomElementFromArray([]string{
+		"ls",
+		"stat",
+		"du",
+		"tree",
+	})
+}
