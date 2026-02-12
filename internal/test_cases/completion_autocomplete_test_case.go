@@ -16,8 +16,8 @@ import (
 // Asserts that the expected reflection is printed to the screen (with a space after it)
 // If any error occurs returns the error from the corresponding assertion
 type AutocompleteTestCase struct {
-	// InputRawText is the text to send to the shell
-	InputRawText string
+	// RawInput is the text to send to the shell
+	RawInput string
 
 	// ExpectedReflection is the custom reflection to use
 	ExpectedReflection string
@@ -35,14 +35,14 @@ type AutocompleteTestCase struct {
 
 func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	// Log the details of the text before sending it
-	logTypedText(logger, t.InputRawText)
+	logTypedText(logger, t.RawInput)
 
 	// Send the text to the shell
-	if err := shell.SendTextRaw(t.InputRawText); err != nil {
+	if err := shell.SendTextRaw(t.RawInput); err != nil {
 		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
-	inputReflection := fmt.Sprintf("$ %s", t.InputRawText)
+	inputReflection := fmt.Sprintf("$ %s", t.RawInput)
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: inputReflection,
 		StayOnSameLine: true,

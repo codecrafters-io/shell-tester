@@ -18,10 +18,10 @@ import (
 // And sends the subsequent input
 // If any error occurs returns the error from the corresponding assertion
 type PartialCompletionsTestCase struct {
-	// Inputs is the list of inputs to send to the shell
+	// RawInputs is the list of inputs to send to the shell
 	// They are send one by one, interleaved with TABs
 	// The shell is expected to auto-complete expected reflections
-	Inputs []string
+	RawInputs []string
 
 	// ExpectedReflections is the list of expected reflections to use
 	ExpectedReflections []string
@@ -34,17 +34,17 @@ type PartialCompletionsTestCase struct {
 }
 
 func (t PartialCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	if len(t.Inputs) != len(t.ExpectedReflections) {
+	if len(t.RawInputs) != len(t.ExpectedReflections) {
 		panic("Inputs and ExpectedReflections must have the same length")
 	}
 
 	// The entire flow is repeated for each input & expected reflection
 	for idx := 0; idx < len(t.ExpectedReflections); idx++ {
 		// Log the details of the text before sending it
-		logTypedText(logger, t.Inputs[idx])
+		logTypedText(logger, t.RawInputs[idx])
 
 		// Send the text to the shell
-		if err := shell.SendTextRaw(t.Inputs[idx]); err != nil {
+		if err := shell.SendTextRaw(t.RawInputs[idx]); err != nil {
 			return fmt.Errorf("Error sending text to shell: %v", err)
 		}
 
@@ -55,7 +55,7 @@ func (t PartialCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedSh
 			prevInput = t.ExpectedReflections[idx-1]
 		}
 
-		inputReflection := fmt.Sprintf("$ %s", prevInput+t.Inputs[idx])
+		inputReflection := fmt.Sprintf("$ %s", prevInput+t.RawInputs[idx])
 		asserter.AddAssertion(assertions.SingleLineAssertion{
 			ExpectedOutput: inputReflection,
 			StayOnSameLine: true,

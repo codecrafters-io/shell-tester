@@ -41,7 +41,7 @@ func testA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	completions := strings.Join(executableNames, "  ")
 
 	err := test_cases.MultipleCompletionsTestCase{
-		RawInputText:       command,
+		RawInput:           command,
 		TabCount:           2,
 		ExpectedReflection: completions,
 		SuccessMessage:     fmt.Sprintf("Received completion for %q", command),
