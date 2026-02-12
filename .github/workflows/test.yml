@@ -69,7 +69,6 @@ jobs:
 
       - name: setup-ubuntu-env
         run: |
-          sudo apt update
           sudo apt install zsh
           sudo apt remove bpfcc-tools
           zsh --version
