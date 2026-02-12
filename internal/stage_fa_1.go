@@ -18,7 +18,7 @@ func testFA1(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
-	shell.Setenv("HOME", workingDirPath)
+	shell.SetWorkingDirectory(workingDirPath)
 
 	targetFileBaseName := fmt.Sprintf("%s-%d", random.RandomWord(), random.RandomInt(1, 100))
 	targetFilePath := filepath.Join(workingDirPath, targetFileBaseName)
