@@ -11,13 +11,19 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-func testPA4(stageHarness *test_case_harness.TestCaseHarness) error {
+func testFA1(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
-
-	dirPath, err := GetRandomDirectory(stageHarness)
-
+	workingDirPath, err := CreateRandomDirInTmp(stageHarness)
 	if err != nil {
+		return err
+	}
+	shell.Setenv("HOME", workingDirPath)
+
+	targetFileBaseName := fmt.Sprintf("%s-%d", random.RandomWord(), random.RandomInt(1, 100))
+	targetFilePath := filepath.Join(workingDirPath, targetFileBaseName)
+
+	if err := WriteFileWithTeardown(stageHarness, targetFilePath, "", 0644); err != nil {
 		return err
 	}
 
@@ -25,23 +31,15 @@ func testPA4(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	randomCommand := random.RandomElementFromArray([]string{
-		"cat",
-		"ls",
-		"stat",
-	})
+	command := GetRandomCommandSuitableForFile()
 
-	dirParentPath := filepath.Dir(dirPath)
-	dirBaseName := filepath.Base(dirPath)
-	dirPartialPath := filepath.Join(dirParentPath, dirBaseName[:len(dirBaseName)/2])
-
-	typedPrefix := fmt.Sprintf("%s %s", randomCommand, dirPartialPath)
-	completion := fmt.Sprintf("%s %s/", randomCommand, dirPath)
+	typedPrefix := fmt.Sprintf("%s %s", command, targetFileBaseName[:len(targetFileBaseName)/2])
+	completion := fmt.Sprintf("%s %s", command, targetFileBaseName)
 
 	err = test_cases.AutocompleteTestCase{
 		TypedPrefix:        typedPrefix,
 		ExpectedReflection: completion,
-		ExpectedAutocompletedReflectionHasNoSpace: true,
+		ExpectedAutocompletedReflectionHasNoSpace: false,
 		SkipPromptAssertion:                       true,
 	}.Run(asserter, shell, stageHarness.Logger)
 

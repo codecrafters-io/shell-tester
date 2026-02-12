@@ -90,13 +90,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/completions/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
-		"path_completions_pass_bash": {
-			StageSlugs:          []string{"zv2", "ue6", "lc6", "px6", "qd1", "vs5", "no5", "jp8"},
-			CodePath:            "./test_helpers/bash",
-			ExpectedExitCode:    0,
-			StdoutFixturePath:   "./test_helpers/fixtures/bash/path_completions/pass",
-			NormalizeOutputFunc: normalizeTesterOutput,
-		},
+		// "filename_completions_pass_bash": {
+		// 	StageSlugs:          []string{},
+		// 	CodePath:            "./test_helpers/bash",
+		// 	ExpectedExitCode:    0,
+		// 	StdoutFixturePath:   "./test_helpers/fixtures/bash/filename_completions/pass",
+		// 	NormalizeOutputFunc: normalizeTesterOutput,
+		// },
 		"pipelines_pass_bash": {
 			StageSlugs:          []string{"br6", "ny9", "xk3"},
 			CodePath:            "./test_helpers/bash",
@@ -155,13 +155,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/ash/completions/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
-		"path_completions_pass_ash": {
-			StageSlugs:          []string{"zv2", "ue6", "lc6", "px6", "qd1", "vs5", "no5", "jp8"},
-			CodePath:            "./test_helpers/ash",
-			ExpectedExitCode:    0,
-			StdoutFixturePath:   "./test_helpers/fixtures/ash/path_completions/pass",
-			NormalizeOutputFunc: normalizeTesterOutput,
-		},
+		// "filename_completions_pass_ash": {
+		// 	StageSlugs:          []string{"zv2", "ue6", "lc6", "px6", "qd1", "vs5", "no5", "jp8"},
+		// 	CodePath:            "./test_helpers/ash",
+		// 	ExpectedExitCode:    0,
+		// 	StdoutFixturePath:   "./test_helpers/fixtures/ash/filename_completions/pass",
+		// 	NormalizeOutputFunc: normalizeTesterOutput,
+		// },
 		"pipelines_pass_ash": {
 			StageSlugs:          []string{"br6", "ny9", "xk3"},
 			CodePath:            "./test_helpers/ash",

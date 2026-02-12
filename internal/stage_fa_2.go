@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -10,35 +11,35 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-func testPA1(stageHarness *test_case_harness.TestCaseHarness) error {
+func testFA2(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
-
-	workingDirPath, err := GetRandomDirectory(stageHarness)
+	workingDirPath, err := CreateRandomDirInTmp(stageHarness)
 	if err != nil {
 		return err
 	}
-
 	shell.SetWorkingDirectory(workingDirPath)
-	fileBaseName, _, err := CreateRandomFileInDir(stageHarness, workingDirPath, "txt", 0644)
 
-	if err != nil {
+	entryNames := random.RandomWords(3)
+	targetFileRelativePath := fmt.Sprintf("%s/%s/%s.txt", entryNames[0], entryNames[1], entryNames[2])
+	targetFileBaseName := filepath.Base(targetFileRelativePath)
+	targetFileDirRelativePath := filepath.Dir(targetFileRelativePath)
+	targetFileFullPath := filepath.Join(workingDirPath, targetFileRelativePath)
+
+	// Create a nested file
+	if err := WriteFileWithTeardown(stageHarness, targetFileFullPath, "", 0644); err != nil {
 		return err
 	}
 
+	// Start and assert prompt
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err
 	}
 
-	randomCommand := random.RandomElementFromArray([]string{
-		"cat",
-		"ls",
-		"stat",
-		"du",
-	})
+	command := GetRandomCommandSuitableForFile()
 
-	typedPrefix := fmt.Sprintf("%s %s", randomCommand, fileBaseName[:len(fileBaseName)/2])
-	completion := fmt.Sprintf("%s %s", randomCommand, fileBaseName)
+	typedPrefix := fmt.Sprintf("%s %s/", command, targetFileDirRelativePath)
+	completion := fmt.Sprintf("%s %s", command, filepath.Join(targetFileDirRelativePath, targetFileBaseName))
 
 	err = test_cases.AutocompleteTestCase{
 		TypedPrefix:        typedPrefix,

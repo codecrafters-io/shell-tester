@@ -12,15 +12,15 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-// getRandomDirectory creates a random directory in /tmp,
+// CreateRandomDirIn creates a random directory in the given root directory
 // creates the directories and returns the full path
-// directory is of the form `/tmp/<random-word>/<random-word>/<random-word>`
+// directory is of the form `root/<random-word>/<random-word>/<random-word>`
 // If performCleanup is true, the directory will be cleaned up
 // when the test is completed
 // The total possible directories is 10^3 = 1000
 // This can be used without cleanup in most cases
-func getRandomDirectory(stageHarness *test_case_harness.TestCaseHarness, performCleanup bool) (string, error) {
-	randomDir := path.Join("/tmp", random.RandomWord(), random.RandomWord(), random.RandomWord())
+func CreateRandomDirIn(stageHarness *test_case_harness.TestCaseHarness, rootDir string) (string, error) {
+	randomDir := path.Join(rootDir, random.RandomWord(), random.RandomWord(), random.RandomWord())
 	for {
 		if _, err := os.Stat(randomDir); os.IsNotExist(err) {
 			if err := os.MkdirAll(randomDir, 0755); err != nil {
@@ -28,22 +28,21 @@ func getRandomDirectory(stageHarness *test_case_harness.TestCaseHarness, perform
 			}
 			break
 		}
-		randomDir = path.Join("/tmp", random.RandomWord(), random.RandomWord(), random.RandomWord())
+		randomDir = path.Join(rootDir, random.RandomWord(), random.RandomWord(), random.RandomWord())
 	}
 
-	// Automatically cleanup the directory when the test is completed, if requested
-	if performCleanup {
-		stageHarness.RegisterTeardownFunc(func() {
-			grandParentDir := path.Dir(path.Dir(randomDir))
-			cleanupDirectories([]string{grandParentDir})
-		})
-	}
+	// Automatically cleanup the directory when the test is completed
+	stageHarness.RegisterTeardownFunc(func() {
+		grandParentDir := path.Dir(path.Dir(randomDir))
+		cleanupDirectories([]string{grandParentDir})
+	})
 
 	return randomDir, nil
 }
 
-func GetRandomDirectory(stageHarness *test_case_harness.TestCaseHarness) (string, error) {
-	return getRandomDirectory(stageHarness, true)
+// CreateRandomDirInTmp returns a random directory from CreateRandomDirIn() inside '/tmp"
+func CreateRandomDirInTmp(stageHarness *test_case_harness.TestCaseHarness) (string, error) {
+	return CreateRandomDirIn(stageHarness, "/tmp")
 }
 
 // GetShortRandomDirectory creates a random directory in /tmp,
@@ -107,30 +106,8 @@ func writeFile(filePath string, content string) error {
 	return os.WriteFile(filePath, []byte(content), 0644)
 }
 
-// CreateRandomFileInDir creates a random file inside the given directory
-// If extension is non empty, it is used as the filename extension
-// Returns file basename, contents and error encountered (if any) during creation
-func CreateRandomFileInDir(stageHarness *test_case_harness.TestCaseHarness, dirPath string, extension string, filemode os.FileMode) (string, string, error) {
-	fileBaseName := fmt.Sprintf("%s-%d", random.RandomWord(), random.RandomInt(1, 100))
-	if extension != "" {
-		fileBaseName += "." + extension
-	}
-	filePath := filepath.Join(dirPath, fileBaseName)
-	contents := random.RandomString()
-
-	if err := os.WriteFile(filePath, []byte(contents), filemode); err != nil {
-		return "", "", err
-	}
-
-	stageHarness.RegisterTeardownFunc(func() {
-		os.Remove(filePath)
-	})
-
-	return fileBaseName, contents, nil
-}
-
 // MkdirAllWithTeardown is a wrapper over os.Mkdir that registers teardown to delete the directory using the harness
-// It will delete every directory in the hierarchy that was created by it
+// Teardown will delete every directory in the hierarchy that was created by it
 func MkdirAllWithTeardown(
 	stageHarness *test_case_harness.TestCaseHarness,
 	dirPath string,
@@ -166,15 +143,25 @@ func MkdirAllWithTeardown(
 	return nil
 }
 
+// WriteFileWithTeardown writes a file at filePath (which may include directories).
+// If the parent directory exists, the file is created there. If not, the parent is
+// created with MkdirAllWithTeardown and then the file is created. File teardown is
+// always registered to remove the file.
 func WriteFileWithTeardown(stageHarness *test_case_harness.TestCaseHarness, filePath string, contents string, permissions os.FileMode) error {
+	dir := filepath.Dir(filePath)
+	if dir != "" && dir != "." {
+		if _, err := os.Stat(dir); os.IsNotExist(err) {
+			if err := MkdirAllWithTeardown(stageHarness, dir, 0755); err != nil {
+				return err
+			}
+		}
+	}
 	if err := os.WriteFile(filePath, []byte(contents), permissions); err != nil {
 		return err
 	}
-
 	stageHarness.RegisterTeardownFunc(func() {
 		os.Remove(filePath)
 	})
-
 	return nil
 }
 

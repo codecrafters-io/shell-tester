@@ -155,45 +155,40 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testA6,
 			Timeout:  15 * time.Second,
 		},
-		// Path autocompletion
+		// Filename completion
 		{
 			Slug:     "zv2",
-			TestFunc: testPA1,
+			TestFunc: testFA1,
 			Timeout:  15 * time.Second,
 		},
 		{
 			Slug:     "ue6",
-			TestFunc: testPA2,
+			TestFunc: testFA2,
 			Timeout:  15 * time.Second,
 		},
 		{
 			Slug:     "lc6",
-			TestFunc: testPA3,
-			Timeout:  15 * time.Second,
-		},
-		{
-			Slug:     "px6",
-			TestFunc: testPA4,
-			Timeout:  15 * time.Second,
-		},
-		{
-			Slug:     "qd1",
-			TestFunc: testPA5,
+			TestFunc: testFA3,
 			Timeout:  15 * time.Second,
 		},
 		{
 			Slug:     "vs5",
-			TestFunc: testPA6,
+			TestFunc: testFA4,
 			Timeout:  15 * time.Second,
 		},
 		{
 			Slug:     "no5",
-			TestFunc: testPA7,
+			TestFunc: testFA5,
 			Timeout:  15 * time.Second,
 		},
 		{
 			Slug:     "jp8",
-			TestFunc: testPA8,
+			TestFunc: testFA6,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "bf8",
+			TestFunc: testFA7,
 			Timeout:  15 * time.Second,
 		},
 		// Pipelines

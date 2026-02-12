@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"path/filepath"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -11,43 +10,31 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-func testPA3(stageHarness *test_case_harness.TestCaseHarness) error {
+func testFA4(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
-
-	dirPath, err := GetRandomDirectory(stageHarness)
-
-	if err != nil {
-		return err
-	}
-
-	fileBaseName, _, err := CreateRandomFileInDir(stageHarness, dirPath, "txt", 0644)
+	workingDirPath, err := CreateRandomDirInTmp(stageHarness)
 
 	if err != nil {
 		return err
 	}
+
+	shell.SetWorkingDirectory(workingDirPath)
 
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err
 	}
 
-	randomCommand := random.RandomElementFromArray([]string{
-		"cat",
-		"ls",
-		"stat",
-	})
-
-	filePath := filepath.Join(dirPath, fileBaseName)
-	filePartialPath := filepath.Join(dirPath, fileBaseName[:len(fileBaseName)/2])
-
-	typedPrefix := fmt.Sprintf("%s %s", randomCommand, filePartialPath)
-	completion := fmt.Sprintf("%s %s", randomCommand, filePath)
+	randomCommand := GetRandomCommandSuitableForFile()
+	typedPrefixInteger := random.RandomInt(1, 1000)
+	typedPrefix := fmt.Sprintf("%s missing_%d", randomCommand, typedPrefixInteger)
 
 	err = test_cases.AutocompleteTestCase{
 		TypedPrefix:        typedPrefix,
-		ExpectedReflection: completion,
-		ExpectedAutocompletedReflectionHasNoSpace: false,
+		ExpectedReflection: typedPrefix,
+		ExpectedAutocompletedReflectionHasNoSpace: true,
 		SkipPromptAssertion:                       true,
+		CheckForBell:                              true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
 	if err != nil {
