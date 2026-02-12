@@ -38,7 +38,7 @@ jobs:
           install-go: false
 
   test-all-shells:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Setup Alpine
         uses: jirutka/setup-alpine@v1
@@ -69,8 +69,10 @@ jobs:
 
       - name: setup-ubuntu-env
         run: |
-          sudo apt install zsh
-          sudo apt remove bpfcc-tools
+          sudo apt update
+          sudo apt install -y zsh=5.9-6ubuntu2
+          sudo apt-mark hold zsh
+          sudo apt remove -y bpfcc-tools
           zsh --version
 
       - name: Run zsh tests with proper terminal setup
