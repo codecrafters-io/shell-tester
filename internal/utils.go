@@ -83,3 +83,12 @@ func logAndQuit(asserter *logged_shell_asserter.LoggedShellAsserter, err error) 
 	asserter.LogRemainingOutput()
 	return err
 }
+
+func GetRandomCommandSuitableForFile() string {
+	return random.RandomElementFromArray([]string{
+		"cat",
+		"stat",
+		"du",
+		"wc",
+	})
+}

@@ -151,6 +151,18 @@ define _COMPLETIONS_STAGES_COMPLEX
   {"slug":"wh6","tester_log_prefix":"tester::#wh6","title":"Stage#5: completion with multiple executables"}
 endef
 
+define _FILENAME_COMPLETION_STAGES
+[ \
+  {"slug":"zv2","tester_log_prefix":"tester::#zv2","title":"Stage#1: File Completion"}, \
+  {"slug":"ue6","tester_log_prefix":"tester::#ue6","title":"Stage#2: Nested file completion"}, \
+  {"slug":"lc6","tester_log_prefix":"tester::#lc6","title":"Stage#3: Directory completion"}, \
+  {"slug":"vs5","tester_log_prefix":"tester::#vs5","title":"Stage#4: Missing entry completion"}, \
+  {"slug":"no5","tester_log_prefix":"tester::#no5","title":"Stage#5: Multiple matches"}, \
+  {"slug":"jp8","tester_log_prefix":"tester::#jp8","title":"Stage#6: Partial filename completions"}, \
+  {"slug":"bf8","tester_log_prefix":"tester::#bf8","title":"Stage#7: Multi-argument completions"} \
+]
+endef
+
 define _PIPELINE_STAGES
 [ \
 	{"slug":"br6","tester_log_prefix":"tester::#br6","title":"Stage#1: Basic dual-command pipeline"}, \
@@ -225,6 +237,7 @@ QUOTING_STAGES = $(call quote_strings,$(_QUOTING_STAGES))
 REDIRECTIONS_STAGES = $(call quote_strings,$(_REDIRECTIONS_STAGES))
 COMPLETIONS_STAGES_ZSH = $(call quote_strings,$(_COMPLETION_STAGES_BASE))
 COMPLETIONS_STAGES = $(shell echo '$(_COMPLETION_STAGES_BASE)' | sed 's/]$$/, $(_COMPLETIONS_STAGES_COMPLEX)]/' | sed 's/"/\\"/g')
+FILENAME_COMPLETION_STAGES = $(call quote_strings,$(_FILENAME_COMPLETION_STAGES))
 PIPELINE_STAGES = $(call quote_strings,$(_PIPELINE_STAGES))
 HISTORY_STAGES = $(call quote_strings,$(_HISTORY_STAGES))
 HISTORY_STAGES_ZSH = $(call quote_strings,$(_HISTORY_STAGES_ZSH))
@@ -246,6 +259,9 @@ test_redirections_w_ash: build
 test_completions_w_ash: build
 	$(call run_test,$(COMPLETIONS_STAGES),ash)
 
+test_filename_completion_w_ash: build
+	$(call run_test,$(FILENAME_COMPLETION_STAGES),ash)
+
 test_base_w_bash: build
 	$(call run_test,$(BASE_STAGES),bash)
 
@@ -260,6 +276,9 @@ test_redirections_w_bash: build
 
 test_completions_w_bash: build
 	$(call run_test,$(COMPLETIONS_STAGES),bash)
+
+test_filename_completion_w_bash: build
+	$(call run_test,$(FILENAME_COMPLETION_STAGES),bash)
 
 test_pipeline_w_bash: build
 	$(call run_test,$(PIPELINE_STAGES),bash)
@@ -291,6 +310,9 @@ test_redirections_w_zsh: build
 test_completions_w_zsh: build
 	$(call run_test,$(COMPLETIONS_STAGES_ZSH),zsh)
 
+test_filename_completion_w_zsh: build
+	$(call run_test,$(FILENAME_COMPLETION_STAGES),zsh)
+
 test_history_w_bash: build
 	$(call run_test,$(HISTORY_STAGES),bash)
 
@@ -309,6 +331,7 @@ test_ash:
 	make test_quoting_w_ash
 	make test_redirections_w_ash
 	make test_completions_w_ash
+	make test_filename_completion_w_ash
 	make test_history_w_ash
 
 test_bash:
@@ -317,6 +340,7 @@ test_bash:
 	make test_quoting_w_bash
 	make test_redirections_w_bash
 	make test_completions_w_bash
+	make test_filename_completion_w_bash
 	make test_history_w_bash
 	make test_history_persistence_w_bash
 
@@ -334,6 +358,7 @@ test_zsh:
 	make test_quoting_w_zsh
 	make test_redirections_w_zsh
 	make test_completions_w_zsh
+	make test_filename_completion_w_zsh
 	make test_history_w_zsh
 
 # Clone the repo in `debug` directory

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/codecrafters-io/tester-utils/logger"
@@ -97,6 +98,65 @@ func CreateShortRandomDirsInTmp(stageHarness *test_case_harness.TestCaseHarness,
 	})
 
 	return randomDirs, nil
+}
+
+// MkdirAllWithTeardown is a wrapper over os.Mkdir that registers teardown to delete the directory using the harness
+// Teardown will delete every directory in the hierarchy that was created by it
+func MkdirAllWithTeardown(
+	stageHarness *test_case_harness.TestCaseHarness,
+	dirPath string,
+	permissions os.FileMode,
+) error {
+	dirAbsolutePath, err := filepath.Abs(dirPath)
+	if err != nil {
+		return err
+	}
+
+	// Walk up from the dirPath given, and mark the directories that do not exist as 'toRemove'
+	toRemove := dirAbsolutePath
+	for {
+		parent := filepath.Dir(toRemove)
+		if parent == toRemove {
+			break
+		}
+		if _, err := os.Stat(parent); os.IsNotExist(err) {
+			toRemove = parent
+		} else {
+			break
+		}
+	}
+
+	if err := os.MkdirAll(dirAbsolutePath, permissions); err != nil {
+		return err
+	}
+
+	stageHarness.RegisterTeardownFunc(func() {
+		_ = os.RemoveAll(toRemove)
+	})
+
+	return nil
+}
+
+// WriteFileWithTeardown writes a file at filePath (which may include directories).
+// If the parent directory exists, the file is created there. If not, the parent is
+// created with MkdirAllWithTeardown and then the file is created. File teardown is
+// always registered to remove the file.
+func WriteFileWithTeardown(stageHarness *test_case_harness.TestCaseHarness, filePath string, contents string, permissions os.FileMode) error {
+	dir := filepath.Dir(filePath)
+	if dir != "" && dir != "." {
+		if _, err := os.Stat(dir); os.IsNotExist(err) {
+			if err := MkdirAllWithTeardown(stageHarness, dir, 0755); err != nil {
+				return err
+			}
+		}
+	}
+	if err := os.WriteFile(filePath, []byte(contents), permissions); err != nil {
+		return err
+	}
+	stageHarness.RegisterTeardownFunc(func() {
+		os.Remove(filePath)
+	})
+	return nil
 }
 
 // writeFile writes a file to the given path with the given content
