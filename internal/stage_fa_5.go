@@ -23,36 +23,22 @@ func testFA5(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	shell.SetWorkingDirectory(workingDirPath)
 	prefix := fmt.Sprintf("%s_", random.RandomElementFromArray(SMALL_WORDS))
-	suffixes := random.RandomInts(1, 10, 3)
-
-	// Create two files and one dir
-	fileSuffixes := suffixes[:2]
-	dirSuffixes := suffixes[2:]
-
-	allCompletions := []string{}
-
-	// Create files
-	for _, fileSuffix := range fileSuffixes {
-		fileBaseName := fmt.Sprintf("%s%d", prefix, fileSuffix)
-		filePath := filepath.Join(workingDirPath, fileBaseName)
-		allCompletions = append(allCompletions, fileBaseName)
-
-		if err := WriteFileWithTeardown(stageHarness, filePath, "", 0644); err != nil {
-			return err
-		}
+	fileSuffix := random.RandomInt(1, 10)
+	dirSuffix := random.RandomInt(1, 10)
+	for dirSuffix == fileSuffix {
+		dirSuffix = random.RandomInt(1, 10)
 	}
 
-	// Create directories
-	for _, dirSuffix := range dirSuffixes {
-		dirbaseName := fmt.Sprintf("%s%d", prefix, dirSuffix)
-		dirPath := filepath.Join(workingDirPath, dirbaseName)
-		allCompletions = append(allCompletions, fmt.Sprintf("%s/", dirbaseName))
-
-		if err := MkdirAllWithTeardown(stageHarness, dirPath, 0755); err != nil {
-			return err
-		}
+	fileBaseName := fmt.Sprintf("%s%d", prefix, fileSuffix)
+	dirBaseName := fmt.Sprintf("%s%d", prefix, dirSuffix)
+	if err := WriteFileWithTeardown(stageHarness, filepath.Join(workingDirPath, fileBaseName), "", 0644); err != nil {
+		return err
+	}
+	if err := MkdirAllWithTeardown(stageHarness, filepath.Join(workingDirPath, dirBaseName), 0755); err != nil {
+		return err
 	}
 
+	allCompletions := []string{fileBaseName, dirBaseName + "/"}
 	slices.Sort(allCompletions)
 
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
@@ -80,22 +66,22 @@ func testFA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	// For next test case, we check for new input reflection instead of the old one
 	asserter.PopAssertion()
 
-	suffix := random.RandomElementFromArray(suffixes)
-
-	expectedReflection := fmt.Sprintf("%s %s%d", command, prefix, suffix)
-
-	// Reflection should contain space if the matched entry was a file, trailing slash for dir
-	if slices.Contains(dirSuffixes, suffix) {
-		expectedReflection += "/"
+	// Complete to either the file or the dir
+	var completionSuffix int
+	var expectedReflection string
+	if random.RandomInt(0, 1) == 0 {
+		completionSuffix = fileSuffix
+		expectedReflection = fmt.Sprintf("%s %s%d", command, prefix, fileSuffix)
 	} else {
-		expectedReflection += " "
+		completionSuffix = dirSuffix
+		expectedReflection = fmt.Sprintf("%s %s%d/", command, prefix, dirSuffix)
 	}
 
 	err = test_cases.AutocompleteTestCase{
 		PreExistingInputOnLine: initialTypedPrefix,
-		RawInput:               fmt.Sprintf("%d", suffix),
+		RawInput:               fmt.Sprintf("%d", completionSuffix),
 		ExpectedReflection:     expectedReflection,
-		ExpectedAutocompletedReflectionHasNoSpace: true,
+		ExpectedAutocompletedReflectionHasNoSpace: (completionSuffix == dirSuffix),
 		SkipPromptAssertion:                       true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
