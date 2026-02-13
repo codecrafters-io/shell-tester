@@ -2,6 +2,7 @@ package test_cases
 
 import (
 	"fmt"
+	"regexp"
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
@@ -20,12 +21,12 @@ type MultipleCompletionsTestCase struct {
 	// RawInput is the text to send to the shell
 	RawInput string
 
-	// ExpectedReflection is the custom reflection to use
-	ExpectedReflection string
+	// ExpectedCompletionOptions is the custom reflection to use
+	ExpectedCompletionOptions string
 
-	// ExpectedAutocompletedReflectionHasNoSpace is true if
-	// the expected reflection should have no space after it
-	ExpectedAutocompletedReflectionHasNoSpace bool
+	// If ExpectedReflection does not match the given reflection
+	// the reflection is checked against the fallback pattern
+	ExpectedCompletionOptionsFallbackPatterns []string
 
 	// CheckForBell is true if we should check for a bell
 	CheckForBell bool
@@ -49,9 +50,9 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
-	inputReflection := fmt.Sprintf("$ %s", t.RawInput)
+	initialInputReflection := fmt.Sprintf("$ %s", t.RawInput)
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: inputReflection,
+		ExpectedOutput: initialInputReflection,
 		StayOnSameLine: false,
 	})
 	// Run the assertion, before sending the enter key
@@ -60,7 +61,7 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	}
 
 	// Only if we attempted to autocomplete, print the success message
-	logger.Successf("✓ Prompt line matches %q", inputReflection)
+	logger.Successf("✓ Prompt line matches %q", initialInputReflection)
 
 	// // The space at the end of the reflection won't be present, so replace that assertion
 	// asserter.PopAssertion()
@@ -68,7 +69,7 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	// Send TAB
 	for i := range t.TabCount {
 		shouldRingBell := i == 0 && t.CheckForBell
-		logTab(logger, t.ExpectedReflection, shouldRingBell)
+		logTab(logger, t.ExpectedCompletionOptions, shouldRingBell)
 
 		// Node's readline doesn't register 2nd tab if sent instantly
 		// Ref: CC-1689
@@ -101,29 +102,35 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		}
 	}
 
-	inputTextReflection := t.ExpectedReflection
-	// Space after autocomplete
-	if !t.ExpectedAutocompletedReflectionHasNoSpace {
-		inputTextReflection = fmt.Sprintf("%s ", t.ExpectedReflection)
+	expectedCompletionOptionsFallbackPatterns := []*regexp.Regexp{}
+	if t.ExpectedCompletionOptionsFallbackPatterns != nil {
+		for _, fallbackPattern := range t.ExpectedCompletionOptionsFallbackPatterns {
+			expectedCompletionOptionsFallbackPatterns = append(
+				expectedCompletionOptionsFallbackPatterns,
+				regexp.MustCompile(fallbackPattern),
+			)
+		}
 	}
 
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: inputTextReflection,
+		ExpectedOutput:   t.ExpectedCompletionOptions,
+		FallbackPatterns: expectedCompletionOptionsFallbackPatterns,
 	})
+
 	// Run the assertion, before sending the enter key
 	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
 	}
 
 	// Only if we attempted to autocomplete, print the success message
-	logger.Successf("✓ Prompt line matches %q", t.ExpectedReflection)
+	logger.Successf("✓ Prompt line matches %q", t.ExpectedCompletionOptions)
 
 	// The space at the end of the reflection won't be present, so replace that assertion
 	// asserter.PopAssertion()
 
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: inputReflection,
+		ExpectedOutput: initialInputReflection,
 		StayOnSameLine: true,
 	})
 	// Run the assertion, before sending the enter key

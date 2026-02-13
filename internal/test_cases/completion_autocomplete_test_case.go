@@ -16,6 +16,9 @@ import (
 // Asserts that the expected reflection is printed to the screen (with a space after it)
 // If any error occurs returns the error from the corresponding assertion
 type AutocompleteTestCase struct {
+	// PreExistingInputOnLine is the string that is already present before RawInput is sent to the shell
+	PreExistingInputOnLine string
+
 	// RawInput is the text to send to the shell
 	RawInput string
 
@@ -42,7 +45,7 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
-	inputReflection := fmt.Sprintf("$ %s", t.RawInput)
+	inputReflection := fmt.Sprintf("$ %s%s", t.PreExistingInputOnLine, t.RawInput)
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: inputReflection,
 		StayOnSameLine: true,
