@@ -86,7 +86,7 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	err = test_cases.AutocompleteTestCase{
 		// The extra space should be inserted by previous step
 		PreExistingInputOnLine: fmt.Sprintf("%s ", expectedReflectionAfterFileCompletion),
-		RawInput:               fmt.Sprintf("%s", dirBaseName),
+		RawInput:               dirBaseName,
 		ExpectedReflection:     expectedReflectionAfterDirCompletion,
 		ExpectedAutocompletedReflectionHasNoSpace: true,
 		SkipPromptAssertion:                       true,
@@ -113,4 +113,9 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	return logAndQuit(asserter, nil)
+
+	// TODO: Kinda unsatisfied by the logs produced for this stage:
+	// We can't log intermediate screen state in the middle: is confusing/misleading
+	// Should we perform shell teardown and test separately for three different arguments 1st, 2nd and 3rd separately
+	// But keep the scenario same as before?
 }
