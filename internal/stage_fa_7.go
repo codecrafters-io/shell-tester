@@ -23,11 +23,9 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	shell.SetWorkingDirectory(workingDirPath)
 	prefix := fmt.Sprintf("%s_", random.RandomElementFromArray(SMALL_WORDS))
-	fileSuffix := random.RandomInt(1, 10)
-	dirSuffix := random.RandomInt(1, 10)
-	for dirSuffix == fileSuffix {
-		dirSuffix = random.RandomInt(1, 10)
-	}
+	suffixes := random.RandomInts(1, 10, 2)
+	fileSuffix := suffixes[0]
+	dirSuffix := suffixes[1]
 
 	fileBaseName := fmt.Sprintf("%s%d", prefix, fileSuffix)
 	dirBaseName := fmt.Sprintf("%s%d", prefix, dirSuffix)
