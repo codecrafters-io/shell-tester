@@ -69,7 +69,7 @@ func testFA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Complete to either the file or the dir
 	var completionSuffix int
 	var expectedReflection string
-	if random.RandomInt(0, 1) == 0 {
+	if random.RandomInt(0, 2) == 0 {
 		completionSuffix = fileSuffix
 		expectedReflection = fmt.Sprintf("%s %s%d", command, prefix, fileSuffix)
 	} else {
