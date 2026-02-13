@@ -124,7 +124,8 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	}
 
 	// Only if we attempted to autocomplete, print the success message
-	logger.Successf("✓ Prompt line matches %q", t.ExpectedCompletionOptions)
+	lastLoggedRow := shell.GetScreenState().GetRow(asserter.GetLastLoggedRowIndex())
+	logger.Successf("✓ Prompt line matches %q", lastLoggedRow.String())
 
 	// The space at the end of the reflection won't be present, so replace that assertion
 	// asserter.PopAssertion()
