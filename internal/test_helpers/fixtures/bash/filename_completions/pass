@@ -22,14 +22,14 @@ Debug = true
 
 [33m[tester::#LC6] [0m[94mRunning tests for Stage #LC6 (lc6)[0m
 [33m[tester::#LC6] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#LC6] [0m[94mTyped "du "[0m
-[33m[tester::#LC6] [0m[92m✓ Prompt line matches "$ du "[0m
-[33m[tester::#LC6] [0m[94mPressed "<TAB>" (expecting autocomplete to "du ant/")[0m
-[33m[tester::#LC6] [0m[92m✓ Prompt line matches "$ du ant/"[0m
-[33m[tester::#LC6] [0m[94mPressed "<TAB>" (expecting autocomplete to "du ant/bee/")[0m
-[33m[tester::#LC6] [0m[92m✓ Prompt line matches "$ du ant/bee/"[0m
-[33m[tester::#LC6] [0m[92mReceived all path completions for "du "[0m
-[33m[your-program] [0m[0m$ du ant/bee/[0m
+[33m[tester::#LC6] [0m[94mTyped "stat "[0m
+[33m[tester::#LC6] [0m[92m✓ Prompt line matches "$ stat "[0m
+[33m[tester::#LC6] [0m[94mPressed "<TAB>" (expecting autocomplete to "stat ant/")[0m
+[33m[tester::#LC6] [0m[92m✓ Prompt line matches "$ stat ant/"[0m
+[33m[tester::#LC6] [0m[94mPressed "<TAB>" (expecting autocomplete to "stat ant/bee/")[0m
+[33m[tester::#LC6] [0m[92m✓ Prompt line matches "$ stat ant/bee/"[0m
+[33m[tester::#LC6] [0m[92mReceived all path completions for "stat "[0m
+[33m[your-program] [0m[0m$ stat ant/bee/[0m
 [33m[tester::#LC6] [0m[92mTest passed.[0m
 
 [33m[tester::#VS5] [0m[94mRunning tests for Stage #VS5 (vs5)[0m
@@ -44,10 +44,67 @@ Debug = true
 [33m[tester::#VS5] [0m[92mTest passed.[0m
 
 [33m[tester::#NO5] [0m[94mRunning tests for Stage #NO5 (no5)[0m
+[33m[tester::#NO5] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#NO5] [0m[92m✓ Received prompt ($ )[0m
+[33m[tester::#NO5] [0m[94mTyped "du bee_"[0m
+[33m[your-program] [0m[0m$ du bee_[0m
+[33m[tester::#NO5] [0m[92m✓ Prompt line matches "$ du bee_"[0m
+[33m[tester::#NO5] [0m[94mPressed "<TAB>" (expecting bell to ring)[0m
+[33m[tester::#NO5] [0m[92m✓ Received bell[0m
+[33m[tester::#NO5] [0m[94mPressed "<TAB>" (expecting autocomplete to "bee_1/  bee_8")[0m
+[33m[your-program] [0m[0mbee_1/ bee_8[0m
+[33m[tester::#NO5] [0m[92m✓ Prompt line matches "bee_1/ bee_8"[0m
+[33m[tester::#NO5] [0m[92mReceived completion for "du bee_"[0m
+[33m[tester::#NO5] [0m[94mTyped "8"[0m
+[33m[tester::#NO5] [0m[92m✓ Prompt line matches "$ du bee_8"[0m
+[33m[tester::#NO5] [0m[94mPressed "<TAB>" (expecting autocomplete to "du bee_8")[0m
+[33m[tester::#NO5] [0m[92m✓ Prompt line matches "du bee_8"[0m
+[33m[your-program] [0m[0m$ du bee_8 [0m
 [33m[tester::#NO5] [0m[92mTest passed.[0m
 
 [33m[tester::#JP8] [0m[94mRunning tests for Stage #JP8 (jp8)[0m
+[33m[tester::#JP8] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#JP8] [0m[92m✓ Received prompt ($ )[0m
+[33m[tester::#JP8] [0m[94mTyped "du xyz_"[0m
+[33m[tester::#JP8] [0m[92m✓ Prompt line matches "$ du xyz_"[0m
+[33m[tester::#JP8] [0m[94mPressed "<TAB>" (expecting autocomplete to "du xyz_fox")[0m
+[33m[tester::#JP8] [0m[92m✓ Prompt line matches "$ du xyz_fox"[0m
+[33m[tester::#JP8] [0m[94mTyped "_"[0m
+[33m[tester::#JP8] [0m[92m✓ Prompt line matches "$ du xyz_fox_"[0m
+[33m[tester::#JP8] [0m[94mPressed "<TAB>" (expecting autocomplete to "du xyz_fox_owl")[0m
+[33m[tester::#JP8] [0m[92m✓ Prompt line matches "$ du xyz_fox_owl"[0m
+[33m[tester::#JP8] [0m[94mTyped "_"[0m
+[33m[tester::#JP8] [0m[92m✓ Prompt line matches "$ du xyz_fox_owl_"[0m
+[33m[tester::#JP8] [0m[94mPressed "<TAB>" (expecting autocomplete to "du xyz_fox_owl_pig.txt")[0m
+[33m[tester::#JP8] [0m[92m✓ Prompt line matches "$ du xyz_fox_owl_pig.txt "[0m
+[33m[tester::#JP8] [0m[92mReceived all partial completions for "du xyz_"[0m
+[33m[your-program] [0m[0m$ du xyz_fox_owl_pig.txt [0m
 [33m[tester::#JP8] [0m[92mTest passed.[0m
 
 [33m[tester::#BF8] [0m[94mRunning tests for Stage #BF8 (bf8)[0m
+[33m[tester::#BF8] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#BF8] [0m[92m✓ Received prompt ($ )[0m
+[33m[tester::#BF8] [0m[94mTyped "stat fox_"[0m
+[33m[your-program] [0m[0m$ stat fox_[0m
+[33m[tester::#BF8] [0m[92m✓ Prompt line matches "$ stat fox_"[0m
+[33m[tester::#BF8] [0m[94mPressed "<TAB>" (expecting bell to ring)[0m
+[33m[tester::#BF8] [0m[92m✓ Received bell[0m
+[33m[tester::#BF8] [0m[94mPressed "<TAB>" (expecting autocomplete to "fox_6/  fox_8")[0m
+[33m[your-program] [0m[0mfox_6/ fox_8[0m
+[33m[tester::#BF8] [0m[92m✓ Prompt line matches "fox_6/ fox_8"[0m
+[33m[tester::#BF8] [0m[92mReceived completion for "stat fox_"[0m
+[33m[tester::#BF8] [0m[94mTyped "8"[0m
+[33m[tester::#BF8] [0m[92m✓ Prompt line matches "$ stat fox_8"[0m
+[33m[tester::#BF8] [0m[94mPressed "<TAB>" (expecting autocomplete to "stat fox_8")[0m
+[33m[tester::#BF8] [0m[92m✓ Prompt line matches "stat fox_8"[0m
+[33m[tester::#BF8] [0m[94mTyped "fox_6"[0m
+[33m[tester::#BF8] [0m[92m✓ Prompt line matches "$ stat fox_8 fox_6"[0m
+[33m[tester::#BF8] [0m[94mPressed "<TAB>" (expecting autocomplete to "stat fox_8 fox_6/")[0m
+[33m[tester::#BF8] [0m[92m✓ Prompt line matches "stat fox_8 fox_6/"[0m
+[33m[tester::#BF8] [0m[94mTyped " missing_entry-649"[0m
+[33m[tester::#BF8] [0m[92m✓ Prompt line matches "$ stat fox_8 fox_6/ missing_entry-649"[0m
+[33m[tester::#BF8] [0m[94mPressed "<TAB>" (expecting autocomplete to "stat fox_8 fox_6/ missing_entry-649")[0m
+[33m[tester::#BF8] [0m[92m✓ Prompt line matches "stat fox_8 fox_6/ missing_entry-649"[0m
+[33m[tester::#BF8] [0m[92m✓ Received bell[0m
+[33m[your-program] [0m[0m$ stat fox_8 fox_6/ missing_entry-649[0m
 [33m[tester::#BF8] [0m[92mTest passed.[0m
