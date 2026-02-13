@@ -55,11 +55,11 @@ Debug = true
 [33m[your-program] [0m[0mbee_1/  bee_8[0m
 [33m[tester::#NO5] [0m[92m✓ Prompt line matches "bee_1/  bee_8"[0m
 [33m[tester::#NO5] [0m[92mReceived completion for "du bee_"[0m
-[33m[tester::#NO5] [0m[94mTyped "8"[0m
-[33m[tester::#NO5] [0m[92m✓ Prompt line matches "$ du bee_8"[0m
-[33m[tester::#NO5] [0m[94mPressed "<TAB>" (expecting autocomplete to "du bee_8")[0m
-[33m[tester::#NO5] [0m[92m✓ Prompt line matches "du bee_8"[0m
-[33m[your-program] [0m[0m$ du bee_8 [0m
+[33m[tester::#NO5] [0m[94mTyped "1"[0m
+[33m[tester::#NO5] [0m[92m✓ Prompt line matches "$ du bee_1"[0m
+[33m[tester::#NO5] [0m[94mPressed "<TAB>" (expecting autocomplete to "du bee_1/")[0m
+[33m[tester::#NO5] [0m[92m✓ Prompt line matches "du bee_1/"[0m
+[33m[your-program] [0m[0m$ du bee_1/[0m
 [33m[tester::#NO5] [0m[92mTest passed.[0m
 
 [33m[tester::#JP8] [0m[94mRunning tests for Stage #JP8 (jp8)[0m
