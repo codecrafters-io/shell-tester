@@ -24,8 +24,8 @@ type MultipleCompletionsTestCase struct {
 	// ExpectedCompletionOptions is the custom reflection to use
 	ExpectedCompletionOptions string
 
-	// If ExpectedReflection does not match the given reflection
-	// the reflection is checked against the fallback pattern
+	// If ExpectedCompletionOptions does not match the given completion options
+	// the obtained completions are checked against the fallback pattern
 	ExpectedCompletionOptionsFallbackPatterns []string
 
 	// CheckForBell is true if we should check for a bell
