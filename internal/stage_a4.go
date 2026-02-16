@@ -32,10 +32,10 @@ func testA4(stageHarness *test_case_harness.TestCaseHarness) error {
 	completion := executableName
 
 	err = test_cases.AutocompleteTestCase{
-		RawInput:           command,
-		ExpectedReflection: completion,
-		ExpectedAutocompletedReflectionHasNoSpace: false,
-		SkipPromptAssertion:                       true,
+		RawInput:                     command,
+		ExpectedCompletion:           completion,
+		ExpectedCompletionHasNoSpace: false,
+		SkipPromptAssertion:          true,
 	}.Run(asserter, shell, logger)
 	if err != nil {
 		return err
