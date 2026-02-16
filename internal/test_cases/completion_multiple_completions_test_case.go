@@ -26,7 +26,7 @@ type MultipleCompletionsTestCase struct {
 
 	// If ExpectedCompletionOptions does not match the given completion options
 	// the obtained completions are checked against the fallback pattern
-	ExpectedCompletionFallbackPatterns []*regexp.Regexp
+	FallbackPatterns []*regexp.Regexp
 
 	// CheckForBell is true if we should check for a bell
 	CheckForBell bool
@@ -102,7 +102,7 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput:   t.ExpectedCompletion,
-		FallbackPatterns: t.ExpectedCompletionFallbackPatterns,
+		FallbackPatterns: t.FallbackPatterns,
 	})
 
 	// Run the assertion, before sending the enter key

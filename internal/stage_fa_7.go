@@ -52,7 +52,7 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 		RawInput:           initialTypedPrefix,
 		TabCount:           2,
 		ExpectedCompletion: strings.Join(allCompletions, "  "),
-		ExpectedCompletionFallbackPatterns: []*regexp.Regexp{
+		FallbackPatterns: []*regexp.Regexp{
 			regexp.MustCompile("^" + strings.Join(allCompletions, `\s*`) + "$"),
 		},
 		SuccessMessage:      fmt.Sprintf("Received completion for %q", initialTypedPrefix),
