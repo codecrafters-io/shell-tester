@@ -36,15 +36,23 @@ func testFA3(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	command := GetRandomCommandSuitableForDir()
 	initialPrefix := fmt.Sprintf("%s ", command)
-	initialReflection := fmt.Sprintf("%s %s/", command, dirParentRelativePath)
-	finalReflection := fmt.Sprintf("%s %s/", command, dirRelativePath)
+	firstCompletion := fmt.Sprintf("%s %s/", command, dirParentRelativePath)
+	lastCompletion := fmt.Sprintf("%s %s/", command, dirRelativePath)
 
 	err = test_cases.PartialCompletionsTestCase{
-		RawInputs:                        []string{initialPrefix, ""},
-		ExpectedReflections:              []string{initialReflection, finalReflection},
-		SuccessMessage:                   fmt.Sprintf("Received all path completions for %q", initialPrefix),
-		SkipPromptAssertion:              true,
-		ExpectedLastReflectionHasNoSpace: true,
+		InputAndCompletionPairs: []test_cases.InputAndCompletionPair{
+			{
+				Input:              initialPrefix,
+				ExpectedCompletion: firstCompletion,
+			},
+			{
+				Input:              "",
+				ExpectedCompletion: lastCompletion,
+			},
+		},
+		SuccessMessage:            fmt.Sprintf("Received all path completions for %q", initialPrefix),
+		SkipPromptAssertion:       true,
+		FinalCompletionHasNoSpace: true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
 	if err != nil {

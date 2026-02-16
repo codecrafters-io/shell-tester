@@ -42,10 +42,10 @@ func testFA2(stageHarness *test_case_harness.TestCaseHarness) error {
 	completion := fmt.Sprintf("%s %s", command, filepath.Join(targetFileDirRelativePath, targetFileBaseName))
 
 	err = test_cases.AutocompleteTestCase{
-		RawInput:           typedPrefix,
-		ExpectedReflection: completion,
-		ExpectedAutocompletedReflectionHasNoSpace: false,
-		SkipPromptAssertion:                       true,
+		RawInput:                     typedPrefix,
+		ExpectedCompletion:           completion,
+		ExpectedCompletionHasNoSpace: false,
+		SkipPromptAssertion:          true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
 	if err != nil {

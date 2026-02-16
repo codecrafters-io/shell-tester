@@ -12,7 +12,7 @@ import (
 )
 
 // MultipleCompletionsTestCase is a test case that:
-// Sends a text to the shell
+// Sends text to the shell
 // Asserts that the prompt line reflects the text
 // Sends TAB
 // Asserts that the expected reflection is printed to the screen (with a space after it)
@@ -46,7 +46,7 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	logTypedText(logger, t.RawInput)
 
 	// Send the text to the shell
-	if err := shell.SendTextRaw(t.RawInput); err != nil {
+	if err := shell.SendText(t.RawInput); err != nil {
 		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
@@ -75,7 +75,7 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		// Ref: CC-1689
 		time.Sleep(5 * time.Millisecond)
 
-		if err := shell.SendTextRaw("\t"); err != nil {
+		if err := shell.SendText("\t"); err != nil {
 			return fmt.Errorf("Error sending text to shell: %v", err)
 		}
 
