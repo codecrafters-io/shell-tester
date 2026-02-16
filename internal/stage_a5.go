@@ -41,12 +41,12 @@ func testA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	completions := strings.Join(executableNames, "  ")
 
 	err := test_cases.MultipleCompletionsTestCase{
-		RawInput:                  command,
-		TabCount:                  2,
-		ExpectedCompletionOptions: completions,
-		SuccessMessage:            fmt.Sprintf("Received completion for %q", command),
-		CheckForBell:              true,
-		SkipPromptAssertion:       true,
+		RawInput:            command,
+		TabCount:            2,
+		ExpectedCompletion:  completions,
+		SuccessMessage:      fmt.Sprintf("Received completion for %q", command),
+		CheckForBell:        true,
+		SkipPromptAssertion: true,
 	}.Run(asserter, shell, logger)
 	if err != nil {
 		return err

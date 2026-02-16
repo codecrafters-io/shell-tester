@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 	"path/filepath"
+	"regexp"
 	"slices"
 	"strings"
 
@@ -46,12 +47,13 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	command := GetRandomCommandSuitableForFileAndDir()
 	initialTypedPrefix := fmt.Sprintf("%s %s", command, prefix)
 
+	// Test multiple completions for first argument
 	err = test_cases.MultipleCompletionsTestCase{
-		RawInput:                  initialTypedPrefix,
-		TabCount:                  2,
-		ExpectedCompletionOptions: strings.Join(allCompletions, "  "),
-		ExpectedCompletionOptionsFallbackPatterns: []string{
-			"^" + strings.Join(allCompletions, `\s*`) + "$",
+		RawInput:           initialTypedPrefix,
+		TabCount:           2,
+		ExpectedCompletion: strings.Join(allCompletions, "  "),
+		ExpectedCompletionOptionsFallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile("^" + strings.Join(allCompletions, `\s*`) + "$"),
 		},
 		SuccessMessage:      fmt.Sprintf("Received completion for %q", initialTypedPrefix),
 		CheckForBell:        true,
@@ -61,16 +63,14 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// For next test case, we check for new input reflection instead of the old one
-	asserter.PopAssertion()
-
 	// Test file completion for first argument
-	expectedReflectionAfterFileCompletion := fmt.Sprintf("%s %s", command, fileBaseName)
+	expectedCompletionAfterFileCompletion := fmt.Sprintf("%s %s", command, fileBaseName)
 
+	// Type some prefix so that the tab press will result in autocompletion of the first argument
 	err = test_cases.AutocompleteTestCase{
-		PreExistingInputOnLine:       initialTypedPrefix,
+		PreviousInputOnLine:          initialTypedPrefix,
 		RawInput:                     fmt.Sprintf("%d", fileSuffix),
-		ExpectedCompletion:           expectedReflectionAfterFileCompletion,
+		ExpectedCompletion:           expectedCompletionAfterFileCompletion,
 		ExpectedCompletionHasNoSpace: false,
 		SkipPromptAssertion:          true,
 	}.Run(asserter, shell, stageHarness.Logger)
@@ -80,12 +80,12 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Complete to directory for the second argument
-	expectedReflectionAfterDirCompletion := fmt.Sprintf("%s %s %s/", command, fileBaseName, dirBaseName)
+	expectedCompletionAfterDirCompletion := fmt.Sprintf("%s %s %s/", command, fileBaseName, dirBaseName)
 	err = test_cases.AutocompleteTestCase{
 		// The extra space should be inserted by previous step
-		PreExistingInputOnLine:       fmt.Sprintf("%s ", expectedReflectionAfterFileCompletion),
+		PreviousInputOnLine:          fmt.Sprintf("%s ", expectedCompletionAfterFileCompletion),
 		RawInput:                     dirBaseName,
-		ExpectedCompletion:           expectedReflectionAfterDirCompletion,
+		ExpectedCompletion:           expectedCompletionAfterDirCompletion,
 		ExpectedCompletionHasNoSpace: true,
 		SkipPromptAssertion:          true,
 	}.Run(asserter, shell, stageHarness.Logger)
@@ -96,11 +96,11 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Check invalid completion now
 	invalidCompletionRawInput := fmt.Sprintf(" missing_entry-%d", random.RandomInt(1, 1000))
-	expectedReflectionAfterInvalidCompletion := fmt.Sprintf("%s%s", expectedReflectionAfterDirCompletion, invalidCompletionRawInput)
+	expectedFinalCompletion := fmt.Sprintf("%s%s", expectedCompletionAfterDirCompletion, invalidCompletionRawInput)
 	err = test_cases.AutocompleteTestCase{
-		PreExistingInputOnLine:       expectedReflectionAfterDirCompletion,
+		PreviousInputOnLine:          expectedCompletionAfterDirCompletion,
 		RawInput:                     invalidCompletionRawInput,
-		ExpectedCompletion:           expectedReflectionAfterInvalidCompletion,
+		ExpectedCompletion:           expectedFinalCompletion,
 		ExpectedCompletionHasNoSpace: true,
 		SkipPromptAssertion:          true,
 		CheckForBell:                 true,

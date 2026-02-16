@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 	"path/filepath"
+	"regexp"
 	"slices"
 	"strings"
 
@@ -49,11 +50,11 @@ func testFA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	initialTypedPrefix := fmt.Sprintf("%s %s", command, prefix)
 
 	err = test_cases.MultipleCompletionsTestCase{
-		RawInput:                  initialTypedPrefix,
-		TabCount:                  2,
-		ExpectedCompletionOptions: strings.Join(allCompletions, "  "),
-		ExpectedCompletionOptionsFallbackPatterns: []string{
-			"^" + strings.Join(allCompletions, `\s*`) + "$",
+		RawInput:           initialTypedPrefix,
+		TabCount:           2,
+		ExpectedCompletion: strings.Join(allCompletions, "  "),
+		ExpectedCompletionOptionsFallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile("^" + strings.Join(allCompletions, `\s*`) + "$"),
 		},
 		SuccessMessage:      fmt.Sprintf("Received completion for %q", initialTypedPrefix),
 		CheckForBell:        true,
@@ -63,24 +64,21 @@ func testFA5(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// For next test case, we check for new input reflection instead of the old one
-	asserter.PopAssertion()
-
 	// Complete to either the file or the dir
 	var completionSuffix int
-	var expectedReflection string
+	var expectedCompletion string
 	if random.RandomInt(0, 2) == 0 {
 		completionSuffix = fileSuffix
-		expectedReflection = fmt.Sprintf("%s %s%d", command, prefix, fileSuffix)
+		expectedCompletion = fmt.Sprintf("%s %s%d", command, prefix, fileSuffix)
 	} else {
 		completionSuffix = dirSuffix
-		expectedReflection = fmt.Sprintf("%s %s%d/", command, prefix, dirSuffix)
+		expectedCompletion = fmt.Sprintf("%s %s%d/", command, prefix, dirSuffix)
 	}
 
 	err = test_cases.AutocompleteTestCase{
-		PreExistingInputOnLine:       initialTypedPrefix,
+		PreviousInputOnLine:          initialTypedPrefix,
 		RawInput:                     fmt.Sprintf("%d", completionSuffix),
-		ExpectedCompletion:           expectedReflection,
+		ExpectedCompletion:           expectedCompletion,
 		ExpectedCompletionHasNoSpace: (completionSuffix == dirSuffix),
 		SkipPromptAssertion:          true,
 	}.Run(asserter, shell, stageHarness.Logger)

@@ -21,12 +21,12 @@ type MultipleCompletionsTestCase struct {
 	// RawInput is the text to send to the shell
 	RawInput string
 
-	// ExpectedCompletionOptions is the custom reflection to use
-	ExpectedCompletionOptions string
+	// ExpectedCompletion is the custom reflection to use
+	ExpectedCompletion string
 
 	// If ExpectedCompletionOptions does not match the given completion options
 	// the obtained completions are checked against the fallback pattern
-	ExpectedCompletionOptionsFallbackPatterns []string
+	ExpectedCompletionOptionsFallbackPatterns []*regexp.Regexp
 
 	// CheckForBell is true if we should check for a bell
 	CheckForBell bool
@@ -63,13 +63,10 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	// Only if we attempted to autocomplete, print the success message
 	logger.Successf("✓ Prompt line matches %q", initialInputReflection)
 
-	// // The space at the end of the reflection won't be present, so replace that assertion
-	// asserter.PopAssertion()
-
 	// Send TAB
 	for i := range t.TabCount {
 		shouldRingBell := i == 0 && t.CheckForBell
-		logTab(logger, t.ExpectedCompletionOptions, shouldRingBell)
+		logTab(logger, t.ExpectedCompletion, shouldRingBell)
 
 		// Node's readline doesn't register 2nd tab if sent instantly
 		// Ref: CC-1689
@@ -102,20 +99,10 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		}
 	}
 
-	expectedCompletionOptionsFallbackPatterns := []*regexp.Regexp{}
-	if t.ExpectedCompletionOptionsFallbackPatterns != nil {
-		for _, fallbackPattern := range t.ExpectedCompletionOptionsFallbackPatterns {
-			expectedCompletionOptionsFallbackPatterns = append(
-				expectedCompletionOptionsFallbackPatterns,
-				regexp.MustCompile(fallbackPattern),
-			)
-		}
-	}
-
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput:   t.ExpectedCompletionOptions,
-		FallbackPatterns: expectedCompletionOptionsFallbackPatterns,
+		ExpectedOutput:   t.ExpectedCompletion,
+		FallbackPatterns: t.ExpectedCompletionOptionsFallbackPatterns,
 	})
 
 	// Run the assertion, before sending the enter key
@@ -138,6 +125,9 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
 	}
+
+	// Remove autocompletion assertion
+	asserter.PopAssertion()
 
 	var assertFuncToRun func() error
 	if t.SkipPromptAssertion {

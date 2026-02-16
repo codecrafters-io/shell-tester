@@ -54,14 +54,14 @@ func testFA6(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	command := GetRandomCommandSuitableForFileAndDir()
 	initialTypedPrefix := fmt.Sprintf("%s %s", command, initialFilePrefix)
-	expectedReflections := []string{}
+	expectedCompletions := []string{}
 
 	for _, entryName := range entryNames {
-		expectedReflections = append(expectedReflections, fmt.Sprintf("%s %s", command, entryName))
+		expectedCompletions = append(expectedCompletions, fmt.Sprintf("%s %s", command, entryName))
 	}
 
 	inputAndCompletionPairs := []test_cases.InputAndCompletionPair{}
-	for idx, expectedReflection := range expectedReflections {
+	for idx, expectedCompletion := range expectedCompletions {
 		input := "_"
 
 		if idx == 0 {
@@ -70,7 +70,7 @@ func testFA6(stageHarness *test_case_harness.TestCaseHarness) error {
 
 		inputAndCompletionPairs = append(inputAndCompletionPairs, test_cases.InputAndCompletionPair{
 			Input:              input,
-			ExpectedCompletion: expectedReflection,
+			ExpectedCompletion: expectedCompletion,
 		})
 	}
 
