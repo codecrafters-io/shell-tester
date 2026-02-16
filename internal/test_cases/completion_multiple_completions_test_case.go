@@ -24,7 +24,7 @@ type MultipleCompletionsTestCase struct {
 	// ExpectedCompletion is the custom reflection to use
 	ExpectedCompletion string
 
-	// If ExpectedCompletionOptions does not match the given completion options
+	// If ExpectedCompletion does not match the given completion options
 	// the obtained completions are checked against the fallback pattern
 	ExpectedCompletionFallbackPatterns []*regexp.Regexp
 
