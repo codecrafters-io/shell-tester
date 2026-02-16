@@ -68,11 +68,11 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	expectedReflectionAfterFileCompletion := fmt.Sprintf("%s %s", command, fileBaseName)
 
 	err = test_cases.AutocompleteTestCase{
-		PreExistingInputOnLine: initialTypedPrefix,
-		RawInput:               fmt.Sprintf("%d", fileSuffix),
-		ExpectedReflection:     expectedReflectionAfterFileCompletion,
-		ExpectedAutocompletedReflectionHasNoSpace: false,
-		SkipPromptAssertion:                       true,
+		PreExistingInputOnLine:       initialTypedPrefix,
+		RawInput:                     fmt.Sprintf("%d", fileSuffix),
+		ExpectedCompletion:           expectedReflectionAfterFileCompletion,
+		ExpectedCompletionHasNoSpace: false,
+		SkipPromptAssertion:          true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
 	if err != nil {
@@ -83,11 +83,11 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	expectedReflectionAfterDirCompletion := fmt.Sprintf("%s %s %s/", command, fileBaseName, dirBaseName)
 	err = test_cases.AutocompleteTestCase{
 		// The extra space should be inserted by previous step
-		PreExistingInputOnLine: fmt.Sprintf("%s ", expectedReflectionAfterFileCompletion),
-		RawInput:               dirBaseName,
-		ExpectedReflection:     expectedReflectionAfterDirCompletion,
-		ExpectedAutocompletedReflectionHasNoSpace: true,
-		SkipPromptAssertion:                       true,
+		PreExistingInputOnLine:       fmt.Sprintf("%s ", expectedReflectionAfterFileCompletion),
+		RawInput:                     dirBaseName,
+		ExpectedCompletion:           expectedReflectionAfterDirCompletion,
+		ExpectedCompletionHasNoSpace: true,
+		SkipPromptAssertion:          true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
 	if err != nil {
@@ -98,12 +98,12 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	invalidCompletionRawInput := fmt.Sprintf(" missing_entry-%d", random.RandomInt(1, 1000))
 	expectedReflectionAfterInvalidCompletion := fmt.Sprintf("%s%s", expectedReflectionAfterDirCompletion, invalidCompletionRawInput)
 	err = test_cases.AutocompleteTestCase{
-		PreExistingInputOnLine: expectedReflectionAfterDirCompletion,
-		RawInput:               invalidCompletionRawInput,
-		ExpectedReflection:     expectedReflectionAfterInvalidCompletion,
-		ExpectedAutocompletedReflectionHasNoSpace: true,
-		SkipPromptAssertion:                       true,
-		CheckForBell:                              true,
+		PreExistingInputOnLine:       expectedReflectionAfterDirCompletion,
+		RawInput:                     invalidCompletionRawInput,
+		ExpectedCompletion:           expectedReflectionAfterInvalidCompletion,
+		ExpectedCompletionHasNoSpace: true,
+		SkipPromptAssertion:          true,
+		CheckForBell:                 true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
 	if err != nil {

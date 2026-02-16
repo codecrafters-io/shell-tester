@@ -60,11 +60,24 @@ func testFA6(stageHarness *test_case_harness.TestCaseHarness) error {
 		expectedReflections = append(expectedReflections, fmt.Sprintf("%s %s", command, entryName))
 	}
 
+	inputAndCompletionPairs := []test_cases.InputAndCompletionPair{}
+	for idx, expectedReflection := range expectedReflections {
+		input := "_"
+
+		if idx == 0 {
+			input = initialTypedPrefix
+		}
+
+		inputAndCompletionPairs = append(inputAndCompletionPairs, test_cases.InputAndCompletionPair{
+			Input:              input,
+			ExpectedCompletion: expectedReflection,
+		})
+	}
+
 	err = test_cases.PartialCompletionsTestCase{
-		RawInputs:           []string{initialTypedPrefix, "_", "_"},
-		ExpectedReflections: expectedReflections,
-		SuccessMessage:      fmt.Sprintf("Received all partial completions for %q", initialTypedPrefix),
-		SkipPromptAssertion: true,
+		InputAndCompletionPairs: inputAndCompletionPairs,
+		SuccessMessage:          fmt.Sprintf("Received all partial completions for %q", initialTypedPrefix),
+		SkipPromptAssertion:     true,
 	}.Run(asserter, shell, stageHarness.Logger)
 	if err != nil {
 		return err

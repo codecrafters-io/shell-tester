@@ -78,11 +78,11 @@ func testFA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	err = test_cases.AutocompleteTestCase{
-		PreExistingInputOnLine: initialTypedPrefix,
-		RawInput:               fmt.Sprintf("%d", completionSuffix),
-		ExpectedReflection:     expectedReflection,
-		ExpectedAutocompletedReflectionHasNoSpace: (completionSuffix == dirSuffix),
-		SkipPromptAssertion:                       true,
+		PreExistingInputOnLine:       initialTypedPrefix,
+		RawInput:                     fmt.Sprintf("%d", completionSuffix),
+		ExpectedCompletion:           expectedReflection,
+		ExpectedCompletionHasNoSpace: (completionSuffix == dirSuffix),
+		SkipPromptAssertion:          true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
 	if err != nil {
