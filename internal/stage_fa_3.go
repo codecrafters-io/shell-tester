@@ -30,7 +30,7 @@ func testFA3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
+	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err
 	}
 
