@@ -130,14 +130,14 @@ func (b *ShellExecutable) ReadUntilConditionOrTimeout(condition func() bool, tim
 }
 
 func (b *ShellExecutable) SendCommand(command string) error {
-	if err := b.SendTextRaw(command + "\n"); err != nil {
+	if err := b.SendText(command + "\n"); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (b *ShellExecutable) SendTextRaw(text string) error {
+func (b *ShellExecutable) SendText(text string) error {
 	if _, err := b.pty.Write([]byte(text)); err != nil {
 		return err
 	}
