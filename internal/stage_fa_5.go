@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 	"path/filepath"
+	"regexp"
 	"slices"
 	"strings"
 
@@ -51,9 +52,9 @@ func testFA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	err = test_cases.MultipleCompletionsTestCase{
 		RawInput:                  initialTypedPrefix,
 		TabCount:                  2,
-		ExpectedCompletionOptions: strings.Join(allCompletions, "  "),
-		ExpectedCompletionOptionsFallbackPatterns: []string{
-			"^" + strings.Join(allCompletions, `\s*`) + "$",
+		ExpectedCompletionOptions: allCompletions,
+		ExpectedCompletionOptionsFallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile("^" + strings.Join(allCompletions, `\s*`) + "$"),
 		},
 		SuccessMessage:      fmt.Sprintf("Received completion for %q", initialTypedPrefix),
 		CheckForBell:        true,

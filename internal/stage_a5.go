@@ -3,7 +3,6 @@ package internal
 import (
 	"fmt"
 	"sort"
-	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -38,12 +37,11 @@ func testA5(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	command := prefix
 	sort.Strings(executableNames)
-	completions := strings.Join(executableNames, "  ")
 
 	err := test_cases.MultipleCompletionsTestCase{
 		RawInput:                  command,
 		TabCount:                  2,
-		ExpectedCompletionOptions: completions,
+		ExpectedCompletionOptions: executableNames,
 		SuccessMessage:            fmt.Sprintf("Received completion for %q", command),
 		CheckForBell:              true,
 		SkipPromptAssertion:       true,

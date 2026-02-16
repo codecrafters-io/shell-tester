@@ -3,6 +3,7 @@ package test_cases
 import (
 	"fmt"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
@@ -21,12 +22,12 @@ type MultipleCompletionsTestCase struct {
 	// RawInput is the text to send to the shell
 	RawInput string
 
-	// ExpectedCompletionOptions is the custom reflection to use
-	ExpectedCompletionOptions string
+	// ExpectedCompletionOptions is a list of expected completion options
+	ExpectedCompletionOptions []string
 
 	// If ExpectedCompletionOptions does not match the given completion options
 	// the obtained completions are checked against the fallback pattern
-	ExpectedCompletionOptionsFallbackPatterns []string
+	ExpectedCompletionOptionsFallbackPatterns []*regexp.Regexp
 
 	// CheckForBell is true if we should check for a bell
 	CheckForBell bool
@@ -67,9 +68,11 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	// asserter.PopAssertion()
 
 	// Send TAB
+	expectedCompletionOptionsStr := strings.Join(t.ExpectedCompletionOptions, "  ")
+
 	for i := range t.TabCount {
 		shouldRingBell := i == 0 && t.CheckForBell
-		logTab(logger, t.ExpectedCompletionOptions, shouldRingBell)
+		logTab(logger, expectedCompletionOptionsStr, shouldRingBell)
 
 		// Node's readline doesn't register 2nd tab if sent instantly
 		// Ref: CC-1689
@@ -102,20 +105,10 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		}
 	}
 
-	expectedCompletionOptionsFallbackPatterns := []*regexp.Regexp{}
-	if t.ExpectedCompletionOptionsFallbackPatterns != nil {
-		for _, fallbackPattern := range t.ExpectedCompletionOptionsFallbackPatterns {
-			expectedCompletionOptionsFallbackPatterns = append(
-				expectedCompletionOptionsFallbackPatterns,
-				regexp.MustCompile(fallbackPattern),
-			)
-		}
-	}
-
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput:   t.ExpectedCompletionOptions,
-		FallbackPatterns: expectedCompletionOptionsFallbackPatterns,
+		ExpectedOutput:   expectedCompletionOptionsStr,
+		FallbackPatterns: t.ExpectedCompletionOptionsFallbackPatterns,
 	})
 
 	// Run the assertion, before sending the enter key
