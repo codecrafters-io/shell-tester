@@ -22,6 +22,7 @@ Debug = true
 
 [33m[tester::#LC6] [0m[94mRunning tests for Stage #LC6 (lc6)[0m
 [33m[tester::#LC6] [0m[94mRunning ./your_shell.sh[0m
+[33m[tester::#LC6] [0m[92m✓ Received prompt ($ )[0m
 [33m[tester::#LC6] [0m[94mTyped "du "[0m
 [33m[tester::#LC6] [0m[92m✓ Prompt line matches "$ du "[0m
 [33m[tester::#LC6] [0m[94mPressed "<TAB>" (expecting autocomplete to "du ant/")[0m
