@@ -10,8 +10,10 @@ import (
 )
 
 // PartialCompletionsTestCase is a test case that:
-// Sends (or appends, if 'ExistingPrefixInPromptLine' is already present) an input to the shell
+// Sends a text to the shell
 // Asserts that the prompt line reflects the typed prefix
+// Sends text to the shell
+// Asserts that the prompt line reflects the text
 // for each partial auto-completion:
 // Sends TAB
 // Asserts that the expected reflection is printed to the screen
@@ -23,9 +25,6 @@ type PartialCompletionsTestCase struct {
 	// skipping the refactor in path completions extension
 	// Will open a new PR
 
-	// ExistingPrefixInPromptLine is the prefix that is already present in the prompt before
-	// the first input is sent to the shell
-	ExistingPrefixInPromptLine string
 	// RawInputs is the list of inputs to send to the shell
 	// They are send one by one, interleaved with TABs
 	// The shell is expected to auto-complete expected reflections
@@ -88,13 +87,13 @@ func (t PartialCompletionsTestCase) runInputReflectionForIdx(asserter *logged_sh
 	logTypedText(logger, t.RawInputs[idx])
 
 	// Send the text to the shell
-	if err := shell.SendTextRaw(t.RawInputs[idx]); err != nil {
+	if err := shell.SendText(t.RawInputs[idx]); err != nil {
 		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
 	// The prompt line will not just show the subsequent input,
 	// but the previous reflection concatenated with the current input, if any
-	prevInput := t.ExistingPrefixInPromptLine
+	prevInput := ""
 	if idx > 0 {
 		prevInput = t.ExpectedReflections[idx-1]
 	}
@@ -117,7 +116,7 @@ func (t PartialCompletionsTestCase) runInputReflectionForIdx(asserter *logged_sh
 func (t PartialCompletionsTestCase) runTabCompletionForIdx(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, idx int) error {
 	// Send TAB
 	logTab(logger, t.ExpectedReflections[idx], false)
-	if err := shell.SendTextRaw("\t"); err != nil {
+	if err := shell.SendText("\t"); err != nil {
 		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
