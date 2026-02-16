@@ -5,6 +5,7 @@ import (
 	"path"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -83,7 +84,10 @@ func testP3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	sort.Ints(randomUniqueFileNames)
+	sort.Slice(randomUniqueFileNames, func(i, j int) bool {
+		a, b := strconv.Itoa(randomUniqueFileNames[i]), strconv.Itoa(randomUniqueFileNames[j])
+		return a < b
+	})
 	availableEntries := randomUniqueFileNames[1:4]
 
 	input = fmt.Sprintf(`ls %s | tail -n 5 | head -n 3 | grep "f-%d"`, newRandomDir, availableEntries[2])
