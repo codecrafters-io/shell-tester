@@ -74,7 +74,7 @@ func testH4(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	for _, expected := range expectedCommands {
-		if err := shell.SendTextRaw(upArrow); err != nil {
+		if err := shell.SendText(upArrow); err != nil {
 			return err
 		}
 		stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<UP ARROW>", expected.message)

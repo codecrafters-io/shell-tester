@@ -10,7 +10,7 @@ import (
 )
 
 // PartialCompletionsTestCase is a test case that:
-// Sends a text to the shell
+// Sends text to the shell
 // Asserts that the prompt line reflects the text
 // for each partial auto-completion:
 // Sends TAB
@@ -44,7 +44,7 @@ func (t PartialCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedSh
 		logTypedText(logger, t.RawInputs[idx])
 
 		// Send the text to the shell
-		if err := shell.SendTextRaw(t.RawInputs[idx]); err != nil {
+		if err := shell.SendText(t.RawInputs[idx]); err != nil {
 			return fmt.Errorf("Error sending text to shell: %v", err)
 		}
 
@@ -70,7 +70,7 @@ func (t PartialCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedSh
 
 		// Send TAB
 		logTab(logger, t.ExpectedReflections[idx], false)
-		if err := shell.SendTextRaw("\t"); err != nil {
+		if err := shell.SendText("\t"); err != nil {
 			return fmt.Errorf("Error sending text to shell: %v", err)
 		}
 
