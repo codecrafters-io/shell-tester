@@ -75,8 +75,8 @@ jobs:
 
       - name: Run zsh tests with proper terminal setup
         run: |
-          sudo make test_zsh
-        shell: zsh
+          sudo ./local_testing/docker_test.sh test zsh
+        shell: bash
 
   test-alpine:
     runs-on: ubuntu-latest
