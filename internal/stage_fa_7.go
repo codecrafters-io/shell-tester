@@ -64,15 +64,14 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Test file completion for first argument
-	expectedCompletionAfterFileCompletion := fmt.Sprintf("%s %s", command, fileBaseName)
+	expectedCompletionAfterFileCompletion := fmt.Sprintf("%s %s ", command, fileBaseName)
 
 	// Type some prefix so that the tab press will result in autocompletion of the first argument
 	err = test_cases.AutocompleteTestCase{
-		PreviousInputOnLine:          initialTypedPrefix,
-		RawInput:                     fmt.Sprintf("%d", fileSuffix),
-		ExpectedCompletion:           expectedCompletionAfterFileCompletion,
-		ExpectedCompletionHasNoSpace: false,
-		SkipPromptAssertion:          true,
+		PreviousInputOnLine: initialTypedPrefix,
+		RawInput:            fmt.Sprintf("%d", fileSuffix),
+		ExpectedCompletion:  expectedCompletionAfterFileCompletion,
+		SkipPromptAssertion: true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
 	if err != nil {
@@ -83,11 +82,10 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	expectedCompletionAfterDirCompletion := fmt.Sprintf("%s %s %s/", command, fileBaseName, dirBaseName)
 	err = test_cases.AutocompleteTestCase{
 		// The extra space should be inserted by previous step
-		PreviousInputOnLine:          fmt.Sprintf("%s ", expectedCompletionAfterFileCompletion),
-		RawInput:                     dirBaseName,
-		ExpectedCompletion:           expectedCompletionAfterDirCompletion,
-		ExpectedCompletionHasNoSpace: true,
-		SkipPromptAssertion:          true,
+		PreviousInputOnLine: fmt.Sprintf("%s ", expectedCompletionAfterFileCompletion),
+		RawInput:            dirBaseName,
+		ExpectedCompletion:  expectedCompletionAfterDirCompletion,
+		SkipPromptAssertion: true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
 	if err != nil {
@@ -98,12 +96,11 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	invalidCompletionRawInput := fmt.Sprintf(" missing_entry-%d", random.RandomInt(1, 1000))
 	expectedFinalCompletion := fmt.Sprintf("%s%s", expectedCompletionAfterDirCompletion, invalidCompletionRawInput)
 	err = test_cases.AutocompleteTestCase{
-		PreviousInputOnLine:          expectedCompletionAfterDirCompletion,
-		RawInput:                     invalidCompletionRawInput,
-		ExpectedCompletion:           expectedFinalCompletion,
-		ExpectedCompletionHasNoSpace: true,
-		SkipPromptAssertion:          true,
-		CheckForBell:                 true,
+		PreviousInputOnLine: expectedCompletionAfterDirCompletion,
+		RawInput:            invalidCompletionRawInput,
+		ExpectedCompletion:  expectedFinalCompletion,
+		SkipPromptAssertion: true,
+		CheckForBell:        true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
 	if err != nil {
@@ -111,9 +108,4 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	return logAndQuit(asserter, nil)
-
-	// TODO: Kinda unsatisfied by the logs produced for this stage:
-	// We can't log intermediate screen state in the middle: is confusing/misleading
-	// Should we perform shell teardown and test separately for three different arguments 1st, 2nd and 3rd separately
-	// But keep the scenario same as before?
 }

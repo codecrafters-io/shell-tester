@@ -69,18 +69,17 @@ func testFA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	var expectedCompletion string
 	if random.RandomInt(0, 2) == 0 {
 		completionSuffix = fileSuffix
-		expectedCompletion = fmt.Sprintf("%s %s%d", command, prefix, fileSuffix)
+		expectedCompletion = fmt.Sprintf("%s %s%d ", command, prefix, fileSuffix)
 	} else {
 		completionSuffix = dirSuffix
 		expectedCompletion = fmt.Sprintf("%s %s%d/", command, prefix, dirSuffix)
 	}
 
 	err = test_cases.AutocompleteTestCase{
-		PreviousInputOnLine:          initialTypedPrefix,
-		RawInput:                     fmt.Sprintf("%d", completionSuffix),
-		ExpectedCompletion:           expectedCompletion,
-		ExpectedCompletionHasNoSpace: (completionSuffix == dirSuffix),
-		SkipPromptAssertion:          true,
+		PreviousInputOnLine: initialTypedPrefix,
+		RawInput:            fmt.Sprintf("%d", completionSuffix),
+		ExpectedCompletion:  expectedCompletion,
+		SkipPromptAssertion: true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
 	if err != nil {
