@@ -34,11 +34,14 @@ fi
 # Ensure we're in repo root
 cd "$(dirname "$0")/.."
 
+# Use -it only when stdin is a TTY (e.g. local); CI has no TTY
+DOCKER_RUN_OPTS="--rm $([ -t 0 ] && echo -it || echo -i)"
+
 if [[ "$MODE" == "record_fixtures" ]]; then
     echo "==> Building ash image..."
     docker build -t shell-tester-ash -f local_testing/ash_shell.Dockerfile .
     echo "==> Running record_fixtures..."
-    docker run --rm -it -v "$(pwd)":/home/runner/work/shell-tester/shell-tester shell-tester-ash make record_fixtures
+    docker run $DOCKER_RUN_OPTS -v "$(pwd)":/home/runner/work/shell-tester/shell-tester shell-tester-ash make record_fixtures
     exit 0
 fi
 
@@ -69,7 +72,7 @@ run_one() {
     echo "==> Building $shell image..."
     docker build -t "$image" -f "$dockerfile" .
     echo "==> Running $make_target..."
-    docker run --rm -it -v "$(pwd)":/home/runner/work/shell-tester/shell-tester "$image" make "$make_target"
+    docker run $DOCKER_RUN_OPTS -v "$(pwd)":/home/runner/work/shell-tester/shell-tester "$image" make "$make_target"
 }
 
 if [[ "$SHELL_TYPE" == "all" ]]; then
