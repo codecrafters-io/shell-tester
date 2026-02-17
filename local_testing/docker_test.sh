@@ -71,7 +71,7 @@ run_one() {
     echo "==> Running $make_target..."
     # Use -t only when stdin is a TTY (CI has no TTY, so omit -t to avoid "the input device is not a TTY").
     tty_flag=""
-    [[ -t 0 ]] && tty_flag="-t"
+    if [[ -t 0 ]]; then tty_flag="-t"; fi
     docker run --rm -i $tty_flag -v "$(pwd)":/home/runner/work/shell-tester/shell-tester "$image" make "$make_target"
 }
 
