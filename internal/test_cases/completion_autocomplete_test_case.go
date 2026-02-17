@@ -143,6 +143,11 @@ func logTypedText(logger *logger.Logger, text string) {
 		return
 	}
 
+	if hasEndingSpace && hasStartingSpace {
+		logger.Infof("Typed <SPACE>, followed by %q, followed by <SPACE>", text[1:len(text)-1])
+		return
+	}
+
 	if hasEndingSpace {
 		logger.Infof("Typed %q followed by a <SPACE>", text[:len(text)-1])
 		return
@@ -152,7 +157,4 @@ func logTypedText(logger *logger.Logger, text string) {
 		logger.Infof("Typed <SPACE>, followed by %q", text[1:])
 		return
 	}
-
-	// Not used so far, still kept it for consistency
-	logger.Infof("Typed <SPACE>, followed by %q, followed by <SPACE>", text[1:len(text)-1])
 }
