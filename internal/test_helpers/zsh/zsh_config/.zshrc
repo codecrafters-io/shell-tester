@@ -16,6 +16,8 @@ unsetopt prompt_cr # Remove PROMPT_EOL_MARK + cursor movement
 # unsetopt menucomplete
 # setopt noautomenu
 
+# Make zsh completion behave like bash
+unsetopt AUTO_REMOVE_SLASH
 
 # zstyle ':completion:*' list-prompt %S
 # zstyle ':completion:*' list-lines 1000
