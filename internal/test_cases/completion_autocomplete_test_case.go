@@ -138,7 +138,7 @@ func logTypedText(logger *logger.Logger, text string) {
 	hasEndingSpace := text[len(text)-1] == ' '
 	hasStartingSpace := text[0] == ' '
 
-	if (len(text) == 1) || (!hasEndingSpace && !hasStartingSpace) {
+	if (len(text) <= 1) || (!hasEndingSpace && !hasStartingSpace) {
 		logger.Infof("Typed %q", text)
 		return
 	}
