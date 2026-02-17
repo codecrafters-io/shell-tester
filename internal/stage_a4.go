@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -29,13 +30,12 @@ func testA4(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	command := "custom"
-	completion := executableName
+	completion := fmt.Sprintf("%s ", executableName)
 
 	err = test_cases.AutocompleteTestCase{
-		RawInput:                     command,
-		ExpectedCompletion:           completion,
-		ExpectedCompletionHasNoSpace: false,
-		SkipPromptAssertion:          true,
+		RawInput:            command,
+		ExpectedCompletion:  completion,
+		SkipPromptAssertion: true,
 	}.Run(asserter, shell, logger)
 	if err != nil {
 		return err

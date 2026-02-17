@@ -30,10 +30,6 @@ type PartialCompletionsTestCase struct {
 
 	// SkipPromptAssertion is a flag to skip the final prompt assertion
 	SkipPromptAssertion bool
-
-	// FinalCompletionHasNoSpace should be true if no space is expected
-	// after the last completion appears
-	FinalCompletionHasNoSpace bool
 }
 
 func (t PartialCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
@@ -53,8 +49,7 @@ func (t PartialCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedSh
 			return err
 		}
 
-		completionHasTrailingSpace := idx == len(t.InputAndCompletionPairs)-1 && !t.FinalCompletionHasNoSpace
-		if err := t.runTabCompletionAssertion(asserter, shell, logger, t.InputAndCompletionPairs[idx], completionHasTrailingSpace); err != nil {
+		if err := t.runTabCompletionAssertion(asserter, shell, logger, t.InputAndCompletionPairs[idx]); err != nil {
 			return err
 		}
 	}
@@ -105,7 +100,7 @@ func (t PartialCompletionsTestCase) runInputAppearanceAssertion(asserter *logged
 	return nil
 }
 
-func (t PartialCompletionsTestCase) runTabCompletionAssertion(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, inputCompletionPair InputAndCompletionPair, completionHasTrailingSpace bool) error {
+func (t PartialCompletionsTestCase) runTabCompletionAssertion(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, inputCompletionPair InputAndCompletionPair) error {
 	// Send TAB
 	logTab(logger, inputCompletionPair.ExpectedCompletion, false)
 	if err := shell.SendText("\t"); err != nil {
@@ -113,10 +108,6 @@ func (t PartialCompletionsTestCase) runTabCompletionAssertion(asserter *logged_s
 	}
 
 	expectedCompletion := fmt.Sprintf("$ %s", inputCompletionPair.ExpectedCompletion)
-
-	if completionHasTrailingSpace {
-		expectedCompletion += " "
-	}
 
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{

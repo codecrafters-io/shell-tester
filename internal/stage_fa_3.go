@@ -50,9 +50,8 @@ func testFA3(stageHarness *test_case_harness.TestCaseHarness) error {
 				ExpectedCompletion: lastCompletion,
 			},
 		},
-		SuccessMessage:            fmt.Sprintf("Received all path completions for %q", initialPrefix),
-		SkipPromptAssertion:       true,
-		FinalCompletionHasNoSpace: true,
+		SuccessMessage:      fmt.Sprintf("Received all path completions for %q", initialPrefix),
+		SkipPromptAssertion: true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
 	if err != nil {
