@@ -5,7 +5,7 @@ Debug = true
 [33m[tester::#QP2] [0m[92m✓ Received prompt ($ )[0m
 [33m[tester::#QP2] [0m[94mTyped "ech"[0m
 [33m[tester::#QP2] [0m[92m✓ Prompt line matches "$ ech"[0m
-[33m[tester::#QP2] [0m[94mPressed "<TAB>" (expecting autocomplete to "echo ")[0m
+[33m[tester::#QP2] [0m[94mPressed "<TAB>" (expecting autocomplete to "echo" followed by a space)[0m
 [33m[tester::#QP2] [0m[92m✓ Prompt line matches "echo "[0m
 [33m[your-program] [0m[0m$ echo [0m
 [33m[tester::#QP2] [0m[94mTearing down shell[0m
@@ -13,7 +13,7 @@ Debug = true
 [33m[tester::#QP2] [0m[92m✓ Received prompt ($ )[0m
 [33m[tester::#QP2] [0m[94mTyped "exi"[0m
 [33m[tester::#QP2] [0m[92m✓ Prompt line matches "$ exi"[0m
-[33m[tester::#QP2] [0m[94mPressed "<TAB>" (expecting autocomplete to "exit ")[0m
+[33m[tester::#QP2] [0m[94mPressed "<TAB>" (expecting autocomplete to "exit" followed by a space)[0m
 [33m[tester::#QP2] [0m[92m✓ Prompt line matches "exit "[0m
 [33m[your-program] [0m[0m$ exit [0m
 [33m[tester::#QP2] [0m[94mTearing down shell[0m
@@ -54,7 +54,7 @@ Debug = true
 [33m[tester::#QM8] [0m[94mTyped "xyz"[0m
 [33m[tester::#QM8] [0m[92m✓ Prompt line matches "$ xyz"[0m
 [33m[tester::#QM8] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz")[0m
-[33m[tester::#QM8] [0m[92m✓ Prompt line matches "xyz"[0m
+[33m[tester::#QM8] [0m[92m✓ Prompt line unchanged after <TAB> press[0m
 [33m[tester::#QM8] [0m[92m✓ Received bell[0m
 [33m[your-program] [0m[0m$ xyz[0m
 [33m[tester::#QM8] [0m[92mTest passed.[0m
@@ -67,7 +67,7 @@ Debug = true
 [33m[tester::#GY5] [0m[92m✓ Received prompt ($ )[0m
 [33m[tester::#GY5] [0m[94mTyped "custom"[0m
 [33m[tester::#GY5] [0m[92m✓ Prompt line matches "$ custom"[0m
-[33m[tester::#GY5] [0m[94mPressed "<TAB>" (expecting autocomplete to "custom_exe_1357 ")[0m
+[33m[tester::#GY5] [0m[94mPressed "<TAB>" (expecting autocomplete to "custom_exe_1357" followed by a space)[0m
 [33m[tester::#GY5] [0m[92m✓ Prompt line matches "custom_exe_1357 "[0m
 [33m[your-program] [0m[0m$ custom_exe_1357 [0m
 [33m[tester::#GY5] [0m[92mTest passed.[0m
@@ -87,9 +87,9 @@ Debug = true
 [33m[tester::#WH6] [0m[92m✓ Prompt line matches "$ xyz_"[0m
 [33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting bell to ring)[0m
 [33m[tester::#WH6] [0m[92m✓ Received bell[0m
-[33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_fox  xyz_owl  xyz_rat")[0m
+[33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting completion options line to be "xyz_fox  xyz_owl  xyz_rat")[0m
 [33m[your-program] [0m[0mxyz_fox  xyz_owl  xyz_rat[0m
-[33m[tester::#WH6] [0m[92m✓ Prompt line matches "xyz_fox  xyz_owl  xyz_rat"[0m
+[33m[tester::#WH6] [0m[92m✓ Expected completion options line matches "xyz_fox  xyz_owl  xyz_rat"[0m
 [33m[tester::#WH6] [0m[92mReceived completion for "xyz_"[0m
 [33m[your-program] [0m[0m$ xyz_[0m
 [33m[tester::#WH6] [0m[92mTest passed.[0m
@@ -114,7 +114,7 @@ Debug = true
 [33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_cow_owl"[0m
 [33m[tester::#WT6] [0m[94mTyped "_"[0m
 [33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_cow_owl_"[0m
-[33m[tester::#WT6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_cow_owl_bee ")[0m
+[33m[tester::#WT6] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz_cow_owl_bee" followed by a space)[0m
 [33m[tester::#WT6] [0m[92m✓ Prompt line matches "$ xyz_cow_owl_bee "[0m
 [33m[tester::#WT6] [0m[92mReceived all partial completions for "xyz_cow_owl_bee"[0m
 [33m[your-program] [0m[0m$ xyz_cow_owl_bee [0m
