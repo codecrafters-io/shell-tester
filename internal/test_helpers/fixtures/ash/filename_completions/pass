@@ -13,8 +13,8 @@ Debug = true
 
 [33m[tester::#UE6] [0m[94mRunning tests for Stage #UE6 (ue6)[0m
 [33m[tester::#UE6] [CWD] [0m[94m- strawberry/[0m
-[33m[tester::#UE6] [CWD] [0m[94m  - apple/[0m
-[33m[tester::#UE6] [CWD] [0m[94m    - blueberry.txt[0m
+[33m[tester::#UE6] [CWD] [0m[94m    - apple/[0m
+[33m[tester::#UE6] [CWD] [0m[94m        - blueberry.txt[0m
 [33m[tester::#UE6] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#UE6] [0m[92m✓ Received prompt ($ )[0m
 [33m[tester::#UE6] [0m[94mTyped "wc strawberry/apple/"[0m
@@ -26,7 +26,7 @@ Debug = true
 
 [33m[tester::#LC6] [0m[94mRunning tests for Stage #LC6 (lc6)[0m
 [33m[tester::#LC6] [CWD] [0m[94m- ant/[0m
-[33m[tester::#LC6] [CWD] [0m[94m  - bee/[0m
+[33m[tester::#LC6] [CWD] [0m[94m    - bee/ (empty)[0m
 [33m[tester::#LC6] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#LC6] [0m[92m✓ Received prompt ($ )[0m
 [33m[tester::#LC6] [0m[94mTyped "stat" followed by a <SPACE>[0m
@@ -51,7 +51,7 @@ Debug = true
 [33m[tester::#VS5] [0m[92mTest passed.[0m
 
 [33m[tester::#NO5] [0m[94mRunning tests for Stage #NO5 (no5)[0m
-[33m[tester::#NO5] [CWD] [0m[94m- bee_1/[0m
+[33m[tester::#NO5] [CWD] [0m[94m- bee_1/ (empty)[0m
 [33m[tester::#NO5] [CWD] [0m[94m- bee_8.txt[0m
 [33m[tester::#NO5] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#NO5] [0m[92m✓ Received prompt ($ )[0m
@@ -72,8 +72,8 @@ Debug = true
 [33m[tester::#NO5] [0m[92mTest passed.[0m
 
 [33m[tester::#JP8] [0m[94mRunning tests for Stage #JP8 (jp8)[0m
-[33m[tester::#JP8] [CWD] [0m[94m- xyz_fox/[0m
-[33m[tester::#JP8] [CWD] [0m[94m- xyz_fox_owl/[0m
+[33m[tester::#JP8] [CWD] [0m[94m- xyz_fox/ (empty)[0m
+[33m[tester::#JP8] [CWD] [0m[94m- xyz_fox_owl/ (empty)[0m
 [33m[tester::#JP8] [CWD] [0m[94m- xyz_fox_owl_pig.txt[0m
 [33m[tester::#JP8] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#JP8] [0m[92m✓ Received prompt ($ )[0m
@@ -94,7 +94,7 @@ Debug = true
 [33m[tester::#JP8] [0m[92mTest passed.[0m
 
 [33m[tester::#BF8] [0m[94mRunning tests for Stage #BF8 (bf8)[0m
-[33m[tester::#BF8] [CWD] [0m[94m- fox_6/[0m
+[33m[tester::#BF8] [CWD] [0m[94m- fox_6/ (empty)[0m
 [33m[tester::#BF8] [CWD] [0m[94m- fox_8.txt[0m
 [33m[tester::#BF8] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#BF8] [0m[92m✓ Received prompt ($ )[0m
