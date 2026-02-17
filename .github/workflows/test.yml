@@ -67,12 +67,6 @@ jobs:
           make test_dash
         shell: alpine.sh --root {0}
 
-      - name: setup-ubuntu-env
-        run: |
-          sudo apt install zsh
-          sudo apt remove bpfcc-tools
-          zsh --version
-
       - name: Run zsh tests with proper terminal setup
         run: |
           sudo ./local_testing/docker_test.sh test zsh
