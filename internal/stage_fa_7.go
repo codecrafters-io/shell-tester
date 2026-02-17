@@ -28,7 +28,7 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	fileSuffix := suffixes[0]
 	dirSuffix := suffixes[1]
 
-	fileBaseName := fmt.Sprintf("%s%d", prefix, fileSuffix)
+	fileBaseName := fmt.Sprintf("%s%d.txt", prefix, fileSuffix)
 	dirBaseName := fmt.Sprintf("%s%d", prefix, dirSuffix)
 	if err := WriteFileWithTeardown(stageHarness, filepath.Join(workingDirPath, fileBaseName), "", 0644); err != nil {
 		return err
@@ -36,6 +36,8 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err := MkdirAllWithTeardown(stageHarness, filepath.Join(workingDirPath, dirBaseName), 0755); err != nil {
 		return err
 	}
+
+	MustLogDirTree(stageHarness.Logger, workingDirPath)
 
 	allCompletions := []string{fileBaseName, dirBaseName + "/"}
 	slices.Sort(allCompletions)
