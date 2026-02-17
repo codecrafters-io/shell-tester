@@ -69,7 +69,10 @@ run_one() {
     echo "==> Building $shell image..."
     docker build -t "$image" -f "$dockerfile" .
     echo "==> Running $make_target..."
-    docker run --rm -it -v "$(pwd)":/home/runner/work/shell-tester/shell-tester "$image" make "$make_target"
+    # Use -t only when stdin is a TTY (CI has no TTY, so omit -t to avoid "the input device is not a TTY").
+    tty_flag=""
+    [[ -t 0 ]] && tty_flag="-t"
+    docker run --rm -i $tty_flag -v "$(pwd)":/home/runner/work/shell-tester/shell-tester "$image" make "$make_target"
 }
 
 if [[ "$SHELL_TYPE" == "all" ]]; then
