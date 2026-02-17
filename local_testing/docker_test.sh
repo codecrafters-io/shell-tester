@@ -57,7 +57,7 @@ run_one() {
     
     docker run --rm -it \
         ${env_flags[@]+"${env_flags[@]}"} \
-        -v "$(pwd)":/app \
+        -v "$(pwd)":/home/runner/work/shell-tester/shell-tester \
         "$image" \
         make "$make_target"
 }
