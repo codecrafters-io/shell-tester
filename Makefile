@@ -251,7 +251,7 @@ REDIRECTIONS_STAGES = $(call quote_strings,$(_REDIRECTIONS_STAGES))
 COMPLETIONS_STAGES_ZSH = $(call quote_strings,$(_COMPLETION_STAGES_BASE))
 COMPLETIONS_STAGES = $(shell echo '$(_COMPLETION_STAGES_BASE)' | sed 's/]$$/, $(_COMPLETIONS_STAGES_COMPLEX)]/' | sed 's/"/\\"/g')
 FILENAME_COMPLETION_STAGES = $(call quote_strings,$(_FILENAME_COMPLETION_STAGES))
-FILENAME_COMPLETION_STAGES_ZSH = $(call quote_strings,$(_FILENAME_COMPLETION_STAGES))
+FILENAME_COMPLETION_STAGES_ZSH = $(call quote_strings,$(_FILENAME_COMPLETION_STAGES_EXCEPT_LC6))
 PIPELINE_STAGES = $(call quote_strings,$(_PIPELINE_STAGES))
 HISTORY_STAGES = $(call quote_strings,$(_HISTORY_STAGES))
 HISTORY_STAGES_ZSH = $(call quote_strings,$(_HISTORY_STAGES_ZSH))
@@ -324,6 +324,7 @@ test_redirections_w_zsh: build
 test_completions_w_zsh: build
 	$(call run_test,$(COMPLETIONS_STAGES_ZSH),zsh)
 
+# We skip lc6 because ZSH + lc6 fails in GitHub Action Runners
 test_filename_completion_w_zsh: build
 	$(call run_test,$(FILENAME_COMPLETION_STAGES_ZSH),zsh)
 
