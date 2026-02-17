@@ -324,6 +324,7 @@ test_redirections_w_zsh: build
 test_completions_w_zsh: build
 	$(call run_test,$(COMPLETIONS_STAGES_ZSH),zsh)
 
+# We skip lc6 because ZSH + lc6 fails in GitHub Action Runners
 test_filename_completion_w_zsh: build
 	$(call run_test,$(FILENAME_COMPLETION_STAGES_ZSH),zsh)
 
