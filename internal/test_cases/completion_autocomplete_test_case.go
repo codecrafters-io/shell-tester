@@ -25,10 +25,6 @@ type AutocompleteTestCase struct {
 	// ExpectedCompletion is the completion that is expected after the tab press
 	ExpectedCompletion string
 
-	// ExpectedCompletionHasNoSpace is true if
-	// the expected completion should have no space after it
-	ExpectedCompletionHasNoSpace bool
-
 	// CheckForBell is true if we should check for a bell
 	CheckForBell bool
 
@@ -69,10 +65,7 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 	}
 
 	expectedCompletion := fmt.Sprintf("$ %s", t.ExpectedCompletion)
-	// Space after autocomplete
-	if !t.ExpectedCompletionHasNoSpace {
-		expectedCompletion += " "
-	}
+
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: expectedCompletion,

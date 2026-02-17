@@ -34,13 +34,12 @@ func testFA1(stageHarness *test_case_harness.TestCaseHarness) error {
 	command := GetRandomCommandSuitableForFile()
 
 	typedPrefix := fmt.Sprintf("%s %s", command, targetFileBaseName[:len(targetFileBaseName)/2])
-	completion := fmt.Sprintf("%s %s", command, targetFileBaseName)
+	completion := fmt.Sprintf("%s %s ", command, targetFileBaseName)
 
 	err = test_cases.AutocompleteTestCase{
-		RawInput:                     typedPrefix,
-		ExpectedCompletion:           completion,
-		ExpectedCompletionHasNoSpace: false,
-		SkipPromptAssertion:          true,
+		RawInput:            typedPrefix,
+		ExpectedCompletion:  completion,
+		SkipPromptAssertion: true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
 	if err != nil {

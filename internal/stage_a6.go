@@ -47,6 +47,11 @@ func testA6(stageHarness *test_case_harness.TestCaseHarness) error {
 			input = initialPrefix
 		}
 
+		// Expect an extra space on last completion
+		if i == len(executableNames)-1 {
+			expectedCompletion += " "
+		}
+
 		inputAndCompletionPairs = append(inputAndCompletionPairs, test_cases.InputAndCompletionPair{
 			Input:              input,
 			ExpectedCompletion: expectedCompletion,

@@ -30,11 +30,10 @@ func testFA4(stageHarness *test_case_harness.TestCaseHarness) error {
 	typedPrefix := fmt.Sprintf("%s missing_%d", randomCommand, typedPrefixInteger)
 
 	err = test_cases.AutocompleteTestCase{
-		RawInput:                     typedPrefix,
-		ExpectedCompletion:           typedPrefix,
-		ExpectedCompletionHasNoSpace: true,
-		SkipPromptAssertion:          true,
-		CheckForBell:                 true,
+		RawInput:            typedPrefix,
+		ExpectedCompletion:  typedPrefix,
+		SkipPromptAssertion: true,
+		CheckForBell:        true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
 	if err != nil {
