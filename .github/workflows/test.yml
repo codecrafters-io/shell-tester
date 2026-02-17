@@ -76,7 +76,7 @@ jobs:
       - name: Run zsh tests with proper terminal setup
         run: |
           sudo make test_zsh
-        shell: bash
+        shell: zsh
 
   test-alpine:
     runs-on: ubuntu-latest
