@@ -21,12 +21,12 @@ type MultipleCompletionsTestCase struct {
 	// RawInput is the text to send to the shell
 	RawInput string
 
-	// ExpectedCompletion is the custom reflection to use
-	ExpectedCompletion string
+	// ExpectedCompletionOptionsLine is the custom reflection to use
+	ExpectedCompletionOptionsLine string
 
 	// If ExpectedCompletion does not match the given completion options
 	// the obtained completions are checked against the fallback pattern
-	ExpectedCompletionFallbackPatterns []*regexp.Regexp
+	ExpectedCompletionOptionsLineFallbackPatterns []*regexp.Regexp
 
 	// CheckForBell is true if we should check for a bell
 	CheckForBell bool
@@ -66,7 +66,7 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	// Send TAB
 	for i := range t.TabCount {
 		shouldRingBell := i == 0 && t.CheckForBell
-		logTab(logger, t.ExpectedCompletion, shouldRingBell)
+		logTabForCompletionOptions(logger, t.ExpectedCompletionOptionsLine, shouldRingBell)
 
 		// Node's readline doesn't register 2nd tab if sent instantly
 		// Ref: CC-1689
@@ -101,8 +101,8 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput:   t.ExpectedCompletion,
-		FallbackPatterns: t.ExpectedCompletionFallbackPatterns,
+		ExpectedOutput:   t.ExpectedCompletionOptionsLine,
+		FallbackPatterns: t.ExpectedCompletionOptionsLineFallbackPatterns,
 	})
 
 	// Run the assertion, before sending the enter key
@@ -112,7 +112,7 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 
 	// Only if we attempted to autocomplete, print the success message
 	lastLoggedRow := shell.GetScreenState().GetRow(asserter.GetLastLoggedRowIndex())
-	logger.Successf("✓ Prompt line matches %q", lastLoggedRow.String())
+	logger.Successf("✓ Expected completion options line matches %q", lastLoggedRow.String())
 
 	// The space at the end of the reflection won't be present, so replace that assertion
 	// asserter.PopAssertion()
@@ -140,6 +140,18 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		return err
 	}
 
-	logger.Successf("%s", t.SuccessMessage)
+	// Only log success message when it is provided
+	if t.SuccessMessage != "" {
+		logger.Successf("%s", t.SuccessMessage)
+	}
+
 	return nil
+}
+
+func logTabForCompletionOptions(logger *logger.Logger, expectedCompletionOptionsLine string, expectBell bool) {
+	if expectBell {
+		logger.Infof("Pressed %q (expecting bell to ring)", "<TAB>")
+	} else {
+		logger.Infof("Pressed %q (expecting completion options line to be %q)", "<TAB>", expectedCompletionOptionsLine)
+	}
 }

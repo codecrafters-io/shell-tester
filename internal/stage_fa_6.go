@@ -68,6 +68,11 @@ func testFA6(stageHarness *test_case_harness.TestCaseHarness) error {
 			input = initialTypedPrefix
 		}
 
+		// Extra space at the end of final completion
+		if idx == len(expectedCompletions)-1 {
+			expectedCompletion += " "
+		}
+
 		inputAndCompletionPairs = append(inputAndCompletionPairs, test_cases.InputAndCompletionPair{
 			Input:              input,
 			ExpectedCompletion: expectedCompletion,

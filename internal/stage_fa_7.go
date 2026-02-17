@@ -49,13 +49,12 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Test multiple completions for first argument
 	err = test_cases.MultipleCompletionsTestCase{
-		RawInput:           initialTypedPrefix,
-		TabCount:           2,
-		ExpectedCompletion: strings.Join(allCompletions, "  "),
-		ExpectedCompletionFallbackPatterns: []*regexp.Regexp{
+		RawInput:                      initialTypedPrefix,
+		TabCount:                      2,
+		ExpectedCompletionOptionsLine: strings.Join(allCompletions, "  "),
+		ExpectedCompletionOptionsLineFallbackPatterns: []*regexp.Regexp{
 			regexp.MustCompile("^" + strings.Join(allCompletions, `\s*`) + "$"),
 		},
-		SuccessMessage:      fmt.Sprintf("Received completion for %q", initialTypedPrefix),
 		CheckForBell:        true,
 		SkipPromptAssertion: true,
 	}.Run(asserter, shell, stageHarness.Logger)
@@ -81,8 +80,7 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Complete to directory for the second argument
 	expectedCompletionAfterDirCompletion := fmt.Sprintf("%s %s %s/", command, fileBaseName, dirBaseName)
 	err = test_cases.AutocompleteTestCase{
-		// The extra space should be inserted by previous step
-		PreviousInputOnLine: fmt.Sprintf("%s ", expectedCompletionAfterFileCompletion),
+		PreviousInputOnLine: expectedCompletionAfterFileCompletion,
 		RawInput:            dirBaseName,
 		ExpectedCompletion:  expectedCompletionAfterDirCompletion,
 		SkipPromptAssertion: true,
@@ -93,6 +91,8 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Check invalid completion now
+	// Insert extra space at the beginning to separate arguments since dir completion does not put an extra
+	// space at the end of the completion
 	invalidCompletionRawInput := fmt.Sprintf(" missing_entry-%d", random.RandomInt(1, 1000))
 	expectedFinalCompletion := fmt.Sprintf("%s%s", expectedCompletionAfterDirCompletion, invalidCompletionRawInput)
 	err = test_cases.AutocompleteTestCase{

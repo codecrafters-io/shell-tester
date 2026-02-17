@@ -59,7 +59,7 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 	asserter.PopAssertion()
 
 	// Send TAB
-	logTab(logger, t.ExpectedCompletion, false)
+	logTabForCompletion(logger, t.ExpectedCompletion, false)
 	if err := shell.SendText("\t"); err != nil {
 		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
@@ -76,8 +76,12 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 		return err
 	}
 
-	// Only if we attempted to autocomplete, print the success message
-	logger.Successf("✓ Prompt line matches %q", t.ExpectedCompletion)
+	// If the completion does not change the prompt line: notify that prompt line is unchanged
+	if t.ExpectedCompletion != t.PreviousInputOnLine+t.RawInput {
+		logger.Successf("✓ Prompt line matches %q", t.ExpectedCompletion)
+	} else {
+		logger.Successf("✓ Prompt line unchanged after <TAB> press")
+	}
 
 	// Remove the assertion after expected completion has been met
 	asserter.PopAssertion()
@@ -115,14 +119,40 @@ func logNewLine(logger *logger.Logger) {
 	logger.Infof("Pressed %q", "<ENTER>")
 }
 
-func logTab(logger *logger.Logger, expectedCompletion string, expectBell bool) {
+func logTabForCompletion(logger *logger.Logger, expectedCompletion string, expectBell bool) {
 	if expectBell {
 		logger.Infof("Pressed %q (expecting bell to ring)", "<TAB>")
-	} else {
-		logger.Infof("Pressed %q (expecting autocomplete to %q)", "<TAB>", expectedCompletion)
+		return
 	}
+
+	if expectedCompletion[len(expectedCompletion)-1] == ' ' {
+		expectedCompletionWithoutSpace := expectedCompletion[:len(expectedCompletion)-1]
+		logger.Infof("Pressed %q (expecting autocomplete to %q followed by a space)", "<TAB>", expectedCompletionWithoutSpace)
+		return
+	}
+
+	logger.Infof("Pressed %q (expecting autocomplete to %q)", "<TAB>", expectedCompletion)
 }
 
 func logTypedText(logger *logger.Logger, text string) {
-	logger.Infof("Typed %q", text)
+	hasEndingSpace := text[len(text)-1] == ' '
+	hasStartingSpace := text[0] == ' '
+
+	if (len(text) == 1) || (!hasEndingSpace && !hasStartingSpace) {
+		logger.Infof("Typed %q", text)
+		return
+	}
+
+	if hasEndingSpace {
+		logger.Infof("Typed %q followed by a <SPACE>", text[:len(text)-1])
+		return
+	}
+
+	if hasStartingSpace {
+		logger.Infof("Typed <SPACE>, followed by %q", text[1:])
+		return
+	}
+
+	// Not used so far, still kept it for consistency
+	logger.Infof("Typed <SPACE>, followed by %q, followed by <SPACE>", text[1:len(text)-1])
 }
