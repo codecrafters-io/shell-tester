@@ -5,8 +5,8 @@ Debug = true
 [33m[tester::#ZV2] [0m[92m✓ Received prompt ($ )[0m
 [33m[tester::#ZV2] [0m[94mTyped "cat mang"[0m
 [33m[tester::#ZV2] [0m[92m✓ Prompt line matches "$ cat mang"[0m
-[33m[tester::#ZV2] [0m[94mPressed "<TAB>" (expecting autocomplete to "cat mango-20")[0m
-[33m[tester::#ZV2] [0m[92m✓ Prompt line matches "cat mango-20"[0m
+[33m[tester::#ZV2] [0m[94mPressed "<TAB>" (expecting autocomplete to "cat mango-20 ")[0m
+[33m[tester::#ZV2] [0m[92m✓ Prompt line matches "cat mango-20 "[0m
 [33m[your-program] [0m[0m$ cat mango-20 [0m
 [33m[tester::#ZV2] [0m[92mTest passed.[0m
 
@@ -15,8 +15,8 @@ Debug = true
 [33m[tester::#UE6] [0m[92m✓ Received prompt ($ )[0m
 [33m[tester::#UE6] [0m[94mTyped "wc strawberry/apple/"[0m
 [33m[tester::#UE6] [0m[92m✓ Prompt line matches "$ wc strawberry/apple/"[0m
-[33m[tester::#UE6] [0m[94mPressed "<TAB>" (expecting autocomplete to "wc strawberry/apple/blueberry.txt")[0m
-[33m[tester::#UE6] [0m[92m✓ Prompt line matches "wc strawberry/apple/blueberry.txt"[0m
+[33m[tester::#UE6] [0m[94mPressed "<TAB>" (expecting autocomplete to "wc strawberry/apple/blueberry.txt ")[0m
+[33m[tester::#UE6] [0m[92m✓ Prompt line matches "wc strawberry/apple/blueberry.txt "[0m
 [33m[your-program] [0m[0m$ wc strawberry/apple/blueberry.txt [0m
 [33m[tester::#UE6] [0m[92mTest passed.[0m
 
