@@ -135,6 +135,10 @@ func logTabForCompletion(logger *logger.Logger, expectedCompletion string, expec
 }
 
 func logTypedText(logger *logger.Logger, text string) {
+	if len(text) == 0 {
+		return
+	}
+
 	hasEndingSpace := text[len(text)-1] == ' '
 	hasStartingSpace := text[0] == ' '
 
