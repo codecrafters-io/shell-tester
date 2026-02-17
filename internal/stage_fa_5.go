@@ -54,7 +54,7 @@ func testFA5(stageHarness *test_case_harness.TestCaseHarness) error {
 		TabCount:                      2,
 		ExpectedCompletionOptionsLine: strings.Join(allCompletions, "  "),
 		ExpectedCompletionOptionsLineFallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile("^" + strings.Join(allCompletions, `\s*`) + "$"),
+			regexp.MustCompile("^" + strings.Join(allCompletions, `\s+`) + "$"),
 		},
 		SuccessMessage:      fmt.Sprintf("Received completion for %q", initialTypedPrefix),
 		CheckForBell:        true,

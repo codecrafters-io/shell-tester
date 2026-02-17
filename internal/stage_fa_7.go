@@ -53,7 +53,7 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 		TabCount:                      2,
 		ExpectedCompletionOptionsLine: strings.Join(allCompletions, "  "),
 		ExpectedCompletionOptionsLineFallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile("^" + strings.Join(allCompletions, `\s*`) + "$"),
+			regexp.MustCompile("^" + strings.Join(allCompletions, `\s+`) + "$"),
 		},
 		CheckForBell:        true,
 		SkipPromptAssertion: true,
