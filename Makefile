@@ -163,13 +163,6 @@ define _FILENAME_COMPLETION_STAGES_EXCEPT_LC6
 ]
 endef
 
-# lc6 only (directory completion)
-define _FILENAME_COMPLETION_STAGES_LC6
-[ \
-  {"slug":"lc6","tester_log_prefix":"tester::#lc6","title":"Stage#3: Directory completion"} \
-]
-endef
-
 # Full list: except_lc6 stages then lc6 (order preserved for bash/ash)
 define _FILENAME_COMPLETION_STAGES
 [ \
