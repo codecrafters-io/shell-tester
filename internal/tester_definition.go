@@ -10,6 +10,7 @@ var testerDefinition = tester_definition.TesterDefinition{
 	ExecutableFileName:       "your_program.sh",
 	LegacyExecutableFileName: "your_shell.sh",
 	TestCases: []tester_definition.TestCase{
+		// Base stages
 		{
 			Slug:     "oo8",
 			TestFunc: testPrompt,
@@ -50,6 +51,7 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testRun,
 			Timeout:  15 * time.Second,
 		},
+		// Navigation
 		{
 			Slug:     "ei0",
 			TestFunc: testpwd,
@@ -70,6 +72,7 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testCd3,
 			Timeout:  15 * time.Second,
 		},
+		// Quoting
 		{
 			Slug:     "ni6",
 			TestFunc: testQ1,
@@ -100,6 +103,7 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testQ6,
 			Timeout:  15 * time.Second,
 		},
+		// Redirection
 		{
 			Slug:     "jv1",
 			TestFunc: testR1,
@@ -120,6 +124,7 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testR4,
 			Timeout:  15 * time.Second,
 		},
+		// Autocompletion
 		{
 			Slug:     "qp2",
 			TestFunc: testA1,
@@ -150,6 +155,43 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testA6,
 			Timeout:  15 * time.Second,
 		},
+		// Filename completion
+		{
+			Slug:     "zv2",
+			TestFunc: testFA1,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "ue6",
+			TestFunc: testFA2,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "lc6",
+			TestFunc: testFA3,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "vs5",
+			TestFunc: testFA4,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "no5",
+			TestFunc: testFA5,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "jp8",
+			TestFunc: testFA6,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "bf8",
+			TestFunc: testFA7,
+			Timeout:  15 * time.Second,
+		},
+		// Pipelines
 		{
 			Slug:     "br6",
 			TestFunc: testP1,
@@ -165,6 +207,7 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testP3,
 			Timeout:  15 * time.Second,
 		},
+		// History
 		{
 			Slug:     "bq4",
 			TestFunc: testH1,
@@ -195,6 +238,7 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testH6,
 			Timeout:  15 * time.Second,
 		},
+		// History Persistence
 		{
 			Slug:     "za2",
 			TestFunc: testHP1,

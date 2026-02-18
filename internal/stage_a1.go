@@ -9,21 +9,20 @@ import (
 )
 
 type inputAndCompletion struct {
-	Input                     string
-	Completion                string
-	CompletionEndsWithNoSpace bool
+	Input      string
+	Completion string
 }
 
 func testA1(stageHarness *test_case_harness.TestCaseHarness) error {
 	stageLogger := stageHarness.Logger
 
 	inputAndCompletions := []inputAndCompletion{
-		{Input: "ech", Completion: "echo", CompletionEndsWithNoSpace: false},
-		{Input: "exi", Completion: "exit", CompletionEndsWithNoSpace: false},
+		{Input: "ech", Completion: "echo "},
+		{Input: "exi", Completion: "exit "},
 	}
 
 	for _, inputAndCompletion := range inputAndCompletions {
-		err := a1Helper(stageHarness, stageLogger, inputAndCompletion.Input, inputAndCompletion.Completion, inputAndCompletion.CompletionEndsWithNoSpace)
+		err := a1Helper(stageHarness, stageLogger, inputAndCompletion.Input, inputAndCompletion.Completion)
 		if err != nil {
 			return err
 		}
@@ -33,7 +32,7 @@ func testA1(stageHarness *test_case_harness.TestCaseHarness) error {
 	return nil
 }
 
-func a1Helper(stageHarness *test_case_harness.TestCaseHarness, logger *logger.Logger, command string, completion string, completionEndsWithNoSpace bool) error {
+func a1Helper(stageHarness *test_case_harness.TestCaseHarness, logger *logger.Logger, command string, completion string) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
@@ -42,10 +41,9 @@ func a1Helper(stageHarness *test_case_harness.TestCaseHarness, logger *logger.Lo
 	}
 
 	err := test_cases.AutocompleteTestCase{
-		RawInput:           command,
-		ExpectedReflection: completion,
-		ExpectedAutocompletedReflectionHasNoSpace: completionEndsWithNoSpace,
-		SkipPromptAssertion:                       true,
+		RawInput:            command,
+		ExpectedCompletion:  completion,
+		SkipPromptAssertion: true,
 	}.Run(asserter, shell, logger)
 	if err != nil {
 		return err

@@ -70,7 +70,7 @@ func (t CommandAutocompleteAndResponseTestCase) Run(asserter *logged_shell_asser
 	asserter.PopAssertion()
 
 	// Send TAB
-	logTab(logger, t.ExpectedReflection, false)
+	logTabForCompletion(logger, t.ExpectedReflection, false)
 	if err := shell.SendText("\t"); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}

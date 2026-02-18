@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -11,32 +10,32 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-func testA4(stageHarness *test_case_harness.TestCaseHarness) error {
-	logger := stageHarness.Logger
+func testFA4(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
+	workingDirPath, err := CreateRandomDirInTmp(stageHarness)
 
-	executableName := "custom_exe_" + strconv.Itoa(random.RandomInt(1000, 9999))
-	_, err := SetUpCustomCommands(stageHarness, shell, []CommandDetails{
-		{CommandType: "signature_printer", CommandName: executableName, CommandMetadata: getRandomString()},
-	}, true)
 	if err != nil {
 		return err
 	}
-	logAvailableExecutables(logger, []string{executableName})
+
+	shell.SetWorkingDirectory(workingDirPath)
 
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err
 	}
 
-	command := "custom"
-	completion := fmt.Sprintf("%s ", executableName)
+	randomCommand := GetRandomCommandSuitableForFile()
+	typedPrefixInteger := random.RandomInt(1, 1000)
+	typedPrefix := fmt.Sprintf("%s missing_%d", randomCommand, typedPrefixInteger)
 
 	err = test_cases.AutocompleteTestCase{
-		RawInput:            command,
-		ExpectedCompletion:  completion,
+		RawInput:            typedPrefix,
+		ExpectedCompletion:  typedPrefix,
 		SkipPromptAssertion: true,
-	}.Run(asserter, shell, logger)
+		CheckForBell:        true,
+	}.Run(asserter, shell, stageHarness.Logger)
+
 	if err != nil {
 		return err
 	}
