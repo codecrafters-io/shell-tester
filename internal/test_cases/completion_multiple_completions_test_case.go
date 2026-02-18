@@ -156,7 +156,7 @@ func logTabForCompletionOptions(logger *logger.Logger, expectedCompletionOptions
 	if expectBell {
 		logger.Infof("Pressed %q (expecting bell to ring)", "<TAB>")
 		return
-	} else {
-		logger.Infof("Pressed %q (expecting %q as completion options)", "<TAB>", expectedCompletionOptionsLine)
 	}
+
+	logger.Infof("Pressed %q (expecting %q as completion options)", "<TAB>", expectedCompletionOptionsLine)
 }
