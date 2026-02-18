@@ -20,12 +20,14 @@ func testFA1(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	shell.SetWorkingDirectory(workingDirPath)
 
-	targetFileBaseName := fmt.Sprintf("%s-%d", random.RandomWord(), random.RandomInt(1, 100))
+	targetFileBaseName := fmt.Sprintf("%s-%d.txt", random.RandomWord(), random.RandomInt(1, 100))
 	targetFilePath := filepath.Join(workingDirPath, targetFileBaseName)
 
 	if err := WriteFileWithTeardown(stageHarness, targetFilePath, "", 0644); err != nil {
 		return err
 	}
+
+	MustLogWorkingDirTree(stageHarness.Logger, workingDirPath)
 
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {
 		return err
@@ -34,13 +36,12 @@ func testFA1(stageHarness *test_case_harness.TestCaseHarness) error {
 	command := GetRandomCommandSuitableForFile()
 
 	typedPrefix := fmt.Sprintf("%s %s", command, targetFileBaseName[:len(targetFileBaseName)/2])
-	completion := fmt.Sprintf("%s %s", command, targetFileBaseName)
+	completion := fmt.Sprintf("%s %s ", command, targetFileBaseName)
 
 	err = test_cases.AutocompleteTestCase{
-		RawInput:           typedPrefix,
-		ExpectedReflection: completion,
-		ExpectedAutocompletedReflectionHasNoSpace: false,
-		SkipPromptAssertion:                       true,
+		RawInput:            typedPrefix,
+		ExpectedCompletion:  completion,
+		SkipPromptAssertion: true,
 	}.Run(asserter, shell, stageHarness.Logger)
 
 	if err != nil {

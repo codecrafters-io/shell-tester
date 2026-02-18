@@ -37,11 +37,31 @@ func testA6(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	inputAndCompletionPairs := []test_cases.InputAndCompletionPair{}
+
+	for i, executableName := range executableNames {
+		expectedCompletion := executableName
+		input := "_"
+
+		if i == 0 {
+			input = initialPrefix
+		}
+
+		// Expect an extra space on last completion
+		if i == len(executableNames)-1 {
+			expectedCompletion += " "
+		}
+
+		inputAndCompletionPairs = append(inputAndCompletionPairs, test_cases.InputAndCompletionPair{
+			Input:              input,
+			ExpectedCompletion: expectedCompletion,
+		})
+	}
+
 	err := test_cases.PartialCompletionsTestCase{
-		RawInputs:           []string{initialPrefix, "_", "_"},
-		ExpectedReflections: executableNames,
-		SuccessMessage:      fmt.Sprintf("Received all partial completions for %q", executableNames[len(executableNames)-1]),
-		SkipPromptAssertion: true,
+		InputAndCompletionPairs: inputAndCompletionPairs,
+		SuccessMessage:          fmt.Sprintf("Received all partial completions for %q", executableNames[len(executableNames)-1]),
+		SkipPromptAssertion:     true,
 	}.Run(asserter, shell, stageLogger)
 	if err != nil {
 		return err

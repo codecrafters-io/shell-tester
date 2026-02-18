@@ -87,8 +87,24 @@ func logAndQuit(asserter *logged_shell_asserter.LoggedShellAsserter, err error) 
 func GetRandomCommandSuitableForFile() string {
 	return random.RandomElementFromArray([]string{
 		"cat",
-		"stat",
 		"du",
+		"stat",
 		"wc",
+	})
+}
+
+func GetRandomCommandSuitableForDir() string {
+	return random.RandomElementFromArray([]string{
+		"du",
+		"ls",
+		"stat",
+		"tree",
+	})
+}
+
+func GetRandomCommandSuitableForFileAndDir() string {
+	return random.RandomElementFromArray([]string{
+		"du",
+		"stat",
 	})
 }

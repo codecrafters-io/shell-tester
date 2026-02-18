@@ -16,6 +16,7 @@ unsetopt prompt_cr # Remove PROMPT_EOL_MARK + cursor movement
 # unsetopt menucomplete
 # setopt noautomenu
 
+
 # zstyle ':completion:*' list-prompt %S
 # zstyle ':completion:*' list-lines 1000
 # zstyle ':completion:*' menu no

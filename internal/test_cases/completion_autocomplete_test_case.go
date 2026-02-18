@@ -13,18 +13,17 @@ import (
 // Sends text to the shell
 // Asserts that the prompt line reflects the typed text
 // Sends TAB
-// Asserts that the expected reflection is printed to the screen (with a space after it)
+// Asserts that the expected completion is printed to the screen (with a space after it)
 // If any error occurs returns the error from the corresponding assertion
 type AutocompleteTestCase struct {
+	// PreviousInputOnLine is the string that is already present before RawInput is sent to the shell
+	PreviousInputOnLine string
+
 	// RawInput is the text to send to the shell
 	RawInput string
 
-	// ExpectedReflection is the custom reflection to use
-	ExpectedReflection string
-
-	// ExpectedAutocompletedReflectionHasNoSpace is true if
-	// the expected reflection should have no space after it
-	ExpectedAutocompletedReflectionHasNoSpace bool
+	// ExpectedCompletion is the completion that is expected after the tab press
+	ExpectedCompletion string
 
 	// CheckForBell is true if we should check for a bell
 	CheckForBell bool
@@ -42,7 +41,7 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
-	inputReflection := fmt.Sprintf("$ %s", t.RawInput)
+	inputReflection := fmt.Sprintf("$ %s%s", t.PreviousInputOnLine, t.RawInput)
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: inputReflection,
 		StayOnSameLine: true,
@@ -55,23 +54,21 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 	// Only if we attempted to autocomplete, print the success message
 	logger.Successf("✓ Prompt line matches %q", inputReflection)
 
-	// The space at the end of the reflection won't be present, so replace that assertion
+	// Remove the last assertion since the inputReflection won't be present in the next run
+	// It will have been replaced by the expected completion
 	asserter.PopAssertion()
 
 	// Send TAB
-	logTab(logger, t.ExpectedReflection, false)
+	logTabForCompletion(logger, t.ExpectedCompletion, false)
 	if err := shell.SendText("\t"); err != nil {
 		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
-	inputTextReflection := fmt.Sprintf("$ %s", t.ExpectedReflection)
-	// Space after autocomplete
-	if !t.ExpectedAutocompletedReflectionHasNoSpace {
-		inputTextReflection = fmt.Sprintf("$ %s ", t.ExpectedReflection)
-	}
+	expectedCompletion := fmt.Sprintf("$ %s", t.ExpectedCompletion)
+
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: inputTextReflection,
+		ExpectedOutput: expectedCompletion,
 		StayOnSameLine: true,
 	})
 	// Run the assertion, before sending the enter key
@@ -79,9 +76,14 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 		return err
 	}
 
-	// Only if we attempted to autocomplete, print the success message
-	logger.Successf("✓ Prompt line matches %q", t.ExpectedReflection)
-	// The space at the end of the reflection won't be present, so replace that assertion
+	// If the completion does not change the prompt line: notify that prompt line is unchanged
+	if t.ExpectedCompletion != t.PreviousInputOnLine+t.RawInput {
+		logger.Successf("✓ Prompt line matches %q", t.ExpectedCompletion)
+	} else {
+		logger.Successf("✓ Prompt line unchanged after <TAB> press")
+	}
+
+	// Remove the assertion after expected completion has been met
 	asserter.PopAssertion()
 
 	if t.CheckForBell {
@@ -117,14 +119,38 @@ func logNewLine(logger *logger.Logger) {
 	logger.Infof("Pressed %q", "<ENTER>")
 }
 
-func logTab(logger *logger.Logger, expectedReflection string, expectBell bool) {
+func logTabForCompletion(logger *logger.Logger, expectedCompletion string, expectBell bool) {
 	if expectBell {
 		logger.Infof("Pressed %q (expecting bell to ring)", "<TAB>")
-	} else {
-		logger.Infof("Pressed %q (expecting autocomplete to %q)", "<TAB>", expectedReflection)
+		return
 	}
+
+	if expectedCompletion[len(expectedCompletion)-1] == ' ' {
+		expectedCompletionWithoutSpace := expectedCompletion[:len(expectedCompletion)-1]
+		logger.Infof("Pressed %q (expecting autocomplete to %q followed by a space)", "<TAB>", expectedCompletionWithoutSpace)
+		return
+	}
+
+	logger.Infof("Pressed %q (expecting autocomplete to %q)", "<TAB>", expectedCompletion)
 }
 
 func logTypedText(logger *logger.Logger, text string) {
-	logger.Infof("Typed %q", text)
+	hasEndingSpace := text[len(text)-1] == ' '
+	hasStartingSpace := text[0] == ' '
+
+	if (len(text) <= 1) || (!hasEndingSpace && !hasStartingSpace) {
+		logger.Infof("Typed %q", text)
+
+	} else if hasEndingSpace && hasStartingSpace {
+		logger.Infof("Typed <SPACE>, followed by %q, followed by <SPACE>", text[1:len(text)-1])
+
+	} else if hasEndingSpace {
+		logger.Infof("Typed %q followed by a <SPACE>", text[:len(text)-1])
+
+	} else if hasStartingSpace {
+		logger.Infof("Typed <SPACE>, followed by %q", text[1:])
+
+	} else {
+		panic("Codecrafters Internal Error - Shouldn't reach here")
+	}
 }
