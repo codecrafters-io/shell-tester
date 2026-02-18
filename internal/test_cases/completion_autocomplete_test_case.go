@@ -140,21 +140,17 @@ func logTypedText(logger *logger.Logger, text string) {
 
 	if (len(text) <= 1) || (!hasEndingSpace && !hasStartingSpace) {
 		logger.Infof("Typed %q", text)
-		return
-	}
 
-	if hasEndingSpace && hasStartingSpace {
+	} else if hasEndingSpace && hasStartingSpace {
 		logger.Infof("Typed <SPACE>, followed by %q, followed by <SPACE>", text[1:len(text)-1])
-		return
-	}
 
-	if hasEndingSpace {
+	} else if hasEndingSpace {
 		logger.Infof("Typed %q followed by a <SPACE>", text[:len(text)-1])
-		return
-	}
 
-	if hasStartingSpace {
+	} else if hasStartingSpace {
 		logger.Infof("Typed <SPACE>, followed by %q", text[1:])
-		return
+
+	} else {
+		panic("Codecrafters Internal Error - Shouldn't reach here")
 	}
 }
