@@ -9,6 +9,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
+	"github.com/google/shlex"
 )
 
 // MultipleCompletionsTestCase is a test case that:
@@ -110,17 +111,20 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		return err
 	}
 
-	// Only if we attempted to autocomplete, print the success message
-	lastLoggedRow := shell.GetScreenState().GetRow(asserter.GetLastLoggedRowIndex())
-	logger.Successf("✓ Expected completion options line matches %q", lastLoggedRow.String())
+	// Although shlex.Split() is an overkill, it is used, if in the future, we decide to combine
+	// quoting stages with completion stages
+	words, err := shlex.Split(t.ExpectedCompletionOptionsLine)
+	if err != nil {
+		return fmt.Errorf("Failed to split expected completion options: %v", err)
+	}
 
-	// The space at the end of the reflection won't be present, so replace that assertion
-	// asserter.PopAssertion()
+	logger.Successf("%d matching completion options found", len(words))
 
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: initialInputReflection,
 		StayOnSameLine: true,
 	})
+
 	// Run the assertion, before sending the enter key
 	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
@@ -151,7 +155,8 @@ func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedS
 func logTabForCompletionOptions(logger *logger.Logger, expectedCompletionOptionsLine string, expectBell bool) {
 	if expectBell {
 		logger.Infof("Pressed %q (expecting bell to ring)", "<TAB>")
+		return
 	} else {
-		logger.Infof("Pressed %q (expecting completion options line to be %q)", "<TAB>", expectedCompletionOptionsLine)
+		logger.Infof("Pressed %q (expecting %q as completion options)", "<TAB>", expectedCompletionOptionsLine)
 	}
 }

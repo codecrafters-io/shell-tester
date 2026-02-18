@@ -30,7 +30,7 @@ func testFA5(stageHarness *test_case_harness.TestCaseHarness) error {
 		dirSuffix = random.RandomInt(1, 10)
 	}
 
-	fileBaseName := fmt.Sprintf("%s%d", prefix, fileSuffix)
+	fileBaseName := fmt.Sprintf("%s%d.txt", prefix, fileSuffix)
 	dirBaseName := fmt.Sprintf("%s%d", prefix, dirSuffix)
 	if err := WriteFileWithTeardown(stageHarness, filepath.Join(workingDirPath, fileBaseName), "", 0644); err != nil {
 		return err
@@ -38,6 +38,8 @@ func testFA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err := MkdirAllWithTeardown(stageHarness, filepath.Join(workingDirPath, dirBaseName), 0755); err != nil {
 		return err
 	}
+
+	MustLogWorkingDirTree(stageHarness.Logger, workingDirPath)
 
 	allCompletions := []string{fileBaseName, dirBaseName + "/"}
 	slices.Sort(allCompletions)
@@ -69,10 +71,10 @@ func testFA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	var expectedCompletion string
 	if random.RandomInt(0, 2) == 0 {
 		completionSuffix = fileSuffix
-		expectedCompletion = fmt.Sprintf("%s %s%d ", command, prefix, fileSuffix)
+		expectedCompletion = fmt.Sprintf("%s %s ", command, fileBaseName)
 	} else {
 		completionSuffix = dirSuffix
-		expectedCompletion = fmt.Sprintf("%s %s%d/", command, prefix, dirSuffix)
+		expectedCompletion = fmt.Sprintf("%s %s/", command, dirBaseName)
 	}
 
 	err = test_cases.AutocompleteTestCase{
