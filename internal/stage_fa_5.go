@@ -51,12 +51,17 @@ func testFA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	command := GetRandomCommandSuitableForFileAndDir()
 	initialTypedPrefix := fmt.Sprintf("%s %s", command, prefix)
 
+	escapedCompletions := make([]string, len(allCompletions))
+	for i, c := range allCompletions {
+		escapedCompletions[i] = regexp.QuoteMeta(c)
+	}
+
 	err = test_cases.MultipleCompletionsTestCase{
 		RawInput:                      initialTypedPrefix,
 		TabCount:                      2,
 		ExpectedCompletionOptionsLine: strings.Join(allCompletions, "  "),
 		ExpectedCompletionOptionsLineFallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile("^" + strings.Join(allCompletions, `\s+`) + "$"),
+			regexp.MustCompile("^" + strings.Join(escapedCompletions, `\s+`) + "$"),
 		},
 		SuccessMessage:      fmt.Sprintf("Received completion for %q", initialTypedPrefix),
 		CheckForBell:        true,
