@@ -52,8 +52,8 @@ func testFA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	initialTypedPrefix := fmt.Sprintf("%s %s", command, prefix)
 
 	escapedCompletions := make([]string, len(allCompletions))
-	for i, c := range allCompletions {
-		escapedCompletions[i] = regexp.QuoteMeta(c)
+	for i, completion := range allCompletions {
+		escapedCompletions[i] = regexp.QuoteMeta(completion)
 	}
 
 	err = test_cases.MultipleCompletionsTestCase{
