@@ -159,6 +159,47 @@ func WriteFileWithTeardown(stageHarness *test_case_harness.TestCaseHarness, file
 	return nil
 }
 
+// MustLogWorkingDirTree logs the contents of a directory as a tree (e.g. "- foo" then "  - bar" for nested entries).
+func MustLogWorkingDirTree(logger *logger.Logger, directoryPath string) {
+	logger.PushSecondaryPrefix("working_dir")
+	defer logger.PopSecondaryPrefix()
+	var mustLogDirTreeRecursive func(dirPath string, prefix string)
+
+	mustLogDirTreeRecursive = func(dirPath string, prefix string) {
+		entries, err := os.ReadDir(dirPath)
+
+		if err != nil {
+			panic(fmt.Sprintf("(error reading %s: %v)", dirPath, err))
+		}
+
+		for _, entry := range entries {
+			name := entry.Name()
+
+			if !entry.IsDir() {
+				logger.Infof("%s- %s", prefix, name)
+				continue
+			}
+
+			subPath := filepath.Join(dirPath, entry.Name())
+			subEntries, err := os.ReadDir(subPath)
+
+			if err != nil {
+				panic(fmt.Sprintf("(error reading %s: %v)", subPath, err))
+			}
+
+			if len(subEntries) == 0 {
+				logger.Infof("%s- %s/ (empty)", prefix, name)
+				continue
+			}
+
+			logger.Infof("%s- %s/", prefix, name)
+			mustLogDirTreeRecursive(subPath, prefix+"  ")
+		}
+	}
+
+	mustLogDirTreeRecursive(directoryPath, "")
+}
+
 // writeFile writes a file to the given path with the given content
 func writeFile(filePath string, content string) error {
 	return os.WriteFile(filePath, []byte(content), 0644)

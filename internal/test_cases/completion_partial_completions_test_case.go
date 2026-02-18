@@ -102,7 +102,7 @@ func (t PartialCompletionsTestCase) runInputAppearanceAssertion(asserter *logged
 
 func (t PartialCompletionsTestCase) runTabCompletionAssertion(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger, inputCompletionPair InputAndCompletionPair) error {
 	// Send TAB
-	logTab(logger, inputCompletionPair.ExpectedCompletion, false)
+	logTabForCompletion(logger, inputCompletionPair.ExpectedCompletion, false)
 	if err := shell.SendText("\t"); err != nil {
 		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
