@@ -2,30 +2,32 @@ package test_cases
 
 import (
 	"fmt"
+	"regexp"
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
+	"github.com/google/shlex"
 )
 
-// CommandMultipleCompletionsTestCase is a test case that:
-// Sends a command to the shell
-// Asserts that the prompt line reflects the command
+// MultipleCompletionsTestCase is a test case that:
+// Sends text to the shell
+// Asserts that the prompt line reflects the text
 // Sends TAB
 // Asserts that the expected reflection is printed to the screen (with a space after it)
 // If any error occurs returns the error from the corresponding assertion
-type CommandMultipleCompletionsTestCase struct {
-	// RawCommand is the command to send to the shell
-	RawCommand string
+type MultipleCompletionsTestCase struct {
+	// RawInput is the text to send to the shell
+	RawInput string
 
-	// ExpectedReflection is the custom reflection to use
-	ExpectedReflection string
+	// ExpectedCompletionOptionsLine is the custom reflection to use
+	ExpectedCompletionOptionsLine string
 
-	// ExpectedAutocompletedReflectionHasNoSpace is true if
-	// the expected reflection should have no space after it
-	ExpectedAutocompletedReflectionHasNoSpace bool
+	// If ExpectedCompletion does not match the given completion options
+	// the obtained completions are checked against the fallback pattern
+	ExpectedCompletionOptionsLineFallbackPatterns []*regexp.Regexp
 
 	// CheckForBell is true if we should check for a bell
 	CheckForBell bool
@@ -33,25 +35,25 @@ type CommandMultipleCompletionsTestCase struct {
 	// SuccessMessage is the message to log in case of success
 	SuccessMessage string
 
-	// tabCount is the number of tabs to send after the command
+	// tabCount is the number of tabs to send after the input text
 	TabCount int
 
 	// SkipPromptAssertion is a flag to skip the final prompt assertion
 	SkipPromptAssertion bool
 }
 
-func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
-	// Log the details of the command before sending it
-	logCommand(logger, t.RawCommand)
+func (t MultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
+	// Log the details of the text before sending it
+	logTypedText(logger, t.RawInput)
 
-	// Send the command to the shell
-	if err := shell.SendCommandRaw(t.RawCommand); err != nil {
-		return fmt.Errorf("Error sending command to shell: %v", err)
+	// Send the text to the shell
+	if err := shell.SendText(t.RawInput); err != nil {
+		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
-	inputReflection := fmt.Sprintf("$ %s", t.RawCommand)
+	initialInputReflection := fmt.Sprintf("$ %s", t.RawInput)
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: inputReflection,
+		ExpectedOutput: initialInputReflection,
 		StayOnSameLine: false,
 	})
 	// Run the assertion, before sending the enter key
@@ -60,22 +62,19 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 	}
 
 	// Only if we attempted to autocomplete, print the success message
-	logger.Successf("✓ Prompt line matches %q", inputReflection)
-
-	// // The space at the end of the reflection won't be present, so replace that assertion
-	// asserter.PopAssertion()
+	logger.Successf("✓ Prompt line matches %q", initialInputReflection)
 
 	// Send TAB
 	for i := range t.TabCount {
 		shouldRingBell := i == 0 && t.CheckForBell
-		logTab(logger, t.ExpectedReflection, shouldRingBell)
+		logTabForCompletionOptions(logger, t.ExpectedCompletionOptionsLine, shouldRingBell)
 
 		// Node's readline doesn't register 2nd tab if sent instantly
 		// Ref: CC-1689
 		time.Sleep(5 * time.Millisecond)
 
-		if err := shell.SendCommandRaw("\t"); err != nil {
-			return fmt.Errorf("Error sending command to shell: %v", err)
+		if err := shell.SendText("\t"); err != nil {
+			return fmt.Errorf("Error sending text to shell: %v", err)
 		}
 
 		if shouldRingBell {
@@ -101,35 +100,38 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 		}
 	}
 
-	commandReflection := t.ExpectedReflection
-	// Space after autocomplete
-	if !t.ExpectedAutocompletedReflectionHasNoSpace {
-		commandReflection = fmt.Sprintf("%s ", t.ExpectedReflection)
-	}
-
 	// Assert auto-completion
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: commandReflection,
+		ExpectedOutput:   t.ExpectedCompletionOptionsLine,
+		FallbackPatterns: t.ExpectedCompletionOptionsLineFallbackPatterns,
 	})
+
 	// Run the assertion, before sending the enter key
 	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
 	}
 
-	// Only if we attempted to autocomplete, print the success message
-	logger.Successf("✓ Prompt line matches %q", t.ExpectedReflection)
+	// Although shlex.Split() is an overkill, it is used, if in the future, we decide to combine
+	// quoting stages with completion stages
+	words, err := shlex.Split(t.ExpectedCompletionOptionsLine)
+	if err != nil {
+		return fmt.Errorf("Failed to split expected completion options: %v", err)
+	}
 
-	// The space at the end of the reflection won't be present, so replace that assertion
-	// asserter.PopAssertion()
+	logger.Successf("%d matching completion options found", len(words))
 
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: inputReflection,
+		ExpectedOutput: initialInputReflection,
 		StayOnSameLine: true,
 	})
+
 	// Run the assertion, before sending the enter key
 	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
 	}
+
+	// Remove autocompletion assertion
+	asserter.PopAssertion()
 
 	var assertFuncToRun func() error
 	if t.SkipPromptAssertion {
@@ -142,6 +144,19 @@ func (t CommandMultipleCompletionsTestCase) Run(asserter *logged_shell_asserter.
 		return err
 	}
 
-	logger.Successf("%s", t.SuccessMessage)
+	// Only log success message when it is provided
+	if t.SuccessMessage != "" {
+		logger.Successf("%s", t.SuccessMessage)
+	}
+
 	return nil
+}
+
+func logTabForCompletionOptions(logger *logger.Logger, expectedCompletionOptionsLine string, expectBell bool) {
+	if expectBell {
+		logger.Infof("Pressed %q (expecting bell to ring)", "<TAB>")
+		return
+	} else {
+		logger.Infof("Pressed %q (expecting %q as completion options)", "<TAB>", expectedCompletionOptionsLine)
+	}
 }

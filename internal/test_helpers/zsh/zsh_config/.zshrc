@@ -16,6 +16,13 @@ unsetopt prompt_cr # Remove PROMPT_EOL_MARK + cursor movement
 # unsetopt menucomplete
 # setopt noautomenu
 
+# Make zsh behave like bash for tab completion
+setopt NO_AUTO_LIST
+setopt BASH_AUTO_LIST
+setopt NO_ALWAYS_LAST_PROMPT
+zstyle ':completion:*' squeeze-slashes false
+unsetopt AUTO_REMOVE_SLASH
+
 # zstyle ':completion:*' list-prompt %S
 # zstyle ':completion:*' list-lines 1000
 # zstyle ':completion:*' menu no

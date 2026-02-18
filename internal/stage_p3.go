@@ -32,7 +32,7 @@ func testP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
 	// Test-1
-	randomDir, err := GetShortRandomDirectory(stageHarness)
+	randomDir, err := CreateShortRandomDirInTmp(stageHarness)
 	if err != nil {
 		return err
 	}
@@ -66,7 +66,7 @@ func testP3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Test-2
-	newRandomDir, err := GetShortRandomDirectory(stageHarness)
+	newRandomDir, err := CreateShortRandomDirInTmp(stageHarness)
 	if err != nil {
 		return err
 	}

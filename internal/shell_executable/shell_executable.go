@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"path/filepath"
 	"strings"
 	"syscall"
 	"time"
@@ -32,6 +33,8 @@ type ShellExecutable struct {
 
 	// env is set to os.Environ() by default, but individual values can be overridden with Setenv
 	env environ.Env
+
+	workingDir string
 
 	// Set after starting
 	cmd       *exec.Cmd
@@ -67,13 +70,24 @@ func (b *ShellExecutable) GetPath() string {
 	return b.env.Get("PATH")
 }
 
+func (b *ShellExecutable) SetWorkingDirectory(workingDirPath string) {
+	b.workingDir = workingDirPath
+}
+
 func (b *ShellExecutable) Start(args ...string) error {
 	b.stageLogger.Infof("%s", b.getInitialLogLine(args...))
 
 	b.Setenv("PS1", utils.PROMPT)
 	// b.Setenv("TERM", "dumb") // test_all_success works without this too, do we need it?
 
-	cmd := exec.Command(b.executable.Path, args...)
+	absolutePath, err := filepath.Abs(b.executable.Path)
+	if err != nil {
+		return err
+	}
+
+	cmd := exec.Command(absolutePath, args...)
+	// If workingDir is empty, it is set as cwd() by exec library
+	cmd.Dir = b.workingDir
 	cmd.Env = b.env.Sorted()
 
 	b.cmd = cmd
@@ -116,15 +130,15 @@ func (b *ShellExecutable) ReadUntilConditionOrTimeout(condition func() bool, tim
 }
 
 func (b *ShellExecutable) SendCommand(command string) error {
-	if err := b.SendCommandRaw(command + "\n"); err != nil {
+	if err := b.SendText(command + "\n"); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (b *ShellExecutable) SendCommandRaw(command string) error {
-	if _, err := b.pty.Write([]byte(command)); err != nil {
+func (b *ShellExecutable) SendText(text string) error {
+	if _, err := b.pty.Write([]byte(text)); err != nil {
 		return err
 	}
 

@@ -29,7 +29,7 @@ func testR1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	dirs, err := GetShortRandomDirectories(stageHarness, 2)
+	dirs, err := CreateShortRandomDirsInTmp(stageHarness, 2)
 	if err != nil {
 		return err
 	}

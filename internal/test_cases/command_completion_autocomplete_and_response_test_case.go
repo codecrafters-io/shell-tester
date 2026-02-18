@@ -12,16 +12,16 @@ import (
 )
 
 // CommandAutocompleteAndResponseTestCase is a test case that:
-// Sends a command to the shell
-// Asserts that the prompt line reflects the command
+// Sends text to the shell
+// Asserts that the prompt line reflects the text
 // Sends TAB
 // Asserts that the expected reflection is printed to the screen (with a space after it)
 // Sends ENTER
 // Asserts that the expected reflection is still present (with no space after it)
 // If any error occurs returns the error from the corresponding assertion
 type CommandAutocompleteAndResponseTestCase struct {
-	// RawCommand is the command to send to the shell
-	RawCommand string
+	// InputText is the text to send to the shell
+	InputText string
 
 	// ExpectedReflection is the custom reflection to use
 	ExpectedReflection string
@@ -46,14 +46,14 @@ type CommandAutocompleteAndResponseTestCase struct {
 
 func (t CommandAutocompleteAndResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	// Log the details of the command before sending it
-	logCommand(logger, t.RawCommand)
+	logTypedText(logger, t.InputText)
 
 	// Send the command to the shell
-	if err := shell.SendCommandRaw(t.RawCommand); err != nil {
+	if err := shell.SendText(t.InputText); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
-	inputReflection := fmt.Sprintf("$ %s", t.RawCommand)
+	inputReflection := fmt.Sprintf("$ %s", t.InputText)
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: inputReflection,
 		StayOnSameLine: true,
@@ -70,8 +70,8 @@ func (t CommandAutocompleteAndResponseTestCase) Run(asserter *logged_shell_asser
 	asserter.PopAssertion()
 
 	// Send TAB
-	logTab(logger, t.ExpectedReflection, false)
-	if err := shell.SendCommandRaw("\t"); err != nil {
+	logTabForCompletion(logger, t.ExpectedReflection, false)
+	if err := shell.SendText("\t"); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
@@ -101,9 +101,9 @@ func (t CommandAutocompleteAndResponseTestCase) Run(asserter *logged_shell_asser
 	if t.Args != nil {
 		nextCommandToSend = strings.Join(t.Args, " ") + "\n"
 	}
-	logCommand(logger, strings.TrimSpace(nextCommandToSend))
+	logTypedText(logger, strings.TrimSpace(nextCommandToSend))
 	logNewLine(logger)
-	if err := shell.SendCommandRaw(nextCommandToSend); err != nil {
+	if err := shell.SendText(nextCommandToSend); err != nil {
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 

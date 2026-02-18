@@ -75,7 +75,7 @@ func testH6(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	for _, expected := range expectedCommands {
-		if err := shell.SendCommandRaw(upArrow); err != nil {
+		if err := shell.SendText(upArrow); err != nil {
 			return err
 		}
 		stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<UP ARROW>", expected.message)
@@ -94,7 +94,7 @@ func testH6(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Down-arrow should go forward to the echo command
-	if err := shell.SendCommandRaw(downArrow); err != nil {
+	if err := shell.SendText(downArrow); err != nil {
 		return err
 	}
 	stageHarness.Logger.Infof("Pressed %q (expecting to recall %q)", "<DOWN ARROW>", echoCommand.Command)
@@ -112,7 +112,7 @@ func testH6(stageHarness *test_case_harness.TestCaseHarness) error {
 	stageHarness.Logger.Successf("✓ Prompt line matches %q", echoCommand.Command)
 
 	// Execute the echo command
-	if err := shell.SendCommandRaw("\n"); err != nil {
+	if err := shell.SendText("\n"); err != nil {
 		return err
 	}
 	stageHarness.Logger.Infof("Executing command %q", echoCommand.Command)

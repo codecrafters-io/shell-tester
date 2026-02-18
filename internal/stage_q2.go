@@ -25,7 +25,7 @@ func testQ2(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	randomDir, err := GetShortRandomDirectory(stageHarness)
+	randomDir, err := CreateShortRandomDirInTmp(stageHarness)
 	if err != nil {
 		return err
 	}
