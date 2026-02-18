@@ -87,9 +87,9 @@ Debug = true
 [33m[tester::#WH6] [0m[92m✓ Prompt line matches "$ xyz_"[0m
 [33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting bell to ring)[0m
 [33m[tester::#WH6] [0m[92m✓ Received bell[0m
-[33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting completion options line to be "xyz_fox  xyz_owl  xyz_rat")[0m
+[33m[tester::#WH6] [0m[94mPressed "<TAB>" (expecting "xyz_fox  xyz_owl  xyz_rat" as completion options)[0m
 [33m[your-program] [0m[0mxyz_fox  xyz_owl  xyz_rat[0m
-[33m[tester::#WH6] [0m[92m✓ Expected completion options line matches "xyz_fox  xyz_owl  xyz_rat"[0m
+[33m[tester::#WH6] [0m[92m3 matching completion options found[0m
 [33m[tester::#WH6] [0m[92mReceived completion for "xyz_"[0m
 [33m[your-program] [0m[0m$ xyz_[0m
 [33m[tester::#WH6] [0m[92mTest passed.[0m

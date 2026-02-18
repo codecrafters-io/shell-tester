@@ -31,7 +31,7 @@ func testFA2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	MustLogDirTree(stageHarness.Logger, workingDirPath)
+	MustLogWorkingDirTree(stageHarness.Logger, workingDirPath)
 
 	// Start and assert prompt
 	if err := asserter.StartShellAndAssertPrompt(false); err != nil {

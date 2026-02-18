@@ -37,7 +37,7 @@ func testFA7(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	MustLogDirTree(stageHarness.Logger, workingDirPath)
+	MustLogWorkingDirTree(stageHarness.Logger, workingDirPath)
 
 	allCompletions := []string{fileBaseName, dirBaseName + "/"}
 	slices.Sort(allCompletions)

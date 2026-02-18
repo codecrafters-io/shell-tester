@@ -45,7 +45,7 @@ func testFA6(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	MustLogDirTree(stageHarness.Logger, workingDirPath)
+	MustLogWorkingDirTree(stageHarness.Logger, workingDirPath)
 
 	// Add filename to entry names
 	entryNames = append(entryNames, fileName)

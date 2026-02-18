@@ -159,9 +159,9 @@ func WriteFileWithTeardown(stageHarness *test_case_harness.TestCaseHarness, file
 	return nil
 }
 
-// MustLogDirTree logs the contents of a directory as a tree (e.g. "- foo" then "  - bar" for nested entries).
-func MustLogDirTree(logger *logger.Logger, directoryPath string) {
-	logger.PushSecondaryPrefix("CWD")
+// MustLogWorkingDirTree logs the contents of a directory as a tree (e.g. "- foo" then "  - bar" for nested entries).
+func MustLogWorkingDirTree(logger *logger.Logger, directoryPath string) {
+	logger.PushSecondaryPrefix("working_dir")
 	defer logger.PopSecondaryPrefix()
 	var mustLogDirTreeRecursive func(dirPath string, prefix string)
 
@@ -193,7 +193,7 @@ func MustLogDirTree(logger *logger.Logger, directoryPath string) {
 			}
 
 			logger.Infof("%s- %s/", prefix, name)
-			mustLogDirTreeRecursive(subPath, prefix+"    ")
+			mustLogDirTreeRecursive(subPath, prefix+"  ")
 		}
 	}
 
