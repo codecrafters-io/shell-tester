@@ -1,21 +1,24 @@
 name: Trigger Fixture Regeneration
 
+permissions:
+  contents: write
+  pull-requests: write
+
 on:
-  workflow_call:
-    inputs:
-      tester_repo:
-        description: "The repo to regenerate fixtures for"
-        required: true
-        type: string
+  pull_request:
+    types:
+      - labeled
 
 jobs:
-  trigger_pipeline:
+  regenerate_fixtures:
+    if: github.event.label.name == 'regenerate-fixtures'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref }}
           token: ${{ secrets.TESTER_FIXTURE_GENERATION_GITHUB_TOKEN }}
 
       - name: Set up Go
@@ -38,12 +41,12 @@ jobs:
         run: |
           git config --global user.email "hello@codecrafters.io"
           git config --global user.name "codecrafters-bot"
-          git remote set-url origin https://codecrafters-bot:${{ secrets.TESTER_FIXTURE_GENERATION_GITHUB_TOKEN }}@github.com/codecrafters-io/${{ inputs.tester_repo }}.git
+          git remote set-url origin https://codecrafters-bot:${{ secrets.TESTER_FIXTURE_GENERATION_GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git fetch origin ${{ github.head_ref }}
           git checkout ${{ github.head_ref }}
 
       - name: Regenerate Fixtures
-        run: ./docker_test/docker_test.sh
+        run: ./docker_test/docker_test.sh record_fixtures
 
       - name: Update Fixtures
         run: |
