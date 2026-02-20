@@ -34,14 +34,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           labels: regenerate-fixtures
 
-      - name: Set up prerequisites
-        run: |
-          if grep -q "^setup:" Makefile; then
-            make setup
-          else
-            echo "No setup target found in Makefile, skipping..."
-          fi
-
       - name: Setup git config
         run: |
           git config --global user.email "hello@codecrafters.io"
