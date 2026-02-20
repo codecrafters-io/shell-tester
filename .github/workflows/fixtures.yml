@@ -41,7 +41,8 @@ jobs:
           git checkout ${{ github.head_ref }}
 
       - name: Regenerate Fixtures
-        # We must use docker because ASH shell's behavior is different in GitHub action runners
+        # Using docker for consistency between local machine and GitHub action runners
+        # Cannot use `tester-utils` workflow for this reason
         run: ./docker_test/docker_test.sh record_fixtures
 
       - name: Update Fixtures
