@@ -1,18 +1,58 @@
 name: Trigger Fixture Regeneration
 
-permissions:
-  contents: write
-  pull-requests: write
-
 on:
-  pull_request:
-    types:
-      - labeled
+  workflow_call:
+    inputs:
+      tester_repo:
+        description: "The repo to regenerate fixtures for"
+        required: true
+        type: string
 
 jobs:
-  regenerate_fixtures:
-    if: github.event.label.name == 'regenerate-fixtures'
-    uses: codecrafters-io/tester-utils/.github/workflows/fixtures.yml@master
-    with:
-      tester_repo: shell-tester
-    secrets: inherit
+  trigger_pipeline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.TESTER_FIXTURE_GENERATION_GITHUB_TOKEN }}
+
+      - name: Set up Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.22.x
+
+      - uses: actions-ecosystem/action-create-comment@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            Triggered a [Github Actions](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) job to update fixtures.
+
+      - uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          labels: regenerate-fixtures
+
+      - name: Set up prerequisites
+        run: |
+          if grep -q "^setup:" Makefile; then
+            make setup
+          else
+            echo "No setup target found in Makefile, skipping..."
+          fi
+
+      - name: Setup git config
+        run: |
+          git config --global user.email "hello@codecrafters.io"
+          git config --global user.name "codecrafters-bot"
+          git remote set-url origin https://codecrafters-bot:${{ secrets.TESTER_FIXTURE_GENERATION_GITHUB_TOKEN }}@github.com/codecrafters-io/${{ inputs.tester_repo }}.git
+          git fetch origin ${{ github.head_ref }}
+          git checkout ${{ github.head_ref }}
+
+      - name: Regenerate Fixtures
+        run: ./docker_test/docker_test.sh
+
+      - name: Update Fixtures
+        run: |
+          git diff --quiet || (git add . && git commit -m "CI: Add regenerated fixtures" && git push)
