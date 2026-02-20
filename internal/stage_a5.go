@@ -41,12 +41,17 @@ func testA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	sort.Strings(executableNames)
 	completions := strings.Join(executableNames, "  ")
 
+	escapedExecutableNames := make([]string, len(executableNames))
+	for i, name := range executableNames {
+		escapedExecutableNames[i] = regexp.QuoteMeta(name)
+	}
+
 	err := test_cases.MultipleCompletionsTestCase{
 		RawInput:                      command,
 		TabCount:                      2,
 		ExpectedCompletionOptionsLine: completions,
 		ExpectedCompletionOptionsLineFallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile("^" + strings.Join(executableNames, `\s+`) + "$"),
+			regexp.MustCompile("^" + strings.Join(escapedExecutableNames, `\s+`) + "$"),
 		},
 		SuccessMessage:      fmt.Sprintf("Received completion for %q", command),
 		CheckForBell:        true,
