@@ -43,7 +43,7 @@ jobs:
           git checkout ${{ github.head_ref }}
 
       - name: Regenerate Fixtures
-        run: ./docker_test/docker_test.sh
+        run: ./docker_test/docker_test.sh record_fixtures
 
       - name: Update Fixtures
         run: |
