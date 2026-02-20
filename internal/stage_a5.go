@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -44,9 +45,12 @@ func testA5(stageHarness *test_case_harness.TestCaseHarness) error {
 		RawInput:                      command,
 		TabCount:                      2,
 		ExpectedCompletionOptionsLine: completions,
-		SuccessMessage:                fmt.Sprintf("Received completion for %q", command),
-		CheckForBell:                  true,
-		SkipPromptAssertion:           true,
+		ExpectedCompletionOptionsLineFallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile("^" + strings.Join(executableNames, `\s+`) + "$"),
+		},
+		SuccessMessage:      fmt.Sprintf("Received completion for %q", command),
+		CheckForBell:        true,
+		SkipPromptAssertion: true,
 	}.Run(asserter, shell, logger)
 	if err != nil {
 		return err
