@@ -8,7 +8,6 @@ Debug = true
 [33m[tester::#ZV2] [0m[92m✓ Prompt line matches "$ cat mango-"[0m
 [33m[tester::#ZV2] [0m[94mPressed "<TAB>" (expecting autocomplete to "cat mango-20.txt" followed by a space)[0m
 [33m[tester::#ZV2] [0m[92m✓ Prompt line matches "cat mango-20.txt "[0m
-[33m[tester::#ZV2] [0m[92mExtra line for record fixtures test!!![0m
 [33m[your-program] [0m[0m$ cat mango-20.txt [0m
 [33m[tester::#ZV2] [0m[92mTest passed.[0m
 
