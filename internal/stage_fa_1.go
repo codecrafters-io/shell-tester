@@ -48,7 +48,5 @@ func testFA1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	stageHarness.Logger.Successf("Extra line for record fixtures test!!!")
-
 	return logAndQuit(asserter, nil)
 }
