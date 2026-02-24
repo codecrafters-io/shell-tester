@@ -3,6 +3,7 @@ package assertions
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/screen_state"
 	"github.com/codecrafters-io/shell-tester/internal/utils"
@@ -51,6 +52,10 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 			rowDescription = "no line received"
 		} else if row.IsEmpty() {
 			rowDescription = "empty line"
+		} else if strings.HasSuffix(a.ExpectedOutput, " ") && !strings.HasSuffix(row.String(), " ") {
+			rowDescription = "no trailing space"
+		} else if !strings.HasSuffix(a.ExpectedOutput, " ") && strings.HasSuffix(row.String(), " ") {
+			rowDescription = "trailing space"
 		}
 
 		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, row.String(), rowDescription)
