@@ -207,6 +207,27 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testP3,
 			Timeout:  15 * time.Second,
 		},
+		// Background Jobs
+		{
+			Slug:     "af3",
+			TestFunc: testBG1,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "at7",
+			TestFunc: testBG2,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "jd6",
+			TestFunc: testBG3,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "dk5",
+			TestFunc: testBG4,
+			Timeout:  15 * time.Second,
+		},
 		// History
 		{
 			Slug:     "bq4",

@@ -39,10 +39,14 @@ func (t CommandResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShell
 		ExpectedOutput: commandReflection,
 	})
 
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput:   t.ExpectedOutput,
-		FallbackPatterns: t.FallbackPatterns,
-	})
+	// If the expected output is empty, don't add the single line assertion:
+	// assert the next prompt directly
+	if (t.ExpectedOutput) != "" {
+		asserter.AddAssertion(assertions.SingleLineAssertion{
+			ExpectedOutput:   t.ExpectedOutput,
+			FallbackPatterns: t.FallbackPatterns,
+		})
+	}
 
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
