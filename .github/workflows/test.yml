@@ -8,6 +8,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      
+      # TODO: Generalize using docker container across all testers
+      # Right now, we just use the docker test for recording fixtures and testing manually in this repo
       - name: Run tests (Docker)
         run: ./local_testing/docker_test.sh tests_excluding_ash
 
