@@ -54,6 +54,9 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		case PreviousJob:
 			marker = `\-`
 		}
+
+		// The regex here complies with the Bash's implementation of 'jobs'
+		// Should I add the pattern compatible with ZSH's output as well?
 		regex := regexp.MustCompile(fmt.Sprintf(
 			`\[%d\]%s\s+%s\s+%s &`,
 			outputEntry.JobNumber,
@@ -67,13 +70,9 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		})
 	}
 
-	// Only Add the assertion if there are non-zero output items
-	// For zero case: directly assert the next prompt
-	if len(t.ExpectedOutputItems) != 0 {
-		asserter.AddAssertion(&assertions.MultiLineAssertion{
-			SingleLineAssertions: allLinesAssertions,
-		})
-	}
+	asserter.AddAssertion(&assertions.MultiLineAssertion{
+		SingleLineAssertions: allLinesAssertions,
+	})
 
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
