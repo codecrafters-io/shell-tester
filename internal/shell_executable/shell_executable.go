@@ -119,6 +119,11 @@ func (b *ShellExecutable) Start(args ...string) error {
 	b.pty = pty
 	b.ptyReader = condition_reader.NewConditionReader(io.TeeReader(b.pty, b.vt))
 
+	// Stop any existing memory monitor before starting a new one
+	if b.memoryMonitor != nil {
+		b.memoryMonitor.stop()
+	}
+
 	// Start memory monitoring for RSS-based memory limiting (Linux only, no-op on other platforms)
 	b.memoryMonitor = newMemoryMonitor(b.MemoryLimitInBytes)
 	b.memoryMonitor.start(cmd.Process.Pid)
@@ -198,6 +203,7 @@ func (b *ShellExecutable) WaitForTermination() (hasTerminated bool, exitCode int
 		}
 	case <-time.After(2 * time.Second):
 		if b.memoryMonitor != nil {
+			b.oomKilled = b.memoryMonitor.wasOOMKilled()
 			b.memoryMonitor.stop()
 			b.memoryMonitor = nil
 		}

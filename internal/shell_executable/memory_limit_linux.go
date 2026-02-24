@@ -21,6 +21,7 @@ type memoryMonitor struct {
 	oomKilled atomic.Bool
 	stopChan  chan struct{}
 	wg        sync.WaitGroup
+	stopOnce  sync.Once
 }
 
 // newMemoryMonitor creates a new memory monitor with the specified limit.
@@ -82,11 +83,13 @@ func (m *memoryMonitor) wasOOMKilled() bool {
 
 // stop stops the memory monitor
 func (m *memoryMonitor) stop() {
-	if m.stopChan != nil {
-		close(m.stopChan)
-		m.wg.Wait()
-		m.stopChan = nil
-	}
+	m.stopOnce.Do(func() {
+		if m.stopChan != nil {
+			close(m.stopChan)
+			m.wg.Wait()
+			m.stopChan = nil
+		}
+	})
 }
 
 // getProcessTreeRSS returns the total RSS (in bytes) of a process and all its descendants
