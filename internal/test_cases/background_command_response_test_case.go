@@ -85,3 +85,10 @@ func (t *BackgroundCommandResponseTestCase) GetLaunchedJobNumber() int {
 	}
 	return *t.launchedJobNumber
 }
+
+func (t *BackgroundCommandResponseTestCase) GetLaunchedPGID() int {
+	if t.launchedPGID == nil {
+		panic("Codecrafters Internal Error - GetLaunchedPGID called without successful run of the test case")
+	}
+	return *t.launchedPGID
+}
