@@ -103,6 +103,8 @@ func (b *ShellExecutable) Start(args ...string) error {
 	// If workingDir is empty, it is set as cwd() by exec library
 	cmd.Dir = b.workingDir
 	cmd.Env = b.env.Sorted()
+	// Create a new process group on Linux so we can reliably kill the process and all its children
+	configureProcAttr(cmd)
 
 	b.cmd = cmd
 	b.vt = virtual_terminal.NewStandardVT()

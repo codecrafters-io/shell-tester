@@ -5,6 +5,7 @@ package shell_executable
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -64,9 +65,8 @@ func (m *memoryMonitor) monitor() {
 
 			if rss > m.limit {
 				m.oomKilled.Store(true)
-				// Kill the process group to ensure all children are terminated
-				syscall.Kill(-m.pid, syscall.SIGKILL)
-				syscall.Kill(m.pid, syscall.SIGKILL)
+				// Kill the entire process tree to ensure all children are terminated
+				killProcessTree(m.pid)
 				return
 			}
 		}
@@ -174,4 +174,36 @@ func getChildPIDs(pid int) ([]int, error) {
 	}
 
 	return children, nil
+}
+
+// configureProcAttr is a no-op stub for compatibility.
+// Process groups are not required since we use tree traversal to kill all processes.
+func configureProcAttr(cmd *exec.Cmd) {
+	// Note: We intentionally don't use Setpgid here because:
+	// 1. It requires additional capabilities that may not be available in all environments
+	// 2. The killProcessTree function handles killing the entire tree without needing process groups
+}
+
+// killProcessTree kills a process and all its descendants by traversing the process tree.
+func killProcessTree(pid int) {
+	visited := make(map[int]bool)
+	killProcessTreeRecursive(pid, visited)
+}
+
+func killProcessTreeRecursive(pid int, visited map[int]bool) {
+	if visited[pid] {
+		return
+	}
+	visited[pid] = true
+
+	// First, kill all children recursively
+	children, err := getChildPIDs(pid)
+	if err == nil {
+		for _, childPID := range children {
+			killProcessTreeRecursive(childPID, visited)
+		}
+	}
+
+	// Then kill this process
+	syscall.Kill(pid, syscall.SIGKILL)
 }
