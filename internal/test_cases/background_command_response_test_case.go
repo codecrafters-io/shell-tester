@@ -14,7 +14,7 @@ import (
 // BackgroundCommandResponseTestCase launches the given command with an & symbol
 // Launching it to the background
 // It asserts that the line that follows will match the expected fallback patterns
-// It will record the PID of the background job launched
+// It will record the job number of the background job launched
 // It asserts the next prompt immediately
 type BackgroundCommandResponseTestCase struct {
 	Command           string
@@ -52,7 +52,7 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 	matches := jobNumberRegexp.FindStringSubmatch(outputText)
 
 	if len(matches) != 3 {
-		panic(fmt.Sprintf("Codecrafters Internal Error - Shouldn't be here: Could not parse output: %q", outputText))
+		panic(fmt.Sprintf("Codecrafters Internal Error - Shouldn't be here: Could not parse background launch output: %q", outputText))
 	}
 
 	jobNumberStr := matches[1]

@@ -55,7 +55,7 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 			marker = `\-`
 		}
 
-		// The regex here complies with the Bash's implementation of 'jobs'
+		// TODO: Remove after PR review: The regex here complies with the Bash's implementation of 'jobs'
 		// Should I add the pattern compatible with ZSH's output as well?
 		regex := regexp.MustCompile(fmt.Sprintf(
 			`\[%d\]%s\s+%s\s+%s &`,
