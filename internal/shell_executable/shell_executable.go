@@ -204,6 +204,10 @@ func (b *ShellExecutable) WaitForTermination() (hasTerminated bool, exitCode int
 		rawExitCode := b.cmd.ProcessState.ExitCode()
 
 		if rawExitCode == -1 {
+			// Process was killed by a signal. If it was OOM-killed, treat as terminated.
+			if b.oomKilled {
+				return true, rawExitCode
+			}
 			// We can get isTerminated as false if the program is terminated by SIGKILL too, but that seems unlikely here
 			return false, 0
 		} else {
