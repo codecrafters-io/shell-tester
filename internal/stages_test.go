@@ -97,6 +97,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/filename_completions/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"background_jobs_pass_bash": {
+			StageSlugs:          []string{"af3", "at7"},
+			CodePath:            "./test_helpers/bash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/bash/background_jobs/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"pipelines_pass_bash": {
 			StageSlugs:          []string{"br6", "ny9", "xk3"},
 			CodePath:            "./test_helpers/bash",
@@ -204,6 +211,7 @@ func normalizeTesterOutput(testerOutput []byte) []byte {
 		"ls-la-output-line":               {regexp.MustCompile(`-rw-r--r-- .*`)},
 		"PATH is now: <path>":             {regexp.MustCompile(`PATH is now: .*`)},
 		"/tmp/":                           {regexp.MustCompile(`/var/folders/.*/.*/.*/`)},
+		"[your-program] [JOB_NUM] PID":    {regexp.MustCompile(`\[your-program\] [\d+] \d+`)},
 	}
 
 	for replacement, regexes := range replacements {

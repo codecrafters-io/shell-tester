@@ -191,22 +191,6 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testFA7,
 			Timeout:  15 * time.Second,
 		},
-		// Pipelines
-		{
-			Slug:     "br6",
-			TestFunc: testP1,
-			Timeout:  15 * time.Second,
-		},
-		{
-			Slug:     "ny9",
-			TestFunc: testP2,
-			Timeout:  15 * time.Second,
-		},
-		{
-			Slug:     "xk3",
-			TestFunc: testP3,
-			Timeout:  15 * time.Second,
-		},
 		// Background Jobs
 		{
 			Slug:     "af3",
@@ -226,6 +210,22 @@ var testerDefinition = tester_definition.TesterDefinition{
 		{
 			Slug:     "dk5",
 			TestFunc: testBG4,
+			Timeout:  15 * time.Second,
+		},
+		// Pipelines
+		{
+			Slug:     "br6",
+			TestFunc: testP1,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "ny9",
+			TestFunc: testP2,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "xk3",
+			TestFunc: testP3,
 			Timeout:  15 * time.Second,
 		},
 		// History
