@@ -26,7 +26,20 @@ import (
 // ErrProgramExited is returned when the program exits
 var ErrProgramExited = errors.New("Program exited")
 
+// ErrMemoryLimitExceeded is returned when a process exceeds its memory limit
+var ErrMemoryLimitExceeded = errors.New("process exceeded memory limit")
+
+const defaultMemoryLimitBytes = 2 * 1024 * 1024 * 1024 // 2GB
+
 type ShellExecutable struct {
+	// MemoryLimitInBytes sets the maximum memory the process can use (Linux only).
+	// If exceeded, the process will be killed and an error will be returned.
+	// Defaults to 2GB. Set to 0 to disable memory limiting.
+	MemoryLimitInBytes int64
+
+	memoryMonitor *memoryMonitor // Monitors process memory usage and kills if limit exceeded
+	oomKilled     bool           // set when monitor is stopped after process exits
+
 	executable    *executable.Executable
 	stageLogger   *logger.Logger
 	programLogger *logger.Logger
@@ -45,9 +58,10 @@ type ShellExecutable struct {
 
 func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellExecutable {
 	b := &ShellExecutable{
-		executable:    stageHarness.NewExecutable(),
-		stageLogger:   stageHarness.Logger,
-		programLogger: logger.GetLogger(stageHarness.Logger.IsDebug, "[your-program] "),
+		executable:         stageHarness.NewExecutable(),
+		stageLogger:        stageHarness.Logger,
+		programLogger:      logger.GetLogger(stageHarness.Logger.IsDebug, "[your-program] "),
+		MemoryLimitInBytes: defaultMemoryLimitBytes,
 	}
 
 	b.env = environ.New(os.Environ())
@@ -55,6 +69,22 @@ func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellE
 	// TODO: Kill pty process?
 	// stageHarness.RegisterTeardownFunc(func() { b.Kill() })
 
+	return b
+}
+
+// NewShellExecutableForTest creates a ShellExecutable that runs the executable at path.
+// Used for testing (e.g. memory limit tests). The logger can be nil; a quiet logger will be used.
+func NewShellExecutableForTest(path string, stageLogger *logger.Logger) *ShellExecutable {
+	if stageLogger == nil {
+		stageLogger = logger.GetQuietLogger("")
+	}
+	b := &ShellExecutable{
+		executable:         executable.NewExecutable(path),
+		stageLogger:        stageLogger,
+		programLogger:      logger.GetLogger(stageLogger.IsDebug, "[your-program] "),
+		MemoryLimitInBytes: defaultMemoryLimitBytes,
+	}
+	b.env = environ.New(os.Environ())
 	return b
 }
 
@@ -89,6 +119,7 @@ func (b *ShellExecutable) Start(args ...string) error {
 	// If workingDir is empty, it is set as cwd() by exec library
 	cmd.Dir = b.workingDir
 	cmd.Env = b.env.Sorted()
+	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 
 	b.cmd = cmd
 	b.vt = virtual_terminal.NewStandardVT()
@@ -104,6 +135,10 @@ func (b *ShellExecutable) Start(args ...string) error {
 
 	b.pty = pty
 	b.ptyReader = condition_reader.NewConditionReader(io.TeeReader(b.pty, b.vt))
+
+	// Start memory monitoring for RSS-based memory limiting (Linux only, no-op on other platforms)
+	b.memoryMonitor = newMemoryMonitor(b.MemoryLimitInBytes)
+	b.memoryMonitor.start(cmd.Process.Pid)
 
 	return nil
 }
@@ -159,6 +194,13 @@ func (b *ShellExecutable) WaitForTermination() (hasTerminated bool, exitCode int
 
 	select {
 	case <-waitCompleted:
+		// Stop memory monitor and cache OOM result before clearing
+		if b.memoryMonitor != nil {
+			b.oomKilled = b.memoryMonitor.wasOOMKilled()
+			b.memoryMonitor.stop()
+			b.memoryMonitor = nil
+		}
+
 		rawExitCode := b.cmd.ProcessState.ExitCode()
 
 		if rawExitCode == -1 {
@@ -208,6 +250,40 @@ func wrapReaderError(readerErr error) error {
 	}
 
 	return readerErr
+}
+
+// formatBytesHumanReadable formats bytes as a human-readable string (e.g., "50 MB", "2 GB")
+func formatBytesHumanReadable(bytes int64) string {
+	const (
+		KB = 1024
+		MB = KB * 1024
+		GB = MB * 1024
+	)
+	switch {
+	case bytes >= GB:
+		return fmt.Sprintf("%d GB", bytes/GB)
+	case bytes >= MB:
+		return fmt.Sprintf("%d MB", bytes/MB)
+	case bytes >= KB:
+		return fmt.Sprintf("%d KB", bytes/KB)
+	default:
+		return fmt.Sprintf("%d B", bytes)
+	}
+}
+
+// WasOOMKilled returns true if the process was killed due to exceeding the memory limit.
+// Only meaningful after the process has terminated (e.g. after WaitForTermination returns true).
+func (b *ShellExecutable) WasOOMKilled() bool {
+	return b.oomKilled
+}
+
+// MemoryLimitExceededError returns an error describing that the process exceeded its memory limit,
+// or nil if the process was not OOM killed. Use after WaitForTermination returns true.
+func (b *ShellExecutable) MemoryLimitExceededError() error {
+	if !b.oomKilled {
+		return nil
+	}
+	return fmt.Errorf("process exceeded memory limit (%s): %w", formatBytesHumanReadable(b.MemoryLimitInBytes), ErrMemoryLimitExceeded)
 }
 
 func (b *ShellExecutable) GetLogger() *logger.Logger {
