@@ -14,6 +14,7 @@ import (
 
 	"github.com/codecrafters-io/shell-tester/internal/condition_reader"
 	"github.com/codecrafters-io/shell-tester/internal/screen_state"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
 	"github.com/codecrafters-io/tester-utils/executable"
 	"github.com/codecrafters-io/tester-utils/logger"
@@ -88,6 +89,9 @@ func (b *ShellExecutable) SetWorkingDirectory(workingDirPath string) {
 }
 
 func (b *ShellExecutable) Start(args ...string) error {
+	b.stageLogger.Infof("%s", b.getInitialLogLine(args...))
+
+	b.Setenv("PS1", utils.PROMPT)
 
 	absolutePath, err := filepath.Abs(b.executable.Path)
 	if err != nil {
@@ -197,11 +201,6 @@ func (b *ShellExecutable) WaitForTermination() (hasTerminated bool, exitCode int
 			return true, rawExitCode
 		}
 	case <-time.After(2 * time.Second):
-		if b.memoryMonitor != nil {
-			b.oomKilled = b.memoryMonitor.wasOOMKilled()
-			b.memoryMonitor.stop()
-			b.memoryMonitor = nil
-		}
 		return false, 0
 	}
 }
