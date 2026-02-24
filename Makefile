@@ -174,7 +174,9 @@ endef
 define _BACKGROUND_JOBS_STAGES
 [ \
 	{"slug":"af3","tester_log_prefix":"tester::#af3","title":"Stage#1: The jobs builtin"}, \
-	{"slug":"at7","tester_log_prefix":"tester::#at7","title":"Stage#2: Background launch"} \
+	{"slug":"at7","tester_log_prefix":"tester::#at7","title":"Stage#2: Starting background jobs"}, \
+	{"slug":"jd6","tester_log_prefix":"tester::#jd6","title":"Stage#3: List a single job"}, \
+	{"slug":"dk5","tester_log_prefix":"tester::#dk5","title":"Stage#4: List multiple jobs"} \
 ]
 endef
 

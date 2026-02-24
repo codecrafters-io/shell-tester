@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	UnlabeledJob = iota
+	UnmarkedJob = iota
 	CurrentJob
 	PreviousJob
 )
@@ -24,7 +24,7 @@ type JobsBuiltinOutputEntry struct {
 	// LaunchCommand: Command that was run and sent to the background without trailing &
 	LaunchCommand string
 	// Unlabeled | Current | Previous
-	Label int
+	Marker int
 }
 
 type JobsBuiltinResponseTestCase struct {
@@ -48,7 +48,7 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 
 	for _, outputEntry := range t.ExpectedOutputItems {
 		marker := `\s`
-		switch outputEntry.Label {
+		switch outputEntry.Marker {
 		case CurrentJob:
 			marker = `\+`
 		case PreviousJob:

@@ -1259,6 +1259,20 @@ stages:
     marketing_md: |-
       In this stage, you'll implement launching commands in the background.
 
+  - slug: "jd6"
+    primary_extension_slug: "background-jobs"
+    name: "List a single job"
+    difficulty: medium
+    marketing_md: |-
+      In this stage, you'll implement the `jobs` builtin so it can list a single background job.
+
+  - slug: "dk5"
+    primary_extension_slug: "background-jobs"
+    name: "List multiple jobs"
+    difficulty: medium
+    marketing_md: |-
+      In this stage, you'll extend the `jobs` builtin so it can list background jobs.
+
   - slug: "br6"
     primary_extension_slug: "pipelines"
     name: "Dual-command pipeline"
