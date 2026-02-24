@@ -381,4 +381,4 @@ test_debug: build
 	$(call run_debug,$(NAVIGATION_STAGES),debug)
 	$(call run_debug,$(QUOTING_STAGES),debug)
 	$(call run_debug,$(REDIRECTIONS_STAGES),debug)
-	$(call run_debug,$(COMPLETIONS_STAGES) ,debug)
+	$(call run_debug,$(COMPLETIONS_STAGES),debug)
