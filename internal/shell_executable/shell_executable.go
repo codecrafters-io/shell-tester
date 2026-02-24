@@ -103,7 +103,6 @@ func (b *ShellExecutable) Start(args ...string) error {
 	// If workingDir is empty, it is set as cwd() by exec library
 	cmd.Dir = b.workingDir
 	cmd.Env = b.env.Sorted()
-	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 
 	b.cmd = cmd
 	b.vt = virtual_terminal.NewStandardVT()
@@ -198,6 +197,9 @@ func (b *ShellExecutable) WaitForTermination() (hasTerminated bool, exitCode int
 			return true, rawExitCode
 		}
 	case <-time.After(2 * time.Second):
+		if b.memoryMonitor != nil {
+			b.memoryMonitor.stop()
+		}
 		return false, 0
 	}
 }
