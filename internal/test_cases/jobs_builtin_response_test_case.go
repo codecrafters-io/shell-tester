@@ -47,7 +47,7 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	allLinesAssertions := []assertions.SingleLineAssertion{}
 
 	for _, outputEntry := range t.ExpectedOutputItems {
-		marker := `\s`
+		marker := ` `
 		switch outputEntry.Label {
 		case CurrentJob:
 			marker = `\+`
