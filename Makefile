@@ -175,8 +175,6 @@ define _BACKGROUND_JOBS_STAGES
 [ \
 	{"slug":"af3","tester_log_prefix":"tester::#af3","title":"Stage#1: The jobs builtin"}, \
 	{"slug":"at7","tester_log_prefix":"tester::#at7","title":"Stage#1: Background launch"}, \
-	{"slug":"jd6","tester_log_prefix":"tester::#jd6","title":"Stage#1: List one job"}, \
-	{"slug":"dk5","tester_log_prefix":"tester::#dk5","title":"Stage#1: List all jobs"} \
 ]
 endef
 
