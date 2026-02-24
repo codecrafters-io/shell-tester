@@ -18,7 +18,6 @@ import (
 // It asserts the next prompt immediately
 type BackgroundCommandResponseTestCase struct {
 	Command           string
-	launchedPGID      *int
 	launchedJobNumber *int
 	SuccessMessage    string
 }
@@ -48,6 +47,7 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 	outputLine := asserter.Shell.GetScreenState().GetRow(asserter.GetLastLoggedRowIndex())
 	outputText := outputLine.String()
 
+	// Keeping the capture group for PGID as well: we might need it later
 	jobNumberRegexp := regexp.MustCompile(`\[(\d+)\]\s+(\d+)`)
 	matches := jobNumberRegexp.FindStringSubmatch(outputText)
 
@@ -56,20 +56,13 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 	}
 
 	jobNumberStr := matches[1]
-	pgidStr := matches[2]
 
 	jobNumber, err := strconv.Atoi(jobNumberStr)
 	if err != nil {
 		panic(fmt.Sprintf("Codecrafters Internal Error - Shouldn't be here: Could not parse job number from output: %q", outputText))
 	}
 
-	pgid, err := strconv.Atoi(pgidStr)
-	if err != nil {
-		panic(fmt.Sprintf("Codecrafters Internal Error - Shouldn't be here: Could not parse PGID from output: %q", outputText))
-	}
-
 	t.launchedJobNumber = &jobNumber
-	t.launchedPGID = &pgid
 
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
