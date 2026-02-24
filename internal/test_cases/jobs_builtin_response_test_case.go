@@ -57,16 +57,21 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 
 		// TODO: Remove after PR review: The regex here complies with the Bash's implementation of 'jobs'
 		// Should I add the pattern compatible with ZSH's output as well?
-		regex := regexp.MustCompile(fmt.Sprintf(
-			`\[%d\]%s\s+%s\s+%s &`,
+		regexString := fmt.Sprintf(
+			`\[%d\]%s\s+%s\s+%s`,
 			outputEntry.JobNumber,
 			marker,
 			regexp.QuoteMeta(outputEntry.Status),
-			regexp.QuoteMeta(outputEntry.LaunchCommand)),
+			regexp.QuoteMeta(outputEntry.LaunchCommand),
 		)
 
+		// jobs output displays an additional & for the processes that are running
+		if outputEntry.Status == "Running" {
+			regexString += " &"
+		}
+
 		allLinesAssertions = append(allLinesAssertions, assertions.SingleLineAssertion{
-			FallbackPatterns: []*regexp.Regexp{regex},
+			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(regexString)},
 		})
 	}
 

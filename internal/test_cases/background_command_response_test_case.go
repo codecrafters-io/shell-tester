@@ -64,7 +64,10 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 
 	t.launchedJobNumber = &jobNumber
 
-	logger.Successf("%s", t.SuccessMessage)
+	if t.SuccessMessage != "" {
+		logger.Successf("%s", t.SuccessMessage)
+	}
+
 	return nil
 }
 

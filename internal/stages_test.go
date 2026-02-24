@@ -98,7 +98,7 @@ func TestStages(t *testing.T) {
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"background_jobs_pass_bash": {
-			StageSlugs:          []string{"af3", "at7", "jd6", "dk5"},
+			StageSlugs:          []string{"af3", "at7", "jd6", "dk5", "ma9", "rq2", "bv8", "fy4"},
 			CodePath:            "./test_helpers/bash",
 			ExpectedExitCode:    0,
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/background_jobs/pass",
