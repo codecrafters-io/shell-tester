@@ -23,7 +23,7 @@ type JobsBuiltinOutputEntry struct {
 	Status string
 	// LaunchCommand: Command that was run and sent to the background without trailing &
 	LaunchCommand string
-	// Unlabeled | Current | Previous
+	// Unmarked | Current | Previous
 	Marker int
 }
 
