@@ -10,7 +10,7 @@ Debug = true
 [33m[tester::#AT7] [0m[94mRunning tests for Stage #AT7 (at7)[0m
 [33m[tester::#AT7] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2257[0m
+[33m[your-program] [0m[0m[1] 2151[0m
 [33m[tester::#AT7] [0m[92m✓ Received next prompt[0m
 [33m[your-program] [0m[0m$ [0m
 [33m[tester::#AT7] [0m[92mTest passed.[0m
@@ -18,7 +18,7 @@ Debug = true
 [33m[tester::#JD6] [0m[94mRunning tests for Stage #JD6 (jd6)[0m
 [33m[tester::#JD6] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2259[0m
+[33m[your-program] [0m[0m[1] 2154[0m
 [33m[tester::#JD6] [0m[92m✓ Received next prompt[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    sleep 100 &[0m
@@ -29,25 +29,25 @@ Debug = true
 [33m[tester::#DK5] [0m[94mRunning tests for Stage #DK5 (dk5)[0m
 [33m[tester::#DK5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2261[0m
+[33m[your-program] [0m[0m[1] 2157[0m
 [33m[tester::#DK5] [0m[92m✓ Received next prompt[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    sleep 100 &[0m
-[33m[tester::#DK5] [0m[92mExpected entry for jobs builtin found[0m
+[33m[tester::#DK5] [0m[92mExpected 1 entry for jobs builtin found[0m
 [33m[your-program] [0m[0m$ sleep 200 &[0m
-[33m[your-program] [0m[0m[2] 2266[0m
+[33m[your-program] [0m[0m[2] 2159[0m
 [33m[tester::#DK5] [0m[92m✓ Received next prompt[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]-  Running                    sleep 100 &[0m
 [33m[your-program] [0m[0m[2]+  Running                    sleep 200 &[0m
-[33m[tester::#DK5] [0m[92mExpected entry for jobs builtin found[0m
+[33m[tester::#DK5] [0m[92mExpected 2 entries for jobs builtin found[0m
 [33m[your-program] [0m[0m$ sleep 300 &[0m
-[33m[your-program] [0m[0m[3] 2267[0m
+[33m[your-program] [0m[0m[3] 2160[0m
 [33m[tester::#DK5] [0m[92m✓ Received next prompt[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]   Running                    sleep 100 &[0m
 [33m[your-program] [0m[0m[2]-  Running                    sleep 200 &[0m
 [33m[your-program] [0m[0m[3]+  Running                    sleep 300 &[0m
-[33m[tester::#DK5] [0m[92mExpected entry for jobs builtin found[0m
+[33m[tester::#DK5] [0m[92mExpected 3 entries for jobs builtin found[0m
 [33m[your-program] [0m[0m$ [0m
 [33m[tester::#DK5] [0m[92mTest passed.[0m

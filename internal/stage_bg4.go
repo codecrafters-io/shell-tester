@@ -1,11 +1,14 @@
 package internal
 
 import (
+	"fmt"
+
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
+	"github.com/dustin/go-humanize/english"
 )
 
 func testBG4(stageHarness *test_case_harness.TestCaseHarness) error {
@@ -72,7 +75,7 @@ func launchBgCommandAndAssertJobs(asserter *logged_shell_asserter.LoggedShellAss
 
 		jobsTestCase := test_cases.JobsBuiltinResponseTestCase{
 			ExpectedOutputItems: jobsOutputEntries,
-			SuccessMessage:      "Expected entry for jobs builtin found",
+			SuccessMessage:      fmt.Sprintf("Expected %s for jobs builtin found", english.Plural(len(jobsOutputEntries), "entry", "entries")),
 		}
 
 		if err := jobsTestCase.Run(asserter, shell, logger); err != nil {
