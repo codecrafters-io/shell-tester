@@ -12,9 +12,15 @@ import (
 )
 
 // jobsBuiltinOutputLineRegex matches a single jobs output line and captures:
-// 1. job id (integer), 2. marker (+ or - or space), 3. status (e.g. "Running" or "Exit 1"), 4. launch command (rest of line).
-// Status uses .+? (non-greedy) so "Running" vs "Exit 1" and the rest is the launch command.
-var jobsBuiltinOutputLineRegex = regexp.MustCompile(`^\[(\d+)\]\s*([\+\-\s])\s+(.+?)\s+(.+)$`)
+// 1. job id
+// 2. optional whitespace between job id and marker (+/-/space)
+// 3. marker (+/-/space)
+// 4. whitespaces
+// 5. Status (Could be a single non whitespace like "Done", "Running", or could be sth like "1 Exit"; This last case we'll be used in future extension
+// 6. Whitespaces
+// 7. Launch command
+// 8. Optional & sign that bash uses
+var jobsBuiltinOutputLineRegex = regexp.MustCompile(`^\[(\d+)\]\s*([\+\-\s])\s+(\S+( )?\S+)\s+(.*)( &)$`)
 
 const (
 	UnmarkedJob = iota
@@ -101,14 +107,14 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 func validateJobsOutputLineWithCaptures(outputText string, expectedEntry JobsBuiltinOutputEntry) error {
 	submatches := jobsBuiltinOutputLineRegex.FindStringSubmatch(outputText)
 
-	if len(submatches) < 5 {
+	if len(submatches) < 6 {
 		panic("Codecrafters Internal Error: Shouldn't be here - Could not parse jobs output line")
 	}
 
 	capturedJobIDStr := submatches[1]
 	capturedMarkerStr := submatches[2]
 	capturedStatusStr := submatches[3]
-	capturedLaunchCommandStr := submatches[4]
+	capturedLaunchCommandStr := submatches[5]
 
 	capturedMarker := parsedMarkerToMarkerConstant(capturedMarkerStr)
 
