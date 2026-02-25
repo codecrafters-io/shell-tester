@@ -10,6 +10,9 @@ import (
 )
 
 // SingleLineAssertion asserts that a single line of output matches a given string or regex pattern(s)
+// If ExpectedOutput is provided, it should be non-empty
+// To assert an empty line, use EmptyLineAssertion instead, instead of setting ExpectedOutput to empty string
+// If ExpectedOutput is not provided, fallback patterns are expected
 type SingleLineAssertion struct {
 	// ExpectedOutput is the expected output string to match against
 	ExpectedOutput string
@@ -47,7 +50,8 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 	}
 
 	// If none of the fallback patterns match, compare against the expected otuput
-	if row.String() == a.ExpectedOutput {
+	// Expected output is only valid for non empty case
+	if a.ExpectedOutput != "" && row.String() == a.ExpectedOutput {
 		return processedRowCount, nil
 	}
 
