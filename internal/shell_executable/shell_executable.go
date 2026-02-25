@@ -184,13 +184,11 @@ func (b *ShellExecutable) WaitForTermination() (hasTerminated bool, exitCode int
 	case <-waitCompleted:
 		// Stop memory monitor and cache OOM result before clearing
 		if b.memoryMonitor != nil {
-			b.oomKilled = b.memoryMonitor.wasOOMKilled()
-			b.memoryMonitor.stop()
-			b.memoryMonitor = nil
-
-			if b.oomKilled {
+			if b.WasOOMKilled() {
 				return true, 128 + int(syscall.SIGKILL) // 137, conventional for SIGKILL
 			}
+			b.memoryMonitor.stop()
+			b.memoryMonitor = nil
 		}
 
 		rawExitCode := b.cmd.ProcessState.ExitCode()
@@ -268,10 +266,19 @@ func formatBytesHumanReadable(bytes int64) string {
 	}
 }
 
+func (b *ShellExecutable) WasOOMKilled() bool {
+	if b.memoryMonitor != nil && b.memoryMonitor.wasOOMKilled() {
+		b.oomKilled = true
+		b.memoryMonitor.stop()
+		b.memoryMonitor = nil
+	}
+	return b.oomKilled
+}
+
 // MemoryLimitExceededError returns an error describing that the process exceeded its memory limit,
-// or nil if the process was not OOM killed. Use after WaitForTermination returns true.
+// or nil if the process was not OOM killed.
 func (b *ShellExecutable) MemoryLimitExceededError() error {
-	if !b.oomKilled {
+	if !b.WasOOMKilled() {
 		return nil
 	}
 	return fmt.Errorf("process exceeded memory limit (%s): %w", formatBytesHumanReadable(b.MemoryLimitInBytes), ErrMemoryLimitExceeded)

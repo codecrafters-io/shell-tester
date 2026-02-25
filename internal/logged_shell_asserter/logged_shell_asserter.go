@@ -98,6 +98,10 @@ func (a *LoggedShellAsserter) assert(withoutPrompt bool, readTimeout time.Durati
 		}
 	}
 
+	if a.Shell.WasOOMKilled() {
+		return a.Shell.MemoryLimitExceededError()
+	}
+
 	return nil
 }
 
