@@ -46,8 +46,9 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 		}
 	}
 
-	// If none of the fallback patterns match, compare against the expected otuput
-	if row.String() == a.ExpectedOutput {
+	// If none of the fallback patterns match, compare against the expected output
+	// Only check ExpectedOutput if it was actually provided (non-empty)
+	if a.ExpectedOutput != "" && row.String() == a.ExpectedOutput {
 		return processedRowCount, nil
 	}
 
