@@ -33,8 +33,9 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 		ExpectedOutput: commandReflection,
 	})
 
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		FallbackPatterns: []*regexp.Regexp{
+	// We first match against the format
+	asserter.AddAssertion(assertions.SingleLineRegexAssertion{
+		ExpectedRegexPatterns: []*regexp.Regexp{
 			regexp.MustCompile(`\[\d+\]\s+\d+`),
 		},
 	})
@@ -43,6 +44,7 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 		return err
 	}
 
+	// We match the values later to produce a verbose error message
 	outputLine := asserter.Shell.GetScreenState().GetRow(asserter.GetLastLoggedRowIndex())
 	outputText := outputLine.String()
 

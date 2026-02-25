@@ -10,9 +10,6 @@ import (
 )
 
 // SingleLineAssertion asserts that a single line of output matches a given string or regex pattern(s)
-// If ExpectedOutput is provided, it should be non-empty
-// To assert an empty line, use EmptyLineAssertion instead, instead of setting ExpectedOutput to empty string
-// If ExpectedOutput is not provided, fallback patterns are expected
 type SingleLineAssertion struct {
 	// ExpectedOutput is the expected output string to match against
 	ExpectedOutput string
@@ -31,8 +28,8 @@ func (a SingleLineAssertion) Inspect() string {
 }
 
 func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowIndex int) (processedRowCount int, err *AssertionError) {
-	if a.ExpectedOutput == "" && len(a.FallbackPatterns) == 0 {
-		panic("CodeCrafters Internal Error: ExpectedOutput or fallbackPatterns must be provided")
+	if a.ExpectedOutput == "" {
+		panic("CodeCrafters Internal Error: ExpectedOutput must be provided")
 	}
 
 	processedRowCount = 1
@@ -42,59 +39,40 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 
 	row := screenState.GetRow(startRowIndex)
 
-	// Match against fallback patterns
 	for _, pattern := range a.FallbackPatterns {
 		if pattern.Match([]byte(row.String())) {
 			return processedRowCount, nil
 		}
 	}
 
-	// If none of the fallback patterns match, compare against the expected otuput
-	// Expected output is only valid for non empty case
-	if a.ExpectedOutput != "" && row.String() == a.ExpectedOutput {
-		return processedRowCount, nil
-	}
+	if row.String() != a.ExpectedOutput {
+		rowDescription := ""
 
-	// Handle error case
-
-	rowDescription := ""
-
-	if startRowIndex > screenState.GetLastLoggableRowIndex() {
-		rowDescription = "no line received"
-	} else if row.IsEmpty() {
-		rowDescription = "empty line"
-	} else if strings.HasSuffix(a.ExpectedOutput, " ") && !strings.HasSuffix(row.String(), " ") {
-		rowDescription = "no trailing space"
-	} else if !strings.HasSuffix(a.ExpectedOutput, " ") && strings.HasSuffix(row.String(), " ") {
-		rowDescription = "trailing space"
-	}
-
-	var detailedErrorMessage string
-
-	// If fallback patterns were only provided and not the expected output
-	// we must build the error message indicating the fallback patterns instead of the expected output
-	if a.ExpectedOutput == "" {
-		detailedErrorMessage = utils.BuildColoredErrorMessageForFallbackPatternMismatch(a.FallbackPatterns, row.String(), rowDescription)
-	} else {
-		detailedErrorMessage = utils.BuildColoredErrorMessageForExpectedOutputMismatch(a.ExpectedOutput, row.String(), rowDescription)
-	}
-
-	// If the line won't be logged, we say "didn't find line ..." instead of "line does not match expected ..."
-	if startRowIndex > screenState.GetLastLoggableRowIndex() {
-		return 0, &AssertionError{
-			ErrorRowIndex: startRowIndex,
-			Message:       "Didn't find expected line.\n" + detailedErrorMessage,
+		if startRowIndex > screenState.GetLastLoggableRowIndex() {
+			rowDescription = "no line received"
+		} else if row.IsEmpty() {
+			rowDescription = "empty line"
+		} else if strings.HasSuffix(a.ExpectedOutput, " ") && !strings.HasSuffix(row.String(), " ") {
+			rowDescription = "no trailing space"
+		} else if !strings.HasSuffix(a.ExpectedOutput, " ") && strings.HasSuffix(row.String(), " ") {
+			rowDescription = "trailing space"
 		}
-	}
 
-	// If the line was found, say that "line does not match expected..."
-	expectedEntity := "value"
-	if a.ExpectedOutput == "" {
-		expectedEntity = "pattern"
-	}
+		detailedErrorMessage := utils.BuildColoredErrorMessageForExpectedOutputMismatch(a.ExpectedOutput, row.String(), rowDescription)
 
-	return 0, &AssertionError{
-		ErrorRowIndex: startRowIndex,
-		Message:       "Line does not match expected " + expectedEntity + ".\n" + detailedErrorMessage,
+		// If the line won't be logged, we say "didn't find line ..." instead of "line does not match expected ..."
+		if startRowIndex > screenState.GetLastLoggableRowIndex() {
+			return 0, &AssertionError{
+				ErrorRowIndex: startRowIndex,
+				Message:       "Didn't find expected line.\n" + detailedErrorMessage,
+			}
+		} else {
+			return 0, &AssertionError{
+				ErrorRowIndex: startRowIndex,
+				Message:       "Line does not match expected value.\n" + detailedErrorMessage,
+			}
+		}
+	} else {
+		return processedRowCount, nil
 	}
 }
