@@ -76,6 +76,7 @@ func GetRegex101Link(pattern string, testString string) string {
 
 // Hyperlink returns terminal escape sequences so that displayText is shown as clickable link to targetURL.
 // Uses OSC 8 (e.g. supported by iTerm2, VS Code terminal, WezTerm). Terminals that don't support it show displayText only.
+// Ref. https://en.wikipedia.org/wiki/ANSI_escape_code#Control_Sequence_Introducer_commands
 func Hyperlink(targetURL string, displayText string) string {
 	osc8Start := "\033]8;;"
 	osc8End := "\033\\"
