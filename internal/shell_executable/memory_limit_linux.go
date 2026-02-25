@@ -62,8 +62,6 @@ func (m *memoryMonitor) monitor() {
 				return
 			}
 
-			fmt.Println("⛳ RSS:", rss)
-
 			if rss > m.limit {
 				m.oomKilled.Store(true)
 				// Kill the process group to ensure all children are terminated
