@@ -268,6 +268,13 @@ func formatBytesHumanReadable(bytes int64) string {
 }
 
 func (b *ShellExecutable) WasOOMKilled() bool {
+	fmt.Println("⛳ WasOOMKilled: b.oomKilled:", b.oomKilled)
+	fmt.Println("⛳ WasOOMKilled: b.memoryMonitor == nil:", b.memoryMonitor == nil)
+
+	if b.memoryMonitor != nil {
+		fmt.Println("⛳ WasOOMKilled: b.memoryMonitor.wasOOMKilled():", b.memoryMonitor.wasOOMKilled())
+	}
+
 	if b.memoryMonitor != nil && b.memoryMonitor.wasOOMKilled() {
 		b.oomKilled = true
 		b.memoryMonitor.stop()
