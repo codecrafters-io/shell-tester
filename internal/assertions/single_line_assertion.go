@@ -3,6 +3,7 @@ package assertions
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/screen_state"
 	"github.com/codecrafters-io/shell-tester/internal/utils"
@@ -27,8 +28,8 @@ func (a SingleLineAssertion) Inspect() string {
 }
 
 func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowIndex int) (processedRowCount int, err *AssertionError) {
-	if a.ExpectedOutput == "" && len(a.FallbackPatterns) == 0 {
-		panic("CodeCrafters Internal Error: ExpectedOutput or fallbackPatterns must be provided")
+	if a.ExpectedOutput == "" {
+		panic("CodeCrafters Internal Error: ExpectedOutput must be provided")
 	}
 
 	processedRowCount = 1
@@ -51,9 +52,13 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 			rowDescription = "no line received"
 		} else if row.IsEmpty() {
 			rowDescription = "empty line"
+		} else if strings.HasSuffix(a.ExpectedOutput, " ") && !strings.HasSuffix(row.String(), " ") {
+			rowDescription = "no trailing space"
+		} else if !strings.HasSuffix(a.ExpectedOutput, " ") && strings.HasSuffix(row.String(), " ") {
+			rowDescription = "trailing space"
 		}
 
-		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, row.String(), rowDescription)
+		detailedErrorMessage := utils.BuildColoredErrorMessageForExpectedOutputMismatch(a.ExpectedOutput, row.String(), rowDescription)
 
 		// If the line won't be logged, we say "didn't find line ..." instead of "line does not match expected ..."
 		if startRowIndex > screenState.GetLastLoggableRowIndex() {

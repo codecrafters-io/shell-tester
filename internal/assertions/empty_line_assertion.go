@@ -30,7 +30,7 @@ func (a EmptyLineAssertion) Run(screenState screen_state.ScreenState, startRowIn
 	}
 
 	// Build error message
-	detailedErrorMessage := utils.BuildColoredErrorMessage("(empty line)", row.String(), "")
+	detailedErrorMessage := utils.BuildColoredErrorMessageForExpectedOutputMismatch("(empty line)", row.String(), "")
 	message := "Line is not empty.\n" + detailedErrorMessage
 
 	return 0, &AssertionError{

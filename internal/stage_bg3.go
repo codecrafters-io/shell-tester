@@ -19,8 +19,9 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Launch a program in the background
 	backgroundLaunchCommand := "sleep 100"
 	backgroundLaunchTestCase := test_cases.BackgroundCommandResponseTestCase{
-		Command:        backgroundLaunchCommand,
-		SuccessMessage: "✓ Received next prompt",
+		Command:           backgroundLaunchCommand,
+		SuccessMessage:    "✓ Received next prompt",
+		ExpectedJobNumber: 1,
 	}
 
 	if err := backgroundLaunchTestCase.Run(asserter, shell, logger); err != nil {
@@ -35,7 +36,7 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 			LaunchCommand: backgroundLaunchCommand,
 			Marker:        test_cases.CurrentJob,
 		}},
-		SuccessMessage: "Expected entry for jobs builtin found",
+		SuccessMessage: "✓ Expected entry for jobs builtin found",
 	}
 
 	if err := jobsTestCase.Run(asserter, shell, logger); err != nil {

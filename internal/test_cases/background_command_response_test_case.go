@@ -3,7 +3,6 @@ package test_cases
 import (
 	"fmt"
 	"regexp"
-	"strconv"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -13,12 +12,11 @@ import (
 
 // BackgroundCommandResponseTestCase launches the given command with an & symbol
 // Launching it to the background
-// It asserts that the line that follows will match the expected fallback patterns
-// It will record the job number of the background job launched
+// It will assert that the job number is the expected one in the output
 // It asserts the next prompt immediately
 type BackgroundCommandResponseTestCase struct {
 	Command           string
-	launchedJobNumber *int
+	ExpectedJobNumber int
 	SuccessMessage    string
 }
 
@@ -34,8 +32,9 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 		ExpectedOutput: commandReflection,
 	})
 
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		FallbackPatterns: []*regexp.Regexp{
+	// We first match against the format
+	asserter.AddAssertion(assertions.SingleLineRegexAssertion{
+		ExpectedRegexPatterns: []*regexp.Regexp{
 			regexp.MustCompile(`\[\d+\]\s+\d+`),
 		},
 	})
@@ -44,36 +43,27 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 		return err
 	}
 
+	// We match the values later to produce a verbose error message
 	outputLine := asserter.Shell.GetScreenState().GetRow(asserter.GetLastLoggedRowIndex())
 	outputText := outputLine.String()
 
-	// Keeping the capture group for PGID as well: we might need it later
-	jobNumberRegexp := regexp.MustCompile(`\[(\d+)\]\s+(\d+)`)
+	jobNumberRegexp := regexp.MustCompile(`\[(\d+)\]\s+\d+`)
 	matches := jobNumberRegexp.FindStringSubmatch(outputText)
 
-	if len(matches) != 3 {
+	if len(matches) != 2 {
+		// This is because the regex is already matched against in the assertion above, we're just re-running this with capture group
 		panic(fmt.Sprintf("Codecrafters Internal Error - Shouldn't be here: Could not parse background launch output: %q", outputText))
 	}
 
-	jobNumberStr := matches[1]
+	actualJobNumber := matches[1]
 
-	jobNumber, err := strconv.Atoi(jobNumberStr)
-	if err != nil {
-		panic(fmt.Sprintf("Codecrafters Internal Error - Shouldn't be here: Could not parse job number from output: %q", outputText))
+	if actualJobNumber != fmt.Sprintf("%d", t.ExpectedJobNumber) {
+		return fmt.Errorf("Expected job number to be %d, got %s", t.ExpectedJobNumber, actualJobNumber)
 	}
-
-	t.launchedJobNumber = &jobNumber
 
 	if t.SuccessMessage != "" {
 		logger.Successf("%s", t.SuccessMessage)
 	}
 
 	return nil
-}
-
-func (t *BackgroundCommandResponseTestCase) GetLaunchedJobNumber() int {
-	if t.launchedJobNumber == nil {
-		panic("Codecrafters Internal Error - GetLastLaunchJobNumber called without successful run of the test case")
-	}
-	return *t.launchedJobNumber
 }

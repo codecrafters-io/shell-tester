@@ -2,11 +2,13 @@ package utils
 
 import (
 	"fmt"
+	"net/url"
 	"regexp"
 	"strings"
 	"unicode"
 
 	"github.com/codecrafters-io/tester-utils/logger"
+	"github.com/dustin/go-humanize/english"
 	"github.com/fatih/color"
 )
 
@@ -15,18 +17,72 @@ func ColorizeString(colorToUse color.Attribute, msg string) string {
 	return c.Sprint(msg)
 }
 
-func BuildColoredErrorMessage(expectedPatternExplanation string, output string, outputDescription string) string {
+func BuildColoredErrorMessageForExpectedOutputMismatch(expectedOutput string, receivedOutput string, receivedOutputDescription string) string {
 	errorMsg := ColorizeString(color.FgGreen, "Expected:")
-	errorMsg += " \"" + expectedPatternExplanation + "\""
+	errorMsg += " \"" + expectedOutput + "\""
 	errorMsg += "\n"
 	errorMsg += ColorizeString(color.FgRed, "Received:")
-	errorMsg += " \"" + RemoveNonPrintableCharacters(output) + "\""
+	errorMsg += " \"" + RemoveNonPrintableCharacters(receivedOutput) + "\""
 
-	if outputDescription != "" {
-		errorMsg += " " + ColorizeString(color.FgRed, fmt.Sprintf("(%s)", outputDescription))
+	if receivedOutputDescription != "" {
+		errorMsg += " " + ColorizeString(color.FgRed, fmt.Sprintf("(%s)", receivedOutputDescription))
 	}
 
 	return errorMsg
+}
+
+func BuildColoredErrorMessageForFallbackPatternMismatch(fallbackPatterns []*regexp.Regexp, receivedOutput string, receivedOutputDescription string) string {
+	if len(fallbackPatterns) == 0 {
+		panic("Codecrafters Internal Error - BuildColoredErrorMessageForFallbackPatternMismatch called with empty regex array")
+	}
+
+	var errorMsg strings.Builder
+	errorMsg.WriteString(ColorizeString(color.FgRed, "Received:"))
+	errorMsg.WriteString(" \"" + RemoveNonPrintableCharacters(receivedOutput) + "\"")
+
+	if receivedOutputDescription != "" {
+		errorMsg.WriteString(" " + ColorizeString(color.FgRed, fmt.Sprintf("(%s)", receivedOutputDescription)))
+	}
+
+	errorMsg.WriteString("\n")
+
+	expectedStatement := fmt.Sprintf("Expected line to match %s:\n",
+		english.PluralWord(len(fallbackPatterns),
+			"the following regex",
+			"one of the following regexes"))
+
+	errorMsg.WriteString(ColorizeString(color.FgGreen, expectedStatement))
+
+	for i, regex := range fallbackPatterns {
+		regexString := regex.String()
+		regex101URL := GetRegex101Link(regexString, receivedOutput)
+		hintString := "Hint: " + Hyperlink(regex101URL, "Click Here")
+		regexAndHint := fmt.Sprintf("%s (%s)", regexString, hintString)
+
+		// Add a newline for all except the last entry
+		if i != len(fallbackPatterns)-1 {
+			regexAndHint += "\n"
+		}
+
+		errorMsg.WriteString(ColorizeString(color.FgGreen, regexAndHint))
+	}
+
+	return errorMsg.String()
+}
+
+func GetRegex101Link(pattern string, testString string) string {
+	return fmt.Sprintf("https://regex101.com/?regex=%s&testString=%s", url.QueryEscape(pattern), url.QueryEscape(testString))
+}
+
+// Hyperlink returns terminal escape sequences so that displayText is shown as clickable link to targetURL.
+// Uses OSC 8 (e.g. supported by iTerm2, VS Code terminal, WezTerm). Terminals that don't support it show displayText only.
+// Ref. https://en.wikipedia.org/wiki/ANSI_escape_code#Control_Sequence_Introducer_commands
+func Hyperlink(targetURL string, displayText string) string {
+	osc8Start := "\033]8;;"
+	osc8End := "\033\\"
+	osc8Close := "\033]8;;\033\\"
+
+	return osc8Start + targetURL + osc8End + displayText + osc8Close
 }
 
 func RemoveNonPrintableCharacters(output string) string {
