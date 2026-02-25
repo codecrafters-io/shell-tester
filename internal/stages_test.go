@@ -227,8 +227,9 @@ func normalizeTesterOutput(testerOutput []byte) []byte {
 		"/tmp/":                           {regexp.MustCompile(`/var/folders/.*/.*/.*/`)},
 		"[your-program] [JOB_NUM] PID":    {regexp.MustCompile(`\[your-program\].*\[\d+\] \d+`)},
 		// For background_jobs_incorrect_output_format
-		"[your-program] [JOB_NUM]PID": {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
-		"[tester::#AT7] REGEX (HINT)": {regexp.MustCompile(`\[tester::#AT7\].*\(Hint:.*\)`)},
+		"[your-program] [JOB_NUM]PID":               {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
+		"[tester::#AT7] Received: \"[JOB_NUM]PID\"": {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\]\d+"`)},
+		"[tester::#AT7] REGEX (HINT)":               {regexp.MustCompile(`\[tester::#AT7\].*\(Hint:.*\)`)},
 	}
 
 	for replacement, regexes := range replacements {
