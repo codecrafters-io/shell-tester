@@ -45,6 +45,12 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		ExpectedOutput: commandReflection,
 	})
 
+	if len(t.ExpectedOutputItems) == 0 {
+		if err := asserter.AssertWithPrompt(); err != nil {
+			return err
+		}
+	}
+
 	for i, outputEntry := range t.ExpectedOutputItems {
 		marker := `\s`
 		switch outputEntry.Label {
