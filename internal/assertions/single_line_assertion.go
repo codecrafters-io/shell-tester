@@ -63,9 +63,9 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 		rowDescription = "no line received"
 	} else if row.IsEmpty() {
 		rowDescription = "empty line"
-	} else if strings.HasSuffix(a.ExpectedOutput, " ") && !strings.HasSuffix(row.String(), " ") {
+	} else if a.ExpectedOutput != "" && strings.HasSuffix(a.ExpectedOutput, " ") && !strings.HasSuffix(row.String(), " ") {
 		rowDescription = "no trailing space"
-	} else if !strings.HasSuffix(a.ExpectedOutput, " ") && strings.HasSuffix(row.String(), " ") {
+	} else if a.ExpectedOutput != "" && !strings.HasSuffix(a.ExpectedOutput, " ") && strings.HasSuffix(row.String(), " ") {
 		rowDescription = "trailing space"
 	}
 
