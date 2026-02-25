@@ -53,7 +53,7 @@ fi
 
 if [[ "$MODE" == "tests_excluding_ash" ]]; then
     echo "==> Building ash image..."
-    docker build -t shell-tester-ash -f local_testing/ash_shell.Dockerfile .
+    docker build -t shell-tester-ash -f "$DOCKER_TEST_DIR/ash_shell.Dockerfile" .
     echo "==> Running tests_excluding_ash..."
     docker run $DOCKER_RUN_OPTS -v "$(pwd)":/home/runner/work/shell-tester/shell-tester shell-tester-ash make tests_excluding_ash
     exit 0
@@ -61,7 +61,7 @@ fi
 
 if [[ -z "${SHELL_TYPE:-}" ]]; then
     echo "==> Building ash image..."
-    docker build -t shell-tester-ash -f local_testing/ash_shell.Dockerfile .
+    docker build -t shell-tester-ash -f "$DOCKER_TEST_DIR/ash_shell.Dockerfile" .
     echo "==> Running test..."
     docker run $DOCKER_RUN_OPTS -v "$(pwd)":/home/runner/work/shell-tester/shell-tester shell-tester-ash make test
     exit 0

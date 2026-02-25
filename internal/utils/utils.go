@@ -56,7 +56,7 @@ func BuildColoredErrorMessageForFallbackPatternMismatch(fallbackPatterns []*rege
 	for _, regex := range fallbackPatterns {
 		regexString := regex.String()
 		hintString := fmt.Sprintf("Hint: %s", GetRegex101Link(regexString, receivedOutput))
-		regexAndHint := fmt.Sprintf("%s (%s)", regexString, hintString)
+		regexAndHint := fmt.Sprintf("%s (%s)\n", regexString, hintString)
 		errorMsg.WriteString(ColorizeString(color.FgGreen, regexAndHint))
 	}
 
