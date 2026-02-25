@@ -37,7 +37,7 @@ func BuildColoredErrorMessageForFallbackPatternMismatch(fallbackPatterns []*rege
 	}
 
 	var errorMsg strings.Builder
-	errorMsg.WriteString(ColorizeString(color.FgRed, "Received: "))
+	errorMsg.WriteString(ColorizeString(color.FgRed, "Received:"))
 	errorMsg.WriteString(" \"" + RemoveNonPrintableCharacters(receivedOutput) + "\"")
 
 	if receivedOutputDescription != "" {
@@ -47,7 +47,7 @@ func BuildColoredErrorMessageForFallbackPatternMismatch(fallbackPatterns []*rege
 	errorMsg.WriteString("\n")
 
 	expectedStatement := fmt.Sprintf("Expected line to match %s:\n",
-		english.Plural(len(fallbackPatterns),
+		english.PluralWord(len(fallbackPatterns),
 			"the following regex",
 			"one of the following regexes"))
 
