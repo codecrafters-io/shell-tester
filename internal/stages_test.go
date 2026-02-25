@@ -118,6 +118,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_incorrect_job_number",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"background_jobs_incorrect_job_marker": {
+			StageSlugs:          []string{"dk5"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_jobs_builtin_incorrect_marker",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_jobs_builtin_incorrect_marker",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"pipelines_pass_bash": {
 			StageSlugs:          []string{"br6", "ny9", "xk3"},
 			CodePath:            "./test_helpers/bash",
