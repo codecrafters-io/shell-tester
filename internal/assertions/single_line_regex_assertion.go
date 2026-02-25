@@ -7,6 +7,7 @@ import (
 
 	"github.com/codecrafters-io/shell-tester/internal/screen_state"
 	"github.com/codecrafters-io/shell-tester/internal/utils"
+	"github.com/dustin/go-humanize/english"
 )
 
 // SingleLineRegexAssertion asserts that a single line of output matches a given set of regexes
@@ -65,9 +66,12 @@ func (a SingleLineRegexAssertion) Run(screenState screen_state.ScreenState, star
 		}
 	}
 
-	// Line exists: but doesn't match any of the regexes
+	// Line exists: but doesn't match any of the expected regexes
 	return 0, &AssertionError{
 		ErrorRowIndex: startRowIndex,
-		Message:       "Line does not match any of the expected patterns.\n" + detailedErrorMessage,
+		Message: fmt.Sprintf("Line does not match %s.\n%s",
+			english.PluralWord(len(a.ExpectedRegexPatterns), "the expected regex", "any of the expected regexes"),
+			detailedErrorMessage,
+		),
 	}
 }

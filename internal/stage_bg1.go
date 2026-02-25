@@ -16,13 +16,23 @@ func testBG1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	testCase := test_cases.JobsBuiltinResponseTestCase{
-		SuccessMessage: "✓ Received expected response",
+	typeTestCase := test_cases.CommandResponseTestCase{
+		Command:        "type jobs",
+		ExpectedOutput: "jobs is a shell builtin",
+		SuccessMessage: "Expected type for 'jobs' found",
+	}
+
+	if err := typeTestCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	jobsTestCase := test_cases.JobsBuiltinResponseTestCase{
+		SuccessMessage: "✓ Received empty response",
 		// Expect no output
 		ExpectedOutputItems: []test_cases.JobsBuiltinOutputEntry{},
 	}
 
-	if err := testCase.Run(asserter, shell, logger); err != nil {
+	if err := jobsTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 

@@ -33,7 +33,13 @@ type JobsBuiltinResponseTestCase struct {
 	SuccessMessage      string
 }
 
-func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
+func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) (err error) {
+	defer func() {
+		if err == nil && t.SuccessMessage != "" {
+			logger.Successf("%s", t.SuccessMessage)
+		}
+	}()
+
 	command := "jobs"
 
 	if err := shell.SendCommand(command); err != nil {
@@ -44,6 +50,11 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
 	})
+
+	// If we don't expect any items directly assert next prompt
+	if len(t.ExpectedOutputItems) == 0 {
+		return asserter.AssertWithPrompt()
+	}
 
 	for i, outputEntry := range t.ExpectedOutputItems {
 		marker := `\s`
@@ -101,6 +112,5 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		}
 	}
 
-	logger.Successf("%s", t.SuccessMessage)
 	return nil
 }
