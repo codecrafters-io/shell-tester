@@ -1287,20 +1287,6 @@ stages:
     marketing_md: |-
       In this stage, you'll extend the `jobs` builtin to reap multiple jobs and update markers dynamically.
 
-  - slug: "bv8"
-    primary_extension_slug: "background-jobs"
-    name: "Reap before the next prompt"
-    difficulty: medium
-    marketing_md: |-
-      In this stage, you'll add suport for reaping jobs before printing the next prompt.
-
-  - slug: "fy4"
-    primary_extension_slug: "background-jobs"
-    name: "Job number reset"
-    difficulty: easy
-    marketing_md: |-
-      In this stage, you'll implement recycling job number indices.
-
   - slug: "br6"
     primary_extension_slug: "pipelines"
     name: "Dual-command pipeline"

@@ -1,104 +1,98 @@
 Debug = true
 
-[33m[tester::#AF3] [0m[94mRunning tests for Stage #AF3 (af3)[0m
-[33m[tester::#AF3] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m[0m$ type jobs[0m
-[33m[your-program] [0m[0mjobs is a shell builtin[0m
-[33m[tester::#AF3] [0m[92m✓ Received expected response[0m
-[33m[your-program] [0m[0m$ jobs[0m
-[33m[tester::#AF3] [0m[92m✓ Received empty response[0m
-[33m[your-program] [0m[0m$ [0m
-[33m[tester::#AF3] [0m[92mTest passed.[0m
+[tester::#AF3] Running tests for Stage #AF3 (af3)
+[tester::#AF3] Running ./your_shell.sh
+[your-program] $ type jobs
+[your-program] jobs is a shell builtin
+[tester::#AF3] ✓ Received expected response
+[your-program] $ jobs
+[tester::#AF3] ✓ Received empty response
+[your-program] $ 
+[tester::#AF3] Test passed.
 
-[33m[tester::#AT7] [0m[94mRunning tests for Stage #AT7 (at7)[0m
-[33m[tester::#AT7] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2672[0m
-[33m[tester::#AT7] [0m[92m✓ Received next prompt[0m
-[33m[your-program] [0m[0m$ [0m
-[33m[tester::#AT7] [0m[92mTest passed.[0m
+[tester::#AT7] Running tests for Stage #AT7 (at7)
+[tester::#AT7] Running ./your_shell.sh
+[your-program] $ sleep 100 &
+[your-program] [1] 10953
+[tester::#AT7] ✓ Received next prompt
+[your-program] $ 
+[tester::#AT7] Test passed.
 
-[33m[tester::#JD6] [0m[94mRunning tests for Stage #JD6 (jd6)[0m
-[33m[tester::#JD6] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2674[0m
-[33m[tester::#JD6] [0m[92m✓ Received next prompt[0m
-[33m[your-program] [0m[0m$ jobs[0m
-[33m[your-program] [0m[0m[1]+  Running                    sleep 100 &[0m
-[33m[tester::#JD6] [0m[92m✓ Expected entry for jobs builtin found[0m
-[33m[your-program] [0m[0m$ [0m
-[33m[tester::#JD6] [0m[92mTest passed.[0m
+[tester::#JD6] Running tests for Stage #JD6 (jd6)
+[tester::#JD6] Running ./your_shell.sh
+[your-program] $ sleep 100 &
+[your-program] [1] 10956
+[tester::#JD6] ✓ Received next prompt
+[your-program] $ jobs
+[your-program] [1]+  Running                 sleep 100 &
+[tester::#JD6] ✓ Expected entry for jobs builtin found
+[your-program] $ 
+[tester::#JD6] Test passed.
 
-[33m[tester::#DK5] [0m[94mRunning tests for Stage #DK5 (dk5)[0m
-[33m[tester::#DK5] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2676[0m
-[33m[tester::#DK5] [0m[92m✓ Received next prompt[0m
-[33m[your-program] [0m[0m$ jobs[0m
-[33m[your-program] [0m[0m[1]+  Running                    sleep 100 &[0m
-[33m[tester::#DK5] [0m[92m✓ Expected 1 entry for jobs builtin found[0m
-[33m[your-program] [0m[0m$ sleep 200 &[0m
-[33m[your-program] [0m[0m[2] 2677[0m
-[33m[tester::#DK5] [0m[92m✓ Received next prompt[0m
-[33m[your-program] [0m[0m$ jobs[0m
-[33m[your-program] [0m[0m[1]-  Running                    sleep 100 &[0m
-[33m[your-program] [0m[0m[2]+  Running                    sleep 200 &[0m
-[33m[tester::#DK5] [0m[92m✓ Expected 2 entries for jobs builtin found[0m
-[33m[your-program] [0m[0m$ sleep 300 &[0m
-[33m[your-program] [0m[0m[3] 2678[0m
-[33m[tester::#DK5] [0m[92m✓ Received next prompt[0m
-[33m[your-program] [0m[0m$ jobs[0m
-[33m[your-program] [0m[0m[1]   Running                    sleep 100 &[0m
-[33m[your-program] [0m[0m[2]-  Running                    sleep 200 &[0m
-[33m[your-program] [0m[0m[3]+  Running                    sleep 300 &[0m
-[33m[tester::#DK5] [0m[92m✓ Expected 3 entries for jobs builtin found[0m
-[33m[your-program] [0m[0m$ [0m
-[33m[tester::#DK5] [0m[92mTest passed.[0m
+[tester::#DK5] Running tests for Stage #DK5 (dk5)
+[tester::#DK5] Running ./your_shell.sh
+[your-program] $ sleep 100 &
+[your-program] [1] 10959
+[tester::#DK5] ✓ Received next prompt
+[your-program] $ jobs
+[your-program] [1]+  Running                 sleep 100 &
+[tester::#DK5] ✓ Expected 1 entry for jobs builtin found
+[your-program] $ sleep 200 &
+[your-program] [2] 10961
+[tester::#DK5] ✓ Received next prompt
+[your-program] $ jobs
+[your-program] [1]-  Running                 sleep 100 &
+[your-program] [2]+  Running                 sleep 200 &
+[tester::#DK5] ✓ Expected 2 entries for jobs builtin found
+[your-program] $ sleep 300 &
+[your-program] [3] 10962
+[tester::#DK5] ✓ Received next prompt
+[your-program] $ jobs
+[your-program] [1]   Running                 sleep 100 &
+[your-program] [2]-  Running                 sleep 200 &
+[your-program] [3]+  Running                 sleep 300 &
+[tester::#DK5] ✓ Expected 3 entries for jobs builtin found
+[your-program] $ 
+[tester::#DK5] Test passed.
 
-[33m[tester::#MA9] [0m[94mRunning tests for Stage #MA9 (ma9)[0m
-[33m[tester::#MA9] [0m[94mRunning ./your_shell.sh[0m
-[33m[tester::#MA9] [setup] [0m[94mmkfifo /tmp/pear-70[0m
-[33m[your-program] [0m[0m$ grep -q raspberry /tmp/pear-70 &[0m
-[33m[your-program] [0m[0m[1] 2681[0m
-[33m[your-program] [0m[0m$ jobs[0m
-[33m[your-program] [0m[0m[1]+  Running                    grep -q raspberry /tmp/pear-70 &[0m
-[33m[tester::#MA9] [0m[92mExpected 1 entry found in the output[0m
-[33m[tester::#MA9] [setup] [0m[94mecho "raspberry" > "/tmp/pear-70"[0m
-[33m[your-program] [0m[0m$ jobs[0m
-[33m[your-program] [0m[0m[1]+  Done                       grep -q raspberry /tmp/pear-70[0m
-[33m[tester::#MA9] [0m[92mExpected 1 entry found in the output[0m
-[33m[your-program] [0m[0m$ [0m
-[33m[tester::#MA9] [0m[92mTest passed.[0m
+[tester::#MA9] Running tests for Stage #MA9 (ma9)
+[tester::#MA9] Running ./your_shell.sh
+[tester::#MA9] [setup] mkfifo /tmp/pear-70
+[your-program] $ grep -q raspberry /tmp/pear-70 &
+[your-program] [1] 10965
+[your-program] $ jobs
+[your-program] [1]+  Running                 grep -q raspberry /tmp/pear-70 &
+[tester::#MA9] Expected 1 entry found in the output
+[tester::#MA9] [setup] echo "raspberry" > "/tmp/pear-70"
+[your-program] $ jobs
+[your-program] [1]+  Done                    grep -q raspberry /tmp/pear-70
+[tester::#MA9] Expected 1 entry found in the output
+[your-program] $ 
+[tester::#MA9] Test passed.
 
-[33m[tester::#RQ2] [0m[94mRunning tests for Stage #RQ2 (rq2)[0m
-[33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/mango-20[0m
-[33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/banana-67[0m
-[33m[tester::#RQ2] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m[0m$ sleep 500 &[0m
-[33m[your-program] [0m[0m[1] 2683[0m
-[33m[your-program] [0m[0m$ grep -q banana /tmp/mango-20 &[0m
-[33m[your-program] [0m[0m[2] 2684[0m
-[33m[your-program] [0m[0m$ grep -q pear /tmp/banana-67 &[0m
-[33m[your-program] [0m[0m[3] 2685[0m
-[33m[tester::#RQ2] [setup] [0m[94mecho "banana" > "/tmp/mango-20"[0m
-[33m[your-program] [0m[0m$ jobs[0m
-[33m[your-program] [0m[0m[1]   Running                    sleep 500 &[0m
-[33m[your-program] [0m[0m[2]-  Done                       grep -q banana /tmp/mango-20[0m
-[33m[your-program] [0m[0m[3]+  Running                    grep -q pear /tmp/banana-67 &[0m
-[33m[tester::#RQ2] [0m[92mExpected 3 entries found in the output[0m
-[33m[tester::#RQ2] [setup] [0m[94mecho "pear" > "/tmp/banana-67"[0m
-[33m[your-program] [0m[0m$ jobs[0m
-[33m[your-program] [0m[0m[1]-  Running                    sleep 500 &[0m
-[33m[your-program] [0m[0m[3]+  Done                       grep -q pear /tmp/banana-67[0m
-[33m[tester::#RQ2] [0m[92mExpected 3 entries found in the output[0m
-[33m[your-program] [0m[0m$ jobs[0m
-[33m[your-program] [0m[0m[1]+  Running                    sleep 500 &[0m
-[33m[tester::#RQ2] [0m[92mExpected 1 entries found in the output[0m
-[33m[your-program] [0m[0m$ [0m
-[33m[tester::#RQ2] [0m[92mTest passed.[0m
-
-[33m[tester::#BV8] [0m[94mRunning tests for Stage #BV8 (bv8)[0m
-[33m[tester::#BV8] [0m[92mTest passed.[0m
-
-[33m[tester::#FY4] [0m[94mRunning tests for Stage #FY4 (fy4)[0m
-[33m[tester::#FY4] [0m[92mTest passed.[0m
+[tester::#RQ2] Running tests for Stage #RQ2 (rq2)
+[tester::#RQ2] [setup] mkfifo /tmp/mango-20
+[tester::#RQ2] [setup] mkfifo /tmp/banana-67
+[tester::#RQ2] Running ./your_shell.sh
+[your-program] $ sleep 500 &
+[your-program] [1] 10968
+[your-program] $ grep -q banana /tmp/mango-20 &
+[your-program] [2] 10969
+[your-program] $ grep -q pear /tmp/banana-67 &
+[your-program] [3] 10970
+[tester::#RQ2] [setup] echo "banana" > "/tmp/mango-20"
+[your-program] $ jobs
+[your-program] [1]   Running                 sleep 500 &
+[your-program] [2]-  Done                    grep -q banana /tmp/mango-20
+[your-program] [3]+  Running                 grep -q pear /tmp/banana-67 &
+[tester::#RQ2] Expected 3 entries found in the output
+[tester::#RQ2] [setup] echo "pear" > "/tmp/banana-67"
+[your-program] $ jobs
+[your-program] [1]-  Running                 sleep 500 &
+[your-program] [3]+  Done                    grep -q pear /tmp/banana-67
+[tester::#RQ2] Expected 2 entries found in the output
+[your-program] $ jobs
+[your-program] [1]+  Running                 sleep 500 &
+[tester::#RQ2] Expected 1 entries found in the output
+[your-program] $ 
+[tester::#RQ2] Test passed.
