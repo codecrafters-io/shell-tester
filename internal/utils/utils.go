@@ -37,7 +37,7 @@ func BuildColoredErrorMessageForFallbackPatternMismatch(fallbackPatterns []*rege
 	}
 
 	var errorMsg strings.Builder
-	errorMsg.WriteString(ColorizeString(color.FgRed, "Received: "))
+	errorMsg.WriteString(ColorizeString(color.FgRed, "Received:"))
 	errorMsg.WriteString(" \"" + RemoveNonPrintableCharacters(receivedOutput) + "\"")
 
 	if receivedOutputDescription != "" {
@@ -47,16 +47,22 @@ func BuildColoredErrorMessageForFallbackPatternMismatch(fallbackPatterns []*rege
 	errorMsg.WriteString("\n")
 
 	expectedStatement := fmt.Sprintf("Expected line to match %s:\n",
-		english.Plural(len(fallbackPatterns),
+		english.PluralWord(len(fallbackPatterns),
 			"the following regex",
 			"one of the following regexes"))
 
 	errorMsg.WriteString(ColorizeString(color.FgGreen, expectedStatement))
 
-	for _, regex := range fallbackPatterns {
+	for i, regex := range fallbackPatterns {
 		regexString := regex.String()
 		hintString := fmt.Sprintf("Hint: %s", GetRegex101Link(regexString, receivedOutput))
-		regexAndHint := fmt.Sprintf("%s (%s)", regexString, hintString)
+		regexAndHint := fmt.Sprintf("%s(%s)", regexString, hintString)
+
+		// Add a newline for all except the last entry
+		if i != len(fallbackPatterns)-1 {
+			regexAndHint += "\n"
+		}
+
 		errorMsg.WriteString(ColorizeString(color.FgGreen, regexAndHint))
 	}
 

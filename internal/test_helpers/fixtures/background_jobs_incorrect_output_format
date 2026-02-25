@@ -3,11 +3,11 @@ Debug = true
 [33m[tester::#AT7] [0m[94mRunning tests for Stage #AT7 (at7)[0m
 [33m[tester::#AT7] [0m[94mRunning ./your_program.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1]2235[0m
+[33m[your-program] [0m[0m[1]2685[0m
 [33m[tester::#AT7] [0m[91m^ Line does not match expected pattern.[0m
-[33m[tester::#AT7] [0m[91m[31mReceived: [0m "[1]2235"[0m
-[33m[tester::#AT7] [0m[91m[32mExpected line to match 1 the following regex:[0m
-[33m[tester::#AT7] [0m[91m[0m[32m\[\d+\]\s+\d+ (Hint: https://regex101.com/?regex=%5C%5B%5Cd%2B%5C%5D%5Cs%2B%5Cd%2B&testString=%5B1%5D2235)[0m[0m
+[33m[tester::#AT7] [0m[91m[31mReceived:[0m "[1]2685"[0m
+[33m[tester::#AT7] [0m[91m[32mExpected line to match the following regex:[0m
+[33m[tester::#AT7] [0m[91m[0m[32m\[\d+\]\s+\d+ (Hint: https://regex101.com/?regex=%5C%5B%5Cd%2B%5C%5D%5Cs%2B%5Cd%2B&testString=%5B1%5D2685)[0m[0m
 [33m[your-program] [0m[0m$ [0m
 [33m[tester::#AT7] [0m[91mAssertion failed.[0m
 [33m[tester::#AT7] [0m[91mTest failed[0m
