@@ -226,6 +226,8 @@ func normalizeTesterOutput(testerOutput []byte) []byte {
 		"PATH is now: <path>":             {regexp.MustCompile(`PATH is now: .*`)},
 		"/tmp/":                           {regexp.MustCompile(`/var/folders/.*/.*/.*/`)},
 		"[your-program] [JOB_NUM] PID":    {regexp.MustCompile(`\[your-program\].*\[\d+\] \d+`)},
+		// For background_jobs_incorrect_output_format
+		"[your-program][JOB_NUM] PID": {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
 	}
 
 	for replacement, regexes := range replacements {
