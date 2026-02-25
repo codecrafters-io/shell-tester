@@ -27,7 +27,7 @@ func (a SingleLineRegexAssertion) Inspect() string {
 		patterns = append(patterns, pattern.String())
 	}
 
-	return fmt.Sprintf("SingleLineAssertion (%q)", strings.Join(patterns, "\n"))
+	return fmt.Sprintf("SingleLineRegexAssertion (%q)", strings.Join(patterns, "\n"))
 }
 
 func (a SingleLineRegexAssertion) Run(screenState screen_state.ScreenState, startRowIndex int) (processedRowCount int, err *AssertionError) {
