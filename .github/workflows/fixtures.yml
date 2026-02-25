@@ -1,34 +1,24 @@
 name: Trigger Fixture Regeneration
 
+permissions:
+  contents: write
+  pull-requests: write
+
 on:
   pull_request:
     types:
       - labeled
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
-  trigger_pipeline:
+  regenerate_fixtures:
     if: github.event.label.name == 'regenerate-fixtures'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup Alpine
-        uses: jirutka/setup-alpine@v1
-        with:
-          branch: latest-stable
-
-      - name: Setup Alpine dependencies
-        run: |
-          cat /etc/alpine-release
-          apk add git go make bash dash zsh binutils-gold python3
-        shell: alpine.sh --root {0}
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref }}
           token: ${{ secrets.TESTER_FIXTURE_GENERATION_GITHUB_TOKEN }}
 
       - uses: actions-ecosystem/action-create-comment@v1
@@ -44,19 +34,17 @@ jobs:
 
       - name: Setup git config
         run: |
-          git config --global --add safe.directory /home/runner/work/shell-tester/shell-tester
-          # repo is owned by user and we intend to execute as root
-        shell: alpine.sh --root {0}
+          git config --global user.email "hello@codecrafters.io"
+          git config --global user.name "codecrafters-bot"
+          git remote set-url origin https://codecrafters-bot:${{ secrets.TESTER_FIXTURE_GENERATION_GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git fetch origin ${{ github.head_ref }}
+          git checkout ${{ github.head_ref }}
 
       - name: Regenerate Fixtures
-        run: CODECRAFTERS_RECORD_FIXTURES=true make test
-        shell: alpine.sh --root {0}
+        # Using docker for consistency between local machine and GitHub action runners
+        # Cannot use `tester-utils` workflow for this reason
+        run: ./docker_test/docker_test.sh record_fixtures
 
       - name: Update Fixtures
         run: |
-          git config --global user.email "ryan-gg@outlook.com"
-          git config --global user.name "Ryan Gang"
-          git remote set-url origin https://ryan-gang:${{ secrets.TESTER_FIXTURE_GENERATION_GITHUB_TOKEN }}@github.com/codecrafters-io/shell-tester.git
-          git fetch origin ${{ github.head_ref }}
-          git checkout ${{ github.head_ref }}
-          git diff --quiet || (git add . && git commit -m "ci: add regenerated fixtures" && git push)
+          git diff --quiet || (git add . && git commit -m "CI: Add regenerated fixtures" && git push)

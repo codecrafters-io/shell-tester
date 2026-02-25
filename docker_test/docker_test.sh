@@ -36,14 +36,16 @@ else
     fi
 fi
 
-# Ensure we're in repo root
-cd "$(dirname "$0")/.."
+# Script dir and repo root (dirname "$0" is the dir containing this script)
+DOCKER_TEST_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "$DOCKER_TEST_DIR/.." && pwd)"
+cd "$REPO_ROOT"
 
 DOCKER_RUN_OPTS="--rm"
 
 if [[ "$MODE" == "record_fixtures" ]]; then
     echo "==> Building ash image..."
-    docker build -t shell-tester-ash -f local_testing/ash_shell.Dockerfile .
+    docker build -t shell-tester-ash -f "$DOCKER_TEST_DIR/ash_shell.Dockerfile" .
     echo "==> Running record_fixtures..."
     docker run $DOCKER_RUN_OPTS -v "$(pwd)":/home/runner/work/shell-tester/shell-tester shell-tester-ash make record_fixtures
     exit 0
@@ -70,17 +72,17 @@ run_one() {
     local dockerfile image make_target
     case "$shell" in
         bash)
-            dockerfile="local_testing/bash_shell.Dockerfile"
+            dockerfile="$DOCKER_TEST_DIR/bash_shell.Dockerfile"
             image="shell-tester-bash"
             make_target="test_bash"
             ;;
         ash)
-            dockerfile="local_testing/ash_shell.Dockerfile"
+            dockerfile="$DOCKER_TEST_DIR/ash_shell.Dockerfile"
             image="shell-tester-ash"
             make_target="test_ash"
             ;;
         zsh)
-            dockerfile="local_testing/zsh_shell.Dockerfile"
+            dockerfile="$DOCKER_TEST_DIR/zsh_shell.Dockerfile"
             image="shell-tester-zsh"
             make_target="test_zsh"
             ;;

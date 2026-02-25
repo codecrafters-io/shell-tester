@@ -17,8 +17,9 @@ func testBG2(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	testCase := test_cases.BackgroundCommandResponseTestCase{
-		Command:        "sleep 100",
-		SuccessMessage: "✓ Received next prompt",
+		Command:           "sleep 100",
+		SuccessMessage:    "✓ Received next prompt",
+		ExpectedJobNumber: 1,
 	}
 
 	if err := testCase.Run(asserter, shell, logger); err != nil {

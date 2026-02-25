@@ -13,12 +13,11 @@ import (
 
 // BackgroundCommandResponseTestCase launches the given command with an & symbol
 // Launching it to the background
-// It asserts that the line that follows will match the expected fallback patterns
-// It will record the job number of the background job launched
+// It will assert that the job number is the expected one in the output
 // It asserts the next prompt immediately
 type BackgroundCommandResponseTestCase struct {
 	Command           string
-	launchedJobNumber *int
+	ExpectedJobNumber int
 	SuccessMessage    string
 }
 
@@ -47,30 +46,26 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 	outputLine := asserter.Shell.GetScreenState().GetRow(asserter.GetLastLoggedRowIndex())
 	outputText := outputLine.String()
 
-	// Keeping the capture group for PGID as well: we might need it later
-	jobNumberRegexp := regexp.MustCompile(`\[(\d+)\]\s+(\d+)`)
+	jobNumberRegexp := regexp.MustCompile(`\[(\d+)\]\s+\d+`)
 	matches := jobNumberRegexp.FindStringSubmatch(outputText)
 
-	if len(matches) != 3 {
+	if len(matches) != 2 {
+		// This is because the regex is already matched against in the assertion above, we're just re-running this with capture group
 		panic(fmt.Sprintf("Codecrafters Internal Error - Shouldn't be here: Could not parse background launch output: %q", outputText))
 	}
 
-	jobNumberStr := matches[1]
+	actualJobNumberStr := matches[1]
+	actualJobNumber, err := strconv.Atoi(actualJobNumberStr)
 
-	jobNumber, err := strconv.Atoi(jobNumberStr)
 	if err != nil {
+		// This is because the job number is guaranteed to be an integer from the regex above
 		panic(fmt.Sprintf("Codecrafters Internal Error - Shouldn't be here: Could not parse job number from output: %q", outputText))
 	}
 
-	t.launchedJobNumber = &jobNumber
+	if actualJobNumber != t.ExpectedJobNumber {
+		return fmt.Errorf("Expected job number to be %d, got %d", t.ExpectedJobNumber, actualJobNumber)
+	}
 
 	logger.Successf("%s", t.SuccessMessage)
 	return nil
-}
-
-func (t *BackgroundCommandResponseTestCase) GetLaunchedJobNumber() int {
-	if t.launchedJobNumber == nil {
-		panic("Codecrafters Internal Error - GetLastLaunchJobNumber called without successful run of the test case")
-	}
-	return *t.launchedJobNumber
 }
