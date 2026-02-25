@@ -55,8 +55,9 @@ func BuildColoredErrorMessageForFallbackPatternMismatch(fallbackPatterns []*rege
 
 	for i, regex := range fallbackPatterns {
 		regexString := regex.String()
-		hintString := fmt.Sprintf("Hint: %s", GetRegex101Link(regexString, receivedOutput))
-		regexAndHint := fmt.Sprintf("%s(%s)", regexString, hintString)
+		regex101URL := GetRegex101Link(regexString, receivedOutput)
+		hintString := "Hint: " + Hyperlink(regex101URL, "Click Here")
+		regexAndHint := fmt.Sprintf("%s (%s)", regexString, hintString)
 
 		// Add a newline for all except the last entry
 		if i != len(fallbackPatterns)-1 {
@@ -71,6 +72,16 @@ func BuildColoredErrorMessageForFallbackPatternMismatch(fallbackPatterns []*rege
 
 func GetRegex101Link(pattern string, testString string) string {
 	return fmt.Sprintf("https://regex101.com/?regex=%s&testString=%s", url.QueryEscape(pattern), url.QueryEscape(testString))
+}
+
+// Hyperlink returns terminal escape sequences so that displayText is shown as clickable link to targetURL.
+// Uses OSC 8 (e.g. supported by iTerm2, VS Code terminal, WezTerm). Terminals that don't support it show displayText only.
+func Hyperlink(targetURL string, displayText string) string {
+	osc8Start := "\033]8;;"
+	osc8End := "\033\\"
+	osc8Close := "\033]8;;\033\\"
+
+	return osc8Start + targetURL + osc8End + displayText + osc8Close
 }
 
 func RemoveNonPrintableCharacters(output string) string {
