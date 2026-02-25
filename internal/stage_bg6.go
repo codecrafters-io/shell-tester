@@ -33,7 +33,8 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Launch "sleep 500"
 	sleepCommand := "sleep 500"
 	bgSleepTestCase := test_cases.BackgroundCommandResponseTestCase{
-		Command: sleepCommand,
+		Command:           sleepCommand,
+		ExpectedJobNumber: 1,
 	}
 	if err := bgSleepTestCase.Run(asserter, shell, logger); err != nil {
 		return err
@@ -44,19 +45,21 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 	grepPattern1 := random.RandomWord()
 	bgGrepCommand1 := fmt.Sprintf("grep -q %s %s", grepPattern1, fifoPath1)
 	bgGrepTestCase1 := test_cases.BackgroundCommandResponseTestCase{
-		Command: bgGrepCommand1,
+		Command:           bgGrepCommand1,
+		ExpectedJobNumber: 2,
 	}
 	if err := bgGrepTestCase1.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
 	// Launch grep read pattern again
-
 	grepPattern2 := random.RandomWord()
 	bgGrepCommand2 := fmt.Sprintf("grep -q %s %s", grepPattern2, fifoPath2)
 	bgGrepTestCase2 := test_cases.BackgroundCommandResponseTestCase{
-		Command: bgGrepCommand2,
+		Command:           bgGrepCommand2,
+		ExpectedJobNumber: 3,
 	}
+
 	if err := bgGrepTestCase2.Run(asserter, shell, logger); err != nil {
 		return err
 	}

@@ -30,7 +30,8 @@ func testBG5(stageHarness *test_case_harness.TestCaseHarness) error {
 	bgGrepCommand := fmt.Sprintf("grep -q %s %s", grepPattern, fifoPath)
 
 	bgJobTestCase := test_cases.BackgroundCommandResponseTestCase{
-		Command: bgGrepCommand,
+		Command:           bgGrepCommand,
+		ExpectedJobNumber: 1,
 	}
 
 	if err := bgJobTestCase.Run(asserter, shell, logger); err != nil {
