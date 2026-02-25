@@ -62,11 +62,7 @@ func (m *memoryMonitor) monitor() {
 				return
 			}
 
-			fmt.Println("⛳ monitor:RSS:", rss)
-
 			if rss > m.limit {
-				fmt.Println("⛳ monitor: OOMKilled")
-
 				m.oomKilled.Store(true)
 				// Kill the process group to ensure all children are terminated
 				// We are replying on `cmd.SysProcAttr.Setsid = true` in creack/pty's StartWithSize to avoid process group conflicts.
