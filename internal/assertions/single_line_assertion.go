@@ -67,7 +67,7 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 	if a.ExpectedOutput == "" {
 		detailedErrorMessage = utils.BuildColoredErrorMessageForFallbackPatternMismatch(a.FallbackPatterns, row.String(), rowDescription)
 	} else {
-		detailedErrorMessage = utils.BuildColoredErrorMessageForUnexpectedOutput(a.ExpectedOutput, row.String(), rowDescription)
+		detailedErrorMessage = utils.BuildColoredErrorMessageForExpectedOutputMismatch(a.ExpectedOutput, row.String(), rowDescription)
 	}
 
 	// If the line won't be logged, we say "didn't find line ..." instead of "line does not match expected ..."

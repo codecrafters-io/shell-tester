@@ -17,7 +17,7 @@ func ColorizeString(colorToUse color.Attribute, msg string) string {
 	return c.Sprint(msg)
 }
 
-func BuildColoredErrorMessageForUnexpectedOutput(expectedOutput string, receivedOutput string, receivedOutputDescription string) string {
+func BuildColoredErrorMessageForExpectedOutputMismatch(expectedOutput string, receivedOutput string, receivedOutputDescription string) string {
 	errorMsg := ColorizeString(color.FgGreen, "Expected:")
 	errorMsg += " \"" + expectedOutput + "\""
 	errorMsg += "\n"
