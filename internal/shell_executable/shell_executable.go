@@ -124,6 +124,9 @@ func (b *ShellExecutable) Start(args ...string) error {
 		b.memoryMonitor.stop()
 	}
 
+	// Reset OOM state for the new process
+	b.oomKilled = false
+
 	// Start memory monitoring for RSS-based memory limiting (Linux only, no-op on other platforms)
 	b.memoryMonitor = newMemoryMonitor(b.MemoryLimitInBytes)
 	b.memoryMonitor.start(cmd.Process.Pid)
