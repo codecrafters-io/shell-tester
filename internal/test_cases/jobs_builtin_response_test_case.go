@@ -18,9 +18,8 @@ import (
 // 4. whitespaces
 // 5. Status (Could be a single non whitespace like "Done", "Running", or could be sth like "1 Exit"; This last case we'll be used in future extension
 // 6. Whitespaces
-// 7. Launch command
-// 8. Optional & sign that bash uses
-var jobsBuiltinOutputLineRegex = regexp.MustCompile(`^\[(\d+)\]\s*([\+\-\s])\s+(\S+( )?\S+)\s+(.*)( &)?$`)
+// 7. Launch command (may include trailing & which is trimmed during validation)
+var jobsBuiltinOutputLineRegex = regexp.MustCompile(`^\[(\d+)\]\s*([\+\-\s])\s+(\S+( )?\S+)\s+(.*)$`)
 
 const (
 	UnmarkedJob = iota
