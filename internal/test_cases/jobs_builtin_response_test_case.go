@@ -18,9 +18,9 @@ import (
 // 4. whitespaces
 // 5. Status (Could be a single non whitespace like "Done", "Running", or could be sth like "1 Exit"; This last case we'll be used in future extension
 // 6. Whitespaces
-// 7. Launch command
+// 7. Launch command (Greedy because leaving space for trailing &)
 // 8. Optional & sign that bash uses
-var jobsBuiltinOutputLineRegex = regexp.MustCompile(`^\[(\d+)\]\s*([\+\-\s])\s+(\S+( )?\S+)\s+(.*)( &)?$`)
+var jobsBuiltinOutputLineRegex = regexp.MustCompile(`^\[(\d+)\]\s*([\+\-\s])\s+(\S+( )?\S+)\s+(.*?)( &)?$`)
 
 const (
 	UnmarkedJob = iota
@@ -118,9 +118,7 @@ func validateJobsOutputLineWithCaptures(outputText string, expectedEntry JobsBui
 
 	capturedMarker := parsedMarkerToMarkerConstant(capturedMarkerStr)
 
-	normalisedCapturedLaunchCommand := strings.TrimSuffix(strings.TrimSpace(capturedLaunchCommandStr), "&")
-	normalisedCapturedLaunchCommand = strings.TrimSpace(normalisedCapturedLaunchCommand)
-	expectedLaunchCommandNormalised := strings.TrimSpace(expectedEntry.LaunchCommand)
+	expectedLaunchCommandNormalised := expectedEntry.LaunchCommand
 
 	if capturedJobIDStr != fmt.Sprintf("%d", expectedEntry.JobNumber) {
 		return fmt.Errorf("Job number mismatch: expected %d, got %s", expectedEntry.JobNumber, capturedJobIDStr)
@@ -135,7 +133,7 @@ func validateJobsOutputLineWithCaptures(outputText string, expectedEntry JobsBui
 		return fmt.Errorf("Status mismatch: expected %q, got %q", expectedEntry.Status, capturedStatusStr)
 	}
 
-	if normalisedCapturedLaunchCommand != expectedLaunchCommandNormalised {
+	if capturedLaunchCommandStr != expectedLaunchCommandNormalised {
 		return fmt.Errorf("Launch command mismatch: expected %q, got %q",
 			expectedEntry.LaunchCommand, capturedLaunchCommandStr)
 	}
