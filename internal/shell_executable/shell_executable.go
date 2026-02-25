@@ -29,7 +29,7 @@ var ErrProgramExited = errors.New("Program exited")
 // ErrMemoryLimitExceeded is returned when a process exceeds its memory limit
 var ErrMemoryLimitExceeded = errors.New("process exceeded memory limit")
 
-const defaultMemoryLimitBytes = int64(0.5 * 1024 * 1024 * 1024) // ⛳ 0.5GB
+const defaultMemoryLimitBytes = 2*1024*1024*1024 - 100*1024*1024 // 1.9GB
 
 type ShellExecutable struct {
 	// MemoryLimitInBytes sets the maximum memory the process can use (Linux only).
@@ -268,13 +268,6 @@ func formatBytesHumanReadable(bytes int64) string {
 }
 
 func (b *ShellExecutable) WasOOMKilled() bool {
-	fmt.Println("⛳ WasOOMKilled: b.oomKilled:", b.oomKilled)
-	fmt.Println("⛳ WasOOMKilled: b.memoryMonitor == nil:", b.memoryMonitor == nil)
-
-	if b.memoryMonitor != nil {
-		fmt.Println("⛳ WasOOMKilled: b.memoryMonitor.wasOOMKilled():", b.memoryMonitor.wasOOMKilled())
-	}
-
 	if b.memoryMonitor != nil && b.memoryMonitor.wasOOMKilled() {
 		b.oomKilled = true
 		b.memoryMonitor.stop()
