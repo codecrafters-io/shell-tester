@@ -29,7 +29,7 @@ var ErrProgramExited = errors.New("Program exited")
 // ErrMemoryLimitExceeded is returned when a process exceeds its memory limit
 var ErrMemoryLimitExceeded = errors.New("process exceeded memory limit")
 
-const defaultMemoryLimitBytes = 2 * 1024 * 1024 * 1024 // 2GB
+const defaultMemoryLimitBytes = int64(0.5 * 1024 * 1024 * 1024) // ⛳ 0.5GB
 
 type ShellExecutable struct {
 	// MemoryLimitInBytes sets the maximum memory the process can use (Linux only).
