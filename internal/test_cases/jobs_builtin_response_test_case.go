@@ -13,8 +13,8 @@ import (
 
 // jobsBuiltinOutputLineRegex matches a single jobs output line and captures:
 // 1. job id (integer), 2. marker (+ or - or space), 3. status (e.g. "Running" or "Exit 1"), 4. launch command (rest of line).
-// Status uses .+? (non-greedy) so "Running" vs "Exit 1" and the rest is the launch command.
-var jobsBuiltinOutputLineRegex = regexp.MustCompile(`^\[(\d+)\]\s*([\+\-\s])\s+(.+?)\s+(.+)$`)
+// Status uses .+? (non-greedy) with \s{2,} delimiter to correctly capture multi-word statuses like "Exit 1".
+var jobsBuiltinOutputLineRegex = regexp.MustCompile(`^\[(\d+)\]\s*([\+\-\s])\s+(.+?)\s{2,}(.+)$`)
 
 const (
 	UnmarkedJob = iota
