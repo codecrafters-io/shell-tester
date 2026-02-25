@@ -19,8 +19,9 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Launch a program in the background
 	backgroundLaunchCommand := "sleep 100"
 	backgroundLaunchTestCase := test_cases.BackgroundCommandResponseTestCase{
-		Command:        backgroundLaunchCommand,
-		SuccessMessage: "✓ Received next prompt",
+		Command:           backgroundLaunchCommand,
+		ExpectedJobNumber: 1,
+		SuccessMessage:    "✓ Received next prompt",
 	}
 
 	if err := backgroundLaunchTestCase.Run(asserter, shell, logger); err != nil {

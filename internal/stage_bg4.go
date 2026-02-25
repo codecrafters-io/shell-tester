@@ -40,16 +40,18 @@ func launchBgCommandAndAssertJobs(asserter *logged_shell_asserter.LoggedShellAss
 	var jobs []jobInfo
 
 	for _, bgCommand := range bgCommands {
+		expectedJobNumber := len(jobs) + 1
 		backgroundLaunchTestCase := test_cases.BackgroundCommandResponseTestCase{
-			Command:        bgCommand,
-			SuccessMessage: "✓ Received next prompt",
+			Command:           bgCommand,
+			ExpectedJobNumber: expectedJobNumber,
+			SuccessMessage:    "✓ Received next prompt",
 		}
 
 		if err := backgroundLaunchTestCase.Run(asserter, shell, logger); err != nil {
 			return err
 		}
 
-		jobs = append(jobs, jobInfo{JobNumber: backgroundLaunchTestCase.GetLaunchedJobNumber(), Command: bgCommand})
+		jobs = append(jobs, jobInfo{JobNumber: expectedJobNumber, Command: bgCommand})
 
 		jobsOutputEntries := make([]test_cases.JobsBuiltinOutputEntry, 0, len(jobs))
 
