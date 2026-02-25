@@ -1,0 +1,16 @@
+Debug = true
+
+[33m[tester::#DK5] [0m[94mRunning tests for Stage #DK5 (dk5)[0m
+[33m[tester::#DK5] [0m[94mRunning ./your_program.sh[0m
+[33m[your-program] [0m[0m$ sleep 100 &[0m
+[33m[your-program] [0m[0m[1] 2615[0m
+[33m[tester::#DK5] [0m[92m✓ Received next prompt[0m
+[33m[your-program] [0m[0m$ jobs[0m
+[33m[your-program] [0m[0m[1]-  Running                 sleep 100 &[0m
+[33m[tester::#DK5] [0m[91m^ Line does not match expected pattern.[0m
+[33m[tester::#DK5] [0m[91m[31mReceived:[0m "[1]-  Running                 sleep 100 &"[0m
+[33m[tester::#DK5] [0m[91m[32mExpected line to match the following regex:[0m
+[33m[tester::#DK5] [0m[91m[0m[32m\[1\](\s)?\+\s+(?i)Running\s+(?-i)sleep 100( &)?(Hint: https://regex101.com/?regex=%5C%5B1%5C%5D%28%5Cs%29%3F%5C%2B%5Cs%2B%28%3Fi%29Running%5Cs%2B%28%3F-i%29sleep+100%28+%26%29%3F&testString=%5B1%5D-++Running+++++++++++++++++sleep+100+%26)[0m[0m
+[33m[your-program] [0m[0m$ [0m
+[33m[tester::#DK5] [0m[91mAssertion failed.[0m
+[33m[tester::#DK5] [0m[91mTest failed[0m
