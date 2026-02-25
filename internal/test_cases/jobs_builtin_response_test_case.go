@@ -20,7 +20,7 @@ import (
 // 6. Whitespaces
 // 7. Launch command
 // 8. Optional & sign that bash uses
-var jobsBuiltinOutputLineRegex = regexp.MustCompile(`^\[(\d+)\]\s*([\+\-\s])\s+(\S+( )?\S+)\s+(.*)( &)$`)
+var jobsBuiltinOutputLineRegex = regexp.MustCompile(`^\[(\d+)\]\s*([\+\-\s])\s+(\S+( )?\S+)\s+(.*)( &)?$`)
 
 const (
 	UnmarkedJob = iota
