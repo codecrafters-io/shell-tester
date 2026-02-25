@@ -3,6 +3,7 @@ package test_cases
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -19,7 +20,7 @@ const (
 type JobsBuiltinOutputEntry struct {
 	// The job number value in the square brackets
 	JobNumber int
-	// Status: "Running", "Done", etc
+	// Status: "Running", "Done", "Terminated", etc
 	Status string
 	// LaunchCommand: Command that was run and sent to the background without trailing &
 	LaunchCommand string
@@ -55,15 +56,29 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 			marker = `\-`
 		}
 
-		// TODO: Remove after PR review: The regex here complies with the Bash's implementation of 'jobs'
-		// Should I add the pattern compatible with ZSH's output as well?
-		regex := regexp.MustCompile(fmt.Sprintf(
-			`\[%d\]%s\s+%s\s+%s &`,
+		// This regex expects the following:
+		// 1. Bracketed job number: Square bracket open, followed by an integer, followed by square bracket close
+		// 2. An optional space (ZSH uses this optional space after bracketed job number)
+		// 3. Job Marker (+/-/space)
+		// 4. Whitespaces following the job marker
+		// 5. Job status: "Done", "Running", etc (This is case insensitive: Complies with both bash and zsh)
+		// 6. Followed by whitespace
+		// 7. Followed by the launch command (case sensitive)
+		regexString := fmt.Sprintf(
+			`\[%d+\](\s)?%s\s+(?i)%s\s+(?-i)%s`,
 			outputEntry.JobNumber,
 			marker,
 			regexp.QuoteMeta(outputEntry.Status),
-			regexp.QuoteMeta(outputEntry.LaunchCommand)),
+			regexp.QuoteMeta(outputEntry.LaunchCommand),
 		)
+
+		// For 'running' jobs, bash displays the trailing & sign
+		// This is optional since ZSH doesn't use this
+		if strings.ToLower(outputEntry.Status) == "running" {
+			regexString += "( &)?"
+		}
+
+		regex := regexp.MustCompile(regexString)
 
 		allLinesAssertions = append(allLinesAssertions, assertions.SingleLineAssertion{
 			FallbackPatterns: []*regexp.Regexp{regex},

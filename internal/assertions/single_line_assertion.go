@@ -38,36 +38,54 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 
 	row := screenState.GetRow(startRowIndex)
 
+	// Match against fallback patterns
 	for _, pattern := range a.FallbackPatterns {
 		if pattern.Match([]byte(row.String())) {
 			return processedRowCount, nil
 		}
 	}
 
-	if row.String() != a.ExpectedOutput {
-		rowDescription := ""
-
-		if startRowIndex > screenState.GetLastLoggableRowIndex() {
-			rowDescription = "no line received"
-		} else if row.IsEmpty() {
-			rowDescription = "empty line"
-		}
-
-		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, row.String(), rowDescription)
-
-		// If the line won't be logged, we say "didn't find line ..." instead of "line does not match expected ..."
-		if startRowIndex > screenState.GetLastLoggableRowIndex() {
-			return 0, &AssertionError{
-				ErrorRowIndex: startRowIndex,
-				Message:       "Didn't find expected line.\n" + detailedErrorMessage,
-			}
-		} else {
-			return 0, &AssertionError{
-				ErrorRowIndex: startRowIndex,
-				Message:       "Line does not match expected value.\n" + detailedErrorMessage,
-			}
-		}
-	} else {
+	// If none of the fallback patterns match, compare against the expected otuput
+	if row.String() == a.ExpectedOutput {
 		return processedRowCount, nil
+	}
+
+	// Handle error case
+
+	rowDescription := ""
+
+	if startRowIndex > screenState.GetLastLoggableRowIndex() {
+		rowDescription = "no line received"
+	} else if row.IsEmpty() {
+		rowDescription = "empty line"
+	}
+
+	var detailedErrorMessage string
+
+	// If fallback patterns were only provided and not the expected output
+	// we must build the error message indicating the fallback patterns instead of the expected output
+	if a.ExpectedOutput == "" {
+		detailedErrorMessage = utils.BuildColoredErrorMessageForFallbackPatternMismatch(a.FallbackPatterns, row.String(), rowDescription)
+	} else {
+		detailedErrorMessage = utils.BuildColoredErrorMessageForUnexpectedOutput(a.ExpectedOutput, row.String(), rowDescription)
+	}
+
+	// If the line won't be logged, we say "didn't find line ..." instead of "line does not match expected ..."
+	if startRowIndex > screenState.GetLastLoggableRowIndex() {
+		return 0, &AssertionError{
+			ErrorRowIndex: startRowIndex,
+			Message:       "Didn't find expected line.\n" + detailedErrorMessage,
+		}
+	}
+
+	// If the line was found, say that "line does not match expected..."
+	expectedEntity := "value"
+	if a.ExpectedOutput == "" {
+		expectedEntity = "pattern"
+	}
+
+	return 0, &AssertionError{
+		ErrorRowIndex: startRowIndex,
+		Message:       "Line does not match expected " + expectedEntity + ".\n" + detailedErrorMessage,
 	}
 }

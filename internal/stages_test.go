@@ -104,6 +104,20 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/background_jobs/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"background_jobs_incorrect_output_format": {
+			StageSlugs:          []string{"at7"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_incorrect_output_format",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_incorrect_output_format",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"background_jobs_incorrect_job_number": {
+			StageSlugs:          []string{"at7"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_incorrect_job_number",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_incorrect_job_number",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"pipelines_pass_bash": {
 			StageSlugs:          []string{"br6", "ny9", "xk3"},
 			CodePath:            "./test_helpers/bash",
