@@ -67,14 +67,14 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 
 		// This regex expects the following:
 		// 1. Bracketed job number: Square bracket open, followed by an integer, followed by square bracket close
-		// 2. An optional space (ZSH uses this optional space after bracketed job number)
+		// 2. Optional spaces (ZSH uses spaces after bracketed job number)
 		// 3. Job Marker (+/-/space)
 		// 4. Whitespaces following the job marker
 		// 5. Job status: "Done", "Running", etc (This is case insensitive: Complies with both bash and zsh)
 		// 6. Followed by whitespace
 		// 7. Followed by the launch command (case sensitive)
 		regexString := fmt.Sprintf(
-			`\[%d\](\s)?%s\s+(?i)%s\s+(?-i)%s`,
+			`\[%d\]\s*%s\s+(?i)%s\s+(?-i)%s`,
 			outputEntry.JobNumber,
 			marker,
 			regexp.QuoteMeta(outputEntry.Status),
