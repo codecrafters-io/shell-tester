@@ -45,9 +45,7 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		ExpectedOutput: commandReflection,
 	})
 
-	allLinesAssertions := []assertions.SingleLineAssertion{}
-
-	for _, outputEntry := range t.ExpectedOutputItems {
+	for i, outputEntry := range t.ExpectedOutputItems {
 		marker := `\s`
 		switch outputEntry.Label {
 		case CurrentJob:
@@ -80,17 +78,27 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 
 		regex := regexp.MustCompile(regexString)
 
-		allLinesAssertions = append(allLinesAssertions, assertions.SingleLineAssertion{
-			FallbackPatterns: []*regexp.Regexp{regex},
+		asserter.AddAssertion(assertions.SingleLineRegexAssertion{
+			ExpectedRegexPatterns: []*regexp.Regexp{regex},
 		})
-	}
 
-	asserter.AddAssertion(&assertions.MultiLineAssertion{
-		SingleLineAssertions: allLinesAssertions,
-	})
+		shouldAssertWithPrompt := false
 
-	if err := asserter.AssertWithPrompt(); err != nil {
-		return err
+		if i == len(t.ExpectedOutputItems)-1 {
+			shouldAssertWithPrompt = true
+		}
+
+		var err error
+
+		if shouldAssertWithPrompt {
+			err = asserter.AssertWithPrompt()
+		} else {
+			err = asserter.AssertWithoutPrompt()
+		}
+
+		if err != nil {
+			return err
+		}
 	}
 
 	logger.Successf("%s", t.SuccessMessage)
