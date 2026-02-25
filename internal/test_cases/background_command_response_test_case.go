@@ -3,7 +3,6 @@ package test_cases
 import (
 	"fmt"
 	"regexp"
-	"strconv"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -56,16 +55,10 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 		panic(fmt.Sprintf("Codecrafters Internal Error - Shouldn't be here: Could not parse background launch output: %q", outputText))
 	}
 
-	actualJobNumberStr := matches[1]
-	actualJobNumber, err := strconv.Atoi(actualJobNumberStr)
+	actualJobNumber := matches[1]
 
-	if err != nil {
-		// This is because the job number is guaranteed to be an integer from the regex above
-		panic(fmt.Sprintf("Codecrafters Internal Error - Shouldn't be here: Could not parse job number from output: %q", outputText))
-	}
-
-	if actualJobNumber != t.ExpectedJobNumber {
-		return fmt.Errorf("Expected job number to be %d, got %d", t.ExpectedJobNumber, actualJobNumber)
+	if actualJobNumber != fmt.Sprintf("%d", t.ExpectedJobNumber) {
+		return fmt.Errorf("Expected job number to be %d, got %s", t.ExpectedJobNumber, actualJobNumber)
 	}
 
 	logger.Successf("%s", t.SuccessMessage)

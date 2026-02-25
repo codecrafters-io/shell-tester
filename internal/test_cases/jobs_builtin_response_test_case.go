@@ -12,8 +12,9 @@ import (
 )
 
 // jobsBuiltinOutputLineRegex matches a single jobs output line and captures:
-// 1. job id (integer), 2. marker (+ or - or space), 3. status (non-whitespace), 4. launch command (rest of line)
-var jobsBuiltinOutputLineRegex = regexp.MustCompile(`^\[(\d+)\]([\+\-\s])\s+(\S+)\s+(.+)$`)
+// 1. job id (integer), 2. marker (+ or - or space), 3. status (e.g. "Running" or "Exit 1"), 4. launch command (rest of line).
+// Status uses .+? (non-greedy) so "Running" vs "Exit 1" and the rest is the launch command.
+var jobsBuiltinOutputLineRegex = regexp.MustCompile(`^\[(\d+)\]\s*([\+\-\s])\s+(.+?)\s+(.+)$`)
 
 const (
 	UnmarkedJob = iota
@@ -55,57 +56,25 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		ExpectedOutput: commandReflection,
 	})
 
-	// If we don't expect any items directly assert next prompt
+	// In case of no output entries, assert only the command reflection
 	if len(t.ExpectedOutputItems) == 0 {
-		return asserter.AssertWithPrompt()
+		return asserter.AssertWithoutPrompt()
 	}
 
 	for i, outputEntry := range t.ExpectedOutputItems {
-		marker := `\s`
-		switch outputEntry.Marker {
-		case CurrentJob:
-			marker = `\+`
-		case PreviousJob:
-			marker = `\-`
-		}
-
-		// This regex expects the following:
-		// 1. Bracketed job number: Square bracket open, followed by an integer, followed by square bracket close
-		// 2. Optional spaces (ZSH uses spaces after bracketed job number)
-		// 3. Job Marker (+/-/space)
-		// 4. Whitespaces following the job marker
-		// 5. Job status: "Done", "Running", etc (This is case insensitive: Complies with both bash and zsh)
-		// 6. Followed by whitespace
-		// 7. Followed by the launch command (case sensitive)
-		regexString := fmt.Sprintf(
-			`\[%d\]\s*%s\s+(?i)%s\s+(?-i)%s`,
-			outputEntry.JobNumber,
-			marker,
-			regexp.QuoteMeta(outputEntry.Status),
-			regexp.QuoteMeta(outputEntry.LaunchCommand),
-		)
-
-		// For 'running' jobs, bash displays the trailing & sign
-		// This is optional since ZSH doesn't use this
-		if strings.ToLower(outputEntry.Status) == "running" {
-			regexString += "( &)?"
-		}
-
-		regex := regexp.MustCompile(regexString)
-
 		asserter.AddAssertion(assertions.SingleLineRegexAssertion{
-			ExpectedRegexPatterns: []*regexp.Regexp{regex},
+			ExpectedRegexPatterns: []*regexp.Regexp{jobsBuiltinOutputLineRegex},
 		})
 
-		shouldAssertWithPrompt := false
+		assertWithPrompt := false
 
 		if i == len(t.ExpectedOutputItems)-1 {
-			shouldAssertWithPrompt = true
+			assertWithPrompt = true
 		}
 
 		var err error
 
-		if shouldAssertWithPrompt {
+		if assertWithPrompt {
 			err = asserter.AssertWithPrompt()
 		} else {
 			err = asserter.AssertWithoutPrompt()
@@ -114,7 +83,78 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		if err != nil {
 			return err
 		}
+
+		outputLine := asserter.Shell.GetScreenState().GetRow(asserter.GetLastLoggedRowIndex())
+		outputText := outputLine.String()
+
+		if err := validateJobsOutputLineWithCaptures(outputText, outputEntry); err != nil {
+			return err
+		}
 	}
 
 	return nil
+}
+
+// validateJobsOutputLineWithCaptures parses the jobs output line with capture groups and compares
+// each value to the expected entry. Returns a descriptive error on first mismatch.
+// Panics with a Codecrafters Internal Error if the line does not match the expected format.
+func validateJobsOutputLineWithCaptures(outputText string, expectedEntry JobsBuiltinOutputEntry) error {
+	submatches := jobsBuiltinOutputLineRegex.FindStringSubmatch(outputText)
+
+	if len(submatches) < 5 {
+		panic("Codecrafters Internal Error: Shouldn't be here - Could not parse jobs output line")
+	}
+
+	capturedJobIDStr := submatches[1]
+	capturedMarkerStr := submatches[2]
+	capturedStatusStr := submatches[3]
+	capturedLaunchCommandStr := submatches[4]
+
+	capturedMarker := parsedMarkerToMarkerConstant(capturedMarkerStr)
+
+	normalisedCapturedLaunchCommand := strings.TrimSuffix(strings.TrimSpace(capturedLaunchCommandStr), "&")
+	normalisedCapturedLaunchCommand = strings.TrimSpace(normalisedCapturedLaunchCommand)
+	expectedLaunchCommandNormalised := strings.TrimSpace(expectedEntry.LaunchCommand)
+
+	if capturedJobIDStr != fmt.Sprintf("%d", expectedEntry.JobNumber) {
+		return fmt.Errorf("Job number mismatch: expected %d, got %s", expectedEntry.JobNumber, capturedJobIDStr)
+	}
+
+	if capturedMarker != expectedEntry.Marker {
+		return fmt.Errorf("Marker mismatch: expected %s, got %s",
+			markerConstantToDisplay(expectedEntry.Marker), markerConstantToDisplay(capturedMarker))
+	}
+
+	if !strings.EqualFold(capturedStatusStr, expectedEntry.Status) {
+		return fmt.Errorf("Status mismatch: expected %q, got %q", expectedEntry.Status, capturedStatusStr)
+	}
+
+	if normalisedCapturedLaunchCommand != expectedLaunchCommandNormalised {
+		return fmt.Errorf("Launch command mismatch: expected %q, got %q",
+			expectedEntry.LaunchCommand, capturedLaunchCommandStr)
+	}
+
+	return nil
+}
+
+func parsedMarkerToMarkerConstant(markerStr string) int {
+	switch strings.TrimSpace(markerStr) {
+	case "+":
+		return CurrentJob
+	case "-":
+		return PreviousJob
+	default:
+		return UnmarkedJob
+	}
+}
+
+func markerConstantToDisplay(marker int) string {
+	switch marker {
+	case CurrentJob:
+		return "\"+\" (current)"
+	case PreviousJob:
+		return "\"-\" (previous)"
+	default:
+		return "\" \" (unmarked)"
+	}
 }

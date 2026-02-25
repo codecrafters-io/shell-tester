@@ -36,7 +36,7 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 			LaunchCommand: backgroundLaunchCommand,
 			Marker:        test_cases.CurrentJob,
 		}},
-		SuccessMessage: "Expected entry for jobs builtin found",
+		SuccessMessage: "✓ Expected entry for jobs builtin found",
 	}
 
 	if err := jobsTestCase.Run(asserter, shell, logger); err != nil {

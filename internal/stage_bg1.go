@@ -16,13 +16,11 @@ func testBG1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	typeTestCase := test_cases.CommandResponseTestCase{
-		Command:        "type jobs",
-		ExpectedOutput: "jobs is a shell builtin",
-		SuccessMessage: "Expected type for 'jobs' found",
+	typeTestCase := test_cases.TypeOfCommandTestCase{
+		Command: "jobs",
 	}
 
-	if err := typeTestCase.Run(asserter, shell, logger); err != nil {
+	if err := typeTestCase.RunForBuiltin(asserter, shell, logger); err != nil {
 		return err
 	}
 
