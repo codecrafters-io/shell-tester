@@ -92,6 +92,9 @@ func (a *LoggedShellAsserter) assert(withoutPrompt bool, readTimeout time.Durati
 	}
 
 	if readErr := a.Shell.ReadUntilConditionOrTimeout(conditionFn, readTimeout); readErr != nil {
+		if a.Shell.WasOOMKilled() {
+			return a.Shell.MemoryLimitExceededError()
+		}
 		if assertionErr := assertFn(); assertionErr != nil {
 			a.logAssertionError(*assertionErr)
 			return fmt.Errorf("Assertion failed.")
