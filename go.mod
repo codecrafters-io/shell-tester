@@ -9,7 +9,6 @@ require (
 	github.com/codecrafters-io/tester-utils v0.4.15
 	github.com/creack/pty v1.1.24
 	github.com/fatih/color v1.18.0
-	github.com/google/gops v0.3.28
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 	github.com/shirou/gopsutil/v3 v3.24.5
 	github.com/stretchr/testify v1.10.0

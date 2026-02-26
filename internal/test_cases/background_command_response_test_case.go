@@ -38,7 +38,7 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 	}
 
 	// This window lets the shell spawn the process
-	time.Sleep(time.Millisecond)
+	time.Sleep(10 * time.Millisecond)
 
 	expectedChildPid := shell.GetChildPidFromCmdLine(t.Command)
 
