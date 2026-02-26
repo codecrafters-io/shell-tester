@@ -258,6 +258,7 @@ func normalizeTesterOutput(testerOutput []byte) []byte {
 		"[your-program] [JOB_NUM]PID":                {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
 		"[tester::#AT7] Received: \"[JOB_NUM]PID\"":  {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\]\d+"`)},
 		"[tester::#AT7] Received: \"[JOB_NUM] PID\"": {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\] \d+"`)},
+		"[tester::#FY4] Received: \"[JOB_NUM] PID\"": {regexp.MustCompile(`\[tester::#FY4\].*Received:.*"\[\d+\] \d+"`)},
 		// For background jobs incorrect job number
 	}
 
