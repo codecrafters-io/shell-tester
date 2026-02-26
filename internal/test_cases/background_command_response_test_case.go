@@ -2,7 +2,6 @@ package test_cases
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -36,9 +35,6 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
 	}
-
-	// This window lets the shell spawn the process
-	time.Sleep(time.Millisecond)
 
 	expectedChildPid := shell.GetChildPidFromCmdLine(t.Command)
 
