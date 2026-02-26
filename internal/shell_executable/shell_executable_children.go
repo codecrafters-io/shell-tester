@@ -9,8 +9,8 @@ import (
 // GetChildPidFromCmdLine returns the PID of the first child process of the shell
 // that has the same launch command as the provided string
 // If it cannot find such a children process, it'll return -1
-func (e *ShellExecutable) GetChildPidFromCmdLine(cmdLine string) int {
-	shellPid := e.GetShellPid()
+func (b *ShellExecutable) GetChildPidFromCmdLine(cmdLine string) int {
+	shellPid := b.GetShellPid()
 	processes, err := process.Processes()
 
 	if err != nil {
