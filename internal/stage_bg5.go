@@ -59,7 +59,7 @@ func testBG5(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// A small delay since grep takes some time to process and exit
-	time.Sleep(time.Millisecond)
+	time.Sleep(50 * time.Millisecond)
 
 	// Call jobs again
 	jobsBuiltinTestCase2 := test_cases.JobsBuiltinResponseTestCase{

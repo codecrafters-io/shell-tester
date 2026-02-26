@@ -69,7 +69,7 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	time.Sleep(time.Millisecond)
+	time.Sleep(50 * time.Millisecond)
 
 	// Call jobs for the first time
 	jobsBuiltinTestCase1 := test_cases.JobsBuiltinResponseTestCase{
@@ -88,7 +88,7 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err := WriteToFile(stageHarness, fifoPath2, grepPattern2); err != nil {
 		return err
 	}
-	time.Sleep(time.Millisecond)
+	time.Sleep(50 * time.Millisecond)
 
 	// Call jobs for the second time
 	jobsBuiltinTestCase2 := test_cases.JobsBuiltinResponseTestCase{
