@@ -79,7 +79,11 @@ func testBg8ResetToZero(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	sleepCommand := "sleep 10"
-	if err := (&test_cases.BackgroundCommandResponseTestCase{Command: sleepCommand, ExpectedJobNumber: 1}).Run(asserter, shell, logger); err != nil {
+	if err := (&test_cases.BackgroundCommandResponseTestCase{
+		Command:           sleepCommand,
+		ExpectedJobNumber: 1,
+		SuccessMessage:    "✓ Received entry for started job",
+	}).Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
@@ -111,13 +115,13 @@ func testBg8Recycle(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	sleepLong := "sleep 100"
-	bgLongCmd := &test_cases.BackgroundCommandResponseTestCase{
-		Command:           sleepLong,
+	sleepCommand := "sleep 100"
+	sleepCommandTestCase := &test_cases.BackgroundCommandResponseTestCase{
+		Command:           sleepCommand,
 		ExpectedJobNumber: 1,
 		SuccessMessage:    "✓ Received entry for the launched job",
 	}
-	if err := bgLongCmd.Run(asserter, shell, logger); err != nil {
+	if err := sleepCommandTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
@@ -149,24 +153,24 @@ func testBg8Recycle(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	sleep50 := "sleep 50"
+	sleepCommand2 := "sleep 50"
 	if err := (&test_cases.BackgroundCommandResponseTestCase{
-		Command:           sleep50,
+		Command:           sleepCommand2,
 		ExpectedJobNumber: 2,
 		SuccessMessage:    "✓ Received entry for the launched job",
 	}).Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
-	jobsTwo := test_cases.JobsBuiltinResponseTestCase{
+	jobsTestCase := test_cases.JobsBuiltinResponseTestCase{
 		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{
-			{JobNumber: 1, Status: "Running", LaunchCommand: sleepLong, Marker: test_cases.PreviousJob},
-			{JobNumber: 2, Status: "Running", LaunchCommand: sleep50, Marker: test_cases.CurrentJob},
+			{JobNumber: 1, Status: "Running", LaunchCommand: sleepCommand, Marker: test_cases.PreviousJob},
+			{JobNumber: 2, Status: "Running", LaunchCommand: sleepCommand2, Marker: test_cases.CurrentJob},
 		},
 		SuccessMessage: "✓ Received 2 entries for the running jobs",
 	}
 
-	if err := jobsTwo.Run(asserter, shell, logger); err != nil {
+	if err := jobsTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
