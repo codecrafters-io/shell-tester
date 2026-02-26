@@ -89,7 +89,7 @@ def run_builtin(args: list[str], last_exit_code: int) -> tuple[str | None, int |
                 marker = " "
             line = f"[{jid}]{marker}  Running                 {cmd_line}"
             lines.append(line)
-            return "\n".join(lines) if lines else None, None
+        return "\n".join(lines) if lines else None, None
     return None, None
 
 
