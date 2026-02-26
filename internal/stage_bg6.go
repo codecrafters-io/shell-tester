@@ -96,7 +96,7 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 			{JobNumber: 1, Status: "Running", LaunchCommand: sleepCommand, Marker: test_cases.PreviousJob},
 			{JobNumber: 3, Status: "Done", LaunchCommand: bgGrepCommand2, Marker: test_cases.CurrentJob},
 		},
-		SuccessMessage: "Expected 3 entries found in the output",
+		SuccessMessage: "Expected 2 entries found in the output",
 	}
 	if err := jobsBuiltinTestCase2.Run(asserter, shell, logger); err != nil {
 		return err
