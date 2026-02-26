@@ -52,7 +52,7 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 
 	// In case of no output entries, assert only the command reflection
 	if len(t.ExpectedOutputEntries) == 0 {
-		return asserter.AssertWithoutPrompt()
+		return asserter.AssertWithPrompt()
 	}
 
 	for i, expectedOutputEntry := range t.ExpectedOutputEntries {
