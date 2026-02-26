@@ -28,8 +28,8 @@ func (a SingleLineAssertion) Inspect() string {
 }
 
 func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowIndex int) (processedRowCount int, err *AssertionError) {
-	if a.ExpectedOutput == "" {
-		panic("CodeCrafters Internal Error: ExpectedOutput must be provided")
+	if a.ExpectedOutput == "" && len(a.FallbackPatterns) == 0 {
+		panic("CodeCrafters Internal Error: ExpectedOutput or fallbackPatterns must be provided")
 	}
 
 	processedRowCount = 1
@@ -58,7 +58,7 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 			rowDescription = "trailing space"
 		}
 
-		detailedErrorMessage := utils.BuildColoredErrorMessageForExpectedOutputMismatch(a.ExpectedOutput, row.String(), rowDescription)
+		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, row.String(), rowDescription)
 
 		// If the line won't be logged, we say "didn't find line ..." instead of "line does not match expected ..."
 		if startRowIndex > screenState.GetLastLoggableRowIndex() {

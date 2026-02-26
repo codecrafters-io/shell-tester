@@ -33,9 +33,10 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 	})
 
 	// We first match against the format
-	asserter.AddAssertion(assertions.SingleLineRegexAssertion{
-		ExpectedRegexPatterns: []*regexp.Regexp{
-			regexp.MustCompile(`\[\d+\]\s+\d+`),
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: fmt.Sprintf("[%d] <PID>", t.ExpectedJobNumber),
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(fmt.Sprintf(`^\[%d\] \d+$`, t.ExpectedJobNumber)),
 		},
 	})
 
@@ -43,24 +44,9 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 		return err
 	}
 
-	// We match the values later to produce a verbose error message
-	outputLine := asserter.Shell.GetScreenState().GetRow(asserter.GetLastLoggedRowIndex())
-	outputText := outputLine.String()
-
-	jobNumberRegexp := regexp.MustCompile(`\[(\d+)\]\s+\d+`)
-	matches := jobNumberRegexp.FindStringSubmatch(outputText)
-
-	if len(matches) != 2 {
-		// This is because the regex is already matched against in the assertion above, we're just re-running this with capture group
-		panic(fmt.Sprintf("Codecrafters Internal Error - Shouldn't be here: Could not parse background launch output: %q", outputText))
+	if t.SuccessMessage != "" {
+		logger.Successf("%s", t.SuccessMessage)
 	}
 
-	actualJobNumber := matches[1]
-
-	if actualJobNumber != fmt.Sprintf("%d", t.ExpectedJobNumber) {
-		return fmt.Errorf("Expected job number to be %d, got %s", t.ExpectedJobNumber, actualJobNumber)
-	}
-
-	logger.Successf("%s", t.SuccessMessage)
 	return nil
 }

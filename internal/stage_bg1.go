@@ -27,7 +27,7 @@ func testBG1(stageHarness *test_case_harness.TestCaseHarness) error {
 	jobsTestCase := test_cases.JobsBuiltinResponseTestCase{
 		SuccessMessage: "✓ Received empty response",
 		// Expect no output
-		ExpectedOutputItems: []test_cases.JobsBuiltinOutputEntry{},
+		ExpectedOutputEntries: []test_cases.JobsBuiltinOutputEntry{},
 	}
 
 	if err := jobsTestCase.Run(asserter, shell, logger); err != nil {

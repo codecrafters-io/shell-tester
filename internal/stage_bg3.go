@@ -30,7 +30,7 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Assert the job output
 	jobsTestCase := test_cases.JobsBuiltinResponseTestCase{
-		ExpectedOutputItems: []test_cases.JobsBuiltinOutputEntry{{
+		ExpectedOutputEntries: []test_cases.JobsBuiltinOutputEntry{{
 			JobNumber:     1,
 			Status:        "Running",
 			LaunchCommand: backgroundLaunchCommand,

@@ -75,8 +75,8 @@ func launchBgCommandAndAssertJobs(asserter *logged_shell_asserter.LoggedShellAss
 		}
 
 		jobsTestCase := test_cases.JobsBuiltinResponseTestCase{
-			ExpectedOutputItems: jobsOutputEntries,
-			SuccessMessage:      fmt.Sprintf("✓ Expected %s for jobs builtin found", english.Plural(len(jobsOutputEntries), "entry", "entries")),
+			ExpectedOutputEntries: jobsOutputEntries,
+			SuccessMessage:        fmt.Sprintf("✓ Expected %s for jobs builtin found", english.Plural(len(jobsOutputEntries), "entry", "entries")),
 		}
 
 		if err := jobsTestCase.Run(asserter, shell, logger); err != nil {
