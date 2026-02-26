@@ -233,11 +233,11 @@ func normalizeTesterOutput(testerOutput []byte) []byte {
 		"PATH is now: <path>":             {regexp.MustCompile(`PATH is now: .*`)},
 		"/tmp/":                           {regexp.MustCompile(`/var/folders/.*/.*/.*/`)},
 		"[your-program] [JOB_NUM] PID":    {regexp.MustCompile(`\[your-program\].*\[\d+\] \d+`)},
-		// For background_jobs_incorrect_output_format
+		// For intentional error cases fixtures in background-jobs extension
 		"[your-program] [JOB_NUM]PID":                {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
-		"[tester::#AT7] Received: \"[JOB_NUM]PID\"":  {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\]\d+"`)},
+		"[tester::#AT7] Expected: \"[JOB_NUM] PID\"": {regexp.MustCompile(`\[tester::#AT7\].*Expected:.*"\[\d+\] \d+"`)},
 		"[tester::#AT7] Received: \"[JOB_NUM] PID\"": {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\] \d+"`)},
-		// For background jobs incorrect job number
+		"[tester::#AT7] Received: \"[JOB_NUM]PID\"":  {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\]\d+"`)},
 	}
 
 	for replacement, regexes := range replacements {
