@@ -17,5 +17,5 @@ Debug = true
 [33m[tester::#IP1] [0m[91m[32mExpected:[0m "Program Signature: 3842155998"[0m
 [33m[tester::#IP1] [0m[91m[31mReceived:[0m "" [31m(empty line)[0m[0m
 [33m[your-program] [0m[0mProgram Signature: 3842155998[0m
-[33m[tester::#IP1] [0m[91mAssertion failed.[0m
+[33m[tester::#IP1] [0m[91m[0m
 [33m[tester::#IP1] [0m[91mTest failed[0m

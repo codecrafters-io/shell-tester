@@ -7,5 +7,5 @@ Debug = true
 [33m[tester::#CZ2] [0m[91m^ Line does not match expected value.[0m
 [33m[tester::#CZ2] [0m[91m[32mExpected:[0m "invalid_apple_command: command not found"[0m
 [33m[tester::#CZ2] [0m[91m[31mReceived:[0m "Command: invalid_apple_command"[0m
-[33m[tester::#CZ2] [0m[91mAssertion failed.[0m
+[33m[tester::#CZ2] [0m[91m[0m
 [33m[tester::#CZ2] [0m[91mTest failed[0m
