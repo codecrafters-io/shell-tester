@@ -79,7 +79,7 @@ func testBg8ResetToZero(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	sleepCommand := "sleep 10"
-	if err := (&test_cases.BackgroundCommandResponseTestCase{Command: sleepCommand, ExpectedJobNumber: 1}).Run(asserter, shell, logger); err != nil {
+	if err := (&test_cases.BackgroundCommandResponseTestCase{Command: sleepCommand, ExpectedJobNumber: 1, SuccessMessage: "✓ Received entry for the launched job"}).Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
