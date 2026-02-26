@@ -22,6 +22,9 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	fifoPath2 := fmt.Sprintf("/tmp/%s-%d", random.RandomWord(), random.RandomInt(1, 100))
+	for fifoPath2 == fifoPath1 {
+		fifoPath2 = fmt.Sprintf("/tmp/%s-%d", random.RandomWord(), random.RandomInt(1, 100))
+	}
 	if err := CreateRandomFIFOWithTeardown(stageHarness, fifoPath2, 0644); err != nil {
 		return err
 	}
