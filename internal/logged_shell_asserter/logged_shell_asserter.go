@@ -1,7 +1,7 @@
 package logged_shell_asserter
 
 import (
-	"fmt"
+	"errors"
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertion_collection"
@@ -97,7 +97,7 @@ func (a *LoggedShellAsserter) assert(withoutPrompt bool, readTimeout time.Durati
 		}
 		if assertionErr := assertFn(); assertionErr != nil {
 			a.logAssertionError(*assertionErr)
-			return fmt.Errorf("Assertion failed.")
+			return errors.New("")
 		}
 	}
 
