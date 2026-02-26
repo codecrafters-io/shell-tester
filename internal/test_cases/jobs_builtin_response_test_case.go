@@ -89,8 +89,8 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 
 		regex := regexp.MustCompile(regexString)
 
-		asserter.AddAssertion(assertions.SingleLineRegexAssertion{
-			ExpectedRegexPatterns: []*regexp.Regexp{regex},
+		asserter.AddAssertion(assertions.SingleLineAssertion{
+			FallbackPatterns: []*regexp.Regexp{regex},
 		})
 
 		shouldAssertWithPrompt := false

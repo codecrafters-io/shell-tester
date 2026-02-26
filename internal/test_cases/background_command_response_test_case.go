@@ -3,7 +3,6 @@ package test_cases
 import (
 	"fmt"
 	"regexp"
-	"strconv"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -34,9 +33,10 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 	})
 
 	// We first match against the format
-	asserter.AddAssertion(assertions.SingleLineRegexAssertion{
-		ExpectedRegexPatterns: []*regexp.Regexp{
-			regexp.MustCompile(`\[\d+\]\s+\d+`),
+	asserter.AddAssertion(assertions.SingleLineAssertion{
+		ExpectedOutput: fmt.Sprintf("[%d] <PID>", t.ExpectedJobNumber),
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(fmt.Sprintf(`^\[%d\] \d+$`, t.ExpectedJobNumber)),
 		},
 	})
 
@@ -44,30 +44,9 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 		return err
 	}
 
-	// We match the values later to produce a verbose error message
-	outputLine := asserter.Shell.GetScreenState().GetRow(asserter.GetLastLoggedRowIndex())
-	outputText := outputLine.String()
-
-	jobNumberRegexp := regexp.MustCompile(`\[(\d+)\]\s+\d+`)
-	matches := jobNumberRegexp.FindStringSubmatch(outputText)
-
-	if len(matches) != 2 {
-		// This is because the regex is already matched against in the assertion above, we're just re-running this with capture group
-		panic(fmt.Sprintf("Codecrafters Internal Error - Shouldn't be here: Could not parse background launch output: %q", outputText))
+	if t.SuccessMessage != "" {
+		logger.Successf("%s", t.SuccessMessage)
 	}
 
-	actualJobNumberStr := matches[1]
-	actualJobNumber, err := strconv.Atoi(actualJobNumberStr)
-
-	if err != nil {
-		// This is because the job number is guaranteed to be an integer from the regex above
-		panic(fmt.Sprintf("Codecrafters Internal Error - Shouldn't be here: Could not parse job number from output: %q", outputText))
-	}
-
-	if actualJobNumber != t.ExpectedJobNumber {
-		return fmt.Errorf("Expected job number to be %d, got %d", t.ExpectedJobNumber, actualJobNumber)
-	}
-
-	logger.Successf("%s", t.SuccessMessage)
 	return nil
 }

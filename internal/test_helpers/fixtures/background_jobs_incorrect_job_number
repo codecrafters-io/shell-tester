@@ -3,6 +3,10 @@ Debug = true
 [33m[tester::#AT7] [0m[94mRunning tests for Stage #AT7 (at7)[0m
 [33m[tester::#AT7] [0m[94mRunning ./your_program.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[0] 2652[0m
-[33m[tester::#AT7] [0m[91mExpected job number to be 1, got 0[0m
+[33m[your-program] [0m[0m[0] 2326[0m
+[33m[tester::#AT7] [0m[91m^ Line does not match expected value.[0m
+[33m[tester::#AT7] [0m[91m[32mExpected:[0m "[1] <PID>"[0m
+[33m[tester::#AT7] [0m[91m[31mReceived:[0m "[0] 2326"[0m
+[33m[your-program] [0m[0m$ [0m
+[33m[tester::#AT7] [0m[91mAssertion failed.[0m
 [33m[tester::#AT7] [0m[91mTest failed[0m
