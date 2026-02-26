@@ -1,7 +1,6 @@
 package test_cases
 
 import (
-	"fmt"
 	"regexp"
 	"time"
 
@@ -39,25 +38,11 @@ func (t CommandResponseWithReapedJobsTestCase) Run(asserter *logged_shell_assert
 
 	// Add assertion for reaped job entries now
 	for _, expectedOutputEntry := range t.ExpectedReapedJobEntries {
-		expectedJobMarkerString := convertJobMarkerToString(expectedOutputEntry.Marker)
-
-		expectedOutput := fmt.Sprintf(
-			"[%d]%s  %s                 %s",
-			expectedOutputEntry.JobNumber, expectedJobMarkerString, expectedOutputEntry.Status, expectedOutputEntry.LaunchCommand,
-		)
-
-		// This regex aims to match lines like: [1]+  Done                 sleep 5 &
-		regexString := fmt.Sprintf(
-			`^\[%d\]\s*%s\s+(?i)%s\s+(?-i)%s$`,
-			expectedOutputEntry.JobNumber,
-			regexp.QuoteMeta(expectedJobMarkerString),
-			regexp.QuoteMeta(expectedOutputEntry.Status),
-			regexp.QuoteMeta(expectedOutputEntry.LaunchCommand),
-		)
+		expectedOutput, regexPattern := expectedOutputEntry.ExpectedOutputAndRegex()
 
 		allSingleLinesAssertion = append(allSingleLinesAssertion, assertions.SingleLineAssertion{
 			ExpectedOutput:   expectedOutput,
-			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(regexString)},
+			FallbackPatterns: []*regexp.Regexp{regexPattern},
 		})
 	}
 
