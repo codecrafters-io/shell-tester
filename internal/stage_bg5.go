@@ -32,6 +32,7 @@ func testBG5(stageHarness *test_case_harness.TestCaseHarness) error {
 	bgJobTestCase := test_cases.BackgroundCommandResponseTestCase{
 		Command:           bgGrepCommand,
 		ExpectedJobNumber: 1,
+		SuccessMessage:    fmt.Sprintf("✓ Expected entry found for the started job"),
 	}
 
 	if err := bgJobTestCase.Run(asserter, shell, logger); err != nil {
@@ -46,7 +47,7 @@ func testBG5(stageHarness *test_case_harness.TestCaseHarness) error {
 			LaunchCommand: bgGrepCommand,
 			Marker:        test_cases.CurrentJob,
 		}},
-		SuccessMessage: "Expected 1 entry found in the output",
+		SuccessMessage: "Expected 1 entry found for the running job",
 	}
 
 	if err := jobsBuiltinTestCase1.Run(asserter, shell, logger); err != nil {
@@ -69,7 +70,7 @@ func testBG5(stageHarness *test_case_harness.TestCaseHarness) error {
 			LaunchCommand: bgGrepCommand,
 			Marker:        test_cases.CurrentJob,
 		}},
-		SuccessMessage: "Expected 1 entry found in the output",
+		SuccessMessage: "Expected 1 entry found for the finished job",
 	}
 
 	if err := jobsBuiltinTestCase2.Run(asserter, shell, logger); err != nil {

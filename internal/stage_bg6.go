@@ -35,6 +35,7 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 	bgSleepTestCase := test_cases.BackgroundCommandResponseTestCase{
 		Command:           sleepCommand,
 		ExpectedJobNumber: 1,
+		SuccessMessage:    "Expected entry found for the started job",
 	}
 	if err := bgSleepTestCase.Run(asserter, shell, logger); err != nil {
 		return err
@@ -47,6 +48,7 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 	bgGrepTestCase1 := test_cases.BackgroundCommandResponseTestCase{
 		Command:           bgGrepCommand1,
 		ExpectedJobNumber: 2,
+		SuccessMessage:    "Expected entry found for the started job",
 	}
 	if err := bgGrepTestCase1.Run(asserter, shell, logger); err != nil {
 		return err
@@ -58,6 +60,7 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 	bgGrepTestCase2 := test_cases.BackgroundCommandResponseTestCase{
 		Command:           bgGrepCommand2,
 		ExpectedJobNumber: 3,
+		SuccessMessage:    "Expected entry found for the started job",
 	}
 
 	if err := bgGrepTestCase2.Run(asserter, shell, logger); err != nil {

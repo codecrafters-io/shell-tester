@@ -42,7 +42,7 @@ func launchBgCommandAndAssertJobs(asserter *logged_shell_asserter.LoggedShellAss
 	for i, bgCommand := range bgCommands {
 		backgroundLaunchTestCase := test_cases.BackgroundCommandResponseTestCase{
 			Command:           bgCommand,
-			SuccessMessage:    "✓ Received next prompt",
+			SuccessMessage:    "✓ Received entry for the started job",
 			ExpectedJobNumber: i + 1,
 		}
 
@@ -76,7 +76,7 @@ func launchBgCommandAndAssertJobs(asserter *logged_shell_asserter.LoggedShellAss
 
 		jobsTestCase := test_cases.JobsBuiltinResponseTestCase{
 			ExpectedOutputEntries: jobsOutputEntries,
-			SuccessMessage:        fmt.Sprintf("✓ Expected %s for jobs builtin found", english.Plural(len(jobsOutputEntries), "entry", "entries")),
+			SuccessMessage:        fmt.Sprintf("✓ Expected %s for the running jobs", english.Plural(len(jobsOutputEntries), "entry", "entries")),
 		}
 
 		if err := jobsTestCase.Run(asserter, shell, logger); err != nil {
