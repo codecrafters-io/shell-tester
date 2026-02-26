@@ -29,7 +29,7 @@ func (a SingleLineAssertion) Inspect() string {
 
 func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowIndex int) (processedRowCount int, err *AssertionError) {
 	if a.ExpectedOutput == "" && len(a.FallbackPatterns) == 0 {
-		panic("CodeCrafters Internal Error: Either ExpectedOutput or FallbackPatterns must be provided")
+		panic("CodeCrafters Internal Error: ExpectedOutput or fallbackPatterns must be provided")
 	}
 
 	processedRowCount = 1
