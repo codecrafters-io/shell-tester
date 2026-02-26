@@ -40,7 +40,7 @@ func testBG5(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Call jobs
 	jobsBuiltinTestCase1 := test_cases.JobsBuiltinResponseTestCase{
-		ExpectedOutputEntries: []test_cases.JobsBuiltinOutputEntry{{
+		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{{
 			JobNumber:     1,
 			Status:        "Running",
 			LaunchCommand: bgGrepCommand,
@@ -63,7 +63,7 @@ func testBG5(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Call jobs again
 	jobsBuiltinTestCase2 := test_cases.JobsBuiltinResponseTestCase{
-		ExpectedOutputEntries: []test_cases.JobsBuiltinOutputEntry{{
+		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{{
 			JobNumber:     1,
 			Status:        "Done",
 			LaunchCommand: bgGrepCommand,

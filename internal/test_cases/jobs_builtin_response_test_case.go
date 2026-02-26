@@ -16,7 +16,7 @@ const (
 	PreviousJob
 )
 
-type JobsBuiltinOutputEntry struct {
+type BackgroundJobStatusEntry struct {
 	// The job number value in the square brackets
 	JobNumber int
 	// Status: "Running", "Done", "Terminated", "1 Exit", etc
@@ -28,7 +28,7 @@ type JobsBuiltinOutputEntry struct {
 }
 
 type JobsBuiltinResponseTestCase struct {
-	ExpectedOutputEntries []JobsBuiltinOutputEntry
+	ExpectedOutputEntries []BackgroundJobStatusEntry
 	SuccessMessage        string
 }
 

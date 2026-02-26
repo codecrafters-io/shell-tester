@@ -139,6 +139,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_jobs_builtin_not_reaped",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"background_jobs_job_number_not_recycled": {
+			StageSlugs:          []string{"fy4"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_job_number_not_recycled",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_job_number_not_recycled",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"pipelines_pass_bash": {
 			StageSlugs:          []string{"br6", "ny9", "xk3"},
 			CodePath:            "./test_helpers/bash",
