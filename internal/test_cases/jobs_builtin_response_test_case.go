@@ -19,7 +19,7 @@ const (
 type JobsBuiltinOutputEntry struct {
 	// The job number value in the square brackets
 	JobNumber int
-	// Status: "Running", "Done", "Terminated", etc
+	// Status: "Running", "Done", "Terminated", "1 Exit", etc
 	Status string
 	// LaunchCommand: Command that was run and sent to the background without trailing &
 	LaunchCommand string
@@ -55,49 +55,50 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		return asserter.AssertWithoutPrompt()
 	}
 
-	for i, outputEntry := range t.ExpectedOutputEntries {
-		marker := convertJobMarkerToString(outputEntry.Marker)
+	for i, expectedOutputEntry := range t.ExpectedOutputEntries {
+		expectedJobMarkerString := convertJobMarkerToString(expectedOutputEntry.Marker)
+
 		// This regex aims to match lines like: [1]+  Running                 sleep 5 &
 		regexString := fmt.Sprintf(
 			`^\[%d\]\s*%s\s+(?i)%s\s+(?-i)%s`,
-			outputEntry.JobNumber,
-			regexp.QuoteMeta(marker),
-			regexp.QuoteMeta(outputEntry.Status),
-			regexp.QuoteMeta(outputEntry.LaunchCommand),
+			expectedOutputEntry.JobNumber,
+			regexp.QuoteMeta(expectedJobMarkerString),
+			regexp.QuoteMeta(expectedOutputEntry.Status),
+			regexp.QuoteMeta(expectedOutputEntry.LaunchCommand),
 		)
 
-		// For 'running' jobs, bash displays the trailing & sign
-		// This is optional since ZSH doesn't use this
-		if outputEntry.Status == "Running" {
+		// For 'Running' jobs, bash displays the trailing & sign
+		// Users shall comply with bash for consistency (Ensured this by appending this to expected output)
+		// But this should be optional since ZSH doesn't use this
+		if expectedOutputEntry.Status == "Running" {
 			regexString += "( &)?$"
 		} else {
 			regexString += "$"
 		}
 
-		regex := regexp.MustCompile(regexString)
-
 		expectedOutput := fmt.Sprintf(
 			"[%d]%s  %s                 %s",
-			outputEntry.JobNumber, marker, outputEntry.Status, outputEntry.LaunchCommand,
+			expectedOutputEntry.JobNumber, expectedJobMarkerString, expectedOutputEntry.Status, expectedOutputEntry.LaunchCommand,
 		)
 
-		if outputEntry.Status == "Running" {
+		// For 'Running' jobs, the trailing sign is expected
+		if expectedOutputEntry.Status == "Running" {
 			expectedOutput += " &"
 		}
 
 		asserter.AddAssertion(assertions.SingleLineAssertion{
 			ExpectedOutput:   expectedOutput,
-			FallbackPatterns: []*regexp.Regexp{regex},
+			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(regexString)},
 		})
 
 		assertWithPrompt := false
+		var err error
 
 		if i == len(t.ExpectedOutputEntries)-1 {
 			assertWithPrompt = true
 		}
 
-		var err error
-
+		// Assert with prompt on last entry
 		if assertWithPrompt {
 			err = asserter.AssertWithPrompt()
 		} else {
