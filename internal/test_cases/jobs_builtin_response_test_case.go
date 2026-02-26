@@ -3,18 +3,12 @@ package test_cases
 import (
 	"fmt"
 	"regexp"
-	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/tester-utils/logger"
 )
-
-// jobsBuiltinOutputLineRegex matches a single jobs output line and captures:
-// 1. job id (integer), 2. marker (+ or - or space), 3. status (e.g. "Running" or "Exit 1"), 4. launch command (rest of line).
-// Status uses .+? (non-greedy) so "Running" vs "Exit 1" and the rest is the launch command.
-var jobsBuiltinOutputLineRegex = regexp.MustCompile(`^\[(\d+)\]\s*([\+\-\s])\s+(.+?)\s+(.+)$`)
 
 const (
 	UnmarkedJob = iota
@@ -25,7 +19,7 @@ const (
 type JobsBuiltinOutputEntry struct {
 	// The job number value in the square brackets
 	JobNumber int
-	// Status: "Running", "Done", "Terminated", etc
+	// Status: "Running", "Done", "Terminated", "1 Exit", etc
 	Status string
 	// LaunchCommand: Command that was run and sent to the background without trailing &
 	LaunchCommand string
@@ -34,8 +28,8 @@ type JobsBuiltinOutputEntry struct {
 }
 
 type JobsBuiltinResponseTestCase struct {
-	ExpectedOutputItems []JobsBuiltinOutputEntry
-	SuccessMessage      string
+	ExpectedOutputEntries []JobsBuiltinOutputEntry
+	SuccessMessage        string
 }
 
 func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) (err error) {
@@ -57,23 +51,54 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	})
 
 	// In case of no output entries, assert only the command reflection
-	if len(t.ExpectedOutputItems) == 0 {
-		return asserter.AssertWithoutPrompt()
+	if len(t.ExpectedOutputEntries) == 0 {
+		return asserter.AssertWithPrompt()
 	}
 
-	for i, outputEntry := range t.ExpectedOutputItems {
-		asserter.AddAssertion(assertions.SingleLineRegexAssertion{
-			ExpectedRegexPatterns: []*regexp.Regexp{jobsBuiltinOutputLineRegex},
+	for i, expectedOutputEntry := range t.ExpectedOutputEntries {
+		expectedJobMarkerString := convertJobMarkerToString(expectedOutputEntry.Marker)
+
+		// This regex aims to match lines like: [1]+  Running                 sleep 5 &
+		regexString := fmt.Sprintf(
+			`^\[%d\]\s*%s\s+(?i)%s\s+(?-i)%s`,
+			expectedOutputEntry.JobNumber,
+			regexp.QuoteMeta(expectedJobMarkerString),
+			regexp.QuoteMeta(expectedOutputEntry.Status),
+			regexp.QuoteMeta(expectedOutputEntry.LaunchCommand),
+		)
+
+		// For 'Running' jobs, bash displays the trailing & sign
+		// Users shall comply with bash for consistency (Ensured this by appending this to expected output)
+		// But this should be optional since ZSH doesn't use this
+		if expectedOutputEntry.Status == "Running" {
+			regexString += "( &)?$"
+		} else {
+			regexString += "$"
+		}
+
+		expectedOutput := fmt.Sprintf(
+			"[%d]%s  %s                 %s",
+			expectedOutputEntry.JobNumber, expectedJobMarkerString, expectedOutputEntry.Status, expectedOutputEntry.LaunchCommand,
+		)
+
+		// For 'Running' jobs, the trailing sign is expected
+		if expectedOutputEntry.Status == "Running" {
+			expectedOutput += " &"
+		}
+
+		asserter.AddAssertion(assertions.SingleLineAssertion{
+			ExpectedOutput:   expectedOutput,
+			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(regexString)},
 		})
 
 		assertWithPrompt := false
+		var err error
 
-		if i == len(t.ExpectedOutputItems)-1 {
+		if i == len(t.ExpectedOutputEntries)-1 {
 			assertWithPrompt = true
 		}
 
-		var err error
-
+		// Assert with prompt on last entry
 		if assertWithPrompt {
 			err = asserter.AssertWithPrompt()
 		} else {
@@ -84,77 +109,22 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 			return err
 		}
 
-		outputLine := asserter.Shell.GetScreenState().GetRow(asserter.GetLastLoggedRowIndex())
-		outputText := outputLine.String()
-
-		if err := validateJobsOutputLineWithCaptures(outputText, outputEntry); err != nil {
-			return err
-		}
 	}
 
 	return nil
 }
 
-// validateJobsOutputLineWithCaptures parses the jobs output line with capture groups and compares
-// each value to the expected entry. Returns a descriptive error on first mismatch.
-// Panics with a Codecrafters Internal Error if the line does not match the expected format.
-func validateJobsOutputLineWithCaptures(outputText string, expectedEntry JobsBuiltinOutputEntry) error {
-	submatches := jobsBuiltinOutputLineRegex.FindStringSubmatch(outputText)
-
-	if len(submatches) < 5 {
-		panic("Codecrafters Internal Error: Shouldn't be here - Could not parse jobs output line")
-	}
-
-	capturedJobIDStr := submatches[1]
-	capturedMarkerStr := submatches[2]
-	capturedStatusStr := submatches[3]
-	capturedLaunchCommandStr := submatches[4]
-
-	capturedMarker := parsedMarkerToMarkerConstant(capturedMarkerStr)
-
-	normalisedCapturedLaunchCommand := strings.TrimSuffix(strings.TrimSpace(capturedLaunchCommandStr), "&")
-	normalisedCapturedLaunchCommand = strings.TrimSpace(normalisedCapturedLaunchCommand)
-	expectedLaunchCommandNormalised := strings.TrimSpace(expectedEntry.LaunchCommand)
-
-	if capturedJobIDStr != fmt.Sprintf("%d", expectedEntry.JobNumber) {
-		return fmt.Errorf("Job number mismatch: expected %d, got %s", expectedEntry.JobNumber, capturedJobIDStr)
-	}
-
-	if capturedMarker != expectedEntry.Marker {
-		return fmt.Errorf("Marker mismatch: expected %s, got %s",
-			markerConstantToDisplay(expectedEntry.Marker), markerConstantToDisplay(capturedMarker))
-	}
-
-	if !strings.EqualFold(capturedStatusStr, expectedEntry.Status) {
-		return fmt.Errorf("Status mismatch: expected %q, got %q", expectedEntry.Status, capturedStatusStr)
-	}
-
-	if normalisedCapturedLaunchCommand != expectedLaunchCommandNormalised {
-		return fmt.Errorf("Launch command mismatch: expected %q, got %q",
-			expectedEntry.LaunchCommand, capturedLaunchCommandStr)
-	}
-
-	return nil
-}
-
-func parsedMarkerToMarkerConstant(markerStr string) int {
-	switch strings.TrimSpace(markerStr) {
-	case "+":
-		return CurrentJob
-	case "-":
-		return PreviousJob
-	default:
-		return UnmarkedJob
-	}
-}
-
-func markerConstantToDisplay(marker int) string {
-	switch marker {
+func convertJobMarkerToString(jobMarker int) string {
+	switch jobMarker {
+	case UnmarkedJob:
+		return " "
 	case CurrentJob:
-		return "\"+\" (current)"
+		return "+"
 	case PreviousJob:
-		return "\"-\" (previous)"
-	default:
-		return "\" \" (unmarked)"
+		return "-"
 	}
+	panic(fmt.Sprintf(
+		"Codecrafters Internal Error: convertJobMarkerToString: Invalid job marker: %d",
+		jobMarker,
+	))
 }
