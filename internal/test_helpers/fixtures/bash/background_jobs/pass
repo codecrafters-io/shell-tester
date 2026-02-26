@@ -13,7 +13,7 @@ Debug = true
 [33m[tester::#AT7] [0m[94mRunning tests for Stage #AT7 (at7)[0m
 [33m[tester::#AT7] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2276[0m
+[33m[your-program] [0m[0m[1] 2323[0m
 [33m[tester::#AT7] [0m[92m✓ Received next prompt[0m
 [33m[your-program] [0m[0m$ [0m
 [33m[tester::#AT7] [0m[92mTest passed.[0m
@@ -21,7 +21,7 @@ Debug = true
 [33m[tester::#JD6] [0m[94mRunning tests for Stage #JD6 (jd6)[0m
 [33m[tester::#JD6] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2279[0m
+[33m[your-program] [0m[0m[1] 2326[0m
 [33m[tester::#JD6] [0m[92m✓ Received entry for the started job[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    sleep 100 &[0m
@@ -32,20 +32,20 @@ Debug = true
 [33m[tester::#DK5] [0m[94mRunning tests for Stage #DK5 (dk5)[0m
 [33m[tester::#DK5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2282[0m
+[33m[your-program] [0m[0m[1] 2330[0m
 [33m[tester::#DK5] [0m[92m✓ Received entry for the started job[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    sleep 100 &[0m
 [33m[tester::#DK5] [0m[92m✓ Received 1 entry for the running jobs[0m
 [33m[your-program] [0m[0m$ sleep 200 &[0m
-[33m[your-program] [0m[0m[2] 2283[0m
+[33m[your-program] [0m[0m[2] 2331[0m
 [33m[tester::#DK5] [0m[92m✓ Received entry for the started job[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]-  Running                    sleep 100 &[0m
 [33m[your-program] [0m[0m[2]+  Running                    sleep 200 &[0m
 [33m[tester::#DK5] [0m[92m✓ Received 2 entries for the running jobs[0m
 [33m[your-program] [0m[0m$ sleep 300 &[0m
-[33m[your-program] [0m[0m[3] 2285[0m
+[33m[your-program] [0m[0m[3] 2333[0m
 [33m[tester::#DK5] [0m[92m✓ Received entry for the started job[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]   Running                    sleep 100 &[0m
@@ -59,7 +59,7 @@ Debug = true
 [33m[tester::#MA9] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#MA9] [setup] [0m[94mmkfifo /tmp/pear-70[0m
 [33m[your-program] [0m[0m$ grep -q raspberry /tmp/pear-70 &[0m
-[33m[your-program] [0m[0m[1] 2287[0m
+[33m[your-program] [0m[0m[1] 2335[0m
 [33m[tester::#MA9] [0m[92m✓ Received entry for the started job[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    grep -q raspberry /tmp/pear-70 &[0m
@@ -72,28 +72,28 @@ Debug = true
 [33m[tester::#MA9] [0m[92mTest passed.[0m
 
 [33m[tester::#RQ2] [0m[94mRunning tests for Stage #RQ2 (rq2)[0m
-[33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/mango-20[0m
-[33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/banana-67[0m
+[33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/blueberry-26[0m
+[33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/mango-16[0m
 [33m[tester::#RQ2] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 500 &[0m
-[33m[your-program] [0m[0m[1] 2290[0m
+[33m[your-program] [0m[0m[1] 2337[0m
 [33m[tester::#RQ2] [0m[92m✓ Received entry for the started job[0m
-[33m[your-program] [0m[0m$ grep -q banana /tmp/mango-20 &[0m
-[33m[your-program] [0m[0m[2] 2291[0m
+[33m[your-program] [0m[0m$ grep -q mango /tmp/blueberry-26 &[0m
+[33m[your-program] [0m[0m[2] 2338[0m
 [33m[tester::#RQ2] [0m[92m✓ Received entry for the started job[0m
-[33m[your-program] [0m[0m$ grep -q pear /tmp/banana-67 &[0m
-[33m[your-program] [0m[0m[3] 2293[0m
+[33m[your-program] [0m[0m$ grep -q grape /tmp/mango-16 &[0m
+[33m[your-program] [0m[0m[3] 2339[0m
 [33m[tester::#RQ2] [0m[92m✓ Received entry for the started job[0m
-[33m[tester::#RQ2] [setup] [0m[94mecho "banana" > "/tmp/mango-20"[0m
+[33m[tester::#RQ2] [setup] [0m[94mecho "mango" > "/tmp/blueberry-26"[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]   Running                    sleep 500 &[0m
-[33m[your-program] [0m[0m[2]-  Done                       grep -q banana /tmp/mango-20[0m
-[33m[your-program] [0m[0m[3]+  Running                    grep -q pear /tmp/banana-67 &[0m
+[33m[your-program] [0m[0m[2]-  Done                       grep -q mango /tmp/blueberry-26[0m
+[33m[your-program] [0m[0m[3]+  Running                    grep -q grape /tmp/mango-16 &[0m
 [33m[tester::#RQ2] [0m[92m✓ Received 3 entries in the output[0m
-[33m[tester::#RQ2] [setup] [0m[94mecho "pear" > "/tmp/banana-67"[0m
+[33m[tester::#RQ2] [setup] [0m[94mecho "grape" > "/tmp/mango-16"[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]-  Running                    sleep 500 &[0m
-[33m[your-program] [0m[0m[3]+  Done                       grep -q pear /tmp/banana-67[0m
+[33m[your-program] [0m[0m[3]+  Done                       grep -q grape /tmp/mango-16[0m
 [33m[tester::#RQ2] [0m[92m✓ Received 2 entries in the output[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    sleep 500 &[0m
