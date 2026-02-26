@@ -61,7 +61,7 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		regexString := fmt.Sprintf(
 			`^\[%d\]\s*%s\s+(?i)%s\s+(?-i)%s`,
 			outputEntry.JobNumber,
-			marker,
+			regexp.QuoteMeta(marker),
 			regexp.QuoteMeta(outputEntry.Status),
 			regexp.QuoteMeta(outputEntry.LaunchCommand),
 		)
