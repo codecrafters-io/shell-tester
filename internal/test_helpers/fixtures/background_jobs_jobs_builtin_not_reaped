@@ -5,11 +5,14 @@ Debug = true
 [33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/raspberry-74[0m
 [33m[tester::#RQ2] [0m[94mRunning ./your_program.sh[0m
 [33m[your-program] [0m[0m$ sleep 500 &[0m
-[33m[your-program] [0m[0m[1] 2706[0m
+[33m[your-program] [0m[0m[1] 2152[0m
+[33m[tester::#RQ2] [0m[92m✓ Received entry for the started job[0m
 [33m[your-program] [0m[0m$ grep -q pear /tmp/pear-70 &[0m
-[33m[your-program] [0m[0m[2] 2707[0m
+[33m[your-program] [0m[0m[2] 2153[0m
+[33m[tester::#RQ2] [0m[92m✓ Received entry for the started job[0m
 [33m[your-program] [0m[0m$ grep -q banana /tmp/raspberry-74 &[0m
-[33m[your-program] [0m[0m[3] 2712[0m
+[33m[your-program] [0m[0m[3] 2155[0m
+[33m[tester::#RQ2] [0m[92m✓ Received entry for the started job[0m
 [33m[tester::#RQ2] [setup] [0m[94mecho "pear" > "/tmp/pear-70"[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]   Running                 sleep 500 &[0m

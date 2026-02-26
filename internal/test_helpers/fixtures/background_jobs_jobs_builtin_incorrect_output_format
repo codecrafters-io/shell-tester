@@ -3,8 +3,8 @@ Debug = true
 [33m[tester::#DK5] [0m[94mRunning tests for Stage #DK5 (dk5)[0m
 [33m[tester::#DK5] [0m[94mRunning ./your_program.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2117[0m
-[33m[tester::#DK5] [0m[92m✓ Received next prompt[0m
+[33m[your-program] [0m[0m[1] 2145[0m
+[33m[tester::#DK5] [0m[92m✓ Received entry for the started job[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+Running                 sleep 100 &[0m
 [33m[tester::#DK5] [0m[91m^ Line does not match expected value.[0m
