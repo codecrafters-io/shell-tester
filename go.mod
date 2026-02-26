@@ -20,6 +20,7 @@ require (
 	github.com/charmbracelet/x/ansi v0.7.0 // indirect
 	github.com/charmbracelet/x/wcwidth v0.0.0-20241011142426-46044092ad91 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect

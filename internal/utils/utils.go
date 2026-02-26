@@ -15,15 +15,15 @@ func ColorizeString(colorToUse color.Attribute, msg string) string {
 	return c.Sprint(msg)
 }
 
-func BuildColoredErrorMessage(expectedPatternExplanation string, output string, outputDescription string) string {
+func BuildColoredErrorMessage(expectedOutput string, receivedOutput string, receivedOutputDescription string) string {
 	errorMsg := ColorizeString(color.FgGreen, "Expected:")
-	errorMsg += " \"" + expectedPatternExplanation + "\""
+	errorMsg += " \"" + expectedOutput + "\""
 	errorMsg += "\n"
 	errorMsg += ColorizeString(color.FgRed, "Received:")
-	errorMsg += " \"" + RemoveNonPrintableCharacters(output) + "\""
+	errorMsg += " \"" + RemoveNonPrintableCharacters(receivedOutput) + "\""
 
-	if outputDescription != "" {
-		errorMsg += " " + ColorizeString(color.FgRed, fmt.Sprintf("(%s)", outputDescription))
+	if receivedOutputDescription != "" {
+		errorMsg += " " + ColorizeString(color.FgRed, fmt.Sprintf("(%s)", receivedOutputDescription))
 	}
 
 	return errorMsg

@@ -97,6 +97,27 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/filename_completions/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"background_jobs_pass_bash": {
+			StageSlugs:          []string{"af3", "at7"},
+			CodePath:            "./test_helpers/bash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/bash/background_jobs/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"background_jobs_incorrect_output_format": {
+			StageSlugs:          []string{"at7"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_incorrect_output_format",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_incorrect_output_format",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"background_jobs_incorrect_job_number": {
+			StageSlugs:          []string{"at7"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_incorrect_job_number",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_incorrect_job_number",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"pipelines_pass_bash": {
 			StageSlugs:          []string{"br6", "ny9", "xk3"},
 			CodePath:            "./test_helpers/bash",
@@ -204,6 +225,12 @@ func normalizeTesterOutput(testerOutput []byte) []byte {
 		"ls-la-output-line":               {regexp.MustCompile(`-rw-r--r-- .*`)},
 		"PATH is now: <path>":             {regexp.MustCompile(`PATH is now: .*`)},
 		"/tmp/":                           {regexp.MustCompile(`/var/folders/.*/.*/.*/`)},
+		"[your-program] [JOB_NUM] PID":    {regexp.MustCompile(`\[your-program\].*\[\d+\] \d+`)},
+		// For background_jobs_incorrect_output_format
+		"[your-program] [JOB_NUM]PID":                {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
+		"[tester::#AT7] Received: \"[JOB_NUM]PID\"":  {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\]\d+"`)},
+		"[tester::#AT7] Received: \"[JOB_NUM] PID\"": {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\] \d+"`)},
+		// For background jobs incorrect job number
 	}
 
 	for replacement, regexes := range replacements {

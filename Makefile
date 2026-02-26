@@ -171,6 +171,13 @@ define _PIPELINE_STAGES
 ]
 endef
 
+define _BACKGROUND_JOBS_STAGES
+[ \
+	{"slug":"af3","tester_log_prefix":"tester::#af3","title":"Stage#1: The jobs builtin"}, \
+	{"slug":"at7","tester_log_prefix":"tester::#at7","title":"Stage#2: Background launch"} \
+]
+endef
+
 define _HISTORY_STAGES
 [ \
 	{"slug":"bq4","tester_log_prefix":"tester::#bq4","title":"Stage#1: The history builtin"}, \
@@ -239,6 +246,7 @@ COMPLETIONS_STAGES_ZSH = $(call quote_strings,$(_COMPLETION_STAGES_BASE))
 COMPLETIONS_STAGES = $(shell echo '$(_COMPLETION_STAGES_BASE)' | sed 's/]$$/, $(_COMPLETIONS_STAGES_COMPLEX)]/' | sed 's/"/\\"/g')
 FILENAME_COMPLETION_STAGES = $(call quote_strings,$(_FILENAME_COMPLETION_STAGES))
 PIPELINE_STAGES = $(call quote_strings,$(_PIPELINE_STAGES))
+BACKGROUND_JOBS_STAGES = $(call quote_strings,$(_BACKGROUND_JOBS_STAGES))
 HISTORY_STAGES = $(call quote_strings,$(_HISTORY_STAGES))
 HISTORY_STAGES_ZSH = $(call quote_strings,$(_HISTORY_STAGES_ZSH))
 HISTORY_STAGES_ASH = $(call quote_strings,$(_HISTORY_STAGES_ASH))
@@ -282,6 +290,9 @@ test_filename_completion_w_bash: build
 
 test_pipeline_w_bash: build
 	$(call run_test,$(PIPELINE_STAGES),bash)
+
+test_background_jobs_w_bash: build
+	$(call run_test,$(BACKGROUND_JOBS_STAGES),bash)
 
 test_base_w_dash: build
 	$(call run_test,$(BASE_STAGES),dash)
@@ -341,6 +352,7 @@ test_bash:
 	make test_redirections_w_bash
 	make test_completions_w_bash
 	make test_filename_completion_w_bash
+	make test_background_jobs_w_bash
 	make test_history_w_bash
 	make test_history_persistence_w_bash
 
