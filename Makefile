@@ -179,8 +179,8 @@ define _BACKGROUND_JOBS_STAGES
 	{"slug":"dk5","tester_log_prefix":"tester::#dk5","title":"Stage#4: List multiple jobs"}, \
 	{"slug":"ma9","tester_log_prefix":"tester::#ma9","title":"Stage#5: Reaping one job using jobs"}, \
 	{"slug":"rq2","tester_log_prefix":"tester::#rq2","title":"Stage#6: Reaping multiple jobs using jobs"}, \
-	{"slug":"bv8","tester_log_prefix":"tester::#bv8","title":"Stage#6: Reap before the next prompt"}, \
-	{"slug":"fy4","tester_log_prefix":"tester::#fy4","title":"Stage#6: Job number reset"} \
+	{"slug":"bv8","tester_log_prefix":"tester::#bv8","title":"Stage#7: Reap before the next prompt"}, \
+	{"slug":"fy4","tester_log_prefix":"tester::#fy4","title":"Stage#8: Job number reset"} \
 ]
 endef
 
