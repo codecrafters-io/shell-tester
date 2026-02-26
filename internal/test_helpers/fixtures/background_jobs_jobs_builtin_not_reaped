@@ -1,26 +1,26 @@
 Debug = true
 
 [33m[tester::#RQ2] [0m[94mRunning tests for Stage #RQ2 (rq2)[0m
-[33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/pear-70[0m
-[33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/raspberry-74[0m
+[33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/apple-80[0m
+[33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/blueberry-54[0m
 [33m[tester::#RQ2] [0m[94mRunning ./your_program.sh[0m
 [33m[your-program] [0m[0m$ sleep 500 &[0m
-[33m[your-program] [0m[0m[1] 2152[0m
+[33m[your-program] [0m[0m[1] 2132[0m
 [33m[tester::#RQ2] [0m[92m✓ Received entry for the started job[0m
-[33m[your-program] [0m[0m$ grep -q pear /tmp/pear-70 &[0m
-[33m[your-program] [0m[0m[2] 2153[0m
+[33m[your-program] [0m[0m$ grep -q apple /tmp/apple-80 &[0m
+[33m[your-program] [0m[0m[2] 2134[0m
 [33m[tester::#RQ2] [0m[92m✓ Received entry for the started job[0m
-[33m[your-program] [0m[0m$ grep -q banana /tmp/raspberry-74 &[0m
-[33m[your-program] [0m[0m[3] 2155[0m
+[33m[your-program] [0m[0m$ grep -q apple /tmp/blueberry-54 &[0m
+[33m[your-program] [0m[0m[3] 2136[0m
 [33m[tester::#RQ2] [0m[92m✓ Received entry for the started job[0m
-[33m[tester::#RQ2] [setup] [0m[94mecho "pear" > "/tmp/pear-70"[0m
+[33m[tester::#RQ2] [setup] [0m[94mecho "apple" > "/tmp/apple-80"[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]   Running                 sleep 500 &[0m
-[33m[your-program] [0m[0m[2]-  Running                 grep -q pear /tmp/pear-70 &[0m
+[33m[your-program] [0m[0m[2]-  Running                 grep -q apple /tmp/apple-80 &[0m
 [33m[tester::#RQ2] [0m[91m^ Line does not match expected value.[0m
-[33m[tester::#RQ2] [0m[91m[32mExpected:[0m "[2]-  Done                 grep -q pear /tmp/pear-70"[0m
-[33m[tester::#RQ2] [0m[91m[31mReceived:[0m "[2]-  Running                 grep -q pear /tmp/pear-70 &"[0m
-[33m[your-program] [0m[0m[3]+  Running                 grep -q banana /tmp/raspberry-74 &[0m
+[33m[tester::#RQ2] [0m[91m[32mExpected:[0m "[2]-  Done                 grep -q apple /tmp/apple-80"[0m
+[33m[tester::#RQ2] [0m[91m[31mReceived:[0m "[2]-  Running                 grep -q apple /tmp/apple-80 &"[0m
+[33m[your-program] [0m[0m[3]+  Running                 grep -q apple /tmp/blueberry-54 &[0m
 [33m[your-program] [0m[0m$ [0m
 [33m[tester::#RQ2] [0m[91mAssertion failed.[0m
 [33m[tester::#RQ2] [0m[91mTest failed[0m

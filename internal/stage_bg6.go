@@ -16,12 +16,13 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	fifoPath1 := fmt.Sprintf("/tmp/%s-%d", random.RandomWord(), random.RandomInt(1, 100))
+	fifoBaseNames := random.RandomWords(2)
+	fifoPath1 := fmt.Sprintf("/tmp/%s-%d", fifoBaseNames[0], random.RandomInt(1, 100))
 	if err := CreateRandomFIFOWithTeardown(stageHarness, fifoPath1, 0644); err != nil {
 		return err
 	}
 
-	fifoPath2 := fmt.Sprintf("/tmp/%s-%d", random.RandomWord(), random.RandomInt(1, 100))
+	fifoPath2 := fmt.Sprintf("/tmp/%s-%d", fifoBaseNames[1], random.RandomInt(1, 100))
 	if err := CreateRandomFIFOWithTeardown(stageHarness, fifoPath2, 0644); err != nil {
 		return err
 	}
