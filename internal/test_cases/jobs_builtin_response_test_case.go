@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	UnlabeledJob = iota
+	UnmarkedJob = iota
 	CurrentJob
 	PreviousJob
 )
@@ -24,8 +24,8 @@ type JobsBuiltinOutputEntry struct {
 	Status string
 	// LaunchCommand: Command that was run and sent to the background without trailing &
 	LaunchCommand string
-	// Unlabeled | Current | Previous
-	Label int
+	// Unmarked | Current | Previous
+	Marker int
 }
 
 type JobsBuiltinResponseTestCase struct {
@@ -57,24 +57,9 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	}
 
 	for i, outputEntry := range t.ExpectedOutputItems {
-		marker := `\s`
-		switch outputEntry.Label {
-		case CurrentJob:
-			marker = `\+`
-		case PreviousJob:
-			marker = `\-`
-		}
-
-		// This regex expects the following:
-		// 1. Bracketed job number: Square bracket open, followed by an integer, followed by square bracket close
-		// 2. Optional spaces (ZSH uses spaces after bracketed job number)
-		// 3. Job Marker (+/-/space)
-		// 4. Whitespaces following the job marker
-		// 5. Job status: "Done", "Running", etc (This is case insensitive: Complies with both bash and zsh)
-		// 6. Followed by whitespace
-		// 7. Followed by the launch command (case sensitive)
+		marker := convertJobMarkerToString(outputEntry.Marker)
 		regexString := fmt.Sprintf(
-			`\[%d\]\s*%s\s+(?i)%s\s+(?-i)%s`,
+			`^\[%d\]\s*%s\s+(?i)%s\s+(?-i)%s`,
 			outputEntry.JobNumber,
 			marker,
 			regexp.QuoteMeta(outputEntry.Status),
@@ -84,12 +69,18 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		// For 'running' jobs, bash displays the trailing & sign
 		// This is optional since ZSH doesn't use this
 		if strings.ToLower(outputEntry.Status) == "running" {
-			regexString += "( &)?"
+			regexString += "( &)?$"
+		} else {
+			regexString += "$"
 		}
 
 		regex := regexp.MustCompile(regexString)
 
 		asserter.AddAssertion(assertions.SingleLineAssertion{
+			ExpectedOutput: fmt.Sprintf(
+				"[%d]%s  %s                 %s",
+				outputEntry.JobNumber, marker, outputEntry.Status, outputEntry.LaunchCommand,
+			),
 			FallbackPatterns: []*regexp.Regexp{regex},
 		})
 
@@ -113,4 +104,19 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	}
 
 	return nil
+}
+
+func convertJobMarkerToString(jobMarker int) string {
+	switch jobMarker {
+	case UnmarkedJob:
+		return " "
+	case CurrentJob:
+		return "+"
+	case PreviousJob:
+		return "-"
+	}
+	panic(fmt.Sprintf(
+		"Codecrafters Internal Error: convertJobMarkerToString: Invalid job marker: %d",
+		jobMarker,
+	))
 }
