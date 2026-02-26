@@ -2,7 +2,7 @@ package test_cases
 
 import (
 	"fmt"
-	"regexp"
+	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -32,12 +32,22 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 		ExpectedOutput: commandReflection,
 	})
 
-	// We first match against the format
+	// Assert command reflection first
+	if err := asserter.AssertWithoutPrompt(); err != nil {
+		return err
+	}
+
+	// This window lets the shell spawn the process
+	time.Sleep(time.Millisecond)
+
+	expectedChildPid := shell.GetChildPidFromCmdLine(t.Command)
+
+	if expectedChildPid == -1 {
+		return fmt.Errorf("Expected process for %q not spawned", t.Command)
+	}
+
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: fmt.Sprintf("[%d] <PID>", t.ExpectedJobNumber),
-		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(fmt.Sprintf(`^\[%d\] \d+$`, t.ExpectedJobNumber)),
-		},
+		ExpectedOutput: fmt.Sprintf("[%d] %d", t.ExpectedJobNumber, expectedChildPid),
 	})
 
 	if err := asserter.AssertWithPrompt(); err != nil {
