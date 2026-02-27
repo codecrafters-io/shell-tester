@@ -234,10 +234,11 @@ func normalizeTesterOutput(testerOutput []byte) []byte {
 		"/tmp/":                           {regexp.MustCompile(`/var/folders/.*/.*/.*/`)},
 		"[your-program] [JOB_NUM] PID":    {regexp.MustCompile(`\[your-program\].*\[\d+\] \d+`)},
 		// For intentional error cases fixtures in background-jobs extension
-		"[your-program] [JOB_NUM]PID":                {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
-		"[tester::#AT7] Expected: \"[JOB_NUM] PID\"": {regexp.MustCompile(`\[tester::#AT7\].*Expected:.*"\[\d+\] \d+"`)},
-		"[tester::#AT7] Received: \"[JOB_NUM] PID\"": {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\] \d+"`)},
-		"[tester::#AT7] Received: \"[JOB_NUM]PID\"":  {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\]\d+"`)},
+		"[your-program] [JOB_NUM]PID":                   {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
+		"[tester::#AT7] Expected: \"[JOB_NUM] PID\"":    {regexp.MustCompile(`\[tester::#AT7\].*Expected:.*"\[\d+\] \d+"`)},
+		"[tester::#AT7] Received: \"[JOB_NUM] PID\"":    {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\] \d+"`)},
+		"[tester::#AT7] ✓ Found process with PID <PID>": {regexp.MustCompile(`\[tester::#AT7\].*Found process with PID \d+`)},
+		"[tester::#AT7] Received: \"[JOB_NUM]PID\"":     {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\]\d+"`)},
 	}
 
 	for replacement, regexes := range replacements {
