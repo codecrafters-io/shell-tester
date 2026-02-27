@@ -42,7 +42,7 @@ func testBg8ResetToZero(stageHarness *test_case_harness.TestCaseHarness) error {
 	bgGrepTestCase := &test_cases.BackgroundCommandResponseTestCase{
 		Command:           bgGrepCommand1,
 		ExpectedJobNumber: 1,
-		SuccessMessage:    "✓ Received entry for the launched job",
+		SuccessMessage:    "✓ Output includes job number with PID",
 	}
 	if err := bgGrepTestCase.Run(asserter, shell, logger); err != nil {
 		return err
@@ -55,23 +55,34 @@ func testBg8ResetToZero(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	time.Sleep(time.Millisecond)
 
-	echoArg := random.RandomWord()
+	echoArgs := random.RandomWords(2)
 	echoTestCase := test_cases.CommandResponseWithReapedJobsTestCase{
-		Command:               fmt.Sprintf("echo %s", echoArg),
-		ExpectedCommandOutput: echoArg,
+		Command:               fmt.Sprintf("echo %s", echoArgs[0]),
+		ExpectedCommandOutput: echoArgs[0],
 		ExpectedReapedJobEntries: []*test_cases.BackgroundJobStatusEntry{
 			{JobNumber: 1, Status: "Done", LaunchCommand: bgGrepCommand1, Marker: test_cases.CurrentJob},
 		},
-		SuccessMessage: "✓ Received command output followed by an entry for the reaped job",
+		SuccessMessage: "✓ Received output for echo followed by an entry for the reaped job",
 	}
 
 	if err := echoTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
+	// Test command output not followed by reaped jobs entry
+	echoTestCase2 := test_cases.CommandResponseTestCase{
+		Command:        fmt.Sprintf("echo %s", echoArgs[1]),
+		ExpectedOutput: echoArgs[1],
+		SuccessMessage: "✓ Received output for echo",
+	}
+
+	if err := echoTestCase2.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
 	jobsEmptyTestCase := test_cases.JobsBuiltinResponseTestCase{
 		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{},
-		SuccessMessage:        "✓ Received no entries",
+		SuccessMessage:        "✓ No jobs",
 	}
 
 	if err := jobsEmptyTestCase.Run(asserter, shell, logger); err != nil {
@@ -82,7 +93,7 @@ func testBg8ResetToZero(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err := (&test_cases.BackgroundCommandResponseTestCase{
 		Command:           sleepCommand,
 		ExpectedJobNumber: 1,
-		SuccessMessage:    "✓ Received entry for started job",
+		SuccessMessage:    "✓ Output includes job number with PID",
 	}).Run(asserter, shell, logger); err != nil {
 		return err
 	}
@@ -91,7 +102,7 @@ func testBg8ResetToZero(stageHarness *test_case_harness.TestCaseHarness) error {
 		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{{
 			JobNumber: 1, Status: "Running", LaunchCommand: sleepCommand, Marker: test_cases.CurrentJob,
 		}},
-		SuccessMessage: "✓ Received 1 entry for the running job",
+		SuccessMessage: "✓ 1 entry matches the running job",
 	}
 
 	if err := jobsOneEntryTestCase.Run(asserter, shell, logger); err != nil {
@@ -119,7 +130,7 @@ func testBg8Recycle(stageHarness *test_case_harness.TestCaseHarness) error {
 	sleepCommandTestCase := &test_cases.BackgroundCommandResponseTestCase{
 		Command:           sleepCommand,
 		ExpectedJobNumber: 1,
-		SuccessMessage:    "✓ Received entry for the launched job",
+		SuccessMessage:    "✓ Output includes job number with PID",
 	}
 	if err := sleepCommandTestCase.Run(asserter, shell, logger); err != nil {
 		return err
@@ -130,7 +141,7 @@ func testBg8Recycle(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err := (&test_cases.BackgroundCommandResponseTestCase{
 		Command:           bgGrepCommand,
 		ExpectedJobNumber: 2,
-		SuccessMessage:    "✓ Received entry for the launched job",
+		SuccessMessage:    "✓ Output includes job number with PID",
 	}).Run(asserter, shell, logger); err != nil {
 		return err
 	}
@@ -147,7 +158,7 @@ func testBg8Recycle(stageHarness *test_case_harness.TestCaseHarness) error {
 		ExpectedReapedJobEntries: []*test_cases.BackgroundJobStatusEntry{{
 			JobNumber: 2, Status: "Done", LaunchCommand: bgGrepCommand, Marker: test_cases.CurrentJob,
 		}},
-		SuccessMessage: "✓ Received command output followed by an entry for the reaped job",
+		SuccessMessage: "✓ Received output for echo followed by an entry for the reaped job",
 	}
 	if err := echoTestCase.Run(asserter, shell, logger); err != nil {
 		return err
@@ -157,7 +168,7 @@ func testBg8Recycle(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err := (&test_cases.BackgroundCommandResponseTestCase{
 		Command:           sleepCommand2,
 		ExpectedJobNumber: 2,
-		SuccessMessage:    "✓ Received entry for the launched job",
+		SuccessMessage:    "✓ Output includes job number with PID",
 	}).Run(asserter, shell, logger); err != nil {
 		return err
 	}
@@ -167,7 +178,7 @@ func testBg8Recycle(stageHarness *test_case_harness.TestCaseHarness) error {
 			{JobNumber: 1, Status: "Running", LaunchCommand: sleepCommand, Marker: test_cases.PreviousJob},
 			{JobNumber: 2, Status: "Running", LaunchCommand: sleepCommand2, Marker: test_cases.CurrentJob},
 		},
-		SuccessMessage: "✓ Received 2 entries for the running jobs",
+		SuccessMessage: "✓ 2 entries match the running jobs",
 	}
 
 	if err := jobsTestCase.Run(asserter, shell, logger); err != nil {

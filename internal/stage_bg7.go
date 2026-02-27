@@ -29,7 +29,7 @@ func testBG7(stageHarness *test_case_harness.TestCaseHarness) error {
 	bgSleepTestCase := test_cases.BackgroundCommandResponseTestCase{
 		Command:           sleepCommand,
 		ExpectedJobNumber: 1,
-		SuccessMessage:    "✓ Received entry for the launched job",
+		SuccessMessage:    "✓ Output includes job number with PID",
 	}
 	if err := bgSleepTestCase.Run(asserter, shell, logger); err != nil {
 		return err
@@ -41,7 +41,7 @@ func testBG7(stageHarness *test_case_harness.TestCaseHarness) error {
 	bgGrepTestCase := test_cases.BackgroundCommandResponseTestCase{
 		Command:           bgGrepCommand,
 		ExpectedJobNumber: 2,
-		SuccessMessage:    "✓ Received entry for the launched job",
+		SuccessMessage:    "✓ Output includes job number with PID",
 	}
 	if err := bgGrepTestCase.Run(asserter, shell, logger); err != nil {
 		return err
@@ -53,7 +53,7 @@ func testBG7(stageHarness *test_case_harness.TestCaseHarness) error {
 			{JobNumber: 1, Status: "Running", LaunchCommand: sleepCommand, Marker: test_cases.PreviousJob},
 			{JobNumber: 2, Status: "Running", LaunchCommand: bgGrepCommand, Marker: test_cases.CurrentJob},
 		},
-		SuccessMessage: "✓ Received 2 entries for the running jobs",
+		SuccessMessage: "✓ Found 2 entries for the running jobs",
 	}
 	if err := jobsBuiltinTestCase.Run(asserter, shell, logger); err != nil {
 		return err
@@ -75,7 +75,7 @@ func testBG7(stageHarness *test_case_harness.TestCaseHarness) error {
 			LaunchCommand: bgGrepCommand,
 			Marker:        test_cases.CurrentJob,
 		}},
-		SuccessMessage: "✓ Received command output followed by an entry for the reaped job",
+		SuccessMessage: "✓ Found command output followed by an entry for the reaped job",
 	}
 
 	if err := echoTestCase.Run(asserter, shell, logger); err != nil {
@@ -90,7 +90,7 @@ func testBG7(stageHarness *test_case_harness.TestCaseHarness) error {
 			LaunchCommand: sleepCommand,
 			Marker:        test_cases.CurrentJob,
 		}},
-		SuccessMessage: "✓ Received 1 entry for the remaining running job",
+		SuccessMessage: "✓ 1 entry matches the running job",
 	}
 	if err := jobsBuiltinTestCase2.Run(asserter, shell, logger); err != nil {
 		return err
