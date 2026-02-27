@@ -2,6 +2,9 @@ package test_cases
 
 import (
 	"fmt"
+	"regexp"
+	"slices"
+	"strconv"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -36,19 +39,47 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 		return err
 	}
 
-	expectedChildPid := shell.GetChildPidFromCmdLine(t.Command)
+	outputFormatRegex := regexp.MustCompile(
+		fmt.Sprintf(`^\[%d\] (\d+)$`, t.ExpectedJobNumber),
+	)
 
-	if expectedChildPid == -1 {
-		return fmt.Errorf("Expected process for %q not spawned", t.Command)
-	}
-
+	// Assert the output format first
 	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: fmt.Sprintf("[%d] %d", t.ExpectedJobNumber, expectedChildPid),
+		ExpectedOutput: fmt.Sprintf("[%d] <PID>", t.ExpectedJobNumber),
+		FallbackPatterns: []*regexp.Regexp{
+			outputFormatRegex,
+		},
 	})
 
 	if err := asserter.AssertWithPrompt(); err != nil {
 		return err
 	}
+
+	// Extract the PID from the output format and check if that PID is the shell's child
+	outputLineIdx := asserter.GetLastLoggedRowIndex()
+	outputLine := shell.GetScreenState().GetRow(outputLineIdx)
+
+	matches := outputFormatRegex.FindStringSubmatch(outputLine.String())
+
+	// This will never trigger: This was already asserted
+	if matches == nil {
+		panic("Codecrafters Internal Error: Could not match PID from background command output")
+	}
+
+	receivedPid, err := strconv.Atoi(matches[1])
+
+	// This will never trigger: This was already assserted
+	if err != nil {
+		panic("Codecrafters Internal Error: Could not parse PID from background command output")
+	}
+
+	childPids := shell.GetAllChildrenPids()
+
+	if !slices.Contains(childPids, receivedPid) {
+		return fmt.Errorf("Could not find process with PID %d", receivedPid)
+	}
+
+	logger.Successf("✓ Found process with PID %d", receivedPid)
 
 	if t.SuccessMessage != "" {
 		logger.Successf("%s", t.SuccessMessage)
