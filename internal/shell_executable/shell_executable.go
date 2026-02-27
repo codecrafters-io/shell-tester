@@ -88,6 +88,13 @@ func (b *ShellExecutable) SetWorkingDirectory(workingDirPath string) {
 	b.workingDir = workingDirPath
 }
 
+func (b *ShellExecutable) GetPid() int {
+	if b.cmd == nil || b.cmd.Process == nil {
+		panic("Codecrafters Internal Error: ShellExecutable.GetPid called without starting shell")
+	}
+	return b.cmd.Process.Pid
+}
+
 func (b *ShellExecutable) Start(args ...string) error {
 	b.stageLogger.Infof("%s", b.getInitialLogLine(args...))
 
