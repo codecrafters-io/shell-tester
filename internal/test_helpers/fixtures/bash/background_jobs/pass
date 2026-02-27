@@ -13,7 +13,7 @@ Debug = true
 [33m[tester::#AT7] [0m[94mRunning tests for Stage #AT7 (at7)[0m
 [33m[tester::#AT7] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2251[0m
+[33m[your-program] [0m[0m[1] 2077[0m
 [33m[tester::#AT7] [0m[92m✓ Received next prompt[0m
 [33m[your-program] [0m[0m$ [0m
 [33m[tester::#AT7] [0m[92mTest passed.[0m
@@ -21,7 +21,7 @@ Debug = true
 [33m[tester::#JD6] [0m[94mRunning tests for Stage #JD6 (jd6)[0m
 [33m[tester::#JD6] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2253[0m
+[33m[your-program] [0m[0m[1] 2079[0m
 [33m[tester::#JD6] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    sleep 100 &[0m
@@ -32,20 +32,20 @@ Debug = true
 [33m[tester::#DK5] [0m[94mRunning tests for Stage #DK5 (dk5)[0m
 [33m[tester::#DK5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2255[0m
+[33m[your-program] [0m[0m[1] 2084[0m
 [33m[tester::#DK5] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    sleep 100 &[0m
 [33m[tester::#DK5] [0m[92m✓ 1 entry match the running 1 job[0m
 [33m[your-program] [0m[0m$ sleep 200 &[0m
-[33m[your-program] [0m[0m[2] 2258[0m
+[33m[your-program] [0m[0m[2] 2085[0m
 [33m[tester::#DK5] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]-  Running                    sleep 100 &[0m
 [33m[your-program] [0m[0m[2]+  Running                    sleep 200 &[0m
 [33m[tester::#DK5] [0m[92m✓ 2 entries match the running 2 jobs[0m
 [33m[your-program] [0m[0m$ sleep 300 &[0m
-[33m[your-program] [0m[0m[3] 2259[0m
+[33m[your-program] [0m[0m[3] 2086[0m
 [33m[tester::#DK5] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]   Running                    sleep 100 &[0m
@@ -59,7 +59,7 @@ Debug = true
 [33m[tester::#MA9] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#MA9] [setup] [0m[94mmkfifo /tmp/pear-70[0m
 [33m[your-program] [0m[0m$ grep -q raspberry /tmp/pear-70 &[0m
-[33m[your-program] [0m[0m[1] 2261[0m
+[33m[your-program] [0m[0m[1] 2088[0m
 [33m[tester::#MA9] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    grep -q raspberry /tmp/pear-70 &[0m
@@ -76,13 +76,13 @@ Debug = true
 [33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/mango-16[0m
 [33m[tester::#RQ2] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 500 &[0m
-[33m[your-program] [0m[0m[1] 2265[0m
+[33m[your-program] [0m[0m[1] 2091[0m
 [33m[tester::#RQ2] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ grep -q mango /tmp/blueberry-26 &[0m
-[33m[your-program] [0m[0m[2] 2266[0m
+[33m[your-program] [0m[0m[2] 2092[0m
 [33m[tester::#RQ2] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ grep -q grape /tmp/mango-16 &[0m
-[33m[your-program] [0m[0m[3] 2267[0m
+[33m[your-program] [0m[0m[3] 2093[0m
 [33m[tester::#RQ2] [0m[92m✓ Output includes job number with PID[0m
 [33m[tester::#RQ2] [setup] [0m[94mecho "mango" > "/tmp/blueberry-26"[0m
 [33m[your-program] [0m[0m$ jobs[0m
