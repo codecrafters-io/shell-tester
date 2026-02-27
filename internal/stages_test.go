@@ -235,7 +235,7 @@ func normalizeTesterOutput(testerOutput []byte) []byte {
 		"[your-program] [JOB_NUM] PID":    {regexp.MustCompile(`\[your-program\].*\[\d+\] \d+`)},
 		// For intentional error cases fixtures in background-jobs extension
 		"[your-program] [JOB_NUM]PID":                   {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
-		"[tester::#AT7] Expected: \"[JOB_NUM] PID\"":    {regexp.MustCompile(`\[tester::#AT7\].*Expected:.*"\[\d+\] \d+"`)},
+		"[tester::#AT7] Expected: \"[JOB_NUM] PID\"":    {regexp.MustCompile(`\[tester::#AT7\].*Expected:.*"\[\d+\] <PID>"`)},
 		"[tester::#AT7] Received: \"[JOB_NUM] PID\"":    {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\] \d+"`)},
 		"[tester::#AT7] ✓ Found process with PID <PID>": {regexp.MustCompile(`\[tester::#AT7\].*Found process with PID \d+`)},
 		"[tester::#AT7] Received: \"[JOB_NUM]PID\"":     {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\]\d+"`)},
