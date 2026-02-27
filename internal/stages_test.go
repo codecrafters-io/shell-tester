@@ -98,7 +98,7 @@ func TestStages(t *testing.T) {
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"background_jobs_pass_bash": {
-			StageSlugs:          []string{"af3", "at7"},
+			StageSlugs:          []string{"af3", "at7", "jd6", "dk5"},
 			CodePath:            "./test_helpers/bash",
 			ExpectedExitCode:    0,
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/background_jobs/pass",
@@ -116,6 +116,20 @@ func TestStages(t *testing.T) {
 			CodePath:            "./test_helpers/scenarios/background_jobs_incorrect_job_number",
 			ExpectedExitCode:    1,
 			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_incorrect_job_number",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"background_jobs_jobs_builtin_incorrect_marker": {
+			StageSlugs:          []string{"dk5"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_jobs_builtin_incorrect_marker",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_jobs_builtin_incorrect_marker",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"background_jobs_jobs_builtin_incorrect_output_format": {
+			StageSlugs:          []string{"dk5"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_jobs_builtin_incorrect_output_format",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_jobs_builtin_incorrect_output_format",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"pipelines_pass_bash": {

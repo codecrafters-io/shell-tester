@@ -7,7 +7,7 @@ import (
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
-func testBG1(stageHarness *test_case_harness.TestCaseHarness) error {
+func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
@@ -16,18 +16,27 @@ func testBG1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	typeTestCase := test_cases.TypeOfCommandTestCase{
-		Command: "jobs",
+	// Launch a program in the background
+	backgroundLaunchCommand := "sleep 100"
+	backgroundLaunchTestCase := test_cases.BackgroundCommandResponseTestCase{
+		Command:           backgroundLaunchCommand,
+		SuccessMessage:    "✓ Output includes job number with PID",
+		ExpectedJobNumber: 1,
 	}
 
-	if err := typeTestCase.RunForBuiltin(asserter, shell, logger); err != nil {
+	if err := backgroundLaunchTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
+	// Assert the job output
 	jobsTestCase := test_cases.JobsBuiltinResponseTestCase{
-		SuccessMessage: "✓ Received empty response",
-		// Expect no output
-		ExpectedOutputEntries: []test_cases.JobsBuiltinOutputEntry{},
+		ExpectedOutputEntries: []test_cases.JobsBuiltinOutputEntry{{
+			JobNumber:     1,
+			Status:        "Running",
+			LaunchCommand: backgroundLaunchCommand,
+			Marker:        test_cases.CurrentJob,
+		}},
+		SuccessMessage: "✓ 1 entry matches the running job",
 	}
 
 	if err := jobsTestCase.Run(asserter, shell, logger); err != nil {
