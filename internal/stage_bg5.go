@@ -47,7 +47,7 @@ func testBG5(stageHarness *test_case_harness.TestCaseHarness) error {
 			LaunchCommand: bgGrepCommand,
 			Marker:        test_cases.CurrentJob,
 		}},
-		SuccessMessage: "✓ Received entry for the started job",
+		SuccessMessage: "✓ 1 entry matches the running job",
 	}
 
 	if err := jobsBuiltinTestCase1.Run(asserter, shell, logger); err != nil {
