@@ -79,7 +79,7 @@ func launchBgCommandAndAssertJobs(asserter *logged_shell_asserter.LoggedShellAss
 			SuccessMessage: fmt.Sprintf(
 				"✓ %s match the running %s",
 				english.Plural(len(jobsOutputEntries), "entry", "entries"),
-				english.Plural(len(jobsOutputEntries), "job", "jobs"),
+				english.PluralWord(len(jobsOutputEntries), "job", "jobs"),
 			),
 		}
 

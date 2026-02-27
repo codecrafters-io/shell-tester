@@ -13,7 +13,7 @@ Debug = true
 [33m[tester::#AT7] [0m[94mRunning tests for Stage #AT7 (at7)[0m
 [33m[tester::#AT7] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2707[0m
+[33m[your-program] [0m[0m[1] 2465[0m
 [33m[tester::#AT7] [0m[92m✓ Received next prompt[0m
 [33m[your-program] [0m[0m$ [0m
 [33m[tester::#AT7] [0m[92mTest passed.[0m
@@ -21,7 +21,7 @@ Debug = true
 [33m[tester::#JD6] [0m[94mRunning tests for Stage #JD6 (jd6)[0m
 [33m[tester::#JD6] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2711[0m
+[33m[your-program] [0m[0m[1] 2467[0m
 [33m[tester::#JD6] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    sleep 100 &[0m
@@ -32,25 +32,25 @@ Debug = true
 [33m[tester::#DK5] [0m[94mRunning tests for Stage #DK5 (dk5)[0m
 [33m[tester::#DK5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2713[0m
+[33m[your-program] [0m[0m[1] 2471[0m
 [33m[tester::#DK5] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    sleep 100 &[0m
-[33m[tester::#DK5] [0m[92m✓ 1 entry match the running 1 job[0m
+[33m[tester::#DK5] [0m[92m✓ 1 entry match the running job[0m
 [33m[your-program] [0m[0m$ sleep 200 &[0m
-[33m[your-program] [0m[0m[2] 2714[0m
+[33m[your-program] [0m[0m[2] 2472[0m
 [33m[tester::#DK5] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]-  Running                    sleep 100 &[0m
 [33m[your-program] [0m[0m[2]+  Running                    sleep 200 &[0m
-[33m[tester::#DK5] [0m[92m✓ 2 entries match the running 2 jobs[0m
+[33m[tester::#DK5] [0m[92m✓ 2 entries match the running jobs[0m
 [33m[your-program] [0m[0m$ sleep 300 &[0m
-[33m[your-program] [0m[0m[3] 2715[0m
+[33m[your-program] [0m[0m[3] 2479[0m
 [33m[tester::#DK5] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]   Running                    sleep 100 &[0m
 [33m[your-program] [0m[0m[2]-  Running                    sleep 200 &[0m
 [33m[your-program] [0m[0m[3]+  Running                    sleep 300 &[0m
-[33m[tester::#DK5] [0m[92m✓ 3 entries match the running 3 jobs[0m
+[33m[tester::#DK5] [0m[92m✓ 3 entries match the running jobs[0m
 [33m[your-program] [0m[0m$ [0m
 [33m[tester::#DK5] [0m[92mTest passed.[0m
