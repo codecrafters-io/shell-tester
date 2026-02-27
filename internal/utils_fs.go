@@ -6,6 +6,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"syscall"
 
 	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/random"
@@ -155,6 +156,36 @@ func WriteFileWithTeardown(stageHarness *test_case_harness.TestCaseHarness, file
 	}
 	stageHarness.RegisterTeardownFunc(func() {
 		os.Remove(filePath)
+	})
+	return nil
+}
+
+func CreateRandomFIFOWithTeardown(stageHarness *test_case_harness.TestCaseHarness, fifoPath string, permissions os.FileMode) error {
+	// Remove if exists first (ignore error)
+	_ = os.Remove(fifoPath)
+
+	if err := syscall.Mkfifo(fifoPath, uint32(permissions)); err != nil {
+		return fmt.Errorf("Failed to create named pipe at %s: %w", fifoPath, err)
+	}
+
+	stageHarness.Logger.WithAdditionalSecondaryPrefix("setup", func() {
+		stageHarness.Logger.Infof("mkfifo %s", fifoPath)
+	})
+
+	stageHarness.RegisterTeardownFunc(func() {
+		_ = os.Remove(fifoPath)
+	})
+
+	return nil
+}
+
+// WriteToFile writes the provided contents to the file in the path filePath.
+func WriteToFile(stageHarness *test_case_harness.TestCaseHarness, filePath string, contents string) error {
+	if err := os.WriteFile(filePath, []byte(contents), 0); err != nil {
+		return err
+	}
+	stageHarness.Logger.WithAdditionalSecondaryPrefix("setup", func() {
+		stageHarness.Logger.Infof("echo %q > %q", contents, filePath)
 	})
 	return nil
 }

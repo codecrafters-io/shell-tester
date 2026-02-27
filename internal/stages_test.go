@@ -98,7 +98,7 @@ func TestStages(t *testing.T) {
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"background_jobs_pass_bash": {
-			StageSlugs:          []string{"af3", "at7", "jd6", "dk5"},
+			StageSlugs:          []string{"af3", "at7", "jd6", "dk5", "ma9", "rq2"},
 			CodePath:            "./test_helpers/bash",
 			ExpectedExitCode:    0,
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/background_jobs/pass",
@@ -130,6 +130,13 @@ func TestStages(t *testing.T) {
 			CodePath:            "./test_helpers/scenarios/background_jobs_jobs_builtin_incorrect_output_format",
 			ExpectedExitCode:    1,
 			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_jobs_builtin_incorrect_output_format",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"background_jobs_jobs_builtin_not_reaped": {
+			StageSlugs:          []string{"rq2"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_jobs_builtin_not_reaped",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_jobs_builtin_not_reaped",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"pipelines_pass_bash": {

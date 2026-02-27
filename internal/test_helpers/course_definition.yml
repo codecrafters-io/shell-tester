@@ -1273,6 +1273,20 @@ stages:
     marketing_md: |-
       In this stage, you'll extend the `jobs` builtin so it can list background jobs.
 
+  - slug: "ma9"
+    primary_extension_slug: "background-jobs"
+    name: "Reaping one job using jobs"
+    difficulty: medium
+    marketing_md: |-
+      In this stage, you'll extend the `jobs` builtin to reap a single job.
+
+  - slug: "rq2"
+    primary_extension_slug: "background-jobs"
+    name: "Reap multiple jobs using jobs"
+    difficulty: medium
+    marketing_md: |-
+      In this stage, you'll extend the `jobs` builtin to reap multiple jobs and update markers dynamically.
+
   - slug: "br6"
     primary_extension_slug: "pipelines"
     name: "Dual-command pipeline"

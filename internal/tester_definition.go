@@ -212,6 +212,16 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testBG4,
 			Timeout:  15 * time.Second,
 		},
+		{
+			Slug:     "ma9",
+			TestFunc: testBG5,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "rq2",
+			TestFunc: testBG6,
+			Timeout:  15 * time.Second,
+		},
 		// Pipelines
 		{
 			Slug:     "br6",
