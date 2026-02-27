@@ -32,7 +32,7 @@ func testBG5(stageHarness *test_case_harness.TestCaseHarness) error {
 	bgJobTestCase := test_cases.BackgroundCommandResponseTestCase{
 		Command:           bgGrepCommand,
 		ExpectedJobNumber: 1,
-		SuccessMessage:    "✓ Received entry for the started job",
+		SuccessMessage:    "✓ Output includes job number with PID",
 	}
 
 	if err := bgJobTestCase.Run(asserter, shell, logger); err != nil {
@@ -70,7 +70,7 @@ func testBG5(stageHarness *test_case_harness.TestCaseHarness) error {
 			LaunchCommand: bgGrepCommand,
 			Marker:        test_cases.CurrentJob,
 		}},
-		SuccessMessage: "✓ Received 1 entry for the finished job",
+		SuccessMessage: "✓ 1 entry matches the finished job",
 	}
 
 	if err := jobsBuiltinTestCase2.Run(asserter, shell, logger); err != nil {

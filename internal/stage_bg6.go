@@ -36,7 +36,7 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 	bgSleepTestCase := test_cases.BackgroundCommandResponseTestCase{
 		Command:           sleepCommand,
 		ExpectedJobNumber: 1,
-		SuccessMessage:    "✓ Received entry for the started job",
+		SuccessMessage:    "✓ Output includes job number with PID",
 	}
 	if err := bgSleepTestCase.Run(asserter, shell, logger); err != nil {
 		return err
@@ -49,7 +49,7 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 	bgGrepTestCase1 := test_cases.BackgroundCommandResponseTestCase{
 		Command:           bgGrepCommand1,
 		ExpectedJobNumber: 2,
-		SuccessMessage:    "✓ Received entry for the started job",
+		SuccessMessage:    "✓ Output includes job number with PID",
 	}
 	if err := bgGrepTestCase1.Run(asserter, shell, logger); err != nil {
 		return err
@@ -61,7 +61,7 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 	bgGrepTestCase2 := test_cases.BackgroundCommandResponseTestCase{
 		Command:           bgGrepCommand2,
 		ExpectedJobNumber: 3,
-		SuccessMessage:    "✓ Received entry for the started job",
+		SuccessMessage:    "✓ Output includes job number with PID",
 	}
 
 	if err := bgGrepTestCase2.Run(asserter, shell, logger); err != nil {
@@ -111,7 +111,7 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 		ExpectedOutputEntries: []test_cases.JobsBuiltinOutputEntry{
 			{JobNumber: 1, Status: "Running", LaunchCommand: sleepCommand, Marker: test_cases.CurrentJob},
 		},
-		SuccessMessage: "✓ Received 1 entry for the running job",
+		SuccessMessage: "✓ 1 entry matches the running job",
 	}
 	if err := jobsBuiltinTestCase3.Run(asserter, shell, logger); err != nil {
 		return err
