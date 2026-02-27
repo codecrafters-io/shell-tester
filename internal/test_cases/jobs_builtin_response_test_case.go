@@ -16,7 +16,7 @@ const (
 	PreviousJob
 )
 
-type JobsBuiltinOutputEntry struct {
+type BackgroundJobStatusEntry struct {
 	// The job number value in the square brackets
 	JobNumber int
 	// Status: "Running", "Done", "Terminated", "1 Exit", etc
@@ -27,8 +27,43 @@ type JobsBuiltinOutputEntry struct {
 	Marker int
 }
 
+// ExpectedOutputAndRegex returns the expected output string and regex pattern for this job entry.
+func (e BackgroundJobStatusEntry) ExpectedOutputAndRegex() (string, *regexp.Regexp) {
+	expectedJobMarkerString := convertJobMarkerToString(e.Marker)
+
+	// This regex aims to match lines like: [1]+  Running                 sleep 5 &
+	regexString := fmt.Sprintf(
+		`^\[%d\]\s*%s\s+(?i)%s\s+(?-i)%s`,
+		e.JobNumber,
+		regexp.QuoteMeta(expectedJobMarkerString),
+		regexp.QuoteMeta(e.Status),
+		regexp.QuoteMeta(e.LaunchCommand),
+	)
+
+	// For 'Running' jobs, bash displays the trailing & sign
+	// Users shall comply with bash for consistency (Ensured this by appending this to expected output)
+	// But this should be optional since ZSH doesn't use this
+	if e.Status == "Running" {
+		regexString += "( &)?$"
+	} else {
+		regexString += "$"
+	}
+
+	expectedOutput := fmt.Sprintf(
+		"[%d]%s  %s                 %s",
+		e.JobNumber, expectedJobMarkerString, e.Status, e.LaunchCommand,
+	)
+
+	// For 'Running' jobs, the trailing sign is expected
+	if e.Status == "Running" {
+		expectedOutput += " &"
+	}
+
+	return expectedOutput, regexp.MustCompile(regexString)
+}
+
 type JobsBuiltinResponseTestCase struct {
-	ExpectedOutputEntries []JobsBuiltinOutputEntry
+	ExpectedOutputEntries []BackgroundJobStatusEntry
 	SuccessMessage        string
 }
 
@@ -56,39 +91,11 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 	}
 
 	for i, expectedOutputEntry := range t.ExpectedOutputEntries {
-		expectedJobMarkerString := convertJobMarkerToString(expectedOutputEntry.Marker)
-
-		// This regex aims to match lines like: [1]+  Running                 sleep 5 &
-		regexString := fmt.Sprintf(
-			`^\[%d\]\s*%s\s+(?i)%s\s+(?-i)%s`,
-			expectedOutputEntry.JobNumber,
-			regexp.QuoteMeta(expectedJobMarkerString),
-			regexp.QuoteMeta(expectedOutputEntry.Status),
-			regexp.QuoteMeta(expectedOutputEntry.LaunchCommand),
-		)
-
-		// For 'Running' jobs, bash displays the trailing & sign
-		// Users shall comply with bash for consistency (Ensured this by appending this to expected output)
-		// But this should be optional since ZSH doesn't use this
-		if expectedOutputEntry.Status == "Running" {
-			regexString += "( &)?$"
-		} else {
-			regexString += "$"
-		}
-
-		expectedOutput := fmt.Sprintf(
-			"[%d]%s  %s                 %s",
-			expectedOutputEntry.JobNumber, expectedJobMarkerString, expectedOutputEntry.Status, expectedOutputEntry.LaunchCommand,
-		)
-
-		// For 'Running' jobs, the trailing sign is expected
-		if expectedOutputEntry.Status == "Running" {
-			expectedOutput += " &"
-		}
+		expectedOutput, regexPattern := expectedOutputEntry.ExpectedOutputAndRegex()
 
 		asserter.AddAssertion(assertions.SingleLineAssertion{
 			ExpectedOutput:   expectedOutput,
-			FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(regexString)},
+			FallbackPatterns: []*regexp.Regexp{regexPattern},
 		})
 
 		assertWithPrompt := false

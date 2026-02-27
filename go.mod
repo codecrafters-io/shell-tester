@@ -8,8 +8,10 @@ require (
 	github.com/charmbracelet/x/vt v0.0.0-20250122132629-a969ddeb820d
 	github.com/codecrafters-io/tester-utils v0.4.15
 	github.com/creack/pty v1.1.24
+	github.com/dustin/go-humanize v1.0.1
 	github.com/fatih/color v1.18.0
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
+	github.com/stretchr/testify v1.10.0
 	go.chromium.org/luci v0.0.0-20250611085002-a5741c865576
 )
 
@@ -20,7 +22,6 @@ require (
 	github.com/charmbracelet/x/ansi v0.7.0 // indirect
 	github.com/charmbracelet/x/wcwidth v0.0.0-20241011142426-46044092ad91 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
@@ -30,7 +31,6 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
-	github.com/stretchr/testify v1.10.0 // indirect
 	golang.org/x/exp v0.0.0-20250606033433-dcc06ee1d476 // indirect
 	golang.org/x/sys v0.40.0 // indirect
 	golang.org/x/term v0.32.0 // indirect

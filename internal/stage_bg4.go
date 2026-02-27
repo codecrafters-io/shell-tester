@@ -52,7 +52,7 @@ func launchBgCommandAndAssertJobs(asserter *logged_shell_asserter.LoggedShellAss
 
 		jobs = append(jobs, jobInfo{JobNumber: i + 1, Command: bgCommand})
 
-		jobsOutputEntries := make([]test_cases.JobsBuiltinOutputEntry, 0, len(jobs))
+		jobsOutputEntries := make([]test_cases.BackgroundJobStatusEntry, 0, len(jobs))
 
 		for i, job := range jobs {
 			// Default marker is unmarked
@@ -66,7 +66,7 @@ func launchBgCommandAndAssertJobs(asserter *logged_shell_asserter.LoggedShellAss
 				marker = test_cases.PreviousJob
 			}
 
-			jobsOutputEntries = append(jobsOutputEntries, test_cases.JobsBuiltinOutputEntry{
+			jobsOutputEntries = append(jobsOutputEntries, test_cases.BackgroundJobStatusEntry{
 				JobNumber:     job.JobNumber,
 				Status:        "Running",
 				LaunchCommand: job.Command,

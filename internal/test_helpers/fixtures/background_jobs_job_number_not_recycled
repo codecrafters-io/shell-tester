@@ -1,0 +1,26 @@
+Debug = true
+
+[33m[tester::#FY4] [0m[94mRunning tests for Stage #FY4 (fy4)[0m
+[33m[tester::#FY4] [setup] [0m[94mmkfifo /tmp/pear-70[0m
+[33m[tester::#FY4] [0m[94mRunning ./your_program.sh[0m
+[33m[your-program] [0m[0m$ grep -q raspberry /tmp/pear-70 &[0m
+[33m[your-program] [0m[0m[1] 2378[0m
+[33m[tester::#FY4] [0m[92m✓ Output includes job number with PID[0m
+[33m[tester::#FY4] [setup] [0m[94mecho "raspberry" > "/tmp/pear-70"[0m
+[33m[your-program] [0m[0m$ echo blueberry[0m
+[33m[your-program] [0m[0mblueberry[0m
+[33m[your-program] [0m[0m[1]+ Done                    grep -q raspberry /tmp/pear-70[0m
+[33m[tester::#FY4] [0m[92m✓ Received output for echo followed by an entry for the reaped job[0m
+[33m[your-program] [0m[0m$ echo mango[0m
+[33m[your-program] [0m[0mmango[0m
+[33m[tester::#FY4] [0m[92m✓ Received output for echo[0m
+[33m[your-program] [0m[0m$ jobs[0m
+[33m[tester::#FY4] [0m[92m✓ No jobs[0m
+[33m[your-program] [0m[0m$ sleep 10 &[0m
+[33m[your-program] [0m[0m[2] 2382[0m
+[33m[tester::#FY4] [0m[91m^ Line does not match expected value.[0m
+[33m[tester::#FY4] [0m[91m[32mExpected:[0m "[1] <PID>"[0m
+[33m[tester::#FY4] [0m[91m[31mReceived:[0m "[2] 2382"[0m
+[33m[your-program] [0m[0m$ [0m
+[33m[tester::#FY4] [0m[91mAssertion failed.[0m
+[33m[tester::#FY4] [0m[91mTest failed[0m

@@ -77,7 +77,7 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Call jobs for the first time
 	jobsBuiltinTestCase1 := test_cases.JobsBuiltinResponseTestCase{
-		ExpectedOutputEntries: []test_cases.JobsBuiltinOutputEntry{
+		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{
 			{JobNumber: 1, Status: "Running", LaunchCommand: sleepCommand, Marker: test_cases.UnmarkedJob},
 			{JobNumber: 2, Status: "Done", LaunchCommand: bgGrepCommand1, Marker: test_cases.PreviousJob},
 			{JobNumber: 3, Status: "Running", LaunchCommand: bgGrepCommand2, Marker: test_cases.CurrentJob},
@@ -96,7 +96,7 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Call jobs for the second time
 	jobsBuiltinTestCase2 := test_cases.JobsBuiltinResponseTestCase{
-		ExpectedOutputEntries: []test_cases.JobsBuiltinOutputEntry{
+		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{
 			{JobNumber: 1, Status: "Running", LaunchCommand: sleepCommand, Marker: test_cases.PreviousJob},
 			{JobNumber: 3, Status: "Done", LaunchCommand: bgGrepCommand2, Marker: test_cases.CurrentJob},
 		},
@@ -108,7 +108,7 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Call jobs again
 	jobsBuiltinTestCase3 := test_cases.JobsBuiltinResponseTestCase{
-		ExpectedOutputEntries: []test_cases.JobsBuiltinOutputEntry{
+		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{
 			{JobNumber: 1, Status: "Running", LaunchCommand: sleepCommand, Marker: test_cases.CurrentJob},
 		},
 		SuccessMessage: "✓ 1 entry matches the running job",
