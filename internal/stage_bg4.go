@@ -74,13 +74,20 @@ func launchBgCommandAndAssertJobs(asserter *logged_shell_asserter.LoggedShellAss
 			})
 		}
 
-		jobsTestCase := test_cases.JobsBuiltinResponseTestCase{
-			ExpectedOutputEntries: jobsOutputEntries,
-			SuccessMessage: fmt.Sprintf(
+		var successMessage string
+		if len(jobsOutputEntries) == 1 {
+			successMessage = "✓ 1 entry matches the running job"
+		} else {
+			successMessage = fmt.Sprintf(
 				"✓ %s match the running %s",
 				english.Plural(len(jobsOutputEntries), "entry", "entries"),
 				english.Plural(len(jobsOutputEntries), "job", "jobs"),
-			),
+			)
+		}
+
+		jobsTestCase := test_cases.JobsBuiltinResponseTestCase{
+			ExpectedOutputEntries: jobsOutputEntries,
+			SuccessMessage:        successMessage,
 		}
 
 		if err := jobsTestCase.Run(asserter, shell, logger); err != nil {
