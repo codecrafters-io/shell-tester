@@ -74,6 +74,8 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	time.Sleep(time.Millisecond)
+
 	// Assert the background command's output
 	err := test_cases.BackgroundCommandOutputOnlyTestCase{
 		ExpectedOutputLines: []string{grepPattern1},
@@ -83,8 +85,6 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err != nil {
 		return err
 	}
-
-	time.Sleep(time.Millisecond)
 
 	// Call jobs for the first time
 	jobsBuiltinTestCase1 := test_cases.JobsBuiltinResponseTestCase{
