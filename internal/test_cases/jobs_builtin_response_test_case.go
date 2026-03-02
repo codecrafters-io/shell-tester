@@ -29,7 +29,9 @@ type JobsBuiltinOutputEntry struct {
 
 type JobsBuiltinResponseTestCase struct {
 	ExpectedOutputEntries []JobsBuiltinOutputEntry
-	SuccessMessage        string
+	// SkipCurrentPromptAssertion should be set to true if the prompt symbol is not expected in the 'jobs' command reflection
+	SkipCurrentPromptAssertion bool
+	SuccessMessage             string
 }
 
 func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) (err error) {
@@ -45,7 +47,14 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
-	commandReflection := fmt.Sprintf("$ %s", command)
+	var commandReflection string
+
+	if !t.SkipCurrentPromptAssertion {
+		commandReflection = fmt.Sprintf("$ %s", command)
+	} else {
+		commandReflection = command
+	}
+
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
 	})

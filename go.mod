@@ -17,6 +17,7 @@ require (
 // replace github.com/codecrafters-io/tester-utils v0.2.22 => /Users/rohitpaulk/experiments/codecrafters/tester-utils
 
 require (
+	al.essio.dev/pkg/shellescape v1.6.0 // indirect
 	github.com/charmbracelet/x/ansi v0.7.0 // indirect
 	github.com/charmbracelet/x/wcwidth v0.0.0-20241011142426-46044092ad91 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
