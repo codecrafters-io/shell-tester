@@ -101,5 +101,4 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	return logAndQuit(asserter, nil)
-
 }
