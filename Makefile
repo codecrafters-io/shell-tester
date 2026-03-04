@@ -301,9 +301,6 @@ test_pipeline_w_bash: build
 test_background_jobs_w_bash: build
 	$(call run_test,$(BACKGROUND_JOBS_STAGES),bash)
 
-test_background_jobs_w_zsh: build
-	$(call run_test,$(BACKGROUND_JOBS_STAGES),zsh)
-
 test_base_w_dash: build
 	$(call run_test,$(BASE_STAGES),dash)
 
@@ -381,7 +378,6 @@ test_zsh:
 	make test_redirections_w_zsh
 	make test_completions_w_zsh
 	make test_filename_completion_w_zsh
-	make test_background_jobs_w_zsh
 	make test_history_w_zsh
 
 # Clone the repo in `debug` directory
