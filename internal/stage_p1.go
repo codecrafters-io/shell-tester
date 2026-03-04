@@ -78,10 +78,10 @@ func testP1(stageHarness *test_case_harness.TestCaseHarness) error {
 	input = fmt.Sprintf(`tail -f %s | head -n 5`, filePath)
 	expectedMultiLineOutput := strings.Split(strings.Trim(fileContent, "\n"), "\n")
 	multiLineTestCase := test_cases.CommandWithMultilineResponseTestCase{
-		Command:             input,
-		MultiLineAssertion:  assertions.NewMultiLineAssertion(expectedMultiLineOutput),
-		SuccessMessage:      "✓ Received redirected file content",
-		SkipPromptAssertion: true,
+		Command:                       input,
+		MultiLineAssertion:            assertions.NewMultiLineAssertion(expectedMultiLineOutput),
+		SuccessMessage:                "✓ Received redirected file content",
+		ShouldSkipNextPromptAssertion: true,
 	}
 	if err := multiLineTestCase.Run(asserter, shell, logger); err != nil {
 		return err
