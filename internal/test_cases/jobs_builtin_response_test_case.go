@@ -3,7 +3,6 @@ package test_cases
 import (
 	"fmt"
 	"regexp"
-	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -17,10 +16,10 @@ const (
 	PreviousJob
 )
 
-type JobsBuiltinOutputEntry struct {
+type BackgroundJobStatusEntry struct {
 	// The job number value in the square brackets
 	JobNumber int
-	// Status: "Running", "Done", "Terminated", etc
+	// Status: "Running", "Done", "Terminated", "1 Exit", etc
 	Status string
 	// LaunchCommand: Command that was run and sent to the background without trailing &
 	LaunchCommand string
@@ -28,9 +27,46 @@ type JobsBuiltinOutputEntry struct {
 	Marker int
 }
 
+// ExpectedOutputAndRegex returns the expected output string and regex pattern for this job entry.
+func (e BackgroundJobStatusEntry) ExpectedOutputAndRegex() (string, *regexp.Regexp) {
+	expectedJobMarkerString := convertJobMarkerToString(e.Marker)
+
+	// This regex aims to match lines like: [1]+  Running                 sleep 5 &
+	regexString := fmt.Sprintf(
+		`^\[%d\]\s*%s\s+(?i)%s\s+(?-i)%s`,
+		e.JobNumber,
+		regexp.QuoteMeta(expectedJobMarkerString),
+		regexp.QuoteMeta(e.Status),
+		regexp.QuoteMeta(e.LaunchCommand),
+	)
+
+	// For 'Running' jobs, bash displays the trailing & sign
+	// Users shall comply with bash for consistency (Ensured this by appending this to expected output)
+	// But this should be optional since ZSH doesn't use this
+	if e.Status == "Running" {
+		regexString += "( &)?$"
+	} else {
+		regexString += "$"
+	}
+
+	expectedOutput := fmt.Sprintf(
+		"[%d]%s  %s                 %s",
+		e.JobNumber, expectedJobMarkerString, e.Status, e.LaunchCommand,
+	)
+
+	// For 'Running' jobs, the trailing sign is expected
+	if e.Status == "Running" {
+		expectedOutput += " &"
+	}
+
+	return expectedOutput, regexp.MustCompile(regexString)
+}
+
 type JobsBuiltinResponseTestCase struct {
-	ExpectedOutputItems []JobsBuiltinOutputEntry
-	SuccessMessage      string
+	ExpectedOutputEntries []BackgroundJobStatusEntry
+	// ShouldSkipCurrentPromptAssertion should be set to true if the prompt symbol is not expected in the 'jobs' command reflection
+	ShouldSkipCurrentPromptAssertion bool
+	SuccessMessage                   string
 }
 
 func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) (err error) {
@@ -46,53 +82,40 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
-	commandReflection := fmt.Sprintf("$ %s", command)
+	var commandReflection string
+
+	if !t.ShouldSkipCurrentPromptAssertion {
+		commandReflection = fmt.Sprintf("$ %s", command)
+	} else {
+		commandReflection = command
+	}
+
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
 	})
 
-	// If we don't expect any items directly assert next prompt
-	if len(t.ExpectedOutputItems) == 0 {
+	// In case of no output entries, assert only the command reflection
+	if len(t.ExpectedOutputEntries) == 0 {
 		return asserter.AssertWithPrompt()
 	}
 
-	for i, outputEntry := range t.ExpectedOutputItems {
-		marker := convertJobMarkerToString(outputEntry.Marker)
-		regexString := fmt.Sprintf(
-			`^\[%d\]\s*%s\s+(?i)%s\s+(?-i)%s`,
-			outputEntry.JobNumber,
-			marker,
-			regexp.QuoteMeta(outputEntry.Status),
-			regexp.QuoteMeta(outputEntry.LaunchCommand),
-		)
-
-		// For 'running' jobs, bash displays the trailing & sign
-		// This is optional since ZSH doesn't use this
-		if strings.ToLower(outputEntry.Status) == "running" {
-			regexString += "( &)?$"
-		} else {
-			regexString += "$"
-		}
-
-		regex := regexp.MustCompile(regexString)
+	for i, expectedOutputEntry := range t.ExpectedOutputEntries {
+		expectedOutput, regexPattern := expectedOutputEntry.ExpectedOutputAndRegex()
 
 		asserter.AddAssertion(assertions.SingleLineAssertion{
-			ExpectedOutput: fmt.Sprintf(
-				"[%d]%s  %s                 %s",
-				outputEntry.JobNumber, marker, outputEntry.Status, outputEntry.LaunchCommand,
-			),
-			FallbackPatterns: []*regexp.Regexp{regex},
+			ExpectedOutput:   expectedOutput,
+			FallbackPatterns: []*regexp.Regexp{regexPattern},
 		})
 
-		shouldAssertWithPrompt := false
-
-		if i == len(t.ExpectedOutputItems)-1 {
-			shouldAssertWithPrompt = true
-		}
-
+		assertWithPrompt := false
 		var err error
 
-		if shouldAssertWithPrompt {
+		if i == len(t.ExpectedOutputEntries)-1 {
+			assertWithPrompt = true
+		}
+
+		// Assert with prompt on last entry
+		if assertWithPrompt {
 			err = asserter.AssertWithPrompt()
 		} else {
 			err = asserter.AssertWithoutPrompt()
@@ -101,6 +124,7 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		if err != nil {
 			return err
 		}
+
 	}
 
 	return nil

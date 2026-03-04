@@ -8,6 +8,7 @@ require (
 	github.com/charmbracelet/x/vt v0.0.0-20250122132629-a969ddeb820d
 	github.com/codecrafters-io/tester-utils v0.4.15
 	github.com/creack/pty v1.1.24
+	github.com/dustin/go-humanize v1.0.1
 	github.com/fatih/color v1.18.0
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 	github.com/shirou/gopsutil/v3 v3.24.5
@@ -19,6 +20,7 @@ require (
 // replace github.com/codecrafters-io/tester-utils v0.2.22 => /Users/rohitpaulk/experiments/codecrafters/tester-utils
 
 require (
+	al.essio.dev/pkg/shellescape v1.6.0 // indirect
 	github.com/charmbracelet/x/ansi v0.7.0 // indirect
 	github.com/charmbracelet/x/wcwidth v0.0.0-20241011142426-46044092ad91 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
