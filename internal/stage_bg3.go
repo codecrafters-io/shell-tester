@@ -99,7 +99,7 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Sleep before logging so that the finished job status and prompt are guaranteed to be printed
-	time.Sleep(time.Millisecond)
+	time.Sleep(10 * time.Millisecond)
 
 	return logAndQuit(asserter, nil)
 }
