@@ -12,6 +12,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
+	"github.com/codecrafters-io/tester-utils/testing"
 )
 
 func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
@@ -98,8 +99,10 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// Sleep before logging so that the finished job status and prompt are guaranteed to be printed
-	time.Sleep(time.Second)
+	// Sleep before logging so that the finished job status and prompt are guaranteed to be printed in the fixtures
+	if testing.IsRecordingOrEvaluatingFixtures() {
+		time.Sleep(100 * time.Millisecond)
+	}
 
 	return logAndQuit(asserter, nil)
 }
