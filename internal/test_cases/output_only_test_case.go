@@ -19,8 +19,8 @@ func (t OutputOnlyTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsser
 		panic("Codecrafters Internal Error - ExpectedOutputLines is empty in BackgroundCommandOutputOnlyTestCase")
 	}
 
-	remainingOutputLinesAssertion := assertions.NewMultiLineAssertion(t.ExpectedOutputLines)
-	asserter.AddAssertion(&remainingOutputLinesAssertion)
+	outputLinesAssertion := assertions.NewMultiLineAssertion(t.ExpectedOutputLines)
+	asserter.AddAssertion(&outputLinesAssertion)
 
 	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
