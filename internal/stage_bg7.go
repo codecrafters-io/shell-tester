@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 
+	"al.essio.dev/pkg/shellescape"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -37,7 +38,7 @@ func testBG7(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Grep read pattern
 	grepPattern := random.RandomWord()
-	bgGrepCommand := fmt.Sprintf("grep -q %s %s", grepPattern, fifoPath)
+	bgGrepCommand := fmt.Sprintf("grep %s %s", grepPattern, fifoPath)
 	bgGrepTestCase := test_cases.BackgroundCommandResponseTestCase{
 		Command:           bgGrepCommand,
 		ExpectedJobNumber: 2,
@@ -64,11 +65,22 @@ func testBG7(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	// Background output test case
+	backgroundOutputTestCase := test_cases.BackgroundCommandOutputOnlyTestCase{
+		ExpectedOutputLines: []string{grepPattern},
+		SuccessMessage:      fmt.Sprintf("✓ Output of %s found", shellescape.Quote(bgGrepCommand)),
+	}
+
+	if err := backgroundOutputTestCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
 	// Issue an echo command and expect the reaped job entry will follow the echoed text
 	echoArgument := random.RandomWord()
 	echoTestCase := test_cases.CommandResponseWithReapedJobsTestCase{
-		Command:               fmt.Sprintf("echo %s", echoArgument),
-		ExpectedCommandOutput: echoArgument,
+		Command:                          fmt.Sprintf("echo %s", echoArgument),
+		ExpectedCommandOutput:            echoArgument,
+		ShouldSkipCurrentPromptAssertion: true,
 		ExpectedReapedJobEntries: []*test_cases.BackgroundJobStatusEntry{{
 			JobNumber:     2,
 			Status:        "Done",

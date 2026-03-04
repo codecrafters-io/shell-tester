@@ -19,8 +19,11 @@ type CommandWithMultilineResponseTestCase struct {
 	// SuccessMessage is the message to log in case of success
 	SuccessMessage string
 
-	// SkipAssertPrompt is a flag to indicate that the prompt should not be asserted
-	SkipPromptAssertion bool
+	// ShouldSkipCurrentPromptAssertion should be set if prompt is not expected in the command reflection
+	ShouldSkipCurrentPromptAssertion bool
+
+	// ShouldSkipNextPromptAssertion is a flag to indicate that the prompt should not be asserted
+	ShouldSkipNextPromptAssertion bool
 }
 
 func (t CommandWithMultilineResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
@@ -28,14 +31,21 @@ func (t CommandWithMultilineResponseTestCase) Run(asserter *logged_shell_asserte
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
-	commandReflection := fmt.Sprintf("$ %s", t.Command)
+	var commandReflection string
+
+	if t.ShouldSkipCurrentPromptAssertion {
+		commandReflection = t.Command
+	} else {
+		commandReflection = fmt.Sprintf("$ %s", t.Command)
+	}
+
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
 	})
 
 	asserter.AddAssertion(&t.MultiLineAssertion)
 
-	if !t.SkipPromptAssertion {
+	if !t.ShouldSkipNextPromptAssertion {
 		if err := asserter.AssertWithPrompt(); err != nil {
 			return err
 		}

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"al.essio.dev/pkg/shellescape"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -38,7 +39,7 @@ func testBg8ResetToZero(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	grepPattern1 := random.RandomWord()
-	bgGrepCommand1 := fmt.Sprintf("grep -q %s %s", grepPattern1, fifoPath1)
+	bgGrepCommand1 := fmt.Sprintf("grep %s %s", grepPattern1, fifoPath1)
 	bgGrepTestCase := &test_cases.BackgroundCommandResponseTestCase{
 		Command:           bgGrepCommand1,
 		ExpectedJobNumber: 1,
@@ -55,6 +56,16 @@ func testBg8ResetToZero(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	time.Sleep(time.Millisecond)
 
+	// Background output test case for grep
+	backgroundOutputTestCase := test_cases.BackgroundCommandOutputOnlyTestCase{
+		ExpectedOutputLines: []string{grepPattern1},
+		SuccessMessage:      fmt.Sprintf("✓ Output of %s found", shellescape.Quote(bgGrepCommand1)),
+	}
+
+	if err := backgroundOutputTestCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
 	echoArgs := random.RandomWords(2)
 	echoTestCase := test_cases.CommandResponseWithReapedJobsTestCase{
 		Command:               fmt.Sprintf("echo %s", echoArgs[0]),
@@ -62,7 +73,8 @@ func testBg8ResetToZero(stageHarness *test_case_harness.TestCaseHarness) error {
 		ExpectedReapedJobEntries: []*test_cases.BackgroundJobStatusEntry{
 			{JobNumber: 1, Status: "Done", LaunchCommand: bgGrepCommand1, Marker: test_cases.CurrentJob},
 		},
-		SuccessMessage: "✓ Received output for echo followed by an entry for the reaped job",
+		ShouldSkipCurrentPromptAssertion: true,
+		SuccessMessage:                   "✓ Received output for echo followed by an entry for the reaped job",
 	}
 
 	if err := echoTestCase.Run(asserter, shell, logger); err != nil {
@@ -137,7 +149,7 @@ func testBg8Recycle(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	grepPattern := random.RandomWord()
-	bgGrepCommand := fmt.Sprintf("grep -q %s %s", grepPattern, fifoPath)
+	bgGrepCommand := fmt.Sprintf("grep %s %s", grepPattern, fifoPath)
 	if err := (&test_cases.BackgroundCommandResponseTestCase{
 		Command:           bgGrepCommand,
 		ExpectedJobNumber: 2,
@@ -151,6 +163,17 @@ func testBg8Recycle(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 	time.Sleep(time.Millisecond)
 
+	// Background output test case for grep
+
+	backgroundOutputTestCase := test_cases.BackgroundCommandOutputOnlyTestCase{
+		ExpectedOutputLines: []string{grepPattern},
+		SuccessMessage:      fmt.Sprintf("✓ Output of %s found", shellescape.Quote(bgGrepCommand)),
+	}
+
+	if err := backgroundOutputTestCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
 	echoArgument := random.RandomWord()
 	echoTestCase := test_cases.CommandResponseWithReapedJobsTestCase{
 		Command:               fmt.Sprintf("echo %s", echoArgument),
@@ -158,7 +181,8 @@ func testBg8Recycle(stageHarness *test_case_harness.TestCaseHarness) error {
 		ExpectedReapedJobEntries: []*test_cases.BackgroundJobStatusEntry{{
 			JobNumber: 2, Status: "Done", LaunchCommand: bgGrepCommand, Marker: test_cases.CurrentJob,
 		}},
-		SuccessMessage: "✓ Received output for echo followed by an entry for the reaped job",
+		ShouldSkipCurrentPromptAssertion: true,
+		SuccessMessage:                   "✓ Received output for echo followed by an entry for the reaped job",
 	}
 	if err := echoTestCase.Run(asserter, shell, logger); err != nil {
 		return err
