@@ -80,9 +80,7 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
-	var commandReflection string
-
-	commandReflection = fmt.Sprintf("$ %s", command)
+	commandReflection := fmt.Sprintf("$ %s", command)
 
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,
