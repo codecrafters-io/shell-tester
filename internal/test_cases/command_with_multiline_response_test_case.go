@@ -19,9 +19,6 @@ type CommandWithMultilineResponseTestCase struct {
 	// SuccessMessage is the message to log in case of success
 	SuccessMessage string
 
-	// ShouldSkipCurrentPromptAssertion should be set if prompt is not expected in the command reflection
-	ShouldSkipCurrentPromptAssertion bool
-
 	// ShouldSkipNextPromptAssertion is a flag to indicate that the prompt should not be asserted
 	ShouldSkipNextPromptAssertion bool
 }
@@ -31,13 +28,7 @@ func (t CommandWithMultilineResponseTestCase) Run(asserter *logged_shell_asserte
 		return fmt.Errorf("Error sending command to shell: %v", err)
 	}
 
-	var commandReflection string
-
-	if t.ShouldSkipCurrentPromptAssertion {
-		commandReflection = t.Command
-	} else {
-		commandReflection = fmt.Sprintf("$ %s", t.Command)
-	}
+	commandReflection := fmt.Sprintf("$ %s", t.Command)
 
 	asserter.AddAssertion(assertions.SingleLineAssertion{
 		ExpectedOutput: commandReflection,

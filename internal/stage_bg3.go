@@ -1,9 +1,15 @@
 package internal
 
 import (
+	"fmt"
+	"path/filepath"
+	"strings"
+
+	"al.essio.dev/pkg/shellescape"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -16,30 +22,78 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// Launch a program in the background
-	backgroundLaunchCommand := "sleep 100"
-	backgroundLaunchTestCase := test_cases.BackgroundCommandResponseTestCase{
-		Command:           backgroundLaunchCommand,
-		SuccessMessage:    "✓ Output includes job number with PID",
-		ExpectedJobNumber: 1,
-	}
+	// Create a named pipe
+	fifoBaseNames := random.RandomWords(2)
 
-	if err := backgroundLaunchTestCase.Run(asserter, shell, logger); err != nil {
+	fifoPath1 := filepath.Join(
+		"/tmp",
+		fmt.Sprintf("%s-%d", fifoBaseNames[0], random.RandomInt(1, 100)),
+	)
+
+	if err := CreateRandomFIFOWithTeardown(stageHarness, fifoPath1, 0644); err != nil {
 		return err
 	}
 
-	// Assert the job output
-	jobsTestCase := test_cases.JobsBuiltinResponseTestCase{
-		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{{
-			JobNumber:     1,
-			Status:        "Running",
-			LaunchCommand: backgroundLaunchCommand,
-			Marker:        test_cases.CurrentJob,
-		}},
-		SuccessMessage: "✓ 1 entry matches the running job",
+	fifoPath2 := filepath.Join(
+		"/tmp",
+		fmt.Sprintf("%s-%d", fifoBaseNames[1], random.RandomInt(1, 100)),
+	)
+
+	if err := CreateRandomFIFOWithTeardown(stageHarness, fifoPath2, 0644); err != nil {
+		return err
 	}
 
-	if err := jobsTestCase.Run(asserter, shell, logger); err != nil {
+	bgCatCommand := fmt.Sprintf("cat %s", fifoPath1)
+	bgCommandTestCase := test_cases.BackgroundCommandResponseTestCase{
+		Command:           bgCatCommand,
+		SuccessMessage:    "✓ Received next prompt",
+		ExpectedJobNumber: 1,
+	}
+
+	if err := bgCommandTestCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	// Launch a foreground test case that reads from the fifo
+	fgCatCommand := fmt.Sprintf("cat %s", fifoPath2)
+	fgCommandTestCase := test_cases.CommandWithNoResponseTestCase{
+		Command:             fgCatCommand,
+		SkipPromptAssertion: true,
+	}
+
+	if err := fgCommandTestCase.Run(asserter, shell, logger, true); err != nil {
+		return err
+	}
+
+	// Write to the fifo 1, and assert the output
+	fifo1Contents := "Hello from FIFO #1\n"
+	if err := WriteToFile(stageHarness, fifoPath1, fifo1Contents); err != nil {
+		return err
+	}
+
+	// Assert background cat command output
+	backgroundCommandOutputTestCase := test_cases.OutputOnlyTestCase{
+		ExpectedOutputLines: []string{strings.TrimSuffix(fifo1Contents, "\n")},
+		SuccessMessage:      fmt.Sprintf("✓ Output of %s found", shellescape.Quote(bgCatCommand)),
+	}
+
+	if err := backgroundCommandOutputTestCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	// Write to the fifo 2, and assert the output
+	fifo2Contents := "Hello from FIFO #2\n"
+	if err := WriteToFile(stageHarness, fifoPath2, fifo2Contents); err != nil {
+		return err
+	}
+
+	// Assert foreground cat command output
+	foregroundCommandOutputTestCase := test_cases.OutputOnlyTestCase{
+		ExpectedOutputLines: []string{strings.TrimSuffix(fifo2Contents, "\n")},
+		SuccessMessage:      fmt.Sprintf("✓ Output of %s found", shellescape.Quote(fgCatCommand)),
+	}
+
+	if err := foregroundCommandOutputTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 

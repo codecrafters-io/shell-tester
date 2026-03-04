@@ -25,10 +25,6 @@ type CommandResponseWithReapedJobsTestCase struct {
 
 	// ExpectedReapedJobEntries is the list of entries expected after the command output appears
 	ExpectedReapedJobEntries []*BackgroundJobStatusEntry
-
-	// ShouldSkipCurrentPromptAssertion should be set to true if the prompt symbol is not expected in the command reflection
-	// This is usually true when a background command's output has consumed the current prompt line
-	ShouldSkipCurrentPromptAssertion bool
 }
 
 func (t CommandResponseWithReapedJobsTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
@@ -58,8 +54,7 @@ func (t CommandResponseWithReapedJobsTestCase) Run(asserter *logged_shell_assert
 		MultiLineAssertion: assertions.MultiLineAssertion{
 			SingleLineAssertions: allSingleLinesAssertion,
 		},
-		ShouldSkipCurrentPromptAssertion: t.ShouldSkipCurrentPromptAssertion,
-		SuccessMessage:                   t.SuccessMessage,
+		SuccessMessage: t.SuccessMessage,
 	}
 
 	if err := commandWithMultilineResponseTestCase.Run(asserter, shell, logger); err != nil {

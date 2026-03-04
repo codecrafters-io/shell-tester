@@ -175,6 +175,7 @@ define _BACKGROUND_JOBS_STAGES
 [ \
 	{"slug":"af3","tester_log_prefix":"tester::#af3","title":"Stage#1: The jobs builtin"}, \
 	{"slug":"at7","tester_log_prefix":"tester::#at7","title":"Stage#2: Starting background jobs"}, \
+	{"slug":"si2","tester_log_prefix":"tester::#si2","title":"Stage#2: Printing background job output"}, \
 	{"slug":"jd6","tester_log_prefix":"tester::#jd6","title":"Stage#3: List a single job"}, \
 	{"slug":"dk5","tester_log_prefix":"tester::#dk5","title":"Stage#4: List multiple jobs"}, \
 	{"slug":"ma9","tester_log_prefix":"tester::#ma9","title":"Stage#5: Reaping one job using jobs"}, \

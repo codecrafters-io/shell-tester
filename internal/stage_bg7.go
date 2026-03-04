@@ -2,8 +2,9 @@ package internal
 
 import (
 	"fmt"
+	"path/filepath"
+	"time"
 
-	"al.essio.dev/pkg/shellescape"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -16,8 +17,21 @@ func testBG7(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	fifoPath := fmt.Sprintf("/tmp/%s-%d", random.RandomWord(), random.RandomInt(1, 100))
-	if err := CreateRandomFIFOWithTeardown(stageHarness, fifoPath, 0644); err != nil {
+	fifoBaseNames := random.RandomWords(2)
+	fifoPath1 := filepath.Join(
+		"/tmp",
+		fmt.Sprintf("%s-%d", fifoBaseNames[0], random.RandomInt(1, 100)),
+	)
+	if err := CreateRandomFIFOWithTeardown(stageHarness, fifoPath1, 0644); err != nil {
+		return err
+	}
+
+	fifoPath2 := filepath.Join(
+		"/tmp",
+		fmt.Sprintf("%s-%d", fifoBaseNames[1], random.RandomInt(1, 100)),
+	)
+
+	if err := CreateRandomFIFOWithTeardown(stageHarness, fifoPath2, 0644); err != nil {
 		return err
 	}
 
@@ -25,7 +39,7 @@ func testBG7(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// Spawn background process: sleep 500
+	// Launch "sleep 500"
 	sleepCommand := "sleep 500"
 	bgSleepTestCase := test_cases.BackgroundCommandResponseTestCase{
 		Command:           sleepCommand,
@@ -36,75 +50,77 @@ func testBG7(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// Grep read pattern
-	grepPattern := random.RandomWord()
-	bgGrepCommand := fmt.Sprintf("grep %s %s", grepPattern, fifoPath)
-	bgGrepTestCase := test_cases.BackgroundCommandResponseTestCase{
-		Command:           bgGrepCommand,
+	// Launch 'cat read pattern' to hang the process indefinitely
+	bgCatCommand1 := fmt.Sprintf("cat %s", fifoPath1)
+	bgCatTestCase1 := test_cases.BackgroundCommandResponseTestCase{
+		Command:           bgCatCommand1,
 		ExpectedJobNumber: 2,
 		SuccessMessage:    "✓ Output includes job number with PID",
 	}
-	if err := bgGrepTestCase.Run(asserter, shell, logger); err != nil {
+	if err := bgCatTestCase1.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
-	// Run jobs
-	jobsBuiltinTestCase := test_cases.JobsBuiltinResponseTestCase{
+	// Launch cat that reads from the fifo
+	bgCatCommand2 := fmt.Sprintf("cat %s", fifoPath2)
+	bgCatTestCase2 := test_cases.BackgroundCommandResponseTestCase{
+		Command:           bgCatCommand2,
+		ExpectedJobNumber: 3,
+		SuccessMessage:    "✓ Output includes job number with PID",
+	}
+
+	if err := bgCatTestCase2.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	// Write an empty string to the first fifo
+	if err := WriteToFile(stageHarness, fifoPath1, ""); err != nil {
+		return err
+	}
+
+	time.Sleep(time.Millisecond)
+
+	// Call jobs for the first time
+	jobsBuiltinTestCase1 := test_cases.JobsBuiltinResponseTestCase{
+		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{
+			{JobNumber: 1, Status: "Running", LaunchCommand: sleepCommand, Marker: test_cases.UnmarkedJob},
+			{JobNumber: 2, Status: "Done", LaunchCommand: bgCatCommand1, Marker: test_cases.PreviousJob},
+			{JobNumber: 3, Status: "Running", LaunchCommand: bgCatCommand2, Marker: test_cases.CurrentJob},
+		},
+		SuccessMessage: "✓ Received 3 entries in the output",
+	}
+
+	if err := jobsBuiltinTestCase1.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	// Write empty string to the second fifo
+	if err := WriteToFile(stageHarness, fifoPath2, ""); err != nil {
+		return err
+	}
+
+	time.Sleep(time.Millisecond)
+
+	// Call jobs for the second time
+	jobsBuiltinTestCase2 := test_cases.JobsBuiltinResponseTestCase{
 		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{
 			{JobNumber: 1, Status: "Running", LaunchCommand: sleepCommand, Marker: test_cases.PreviousJob},
-			{JobNumber: 2, Status: "Running", LaunchCommand: bgGrepCommand, Marker: test_cases.CurrentJob},
+			{JobNumber: 3, Status: "Done", LaunchCommand: bgCatCommand2, Marker: test_cases.CurrentJob},
 		},
-		SuccessMessage: "✓ Found 2 entries for the running jobs",
-	}
-	if err := jobsBuiltinTestCase.Run(asserter, shell, logger); err != nil {
-		return err
-	}
-
-	// Write to fifo
-	if err := WriteToFile(stageHarness, fifoPath, grepPattern); err != nil {
-		return err
-	}
-
-	// Background output test case
-	backgroundOutputTestCase := test_cases.BackgroundCommandOutputOnlyTestCase{
-		ExpectedOutputLines: []string{grepPattern},
-		SuccessMessage:      fmt.Sprintf("✓ Output of %s found", shellescape.Quote(bgGrepCommand)),
-	}
-
-	if err := backgroundOutputTestCase.Run(asserter, shell, logger); err != nil {
-		return err
-	}
-
-	// Issue an echo command and expect the reaped job entry will follow the echoed text
-	echoArgument := random.RandomWord()
-	echoTestCase := test_cases.CommandResponseWithReapedJobsTestCase{
-		Command:                          fmt.Sprintf("echo %s", echoArgument),
-		ExpectedCommandOutput:            echoArgument,
-		ShouldSkipCurrentPromptAssertion: true,
-		ExpectedReapedJobEntries: []*test_cases.BackgroundJobStatusEntry{{
-			JobNumber:     2,
-			Status:        "Done",
-			LaunchCommand: bgGrepCommand,
-			Marker:        test_cases.CurrentJob,
-		}},
-		SuccessMessage: "✓ Found command output followed by an entry for the reaped job",
-	}
-
-	if err := echoTestCase.Run(asserter, shell, logger); err != nil {
-		return err
-	}
-
-	// Call jobs — only sleep (job 1) remains
-	jobsBuiltinTestCase2 := test_cases.JobsBuiltinResponseTestCase{
-		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{{
-			JobNumber:     1,
-			Status:        "Running",
-			LaunchCommand: sleepCommand,
-			Marker:        test_cases.CurrentJob,
-		}},
-		SuccessMessage: "✓ 1 entry matches the running job",
+		SuccessMessage: "✓ Received 2 entries in the output",
 	}
 	if err := jobsBuiltinTestCase2.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	// Call jobs again
+	jobsBuiltinTestCase3 := test_cases.JobsBuiltinResponseTestCase{
+		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{
+			{JobNumber: 1, Status: "Running", LaunchCommand: sleepCommand, Marker: test_cases.CurrentJob},
+		},
+		SuccessMessage: "✓ 1 entry matches the running job",
+	}
+	if err := jobsBuiltinTestCase3.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 

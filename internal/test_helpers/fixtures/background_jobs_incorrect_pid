@@ -2,8 +2,7 @@ Debug = true
 
 [33m[tester::#AT7] [0m[94mRunning tests for Stage #AT7 (at7)[0m
 [33m[tester::#AT7] [0m[94mRunning ./your_program.sh[0m
-[33m[tester::#AT7] [setup] [0m[94mmkfifo /tmp/pear-70[0m
-[33m[your-program] [0m[0m$ grep raspberry /tmp/pear-70 &[0m
+[33m[your-program] [0m[0m$ sleep 500 &[0m
 [33m[your-program] [0m[0m[1] 1234[0m
 [33m[tester::#AT7] [0m[91mCould not find process with PID 1234[0m
 [33m[tester::#AT7] [0m[91mTest failed[0m

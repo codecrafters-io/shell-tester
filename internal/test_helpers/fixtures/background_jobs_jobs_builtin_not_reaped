@@ -5,26 +5,24 @@ Debug = true
 [33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/blueberry-54[0m
 [33m[tester::#RQ2] [0m[94mRunning ./your_program.sh[0m
 [33m[your-program] [0m[0m$ sleep 500 &[0m
-[33m[your-program] [0m[0m[1] 2679[0m
-[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2679[0m
+[33m[your-program] [0m[0m[1] 2428[0m
+[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2428[0m
 [33m[tester::#RQ2] [0m[92m✓ Output includes job number with PID[0m
-[33m[your-program] [0m[0m$ grep apple /tmp/apple-80 &[0m
-[33m[your-program] [0m[0m[2] 2681[0m
-[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2681[0m
+[33m[your-program] [0m[0m$ cat /tmp/apple-80 &[0m
+[33m[your-program] [0m[0m[2] 2430[0m
+[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2430[0m
 [33m[tester::#RQ2] [0m[92m✓ Output includes job number with PID[0m
-[33m[your-program] [0m[0m$ grep apple /tmp/blueberry-54 &[0m
-[33m[your-program] [0m[0m[3] 2684[0m
-[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2684[0m
+[33m[your-program] [0m[0m$ cat /tmp/blueberry-54 &[0m
+[33m[your-program] [0m[0m[3] 2432[0m
+[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2432[0m
 [33m[tester::#RQ2] [0m[92m✓ Output includes job number with PID[0m
-[33m[tester::#RQ2] [setup] [0m[94mecho "apple" > "/tmp/apple-80"[0m
-[33m[your-program] [0m[0m$ apple[0m
-[33m[tester::#RQ2] [0m[92m✓ Output of 'grep apple /tmp/apple-80' found[0m
-[33m[your-program] [0m[0mjobs[0m
+[33m[tester::#RQ2] [setup] [0m[94mecho -ne "" > "/tmp/apple-80"[0m
+[33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]   Running                 sleep 500 &[0m
-[33m[your-program] [0m[0m[2]-  Running                 grep apple /tmp/apple-80 &[0m
+[33m[your-program] [0m[0m[2]-  Running                 cat /tmp/apple-80 &[0m
 [33m[tester::#RQ2] [0m[91m^ Line does not match expected value.[0m
-[33m[tester::#RQ2] [0m[91m[32mExpected:[0m "[2]-  Done                 grep apple /tmp/apple-80"[0m
-[33m[tester::#RQ2] [0m[91m[31mReceived:[0m "[2]-  Running                 grep apple /tmp/apple-80 &"[0m
-[33m[your-program] [0m[0m[3]+  Running                 grep apple /tmp/blueberry-54 &[0m
+[33m[tester::#RQ2] [0m[91m[32mExpected:[0m "[2]-  Done                 cat /tmp/apple-80"[0m
+[33m[tester::#RQ2] [0m[91m[31mReceived:[0m "[2]-  Running                 cat /tmp/apple-80 &"[0m
+[33m[your-program] [0m[0m[3]+  Running                 cat /tmp/blueberry-54 &[0m
 [33m[your-program] [0m[0m$ [0m
 [33m[tester::#RQ2] [0m[91mTest failed[0m

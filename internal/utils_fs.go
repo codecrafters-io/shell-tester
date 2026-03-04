@@ -185,7 +185,7 @@ func WriteToFile(stageHarness *test_case_harness.TestCaseHarness, filePath strin
 		return err
 	}
 	stageHarness.Logger.WithAdditionalSecondaryPrefix("setup", func() {
-		stageHarness.Logger.Infof("echo %q > %q", contents, filePath)
+		stageHarness.Logger.Infof("echo -ne %q > %q", contents, filePath)
 	})
 	return nil
 }
