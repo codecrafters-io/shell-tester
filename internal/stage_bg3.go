@@ -12,7 +12,6 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
-	"github.com/codecrafters-io/tester-utils/testing"
 )
 
 func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
@@ -89,6 +88,8 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	time.Sleep(time.Millisecond)
+
 	// Assert foreground cat command output
 	fgCommandOutputTestCase := test_cases.OutputOnlyTestCase{
 		ExpectedOutputLines: []string{strings.TrimSuffix(fifo2Contents, "\n")},
@@ -99,10 +100,6 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// Sleep before logging so that the finished job status and prompt are guaranteed to be printed in the fixtures
-	if testing.IsRecordingOrEvaluatingFixtures() {
-		time.Sleep(time.Second)
-	}
-
 	return logAndQuit(asserter, nil)
+
 }
