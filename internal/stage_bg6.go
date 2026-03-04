@@ -80,5 +80,14 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	jobsBuiltinTestCase3 := test_cases.JobsBuiltinResponseTestCase{
+		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{},
+		SuccessMessage:        "✓ No jobs",
+	}
+
+	if err := jobsBuiltinTestCase3.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
 	return logAndQuit(asserter, nil)
 }

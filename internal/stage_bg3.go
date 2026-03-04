@@ -72,12 +72,12 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Assert background cat command output
-	backgroundCommandOutputTestCase := test_cases.OutputOnlyTestCase{
+	bgCommandOutputTestCasae := test_cases.OutputOnlyTestCase{
 		ExpectedOutputLines: []string{strings.TrimSuffix(fifo1Contents, "\n")},
-		SuccessMessage:      fmt.Sprintf("✓ Output of %s found", shellescape.Quote(bgCatCommand)),
+		SuccessMessage:      fmt.Sprintf("✓ Received output from background job %s", shellescape.Quote(bgCatCommand)),
 	}
 
-	if err := backgroundCommandOutputTestCase.Run(asserter, shell, logger); err != nil {
+	if err := bgCommandOutputTestCasae.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
@@ -88,12 +88,12 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Assert foreground cat command output
-	foregroundCommandOutputTestCase := test_cases.OutputOnlyTestCase{
+	fgCommandOutputTestCase := test_cases.OutputOnlyTestCase{
 		ExpectedOutputLines: []string{strings.TrimSuffix(fifo2Contents, "\n")},
-		SuccessMessage:      fmt.Sprintf("✓ Output of %s found", shellescape.Quote(fgCatCommand)),
+		SuccessMessage:      fmt.Sprintf("✓ Received output from foreground job %s", shellescape.Quote(fgCatCommand)),
 	}
 
-	if err := foregroundCommandOutputTestCase.Run(asserter, shell, logger); err != nil {
+	if err := fgCommandOutputTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
