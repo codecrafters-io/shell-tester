@@ -94,8 +94,8 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 			{JobNumber: 3, Status: "Running", LaunchCommand: bgGrepCommand2, Marker: test_cases.CurrentJob},
 		},
 		// Because background command will have consumed the prompt line
-		SkipCurrentPromptAssertion: true,
-		SuccessMessage:             "✓ Received 3 entries in the output",
+		ShouldSkipCurrentPromptAssertion: true,
+		SuccessMessage:                   "✓ Received 3 entries in the output",
 	}
 
 	if err := jobsBuiltinTestCase1.Run(asserter, shell, logger); err != nil {
@@ -126,8 +126,8 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 			{JobNumber: 3, Status: "Done", LaunchCommand: bgGrepCommand2, Marker: test_cases.CurrentJob},
 		},
 		// Prompt will have been consumed by the background command output
-		SkipCurrentPromptAssertion: true,
-		SuccessMessage:             "✓ Received 2 entries in the output",
+		ShouldSkipCurrentPromptAssertion: true,
+		SuccessMessage:                   "✓ Received 2 entries in the output",
 	}
 	if err := jobsBuiltinTestCase2.Run(asserter, shell, logger); err != nil {
 		return err

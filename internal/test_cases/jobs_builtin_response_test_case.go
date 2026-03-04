@@ -29,9 +29,9 @@ type JobsBuiltinOutputEntry struct {
 
 type JobsBuiltinResponseTestCase struct {
 	ExpectedOutputEntries []JobsBuiltinOutputEntry
-	// SkipCurrentPromptAssertion should be set to true if the prompt symbol is not expected in the 'jobs' command reflection
-	SkipCurrentPromptAssertion bool
-	SuccessMessage             string
+	// ShouldSkipCurrentPromptAssertion should be set to true if the prompt symbol is not expected in the 'jobs' command reflection
+	ShouldSkipCurrentPromptAssertion bool
+	SuccessMessage                   string
 }
 
 func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) (err error) {
@@ -49,7 +49,7 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 
 	var commandReflection string
 
-	if !t.SkipCurrentPromptAssertion {
+	if !t.ShouldSkipCurrentPromptAssertion {
 		commandReflection = fmt.Sprintf("$ %s", command)
 	} else {
 		commandReflection = command

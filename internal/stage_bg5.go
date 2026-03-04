@@ -79,8 +79,8 @@ func testBG5(stageHarness *test_case_harness.TestCaseHarness) error {
 			LaunchCommand: bgGrepCommand,
 			Marker:        test_cases.CurrentJob,
 		}},
-		SkipCurrentPromptAssertion: true,
-		SuccessMessage:             "✓ 1 entry matches the finished job",
+		ShouldSkipCurrentPromptAssertion: true,
+		SuccessMessage:                   "✓ 1 entry matches the finished job",
 	}
 
 	if err := jobsBuiltinTestCase2.Run(asserter, shell, logger); err != nil {
