@@ -27,7 +27,7 @@ func testBG5(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	grepPattern := random.RandomWord()
-	bgGrepCommand := fmt.Sprintf("grep -q %s %s", grepPattern, fifoPath)
+	bgGrepCommand := fmt.Sprintf("grep %s %s", grepPattern, fifoPath)
 
 	bgJobTestCase := test_cases.BackgroundCommandResponseTestCase{
 		Command:           bgGrepCommand,
@@ -62,6 +62,15 @@ func testBG5(stageHarness *test_case_harness.TestCaseHarness) error {
 	// A small delay since grep takes some time to process and exit
 	time.Sleep(time.Millisecond)
 
+	err := test_cases.BackgroundCommandOutputOnlyTestCase{
+		ExpectedOutputLines: []string{grepPattern},
+		SuccessMessage:      "✓ Output of background command 'grep' found",
+	}.Run(asserter, shell, logger)
+
+	if err != nil {
+		return err
+	}
+
 	// Call jobs again
 	jobsBuiltinTestCase2 := test_cases.JobsBuiltinResponseTestCase{
 		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{{
@@ -70,7 +79,8 @@ func testBG5(stageHarness *test_case_harness.TestCaseHarness) error {
 			LaunchCommand: bgGrepCommand,
 			Marker:        test_cases.CurrentJob,
 		}},
-		SuccessMessage: "✓ 1 entry matches the finished job",
+		ShouldSkipCurrentPromptAssertion: true,
+		SuccessMessage:                   "✓ 1 entry matches the finished job",
 	}
 
 	if err := jobsBuiltinTestCase2.Run(asserter, shell, logger); err != nil {

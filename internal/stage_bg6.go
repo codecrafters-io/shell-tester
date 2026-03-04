@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"al.essio.dev/pkg/shellescape"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -45,7 +46,7 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 	// Launch 'grep read pattern' to hang the process indefinitely
 
 	grepPattern1 := random.RandomWord()
-	bgGrepCommand1 := fmt.Sprintf("grep -q %s %s", grepPattern1, fifoPath1)
+	bgGrepCommand1 := fmt.Sprintf("grep %s %s", grepPattern1, fifoPath1)
 	bgGrepTestCase1 := test_cases.BackgroundCommandResponseTestCase{
 		Command:           bgGrepCommand1,
 		ExpectedJobNumber: 2,
@@ -57,7 +58,7 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	// Launch grep read pattern again
 	grepPattern2 := random.RandomWord()
-	bgGrepCommand2 := fmt.Sprintf("grep -q %s %s", grepPattern2, fifoPath2)
+	bgGrepCommand2 := fmt.Sprintf("grep %s %s", grepPattern2, fifoPath2)
 	bgGrepTestCase2 := test_cases.BackgroundCommandResponseTestCase{
 		Command:           bgGrepCommand2,
 		ExpectedJobNumber: 3,
@@ -75,6 +76,16 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	time.Sleep(time.Millisecond)
 
+	// Assert the background command's output
+	err := test_cases.BackgroundCommandOutputOnlyTestCase{
+		ExpectedOutputLines: []string{grepPattern1},
+		SuccessMessage:      fmt.Sprintf("✓ Output of %s found", shellescape.Quote(bgGrepCommand1)),
+	}.Run(asserter, shell, logger)
+
+	if err != nil {
+		return err
+	}
+
 	// Call jobs for the first time
 	jobsBuiltinTestCase1 := test_cases.JobsBuiltinResponseTestCase{
 		ExpectedOutputEntries: []test_cases.BackgroundJobStatusEntry{
@@ -82,8 +93,11 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 			{JobNumber: 2, Status: "Done", LaunchCommand: bgGrepCommand1, Marker: test_cases.PreviousJob},
 			{JobNumber: 3, Status: "Running", LaunchCommand: bgGrepCommand2, Marker: test_cases.CurrentJob},
 		},
-		SuccessMessage: "✓ Received 3 entries in the output",
+		// Because background command will have consumed the prompt line
+		ShouldSkipCurrentPromptAssertion: true,
+		SuccessMessage:                   "✓ Received 3 entries in the output",
 	}
+
 	if err := jobsBuiltinTestCase1.Run(asserter, shell, logger); err != nil {
 		return err
 	}
@@ -92,7 +106,18 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 	if err := WriteToFile(stageHarness, fifoPath2, grepPattern2); err != nil {
 		return err
 	}
+
 	time.Sleep(time.Millisecond)
+
+	// Assert the background command's output
+	err = test_cases.BackgroundCommandOutputOnlyTestCase{
+		ExpectedOutputLines: []string{grepPattern2},
+		SuccessMessage:      fmt.Sprintf("✓ Output of %s found", shellescape.Quote(bgGrepCommand2)),
+	}.Run(asserter, shell, logger)
+
+	if err != nil {
+		return err
+	}
 
 	// Call jobs for the second time
 	jobsBuiltinTestCase2 := test_cases.JobsBuiltinResponseTestCase{
@@ -100,7 +125,9 @@ func testBG6(stageHarness *test_case_harness.TestCaseHarness) error {
 			{JobNumber: 1, Status: "Running", LaunchCommand: sleepCommand, Marker: test_cases.PreviousJob},
 			{JobNumber: 3, Status: "Done", LaunchCommand: bgGrepCommand2, Marker: test_cases.CurrentJob},
 		},
-		SuccessMessage: "✓ Received 2 entries in the output",
+		// Prompt will have been consumed by the background command output
+		ShouldSkipCurrentPromptAssertion: true,
+		SuccessMessage:                   "✓ Received 2 entries in the output",
 	}
 	if err := jobsBuiltinTestCase2.Run(asserter, shell, logger); err != nil {
 		return err

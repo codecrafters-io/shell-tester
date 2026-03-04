@@ -79,8 +79,6 @@ def run_external(args: list[str], background: bool = False) -> tuple[int | None,
             proc = subprocess.Popen(
                 [path] + args[1:],
                 env=os.environ,
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
             )
             return (None, proc)
         proc = subprocess.run(
