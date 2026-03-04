@@ -5,13 +5,16 @@ Debug = true
 [33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/blueberry-54[0m
 [33m[tester::#RQ2] [0m[94mRunning ./your_program.sh[0m
 [33m[your-program] [0m[0m$ sleep 500 &[0m
-[33m[your-program] [0m[0m[1] 2581[0m
+[33m[your-program] [0m[0m[1] 2784[0m
+[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2784[0m
 [33m[tester::#RQ2] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ grep apple /tmp/apple-80 &[0m
-[33m[your-program] [0m[0m[2] 2582[0m
+[33m[your-program] [0m[0m[2] 2786[0m
+[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2786[0m
 [33m[tester::#RQ2] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ grep apple /tmp/blueberry-54 &[0m
-[33m[your-program] [0m[0m[3] 2583[0m
+[33m[your-program] [0m[0m[3] 2788[0m
+[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2788[0m
 [33m[tester::#RQ2] [0m[92m✓ Output includes job number with PID[0m
 [33m[tester::#RQ2] [setup] [0m[94mecho "apple" > "/tmp/apple-80"[0m
 [33m[your-program] [0m[0m$ apple[0m

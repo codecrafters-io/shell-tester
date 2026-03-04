@@ -118,7 +118,6 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_incorrect_job_number",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
-<<<<<<< HEAD
 		"background_jobs_jobs_builtin_incorrect_marker": {
 			StageSlugs:          []string{"dk5"},
 			CodePath:            "./test_helpers/scenarios/background_jobs_jobs_builtin_incorrect_marker",
@@ -145,13 +144,13 @@ func TestStages(t *testing.T) {
 			CodePath:            "./test_helpers/scenarios/background_jobs_job_number_not_recycled",
 			ExpectedExitCode:    1,
 			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_job_number_not_recycled",
-=======
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"background_jobs_incorrect_pid": {
 			StageSlugs:          []string{"at7"},
 			CodePath:            "./test_helpers/scenarios/background_jobs_incorrect_pid",
 			ExpectedExitCode:    1,
 			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_incorrect_pid",
->>>>>>> bg-jobs
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"pipelines_pass_bash": {
@@ -262,20 +261,12 @@ func normalizeTesterOutput(testerOutput []byte) []byte {
 		"PATH is now: <path>":             {regexp.MustCompile(`PATH is now: .*`)},
 		"/tmp/":                           {regexp.MustCompile(`/var/folders/.*/.*/.*/`)},
 		"[your-program] [JOB_NUM] PID":    {regexp.MustCompile(`\[your-program\].*\[\d+\] \d+`)},
-<<<<<<< HEAD
-		// For background_jobs_incorrect_output_format
-		"[your-program] [JOB_NUM]PID":                {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
-		"[tester::#AT7] Received: \"[JOB_NUM]PID\"":  {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\]\d+"`)},
-		"[tester::#AT7] Received: \"[JOB_NUM] PID\"": {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\] \d+"`)},
-		"[tester::#FY4] Received: \"[JOB_NUM] PID\"": {regexp.MustCompile(`\[tester::#FY4\].*Received:.*"\[\d+\] \d+"`)},
-		// For background jobs incorrect job number
-=======
-		// For intentional error cases fixtures in background-jobs extension
+		// For background_jobs error cases
 		"[your-program] [JOB_NUM]PID":                   {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
-		"[tester::#AT7] Received: \"[JOB_NUM] PID\"":    {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\] \d+"`)},
-		"[tester::#AT7] ✓ Found process with PID <PID>": {regexp.MustCompile(`\[tester::#AT7\].*Found process with PID \d+`)},
 		"[tester::#AT7] Received: \"[JOB_NUM]PID\"":     {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\]\d+"`)},
->>>>>>> bg-jobs
+		"[tester::#AT7] Received: \"[JOB_NUM] PID\"":    {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\] \d+"`)},
+		"[tester::#FY4] Received: \"[JOB_NUM] PID\"":    {regexp.MustCompile(`\[tester::#FY4\].*Received:.*"\[\d+\] \d+"`)},
+		"[tester::#AT7] ✓ Found process with PID <PID>": {regexp.MustCompile(`\[tester::#AT7\].*Found process with PID \d+`)},
 	}
 
 	for replacement, regexes := range replacements {
