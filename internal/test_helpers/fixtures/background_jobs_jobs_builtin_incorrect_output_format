@@ -3,8 +3,8 @@ Debug = true
 [33m[tester::#DK5] [0m[94mRunning tests for Stage #DK5 (dk5)[0m
 [33m[tester::#DK5] [0m[94mRunning ./your_program.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2969[0m
-[33m[tester::#DK5] [0m[92m✓ Found process with PID 2969[0m
+[33m[your-program] [0m[0m[1] 2500[0m
+[33m[tester::#DK5] [0m[92m✓ Found process with PID 2500[0m
 [33m[tester::#DK5] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+Running                 sleep 100 &[0m
@@ -12,5 +12,4 @@ Debug = true
 [33m[tester::#DK5] [0m[91m[32mExpected:[0m "[1]+  Running                 sleep 100 &"[0m
 [33m[tester::#DK5] [0m[91m[31mReceived:[0m "[1]+Running                 sleep 100 &"[0m
 [33m[your-program] [0m[0m$ [0m
-[33m[tester::#DK5] [0m[91mAssertion failed.[0m
 [33m[tester::#DK5] [0m[91mTest failed[0m

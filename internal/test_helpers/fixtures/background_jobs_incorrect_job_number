@@ -4,10 +4,9 @@ Debug = true
 [33m[tester::#AT7] [0m[94mRunning ./your_program.sh[0m
 [33m[tester::#AT7] [setup] [0m[94mmkfifo /tmp/pear-70[0m
 [33m[your-program] [0m[0m$ grep raspberry /tmp/pear-70 &[0m
-[33m[your-program] [0m[0m[0] 2408[0m
+[33m[your-program] [0m[0m[0] 3003[0m
 [33m[tester::#AT7] [0m[91m^ Line does not match expected value.[0m
 [33m[tester::#AT7] [0m[91m[32mExpected:[0m "[1] <PID>"[0m
-[33m[tester::#AT7] [0m[91m[31mReceived:[0m "[0] 2408"[0m
+[33m[tester::#AT7] [0m[91m[31mReceived:[0m "[0] 3003"[0m
 [33m[your-program] [0m[0m$ [0m
-[33m[tester::#AT7] [0m[91mAssertion failed.[0m
 [33m[tester::#AT7] [0m[91mTest failed[0m
