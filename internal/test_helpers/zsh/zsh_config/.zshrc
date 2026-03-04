@@ -47,3 +47,6 @@ unsetopt AUTO_REMOVE_SLASH
 # bindkey "^I" _list-or-complete-newline
 # zstyle ':completion:*' menu no
 # zstyle ':completion:*' select 0
+
+# Disable automatically printing notifications when background jobs finish - Force Bash's behavior
+unsetopt NOTIFY
