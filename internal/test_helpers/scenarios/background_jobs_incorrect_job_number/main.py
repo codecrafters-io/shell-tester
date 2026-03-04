@@ -56,16 +56,20 @@ def run_external(args: list[str], background: bool = False) -> tuple[int | None,
         print(f"{name}: command not found", file=sys.stderr)
         return (127, None)
     try:
+        # Build command so that arg0 is args[0] (the original, like "sleep"), not the full path.
+        cmd_argv = [path] + args[1:]
+        cmd_argv[0] = args[0]  # Set arg0 properly
+
         if background:
             proc = subprocess.Popen(
-                [path] + args[1:],
+                cmd_argv,
                 env=os.environ,
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
             return (None, proc)
         proc = subprocess.run(
-            [path] + args[1:],
+            cmd_argv,
             env=os.environ,
             capture_output=False,
             timeout=30,

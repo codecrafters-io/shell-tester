@@ -116,7 +116,8 @@ def main() -> None:
                 last_exit_code = exit_code
             else:
                 job_number += 1
-                print(f"[{job_number}]{bg_proc.pid}")
+                ## Intentional bug: Print 1234 instead of the actual PID
+                print(f"[{job_number}] 1234")
                 sys.stdout.flush()
 
 
