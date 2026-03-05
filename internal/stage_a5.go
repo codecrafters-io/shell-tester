@@ -52,7 +52,7 @@ func testA5(stageHarness *test_case_harness.TestCaseHarness) error {
 		TabCount:                      2,
 		ExpectedCompletionOptionsLine: completions,
 		ExpectedCompletionOptionsLineFallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile("^" + strings.Join(escapedExecutableNames, `\s+`) + "$"),
+			regexp.MustCompile("^" + strings.Join(escapedExecutableNames, `\s{2,}`) + "$"),
 		},
 		SuccessMessage:      fmt.Sprintf("Received completion for %q", command),
 		CheckForBell:        true,
