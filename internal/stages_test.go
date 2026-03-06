@@ -97,6 +97,62 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/filename_completions/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"background_jobs_pass_bash": {
+			StageSlugs:          []string{"af3", "at7", "si2", "jd6", "dk5", "ma9", "rq2", "bv8", "fy4"},
+			CodePath:            "./test_helpers/bash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/bash/background_jobs/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"background_jobs_incorrect_output_format": {
+			StageSlugs:          []string{"at7"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_incorrect_output_format",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_incorrect_output_format",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"background_jobs_incorrect_job_number": {
+			StageSlugs:          []string{"at7"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_incorrect_job_number",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_incorrect_job_number",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"background_jobs_jobs_builtin_incorrect_marker": {
+			StageSlugs:          []string{"dk5"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_jobs_builtin_incorrect_marker",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_jobs_builtin_incorrect_marker",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"background_jobs_jobs_builtin_incorrect_output_format": {
+			StageSlugs:          []string{"dk5"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_jobs_builtin_incorrect_output_format",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_jobs_builtin_incorrect_output_format",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"background_jobs_jobs_builtin_not_reaped": {
+			StageSlugs:          []string{"rq2"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_jobs_builtin_not_reaped",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_jobs_builtin_not_reaped",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"background_jobs_job_number_not_recycled": {
+			StageSlugs:          []string{"fy4"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_job_number_not_recycled",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_job_number_not_recycled",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"background_jobs_incorrect_pid": {
+			StageSlugs:          []string{"at7"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_incorrect_pid",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_incorrect_pid",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"pipelines_pass_bash": {
 			StageSlugs:          []string{"br6", "ny9", "xk3"},
 			CodePath:            "./test_helpers/bash",
@@ -204,6 +260,14 @@ func normalizeTesterOutput(testerOutput []byte) []byte {
 		"ls-la-output-line":               {regexp.MustCompile(`-rw-r--r-- .*`)},
 		"PATH is now: <path>":             {regexp.MustCompile(`PATH is now: .*`)},
 		"/tmp/":                           {regexp.MustCompile(`/var/folders/.*/.*/.*/`)},
+		// Background jobs pass cases
+		"[your-program] [JOB_NUM] PID":                    {regexp.MustCompile(`\[your-program\].*\[\d+\] \d+`)},
+		"[tester::#STAGE] ✓ Found process with PID <PID>": {regexp.MustCompile(`\[tester::#[A-Z]{2}\d+\].*Found process with PID \d+`)},
+		// For background_jobs error cases
+		"[your-program] [JOB_NUM]PID":                {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
+		"[tester::#AT7] Received: \"[JOB_NUM]PID\"":  {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\]\d+"`)},
+		"[tester::#AT7] Received: \"[JOB_NUM] PID\"": {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\] \d+"`)},
+		"[tester::#FY4] Received: \"[JOB_NUM] PID\"": {regexp.MustCompile(`\[tester::#FY4\].*Received:.*"\[\d+\] \d+"`)},
 	}
 
 	for replacement, regexes := range replacements {

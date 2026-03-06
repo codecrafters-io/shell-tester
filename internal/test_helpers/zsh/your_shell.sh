@@ -8,4 +8,4 @@ rm -rf /etc/zshrc
 rm -rf ~/.zshrc
 rm -rf /etc/zlogin
 rm -rf ~/.zlogin 
-ZDOTDIR="$(dirname "$0")/zsh_config" zsh
+ZDOTDIR="$(dirname "$0")/zsh_config" exec zsh
