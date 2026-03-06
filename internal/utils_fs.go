@@ -185,7 +185,16 @@ func WriteToFile(stageHarness *test_case_harness.TestCaseHarness, filePath strin
 		return err
 	}
 	stageHarness.Logger.WithAdditionalSecondaryPrefix("setup", func() {
-		stageHarness.Logger.Infof("echo %q > %q", contents, filePath)
+		// Log the 'no trailing newline' and 'enable backslash escapes' flags: Just like the logs in grep tester
+		echoFlag := "-ne"
+		logContents := contents
+
+		// If we're writing the newline character too, remove the -n flag and remove the suffix while logging
+		if strings.HasSuffix(contents, "\n") {
+			echoFlag = "-e"
+			logContents = strings.TrimSuffix(contents, "\n")
+		}
+		stageHarness.Logger.Infof("echo %s %q > %q", echoFlag, logContents, filePath)
 	})
 	return nil
 }

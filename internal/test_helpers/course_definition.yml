@@ -1259,6 +1259,13 @@ stages:
     marketing_md: |-
       In this stage, you'll implement launching commands in the background.
 
+  - slug: "si2"
+    primary_extension_slug: "background-jobs"
+    name: "Printing background job output"
+    difficulty: medium
+    marketing_md: |-
+      In this stage, you'll implement wiring up background job's output streams to the terminal.
+
   - slug: "jd6"
     primary_extension_slug: "background-jobs"
     name: "List a single job"
