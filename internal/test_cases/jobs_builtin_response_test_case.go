@@ -3,6 +3,7 @@ package test_cases
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -62,6 +63,12 @@ func (e BackgroundJobStatusEntry) ExpectedOutputAndRegex() (string, *regexp.Rege
 	return expectedOutput, regexp.MustCompile(regexString)
 }
 
+func (e BackgroundJobStatusEntry) hasTrailingAmpersand() bool {
+	_, regex := e.ExpectedOutputAndRegex()
+	regexString := regex.String()
+	return strings.HasSuffix(regexString, "( )?$")
+}
+
 type JobsBuiltinResponseTestCase struct {
 	ExpectedOutputEntries []BackgroundJobStatusEntry
 	SuccessMessage        string
@@ -97,6 +104,13 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		asserter.AddAssertion(assertions.SingleLineAssertion{
 			ExpectedOutput:   expectedOutput,
 			FallbackPatterns: []*regexp.Regexp{regexPattern},
+			HintGenerator: func(receivedLine string) string {
+				foundLineHasTrailingAmpersand := strings.HasSuffix(receivedLine, "&")
+				if foundLineHasTrailingAmpersand && !expectedOutputEntry.hasTrailingAmpersand() {
+					return "Entry should not have trailing ampersand"
+				}
+				return ""
+			},
 		})
 
 		assertWithPrompt := false
