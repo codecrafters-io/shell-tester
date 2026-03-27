@@ -44,7 +44,7 @@ func (e BackgroundJobStatusEntry) ExpectedOutputAndRegex() (string, *regexp.Rege
 	// For 'Running' jobs, bash displays the trailing & sign
 	// Users shall comply with bash for consistency (Ensured this by appending this to expected output)
 	// But this should be optional since ZSH doesn't use this
-	if e.Status == "Running" {
+	if e.hasTrailingAmpersand() {
 		regexString += "( &)?$"
 	} else {
 		regexString += "$"
@@ -56,7 +56,7 @@ func (e BackgroundJobStatusEntry) ExpectedOutputAndRegex() (string, *regexp.Rege
 	)
 
 	// For 'Running' jobs, the trailing sign is expected
-	if e.Status == "Running" {
+	if e.hasTrailingAmpersand() {
 		expectedOutput += " &"
 	}
 
@@ -64,9 +64,7 @@ func (e BackgroundJobStatusEntry) ExpectedOutputAndRegex() (string, *regexp.Rege
 }
 
 func (e BackgroundJobStatusEntry) hasTrailingAmpersand() bool {
-	_, regex := e.ExpectedOutputAndRegex()
-	regexString := regex.String()
-	return strings.HasSuffix(regexString, "( )?$")
+	return e.Status == "Running"
 }
 
 type JobsBuiltinResponseTestCase struct {
