@@ -3,7 +3,6 @@ package test_cases
 import (
 	"fmt"
 	"regexp"
-	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -102,12 +101,28 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		asserter.AddAssertion(assertions.SingleLineAssertion{
 			ExpectedOutput:   expectedOutput,
 			FallbackPatterns: []*regexp.Regexp{regexPattern},
-			HintGenerator: func(receivedLine string) string {
-				foundLineHasTrailingAmpersand := strings.HasSuffix(receivedLine, "&")
-				if foundLineHasTrailingAmpersand && !expectedOutputEntry.hasTrailingAmpersand() {
-					return "Entry should not have trailing ampersand"
+			ErrorHintGenerator: func(receivedLine string) string {
+				// If expected entry has a trailing ampersand
+				// don't generate any hint
+				if expectedOutputEntry.hasTrailingAmpersand() {
+					return ""
 				}
-				return ""
+
+				// If the output still complies with the expected regex, but has an extra ampersand
+				// raise error
+				regexForUnexpectedTrailingAmpersand := regexp.MustCompile(fmt.Sprintf(
+					`^\[%d\]\s*%s\s+(?i)%s\s+(?-i)%s &$`,
+					expectedOutputEntry.JobNumber,
+					regexp.QuoteMeta(convertJobMarkerToString(expectedOutputEntry.Marker)),
+					regexp.QuoteMeta(expectedOutputEntry.Status),
+					regexp.QuoteMeta(expectedOutputEntry.LaunchCommand),
+				))
+
+				if !regexForUnexpectedTrailingAmpersand.Match([]byte(receivedLine)) {
+					return ""
+				}
+
+				return "Finished job entry should not have a trailing ampersand"
 			},
 		})
 

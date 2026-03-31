@@ -22,8 +22,8 @@ type SingleLineAssertion struct {
 	// Most probably because the next assertion will run on the same line
 	StayOnSameLine bool
 
-	// HintGenerator will generate a hint for the assertion error given the foundLine
-	HintGenerator func(foundLine string) string
+	// ErrorHintGenerator will generate a hint for the assertion error given the foundLine
+	ErrorHintGenerator func(foundLine string) string
 }
 
 func (a SingleLineAssertion) Inspect() string {
@@ -83,8 +83,8 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 }
 
 func (a SingleLineAssertion) generateExtraHint(foundLine string) string {
-	if a.HintGenerator != nil {
-		return a.HintGenerator(foundLine)
+	if a.ErrorHintGenerator != nil {
+		return a.ErrorHintGenerator(foundLine)
 	}
 	return ""
 }
