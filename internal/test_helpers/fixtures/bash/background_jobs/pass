@@ -13,8 +13,8 @@ Debug = true
 [33m[tester::#AT7] [0m[94mRunning tests for Stage #AT7 (at7)[0m
 [33m[tester::#AT7] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 500 &[0m
-[33m[your-program] [0m[0m[1] 2317[0m
-[33m[tester::#AT7] [0m[92m✓ Found process with PID 2317[0m
+[33m[your-program] [0m[0m[1] 2651[0m
+[33m[tester::#AT7] [0m[92m✓ Found process with PID 2651[0m
 [33m[tester::#AT7] [0m[92m✓ Received next prompt[0m
 [33m[your-program] [0m[0m$ [0m
 [33m[tester::#AT7] [0m[92mTest passed.[0m
@@ -24,8 +24,8 @@ Debug = true
 [33m[tester::#SI2] [setup] [0m[94mmkfifo /tmp/apple-80[0m
 [33m[tester::#SI2] [setup] [0m[94mmkfifo /tmp/blueberry-54[0m
 [33m[your-program] [0m[0m$ cat /tmp/apple-80 &[0m
-[33m[your-program] [0m[0m[1] 2320[0m
-[33m[tester::#SI2] [0m[92m✓ Found process with PID 2320[0m
+[33m[your-program] [0m[0m[1] 2654[0m
+[33m[tester::#SI2] [0m[92m✓ Found process with PID 2654[0m
 [33m[tester::#SI2] [0m[92m✓ Received next prompt[0m
 [33m[your-program] [0m[0m$ cat /tmp/blueberry-54[0m
 [33m[tester::#SI2] [setup] [0m[94mecho -e "Hello from FIFO #1" > "/tmp/apple-80"[0m
@@ -34,14 +34,13 @@ Debug = true
 [33m[tester::#SI2] [setup] [0m[94mecho -e "Hello from FIFO #2" > "/tmp/blueberry-54"[0m
 [33m[your-program] [0m[0mHello from FIFO #2[0m
 [33m[tester::#SI2] [0m[92m✓ Received output from foreground job 'cat /tmp/blueberry-54'[0m
-[33m[your-program] [0m[0m[1]+  Done                       cat /tmp/apple-80[0m
 [33m[tester::#SI2] [0m[92mTest passed.[0m
 
 [33m[tester::#JD6] [0m[94mRunning tests for Stage #JD6 (jd6)[0m
 [33m[tester::#JD6] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2325[0m
-[33m[tester::#JD6] [0m[92m✓ Found process with PID 2325[0m
+[33m[your-program] [0m[0m[1] 2658[0m
+[33m[tester::#JD6] [0m[92m✓ Found process with PID 2658[0m
 [33m[tester::#JD6] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    sleep 100 &[0m
@@ -52,23 +51,23 @@ Debug = true
 [33m[tester::#DK5] [0m[94mRunning tests for Stage #DK5 (dk5)[0m
 [33m[tester::#DK5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2328[0m
-[33m[tester::#DK5] [0m[92m✓ Found process with PID 2328[0m
+[33m[your-program] [0m[0m[1] 2666[0m
+[33m[tester::#DK5] [0m[92m✓ Found process with PID 2666[0m
 [33m[tester::#DK5] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    sleep 100 &[0m
 [33m[tester::#DK5] [0m[92m✓ 1 entry match the running job[0m
 [33m[your-program] [0m[0m$ sleep 200 &[0m
-[33m[your-program] [0m[0m[2] 2331[0m
-[33m[tester::#DK5] [0m[92m✓ Found process with PID 2331[0m
+[33m[your-program] [0m[0m[2] 2668[0m
+[33m[tester::#DK5] [0m[92m✓ Found process with PID 2668[0m
 [33m[tester::#DK5] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]-  Running                    sleep 100 &[0m
 [33m[your-program] [0m[0m[2]+  Running                    sleep 200 &[0m
 [33m[tester::#DK5] [0m[92m✓ 2 entries match the running jobs[0m
 [33m[your-program] [0m[0m$ sleep 300 &[0m
-[33m[your-program] [0m[0m[3] 2333[0m
-[33m[tester::#DK5] [0m[92m✓ Found process with PID 2333[0m
+[33m[your-program] [0m[0m[3] 2670[0m
+[33m[tester::#DK5] [0m[92m✓ Found process with PID 2670[0m
 [33m[tester::#DK5] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]   Running                    sleep 100 &[0m
@@ -82,8 +81,8 @@ Debug = true
 [33m[tester::#MA9] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#MA9] [setup] [0m[94mmkfifo /tmp/apple-26[0m
 [33m[your-program] [0m[0m$ cat /tmp/apple-26 &[0m
-[33m[your-program] [0m[0m[1] 2336[0m
-[33m[tester::#MA9] [0m[92m✓ Found process with PID 2336[0m
+[33m[your-program] [0m[0m[1] 2673[0m
+[33m[tester::#MA9] [0m[92m✓ Found process with PID 2673[0m
 [33m[tester::#MA9] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    cat /tmp/apple-26 &[0m
@@ -102,16 +101,16 @@ Debug = true
 [33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/grape-92[0m
 [33m[tester::#RQ2] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 500 &[0m
-[33m[your-program] [0m[0m[1] 2340[0m
-[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2340[0m
+[33m[your-program] [0m[0m[1] 2677[0m
+[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2677[0m
 [33m[tester::#RQ2] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ cat /tmp/pineapple-90 &[0m
-[33m[your-program] [0m[0m[2] 2342[0m
-[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2342[0m
+[33m[your-program] [0m[0m[2] 2679[0m
+[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2679[0m
 [33m[tester::#RQ2] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ cat /tmp/grape-92 &[0m
-[33m[your-program] [0m[0m[3] 2344[0m
-[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2344[0m
+[33m[your-program] [0m[0m[3] 2681[0m
+[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2681[0m
 [33m[tester::#RQ2] [0m[92m✓ Output includes job number with PID[0m
 [33m[tester::#RQ2] [setup] [0m[94mecho -ne "" > "/tmp/pineapple-90"[0m
 [33m[your-program] [0m[0m$ jobs[0m
@@ -134,12 +133,12 @@ Debug = true
 [33m[tester::#BV8] [setup] [0m[94mmkfifo /tmp/mango-48[0m
 [33m[tester::#BV8] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 500 &[0m
-[33m[your-program] [0m[0m[1] 2348[0m
-[33m[tester::#BV8] [0m[92m✓ Found process with PID 2348[0m
+[33m[your-program] [0m[0m[1] 2684[0m
+[33m[tester::#BV8] [0m[92m✓ Found process with PID 2684[0m
 [33m[tester::#BV8] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ cat /tmp/mango-48 &[0m
-[33m[your-program] [0m[0m[2] 2350[0m
-[33m[tester::#BV8] [0m[92m✓ Found process with PID 2350[0m
+[33m[your-program] [0m[0m[2] 2686[0m
+[33m[tester::#BV8] [0m[92m✓ Found process with PID 2686[0m
 [33m[tester::#BV8] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]-  Running                    sleep 500 &[0m
@@ -160,8 +159,8 @@ Debug = true
 [33m[tester::#FY4] [setup] [0m[94mmkfifo /tmp/apple-55[0m
 [33m[tester::#FY4] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ cat /tmp/apple-55 &[0m
-[33m[your-program] [0m[0m[1] 2354[0m
-[33m[tester::#FY4] [0m[92m✓ Found process with PID 2354[0m
+[33m[your-program] [0m[0m[1] 2691[0m
+[33m[tester::#FY4] [0m[92m✓ Found process with PID 2691[0m
 [33m[tester::#FY4] [0m[92m✓ Output includes job number with PID[0m
 [33m[tester::#FY4] [setup] [0m[94mecho -ne "" > "/tmp/apple-55"[0m
 [33m[your-program] [0m[0m$ echo blueberry[0m
@@ -174,8 +173,8 @@ Debug = true
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[tester::#FY4] [0m[92m✓ No jobs[0m
 [33m[your-program] [0m[0m$ sleep 10 &[0m
-[33m[your-program] [0m[0m[1] 2357[0m
-[33m[tester::#FY4] [0m[92m✓ Found process with PID 2357[0m
+[33m[your-program] [0m[0m[1] 2693[0m
+[33m[tester::#FY4] [0m[92m✓ Found process with PID 2693[0m
 [33m[tester::#FY4] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    sleep 10 &[0m
@@ -184,12 +183,12 @@ Debug = true
 [33m[tester::#FY4] [setup] [0m[94mmkfifo /tmp/blueberry-25[0m
 [33m[tester::#FY4] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2360[0m
-[33m[tester::#FY4] [0m[92m✓ Found process with PID 2360[0m
+[33m[your-program] [0m[0m[1] 2696[0m
+[33m[tester::#FY4] [0m[92m✓ Found process with PID 2696[0m
 [33m[tester::#FY4] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ cat /tmp/blueberry-25 &[0m
-[33m[your-program] [0m[0m[2] 2362[0m
-[33m[tester::#FY4] [0m[92m✓ Found process with PID 2362[0m
+[33m[your-program] [0m[0m[2] 2700[0m
+[33m[tester::#FY4] [0m[92m✓ Found process with PID 2700[0m
 [33m[tester::#FY4] [0m[92m✓ Output includes job number with PID[0m
 [33m[tester::#FY4] [setup] [0m[94mecho -ne "" > "/tmp/blueberry-25"[0m
 [33m[your-program] [0m[0m$ echo apple[0m
@@ -197,8 +196,8 @@ Debug = true
 [33m[your-program] [0m[0m[2]+  Done                       cat /tmp/blueberry-25[0m
 [33m[tester::#FY4] [0m[92m✓ Received output for echo followed by an entry for the reaped job[0m
 [33m[your-program] [0m[0m$ sleep 50 &[0m
-[33m[your-program] [0m[0m[2] 2364[0m
-[33m[tester::#FY4] [0m[92m✓ Found process with PID 2364[0m
+[33m[your-program] [0m[0m[2] 2702[0m
+[33m[tester::#FY4] [0m[92m✓ Found process with PID 2702[0m
 [33m[tester::#FY4] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]-  Running                    sleep 100 &[0m
