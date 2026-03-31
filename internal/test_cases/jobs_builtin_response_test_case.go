@@ -3,6 +3,7 @@ package test_cases
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -108,21 +109,15 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 					return ""
 				}
 
-				// If the output still complies with the expected regex, but has an extra ampersand
-				// raise error
-				regexForUnexpectedTrailingAmpersand := regexp.MustCompile(fmt.Sprintf(
-					`^\[%d\]\s*%s\s+(?i)%s\s+(?-i)%s &$`,
-					expectedOutputEntry.JobNumber,
-					regexp.QuoteMeta(convertJobMarkerToString(expectedOutputEntry.Marker)),
-					regexp.QuoteMeta(expectedOutputEntry.Status),
-					regexp.QuoteMeta(expectedOutputEntry.LaunchCommand),
-				))
-
-				if !regexForUnexpectedTrailingAmpersand.Match([]byte(receivedLine)) {
-					return ""
+				// If the output has the suffix ' &' and the part without the suffix
+				// matches the regex,
+				if outputWithoutTrailingAmpersand, found := strings.CutSuffix(receivedLine, " &"); found {
+					if regexPattern.Match([]byte(outputWithoutTrailingAmpersand)) {
+						return "Finished job entry cannot have a trailing ampersand"
+					}
 				}
 
-				return "Finished job entry should not have a trailing ampersand"
+				return ""
 			},
 		})
 

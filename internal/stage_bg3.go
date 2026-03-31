@@ -99,8 +99,10 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Fixtures are inconsistent for this stage because we cannot guarantee
-	// if the first cat job was Done or not by then. The shell may or may not print
-	// the 'Done' entry for that job
+	// if the first 'cat' job was reaped by the time the output for the foreground
+	// 'cat' job finishes. The shell may or may not print
+	// the 'Done' entry for that job depending on whether the former 'cat' was reaped by the time the
+	// second output is shown
 	if testing.IsRecordingOrEvaluatingFixtures() {
 		return nil
 	}
