@@ -83,7 +83,7 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Sleep to ensure that the next the reaped job entry is printed always (For fixtures)
-	time.Sleep(time.Millisecond)
+	time.Sleep(10 * time.Millisecond)
 
 	// Write to the fifo 2, and assert the output
 	fifo2Contents := "Hello from FIFO #2\n"
