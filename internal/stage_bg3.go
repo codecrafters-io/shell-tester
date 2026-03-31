@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"al.essio.dev/pkg/shellescape"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -12,6 +11,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
+	"github.com/codecrafters-io/tester-utils/testing"
 )
 
 func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
@@ -82,9 +82,6 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// Sleep to ensure that the next the reaped job entry is printed always (For fixtures)
-	time.Sleep(10 * time.Millisecond)
-
 	// Write to the fifo 2, and assert the output
 	fifo2Contents := "Hello from FIFO #2\n"
 	if err := WriteToFile(stageHarness, fifoPath2, fifo2Contents); err != nil {
@@ -99,6 +96,13 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	if err := fgCommandOutputTestCase.Run(asserter, shell, logger); err != nil {
 		return err
+	}
+
+	// Fixtures are inconsistent for this stage because we cannot guarantee
+	// if the first cat job was Done or not by then. The shell may or may not print
+	// the 'Done' entry for that job
+	if testing.IsRecordingOrEvaluatingFixtures() {
+		return nil
 	}
 
 	return logAndQuit(asserter, nil)
