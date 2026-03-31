@@ -1,21 +1,21 @@
 Debug = true
 
-[tester::#MA9] Running tests for Stage #MA9 (ma9)
-[tester::#MA9] Running ./your_program.sh
-[tester::#MA9] [setup] mkfifo /tmp/pear-70
-[your-program] $ cat /tmp/pear-70 &
-[your-program] [1] 43646
-[tester::#MA9] ✓ Found process with PID 43646
-[tester::#MA9] ✓ Output includes job number with PID
-[your-program] $ jobs
-[your-program] [1]+  Running                 cat /tmp/pear-70 &
-[tester::#MA9] ✓ 1 entry matches the running job
-[tester::#MA9] [setup] echo -ne "" > "/tmp/pear-70"
-[your-program] $ jobs
-[your-program] [1]+  Done                 cat /tmp/pear-70 &
-[tester::#MA9] ^ Line does not match expected value.
-[tester::#MA9] Expected: "[1]+  Done                 cat /tmp/pear-70"
-[tester::#MA9] Received: "[1]+  Done                 cat /tmp/pear-70 &"
-[tester::#MA9] Expected job entry to not have trailing ampersand
-[your-program] $ 
-[tester::#MA9] Test failed
+[33m[tester::#MA9] [0m[94mRunning tests for Stage #MA9 (ma9)[0m
+[33m[tester::#MA9] [0m[94mRunning ./your_program.sh[0m
+[33m[tester::#MA9] [setup] [0m[94mmkfifo /tmp/pear-70[0m
+[33m[your-program] [0m[0m$ cat /tmp/pear-70 &[0m
+[33m[your-program] [0m[0m[1] 2581[0m
+[33m[tester::#MA9] [0m[92m✓ Found process with PID 2581[0m
+[33m[tester::#MA9] [0m[92m✓ Output includes job number with PID[0m
+[33m[your-program] [0m[0m$ jobs[0m
+[33m[your-program] [0m[0m[1]+  Running                 cat /tmp/pear-70 &[0m
+[33m[tester::#MA9] [0m[92m✓ 1 entry matches the running job[0m
+[33m[tester::#MA9] [setup] [0m[94mecho -ne "" > "/tmp/pear-70"[0m
+[33m[your-program] [0m[0m$ jobs[0m
+[33m[your-program] [0m[0m[1]+  Done                 cat /tmp/pear-70 &[0m
+[33m[tester::#MA9] [0m[91m^ Line does not match expected value.[0m
+[33m[tester::#MA9] [0m[91m[32mExpected:[0m "[1]+  Done                 cat /tmp/pear-70"[0m
+[33m[tester::#MA9] [0m[91m[31mReceived:[0m "[1]+  Done                 cat /tmp/pear-70 &"[0m
+[33m[tester::#MA9] [0m[91mFinished job entry should not have a trailing ampersand[0m
+[33m[your-program] [0m[0m$ [0m
+[33m[tester::#MA9] [0m[91mTest failed[0m
