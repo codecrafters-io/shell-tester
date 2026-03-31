@@ -82,13 +82,14 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	// Sleep to ensure that the next the reaped job entry is printed always (For fixtures)
+	time.Sleep(time.Millisecond)
+
 	// Write to the fifo 2, and assert the output
 	fifo2Contents := "Hello from FIFO #2\n"
 	if err := WriteToFile(stageHarness, fifoPath2, fifo2Contents); err != nil {
 		return err
 	}
-
-	time.Sleep(time.Millisecond)
 
 	// Assert foreground cat command output
 	fgCommandOutputTestCase := test_cases.OutputOnlyTestCase{
