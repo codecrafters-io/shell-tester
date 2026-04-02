@@ -92,6 +92,7 @@ build_executables:
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/tail_$${os}_$${arch} ./internal/custom_executable/tail/tail.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/wc_$${os}_$${arch} ./internal/custom_executable/wc/wc.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/yes_$${os}_$${arch} ./internal/custom_executable/yes/yes.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/single_completer_$${os}_$${arch} ./internal/custom_executable/single_completer/main.go; \
 		done; \
 	done
 

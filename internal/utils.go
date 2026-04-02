@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/tester-utils/random"
@@ -65,13 +66,12 @@ func getRandomInvalidCommands(n int) []string {
 }
 
 func getRandomString() string {
-	// We will use a random numeric string of length = 6
-	var result string
-	for i := 0; i < 5; i++ {
-		result += fmt.Sprintf("%d", random.RandomInt(10, 99))
+	// Length must match <<RANDOM_1>> in patched signature_printer binaries (see custom_executable.SecretSlotByteLen).
+	var result strings.Builder
+	for range 6 {
+		result.WriteString(fmt.Sprintf("%d", random.RandomInt(10, 99)))
 	}
-
-	return result
+	return result.String()
 }
 
 func getRandomName() string {
