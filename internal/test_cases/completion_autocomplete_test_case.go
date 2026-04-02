@@ -25,6 +25,9 @@ type AutocompleteTestCase struct {
 	// ExpectedCompletion is the completion that is expected after the tab press
 	ExpectedCompletion string
 
+	// ExpectedSubsequentLines is the used if the completion extends to multiple lines
+	ExpectedSubsequentLines []string
+
 	// CheckForBell is true if we should check for a bell
 	CheckForBell bool
 
@@ -67,10 +70,17 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 	expectedCompletion := fmt.Sprintf("$ %s", t.ExpectedCompletion)
 
 	// Assert auto-completion
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: expectedCompletion,
-		StayOnSameLine: true,
-	})
+	if len(t.ExpectedSubsequentLines) > 0 {
+		assertion := assertions.NewMultiLineAssertion(
+			append([]string{expectedCompletion}, t.ExpectedSubsequentLines...),
+		)
+		asserter.AddAssertion(&assertion)
+	} else {
+		asserter.AddAssertion(assertions.SingleLineAssertion{
+			ExpectedOutput: expectedCompletion,
+			StayOnSameLine: true,
+		})
+	}
 	// Run the assertion, before sending the enter key
 	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
@@ -79,6 +89,12 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 	// If the completion does not change the prompt line: notify that prompt line is unchanged
 	if t.ExpectedCompletion != t.PreviousInputOnLine+t.RawInput {
 		logger.Successf("✓ Prompt line matches %q", t.ExpectedCompletion)
+		// TODO: Loop thru the subsequent lines and successf subsequent line matches
+		if len(t.ExpectedSubsequentLines) > 0 {
+			for i, line := range t.ExpectedSubsequentLines {
+				logger.Successf("✓ Subsequent line %d matches %q", i+1, line)
+			}
+		}
 	} else {
 		logger.Successf("✓ Prompt line unchanged after <TAB> press")
 	}
@@ -125,7 +141,7 @@ func logTabForCompletion(logger *logger.Logger, expectedCompletion string, expec
 		return
 	}
 
-	if expectedCompletion[len(expectedCompletion)-1] == ' ' {
+	if len(expectedCompletion) > 0 && expectedCompletion[len(expectedCompletion)-1] == ' ' {
 		expectedCompletionWithoutSpace := expectedCompletion[:len(expectedCompletion)-1]
 		logger.Infof("Pressed %q (expecting autocomplete to %q followed by a space)", "<TAB>", expectedCompletionWithoutSpace)
 		return
