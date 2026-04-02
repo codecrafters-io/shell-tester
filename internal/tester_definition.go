@@ -191,6 +191,53 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testFA7,
 			Timeout:  15 * time.Second,
 		},
+		// Programmable completion
+		{
+			Slug:     "ne7",
+			TestFunc: testPA1,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "oi7",
+			TestFunc: testPA2,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "wl6",
+			TestFunc: testPA3,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "zi0",
+			TestFunc: testPA4,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "nr7",
+			TestFunc: testPA5,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "ep2",
+			TestFunc: testPA6,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "xz3",
+			TestFunc: testPA7,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "pm5",
+			TestFunc: testPA8,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "tz2",
+			TestFunc: testPA9,
+			Timeout:  15 * time.Second,
+		},
+
 		// Background Jobs
 		{
 			Slug:     "af3",
