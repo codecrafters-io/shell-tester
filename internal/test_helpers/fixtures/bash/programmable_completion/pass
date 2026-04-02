@@ -1,9 +1,23 @@
 Debug = true
 
 [33m[tester::#NE7] [0m[94mRunning tests for Stage #NE7 (ne7)[0m
+[33m[tester::#NE7] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m[0m$ type complete[0m
+[33m[your-program] [0m[0mcomplete is a shell builtin[0m
+[33m[tester::#NE7] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ complete[0m
+[33m[tester::#NE7] [0m[92m✓ No output found[0m
+[33m[your-program] [0m[0m$ [0m
 [33m[tester::#NE7] [0m[92mTest passed.[0m
 
 [33m[tester::#OI7] [0m[94mRunning tests for Stage #OI7 (oi7)[0m
+[33m[tester::#OI7] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m[0m$ complete  -C  '/tmp/pear.py'  git[0m
+[33m[tester::#OI7] [0m[92m✓ No output found[0m
+[33m[your-program] [0m[0m$ complete[0m
+[33m[your-program] [0m[0mcomplete -C '/tmp/pear.py' git[0m
+[33m[tester::#OI7] [0m[92m✓ Registered completion found in normalized form[0m
+[33m[your-program] [0m[0m$ [0m
 [33m[tester::#OI7] [0m[92mTest passed.[0m
 
 [33m[tester::#WL6] [0m[94mRunning tests for Stage #WL6 (wl6)[0m
