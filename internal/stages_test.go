@@ -104,6 +104,20 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/programmable_completion/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"programmable_completion_argv_incorrect": {
+			StageSlugs:          []string{"zi0"},
+			CodePath:            "./test_helpers/scenarios/programmable_completion_argv_incorrect",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/programmable_completion_argv_incorrect",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
+		"programmable_completion_envvar_incorrect": {
+			StageSlugs:          []string{"nr7"},
+			CodePath:            "./test_helpers/scenarios/programmable_completion_envvar_incorrect",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/programmable_completion_envvar_incorrect",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		// "background_jobs_pass_bash": {
 		// 	StageSlugs:          []string{"af3", "at7", "si2", "jd6", "dk5", "ma9", "rq2", "bv8", "fy4"},
 		// 	CodePath:            "./test_helpers/bash",

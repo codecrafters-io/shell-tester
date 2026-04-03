@@ -18,6 +18,16 @@ var (
 	wantCompletion = "<<RANDOM_8>>"
 )
 
+var completerErrHeader bool
+
+func completerErr(format string, a ...any) {
+	if !completerErrHeader {
+		fmt.Fprintf(os.Stderr, "\nError from the completer script:\n")
+		completerErrHeader = true
+	}
+	fmt.Fprintf(os.Stderr, format, a...)
+}
+
 func trimSlot(s string) string {
 	return strings.TrimRight(s, " ")
 }
@@ -25,26 +35,27 @@ func trimSlot(s string) string {
 func main() {
 	n := len(os.Args) - 1
 	if n < 3 {
-		fmt.Fprintf(os.Stderr, "\nExpected argv[1] thru argv[3], only found up to argv[%d]\n", len(os.Args)-1)
+		completerErr("Expected argv[1] thru argv[3], only found up to argv[%d]\n", len(os.Args)-1)
 		os.Exit(1)
 	}
 	if n > 3 {
-		fmt.Fprintf(os.Stderr, "\nExpected argv[1] thru argv[3] only, got %d argument(s) after program name\n", n)
+		completerErr("Expected argv[1] thru argv[3] only, got %d argument(s) after program name\n", n)
 		os.Exit(1)
 	}
 
 	w1, w2, w3 := trimSlot(wantArg1), trimSlot(wantArg2), trimSlot(wantArg3)
+	var bad bool
 	if os.Args[1] != w1 {
-		fmt.Fprintf(os.Stderr, "\nargv[1] mismatch: expected %q, got %q\n", w1, os.Args[1])
-		os.Exit(1)
+		completerErr("Expected argv[1] to be '%s' got '%s'\n", w1, os.Args[1])
+		bad = true
 	}
 	if os.Args[2] != w2 {
-		fmt.Fprintf(os.Stderr, "\nargv[2] mismatch: expected %q, got %q\n", w2, os.Args[2])
-		os.Exit(1)
+		completerErr("Expected argv[2] to be '%s' got '%s'\n", w2, os.Args[2])
+		bad = true
 	}
 	if os.Args[3] != w3 {
-		fmt.Fprintf(os.Stderr, "\nargv[3] mismatch: expected %q, got %q\n", w3, os.Args[3])
-		os.Exit(1)
+		completerErr("Expected argv[3] to be '%s' got '%s'\n", w3, os.Args[3])
+		bad = true
 	}
 
 	eln := trimSlot(envLineVar)
@@ -53,22 +64,18 @@ func main() {
 	wantP := trimSlot(wantPoint)
 
 	gotLine := os.Getenv(eln)
-	if gotLine == "" && wantL != "" {
-		fmt.Fprintf(os.Stderr, "\nenvironment variable %q is unset or empty (expected %q)\n", eln, wantL)
-		os.Exit(1)
-	}
 	if gotLine != wantL {
-		fmt.Fprintf(os.Stderr, "\n%s mismatch: expected %q, got %q\n", eln, wantL, gotLine)
-		os.Exit(1)
+		completerErr("Expected %s to be '%s' got '%s'\n", eln, wantL, gotLine)
+		bad = true
 	}
 
 	gotPoint := os.Getenv(epn)
-	if gotPoint == "" && wantP != "" {
-		fmt.Fprintf(os.Stderr, "\nenvironment variable %q is unset or empty (expected %q)\n", epn, wantP)
-		os.Exit(1)
-	}
 	if gotPoint != wantP {
-		fmt.Fprintf(os.Stderr, "\n%s mismatch: expected %q, got %q\n", epn, wantP, gotPoint)
+		completerErr("Expected %s to be '%s' got '%s'\n", epn, wantP, gotPoint)
+		bad = true
+	}
+
+	if bad {
 		os.Exit(1)
 	}
 

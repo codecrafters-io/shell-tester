@@ -1,0 +1,5 @@
+Debug = true
+
+[tester::#NR7] Running tests for Stage #NR7 (nr7)
+[tester::#NR7] CodeCrafters Internal Error: copying env_context_completer failed: CodeCrafters Internal Error: copying executable env_context_completer_darwin_arm64 failed: CodeCrafters Internal Error: cp failed: exit status 1
+[tester::#NR7] Test failed

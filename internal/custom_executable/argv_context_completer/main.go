@@ -13,27 +13,41 @@ const (
 	completionLine = "set-url"
 )
 
+var completerErrHeader bool
+
+func completerErr(format string, a ...any) {
+	if !completerErrHeader {
+		fmt.Fprintf(os.Stderr, "\nError from the completer script:\n")
+		completerErrHeader = true
+	}
+	fmt.Fprintf(os.Stderr, format, a...)
+}
+
 func main() {
 	n := len(os.Args) - 1 // number of args after program name
 	if n < 3 {
-		fmt.Fprintf(os.Stderr, "\nExpected argv[1] thru argv[3], only found up to argv[%d]\n", len(os.Args)-1)
+		completerErr("Expected argv[1] thru argv[3], only found up to argv[%d]\n", len(os.Args)-1)
 		os.Exit(1)
 	}
 	if n > 3 {
-		fmt.Fprintf(os.Stderr, "\nExpected argv[1] thru argv[3] only, got %d argument(s) after program name\n", n)
+		completerErr("Expected argv[1] thru argv[3] only, got %d argument(s) after program name\n", n)
 		os.Exit(1)
 	}
 
+	var bad bool
 	if os.Args[1] != wantArg1 {
-		fmt.Fprintf(os.Stderr, "\nargv[1] mismatch: expected %q, got %q\n", wantArg1, os.Args[1])
-		os.Exit(1)
+		completerErr("Expected argv[1] to be '%s' got '%s'\n", wantArg1, os.Args[1])
+		bad = true
 	}
 	if os.Args[2] != wantArg2 {
-		fmt.Fprintf(os.Stderr, "\nargv[2] mismatch: expected %q, got %q\n", wantArg2, os.Args[2])
-		os.Exit(1)
+		completerErr("Expected argv[2] to be '%s' got '%s'\n", wantArg2, os.Args[2])
+		bad = true
 	}
 	if os.Args[3] != wantArg3 {
-		fmt.Fprintf(os.Stderr, "\nargv[3] mismatch: expected %q, got %q\n", wantArg3, os.Args[3])
+		completerErr("Expected argv[3] to be '%s' got '%s'\n", wantArg3, os.Args[3])
+		bad = true
+	}
+	if bad {
 		os.Exit(1)
 	}
 
