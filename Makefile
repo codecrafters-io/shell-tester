@@ -95,6 +95,8 @@ build_executables:
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/single_completer_$${os}_$${arch} ./internal/custom_executable/single_completer/main.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/no_stdout_stderr_completer_$${os}_$${arch} ./internal/custom_executable/no_stdout_stderr_completer/main.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/no_stdout_completer_$${os}_$${arch} ./internal/custom_executable/no_stdout_completer/main.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/argv_context_completer_$${os}_$${arch} ./internal/custom_executable/argv_context_completer/main.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/env_context_completer_$${os}_$${arch} ./internal/custom_executable/env_context_completer/main.go; \
 		done; \
 	done
 
@@ -171,12 +173,13 @@ define _PROGRAMMABLE_COMPLETION_STAGES
   {"slug":"ne7","tester_log_prefix":"tester::#ne7","title":"Stage#1: Register complete builtin"}, \
   {"slug":"oi7","tester_log_prefix":"tester::#oi7","title":"Stage#2: Display registered completions"}, \
   {"slug":"wl6","tester_log_prefix":"tester::#wl6","title":"Stage#3: Command based completion"}, \
-  {"slug":"zi0","tester_log_prefix":"tester::#zi0","title":"Stage#4: Passing command-line arguments"}, \
-  {"slug":"nr7","tester_log_prefix":"tester::#nr7","title":"Stage#5: Passing environment variables"}, \
-  {"slug":"ep2","tester_log_prefix":"tester::#ep2","title":"Stage#6: Multiple completer candidates"}, \
-  {"slug":"xz3","tester_log_prefix":"tester::#xz3","title":"Stage#7: Longest common prefix"}, \
-  {"slug":"pm5","tester_log_prefix":"tester::#pm5","title":"Stage#8: Empty completer output"}, \
-  {"slug":"tz2","tester_log_prefix":"tester::#tz2","title":"Stage#9: Unregister a completion"} \
+  {"slug":"pm5","tester_log_prefix":"tester::#pm5","title":"Stage#4: Handling no completions"}, \
+  {"slug":"qf1","tester_log_prefix":"tester::#qf1","title":"Stage#5: Handling completer stderr"}, \
+  {"slug":"zi0","tester_log_prefix":"tester::#zi0","title":"Stage#6: Passing command-line arguments"}, \
+  {"slug":"nr7","tester_log_prefix":"tester::#nr7","title":"Stage#7: Passing environment variables"}, \
+  {"slug":"ep2","tester_log_prefix":"tester::#ep2","title":"Stage#8: Multiple completer candidates"}, \
+  {"slug":"xz3","tester_log_prefix":"tester::#xz3","title":"Stage#9: Longest common prefix"}, \
+  {"slug":"tz2","tester_log_prefix":"tester::#tz2","title":"Stage#10: Unregister a completion"} \
 ]
 endef
 

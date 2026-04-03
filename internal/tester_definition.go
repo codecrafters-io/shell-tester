@@ -208,36 +208,40 @@ var testerDefinition = tester_definition.TesterDefinition{
 			Timeout:  15 * time.Second,
 		},
 		{
-			Slug:     "zi0",
+			Slug:     "pm5",
 			TestFunc: testPA4,
 			Timeout:  15 * time.Second,
 		},
 		{
-			Slug:     "nr7",
+			Slug:     "qf1",
 			TestFunc: testPA5,
 			Timeout:  15 * time.Second,
 		},
 		{
-			Slug:     "ep2",
+			Slug:     "zi0",
 			TestFunc: testPA6,
 			Timeout:  15 * time.Second,
 		},
 		{
-			Slug:     "xz3",
+			Slug:     "nr7",
 			TestFunc: testPA7,
 			Timeout:  15 * time.Second,
 		},
 		{
-			Slug:     "pm5",
+			Slug:     "ep2",
 			TestFunc: testPA8,
 			Timeout:  15 * time.Second,
 		},
 		{
-			Slug:     "tz2",
+			Slug:     "xz3",
 			TestFunc: testPA9,
 			Timeout:  15 * time.Second,
 		},
-
+		{
+			Slug:     "tz2",
+			TestFunc: testPA10,
+			Timeout:  15 * time.Second,
+		},
 		// Background Jobs
 		{
 			Slug:     "af3",

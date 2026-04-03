@@ -23,6 +23,13 @@ Debug = true
 [33m[tester::#WL6] [0m[94mRunning tests for Stage #WL6 (wl6)[0m
 [33m[tester::#WL6] [0m[92mTest passed.[0m
 
+
+[33m[tester::#PM5] [0m[94mRunning tests for Stage #PM5 (pm5)[0m
+[33m[tester::#PM5] [0m[92mTest passed.[0m
+
+[33m[tester::#QF1] [0m[94mRunning tests for Stage #QF1 (qf1)[0m
+[33m[tester::#QF1] [0m[92mTest passed.[0m
+
 [33m[tester::#ZI0] [0m[94mRunning tests for Stage #ZI0 (zi0)[0m
 [33m[tester::#ZI0] [0m[92mTest passed.[0m
 
@@ -34,9 +41,6 @@ Debug = true
 
 [33m[tester::#XZ3] [0m[94mRunning tests for Stage #XZ3 (xz3)[0m
 [33m[tester::#XZ3] [0m[92mTest passed.[0m
-
-[33m[tester::#PM5] [0m[94mRunning tests for Stage #PM5 (pm5)[0m
-[33m[tester::#PM5] [0m[92mTest passed.[0m
 
 [33m[tester::#TZ2] [0m[94mRunning tests for Stage #TZ2 (tz2)[0m
 [33m[tester::#TZ2] [0m[92mTest passed.[0m

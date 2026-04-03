@@ -98,7 +98,7 @@ func TestStages(t *testing.T) {
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
 		"programmable_completion_pass_bash": {
-			StageSlugs:          []string{"ne7", "oi7", "wl6", "zi0", "nr7", "ep2", "xz3", "pm5", "tz2"},
+			StageSlugs:          []string{"ne7", "oi7", "wl6", "pm5", "qf1", "zi0", "nr7", "ep2", "xz3", "tz2"},
 			CodePath:            "./test_helpers/bash",
 			ExpectedExitCode:    0,
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/programmable_completion/pass",
