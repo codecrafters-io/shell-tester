@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -14,4 +15,5 @@ func main() {
 	fmt.Fprintln(os.Stderr, strings.TrimRight(l1, " "))
 	fmt.Fprintln(os.Stderr, strings.TrimRight(l2, " "))
 	fmt.Fprintln(os.Stderr, strings.TrimRight(l3, " "))
+	time.Sleep(120 * time.Second)
 }

@@ -62,7 +62,7 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 	asserter.PopAssertion()
 
 	// Send TAB
-	logTabForCompletion(logger, t.ExpectedCompletion, false)
+	logTabForCompletion(logger, t.ExpectedCompletion, t.CheckForBell)
 	if err := shell.SendText("\t"); err != nil {
 		return fmt.Errorf("Error sending text to shell: %v", err)
 	}

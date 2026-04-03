@@ -22,10 +22,9 @@ func testPA4(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	const command = "git"
-	stderrBlock := "Line1\nLine2\nLine3"
 
-	completerPath := path.Join(randomDir, "noStdoutStderrCompleter")
-	if err := custom_executable.CreateNoCompleterWithStderr(completerPath, stderrBlock); err != nil {
+	completerPath := path.Join(randomDir, "noStdoutCompleter")
+	if err := custom_executable.CreateNoCompleter(completerPath); err != nil {
 		return err
 	}
 
@@ -43,12 +42,8 @@ func testPA4(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	autocompleteTestCase := test_cases.AutocompleteTestCase{
-		RawInput:           command + " ",
-		ExpectedCompletion: command + " Line1",
-		ExpectedSubsequentLines: []string{
-			"Line2",
-			"Line3",
-		},
+		RawInput:            command + " xyz",
+		ExpectedCompletion:  command + " xyz",
 		CheckForBell:        true,
 		SkipPromptAssertion: true,
 	}
