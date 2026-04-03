@@ -18,6 +18,7 @@ const (
 	secretPatchedNoStdoutStderrCompleter
 	secretPatchedEnvContextCompleter
 	secretPatchedMultiCandidateEnvCompleter
+	secretPatchedLCPEnvCompleter
 )
 
 // secretPlaceholder returns the embedded token for slot n (1-based: <<RANDOM_1>>, <<RANDOM_2>>, ...).
@@ -75,6 +76,8 @@ func prepareSecretPatchedExecutable(kind secretPatchedExecutable, outputPath str
 		baseName = "env_context_completer"
 	case secretPatchedMultiCandidateEnvCompleter:
 		baseName = "multi_candidate_env_completer"
+	case secretPatchedLCPEnvCompleter:
+		baseName = "lcp_env_completer"
 	default:
 		return fmt.Errorf("CodeCrafters Internal Error: unknown patched executable kind")
 	}
@@ -92,6 +95,8 @@ func prepareSecretPatchedExecutable(kind secretPatchedExecutable, outputPath str
 			return fmt.Errorf("CodeCrafters Internal Error: copying env_context_completer failed: %w", err)
 		case secretPatchedMultiCandidateEnvCompleter:
 			return fmt.Errorf("CodeCrafters Internal Error: copying multi_candidate_env_completer failed: %w", err)
+		case secretPatchedLCPEnvCompleter:
+			return fmt.Errorf("CodeCrafters Internal Error: copying lcp_env_completer failed: %w", err)
 		}
 	}
 
@@ -108,6 +113,8 @@ func prepareSecretPatchedExecutable(kind secretPatchedExecutable, outputPath str
 			return fmt.Errorf("CodeCrafters Internal Error: patching env_context_completer failed: %w", err)
 		case secretPatchedMultiCandidateEnvCompleter:
 			return fmt.Errorf("CodeCrafters Internal Error: patching multi_candidate_env_completer failed: %w", err)
+		case secretPatchedLCPEnvCompleter:
+			return fmt.Errorf("CodeCrafters Internal Error: patching lcp_env_completer failed: %w", err)
 		}
 	}
 
