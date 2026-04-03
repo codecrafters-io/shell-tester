@@ -17,6 +17,7 @@ const (
 	secretPatchedSingleCompleter
 	secretPatchedNoStdoutStderrCompleter
 	secretPatchedEnvContextCompleter
+	secretPatchedMultiCandidateEnvCompleter
 )
 
 // secretPlaceholder returns the embedded token for slot n (1-based: <<RANDOM_1>>, <<RANDOM_2>>, ...).
@@ -72,6 +73,8 @@ func prepareSecretPatchedExecutable(kind secretPatchedExecutable, outputPath str
 		baseName = "no_stdout_stderr_completer"
 	case secretPatchedEnvContextCompleter:
 		baseName = "env_context_completer"
+	case secretPatchedMultiCandidateEnvCompleter:
+		baseName = "multi_candidate_env_completer"
 	default:
 		return fmt.Errorf("CodeCrafters Internal Error: unknown patched executable kind")
 	}
@@ -87,6 +90,8 @@ func prepareSecretPatchedExecutable(kind secretPatchedExecutable, outputPath str
 			return fmt.Errorf("CodeCrafters Internal Error: copying no_stdout_stderr_completer failed: %w", err)
 		case secretPatchedEnvContextCompleter:
 			return fmt.Errorf("CodeCrafters Internal Error: copying env_context_completer failed: %w", err)
+		case secretPatchedMultiCandidateEnvCompleter:
+			return fmt.Errorf("CodeCrafters Internal Error: copying multi_candidate_env_completer failed: %w", err)
 		}
 	}
 
@@ -101,6 +106,8 @@ func prepareSecretPatchedExecutable(kind secretPatchedExecutable, outputPath str
 			return fmt.Errorf("CodeCrafters Internal Error: patching no_stdout_stderr_completer failed: %w", err)
 		case secretPatchedEnvContextCompleter:
 			return fmt.Errorf("CodeCrafters Internal Error: patching env_context_completer failed: %w", err)
+		case secretPatchedMultiCandidateEnvCompleter:
+			return fmt.Errorf("CodeCrafters Internal Error: patching multi_candidate_env_completer failed: %w", err)
 		}
 	}
 

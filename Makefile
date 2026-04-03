@@ -97,6 +97,7 @@ build_executables:
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/no_stdout_completer_$${os}_$${arch} ./internal/custom_executable/no_stdout_completer/main.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/argv_context_completer_$${os}_$${arch} ./internal/custom_executable/argv_context_completer/main.go; \
 		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/env_context_completer_$${os}_$${arch} ./internal/custom_executable/env_context_completer/main.go; \
+		GOOS="$$os" GOARCH="$$arch" go build -o built_executables/multi_candidate_env_completer_$${os}_$${arch} ./internal/custom_executable/multi_candidate_env_completer/main.go; \
 		done; \
 	done
 
