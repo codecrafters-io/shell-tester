@@ -3,7 +3,6 @@ package internal
 import (
 	"fmt"
 	"path/filepath"
-	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -40,16 +39,6 @@ func testPA2(stageHarness *test_case_harness.TestCaseHarness) error {
 	listTestCase := test_cases.CommandResponseTestCase{
 		Command:        "complete",
 		ExpectedOutput: fmt.Sprintf("complete -C '%s' %s", completerPath, commandName),
-		// MacOS has old version of bash (3.2) where quotes aren't printed
-		FallbackPatterns: []*regexp.Regexp{
-			regexp.MustCompile(
-				fmt.Sprintf(
-					"complete -C %s %s",
-					regexp.QuoteMeta(completerPath),
-					regexp.QuoteMeta(commandName),
-				),
-			),
-		},
 		SuccessMessage: "✓ Registered completion found in normalized form",
 	}
 
