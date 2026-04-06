@@ -97,6 +97,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/filename_completions/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"programmable_completion_pass_bash": {
+			StageSlugs:          []string{"ne7", "oi7", "wl6", "pm5", "qf1", "zi0", "nr7", "ep2", "xz3", "tz2"},
+			CodePath:            "./test_helpers/bash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/bash/programmable_completion/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"background_jobs_pass_bash": {
 			StageSlugs:          []string{"af3", "at7", "si2", "jd6", "dk5", "ma9", "rq2", "bv8", "fy4"},
 			CodePath:            "./test_helpers/bash",
