@@ -21,14 +21,15 @@ func testPA2(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	commandName := "git"
-	completerFileBasename := fmt.Sprintf("%s.py", random.RandomWord())
-	completerPath := filepath.Join("/tmp", completerFileBasename)
-
-	// Insert extra spaces in between to prevent byte-copying
-	registerCmd := fmt.Sprintf("complete  -C  '%s'  %s", completerPath, commandName)
+	// The file need not exist in this stage
+	completerPath := filepath.Join(
+		"/tmp",
+		fmt.Sprintf("%s.py", random.RandomWord()),
+	)
 
 	registerTestCase := test_cases.CommandWithNoResponseTestCase{
-		Command:        registerCmd,
+		// Insert extra spaces in between to prevent byte-copying
+		Command:        fmt.Sprintf("complete  -C  '%s'  %s", completerPath, commandName),
 		SuccessMessage: "✓ No output found",
 	}
 
@@ -36,13 +37,13 @@ func testPA2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	listTestCase := test_cases.CommandResponseTestCase{
+	listCompletionTestCase := test_cases.CommandResponseTestCase{
 		Command:        "complete",
 		ExpectedOutput: fmt.Sprintf("complete -C '%s' %s", completerPath, commandName),
 		SuccessMessage: "✓ Registered completion found in normalized form",
 	}
 
-	if err := listTestCase.Run(asserter, shell, logger); err != nil {
+	if err := listCompletionTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
