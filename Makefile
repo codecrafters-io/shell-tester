@@ -163,6 +163,21 @@ define _FILENAME_COMPLETION_STAGES
 ]
 endef
 
+define _PROGRAMMABLE_COMPLETION_STAGES
+[ \
+  {"slug":"ne7","tester_log_prefix":"tester::#ne7","title":"Stage#1: Register complete builtin"}, \
+  {"slug":"oi7","tester_log_prefix":"tester::#oi7","title":"Stage#2: Display registered completions"}, \
+  {"slug":"wl6","tester_log_prefix":"tester::#wl6","title":"Stage#3: Command based completion"}, \
+  {"slug":"pm5","tester_log_prefix":"tester::#pm5","title":"Stage#4: Handling no completions"}, \
+  {"slug":"qf1","tester_log_prefix":"tester::#qf1","title":"Stage#5: Handling completer stderr"}, \
+  {"slug":"zi0","tester_log_prefix":"tester::#zi0","title":"Stage#6: Passing command-line arguments"}, \
+  {"slug":"nr7","tester_log_prefix":"tester::#nr7","title":"Stage#7: Passing environment variables"}, \
+  {"slug":"ep2","tester_log_prefix":"tester::#ep2","title":"Stage#8: Multiple completer candidates"}, \
+  {"slug":"xz3","tester_log_prefix":"tester::#xz3","title":"Stage#9: Longest common prefix"}, \
+  {"slug":"tz2","tester_log_prefix":"tester::#tz2","title":"Stage#10: Unregister a completion"} \
+]
+endef
+
 define _PIPELINE_STAGES
 [ \
 	{"slug":"br6","tester_log_prefix":"tester::#br6","title":"Stage#1: Basic dual-command pipeline"}, \
@@ -252,6 +267,7 @@ REDIRECTIONS_STAGES = $(call quote_strings,$(_REDIRECTIONS_STAGES))
 COMPLETIONS_STAGES_ZSH = $(call quote_strings,$(_COMPLETION_STAGES_BASE))
 COMPLETIONS_STAGES = $(shell echo '$(_COMPLETION_STAGES_BASE)' | sed 's/]$$/, $(_COMPLETIONS_STAGES_COMPLEX)]/' | sed 's/"/\\"/g')
 FILENAME_COMPLETION_STAGES = $(call quote_strings,$(_FILENAME_COMPLETION_STAGES))
+PROGRAMMABLE_COMPLETION_STAGES = $(call quote_strings,$(_PROGRAMMABLE_COMPLETION_STAGES))
 PIPELINE_STAGES = $(call quote_strings,$(_PIPELINE_STAGES))
 BACKGROUND_JOBS_STAGES = $(call quote_strings,$(_BACKGROUND_JOBS_STAGES))
 HISTORY_STAGES = $(call quote_strings,$(_HISTORY_STAGES))
@@ -294,6 +310,9 @@ test_completions_w_bash: build
 
 test_filename_completion_w_bash: build
 	$(call run_test,$(FILENAME_COMPLETION_STAGES),bash)
+
+test_programmable_completion_w_bash: build
+	$(call run_test,$(PROGRAMMABLE_COMPLETION_STAGES),bash)
 
 test_pipeline_w_bash: build
 	$(call run_test,$(PIPELINE_STAGES),bash)
@@ -359,6 +378,7 @@ test_bash:
 	make test_redirections_w_bash
 	make test_completions_w_bash
 	make test_filename_completion_w_bash
+	make test_programmable_completion_w_bash
 	make test_background_jobs_w_bash
 	make test_history_w_bash
 	make test_history_persistence_w_bash
