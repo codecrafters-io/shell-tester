@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"al.essio.dev/pkg/shellescape"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -12,6 +11,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
 	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
+	"github.com/codecrafters-io/tester-utils/testing"
 )
 
 func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
@@ -88,8 +88,6 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	time.Sleep(time.Millisecond)
-
 	// Assert foreground cat command output
 	fgCommandOutputTestCase := test_cases.OutputOnlyTestCase{
 		ExpectedOutputLines: []string{strings.TrimSuffix(fifo2Contents, "\n")},
@@ -98,6 +96,15 @@ func testBG3(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	if err := fgCommandOutputTestCase.Run(asserter, shell, logger); err != nil {
 		return err
+	}
+
+	// Fixtures are inconsistent for this stage because we cannot guarantee
+	// if the first 'cat' job was reaped by the time the output for the foreground
+	// 'cat' job finishes. The shell may or may not print
+	// the 'Done' entry for that job depending on whether the former 'cat' was reaped by the time the
+	// second output is shown
+	if testing.IsRecordingOrEvaluatingFixtures() {
+		return nil
 	}
 
 	return logAndQuit(asserter, nil)

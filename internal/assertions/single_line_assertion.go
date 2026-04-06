@@ -21,6 +21,9 @@ type SingleLineAssertion struct {
 	// should stay on the same line after the assertion is run
 	// Most probably because the next assertion will run on the same line
 	StayOnSameLine bool
+
+	// ErrorHintGenerator will generate a hint for the assertion error given the foundLine
+	ErrorHintGenerator func(foundLine string) string
 }
 
 func (a SingleLineAssertion) Inspect() string {
@@ -38,27 +41,29 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 	}
 
 	row := screenState.GetRow(startRowIndex)
+	rowString := row.String()
 
 	for _, pattern := range a.FallbackPatterns {
-		if pattern.Match([]byte(row.String())) {
+		if pattern.Match([]byte(rowString)) {
 			return processedRowCount, nil
 		}
 	}
 
-	if row.String() != a.ExpectedOutput {
+	if rowString != a.ExpectedOutput {
 		rowDescription := ""
 
 		if startRowIndex > screenState.GetLastLoggableRowIndex() {
 			rowDescription = "no line received"
 		} else if row.IsEmpty() {
 			rowDescription = "empty line"
-		} else if strings.HasSuffix(a.ExpectedOutput, " ") && !strings.HasSuffix(row.String(), " ") {
+		} else if strings.HasSuffix(a.ExpectedOutput, " ") && !strings.HasSuffix(rowString, " ") {
 			rowDescription = "no trailing space"
-		} else if !strings.HasSuffix(a.ExpectedOutput, " ") && strings.HasSuffix(row.String(), " ") {
+		} else if !strings.HasSuffix(a.ExpectedOutput, " ") && strings.HasSuffix(rowString, " ") {
 			rowDescription = "trailing space"
 		}
 
-		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, row.String(), rowDescription)
+		extraHint := a.generateExtraHint(rowString)
+		detailedErrorMessage := utils.BuildColoredErrorMessage(a.ExpectedOutput, rowString, rowDescription, extraHint)
 
 		// If the line won't be logged, we say "didn't find line ..." instead of "line does not match expected ..."
 		if startRowIndex > screenState.GetLastLoggableRowIndex() {
@@ -75,4 +80,11 @@ func (a SingleLineAssertion) Run(screenState screen_state.ScreenState, startRowI
 	} else {
 		return processedRowCount, nil
 	}
+}
+
+func (a SingleLineAssertion) generateExtraHint(foundLine string) string {
+	if a.ErrorHintGenerator != nil {
+		return a.ErrorHintGenerator(foundLine)
+	}
+	return ""
 }

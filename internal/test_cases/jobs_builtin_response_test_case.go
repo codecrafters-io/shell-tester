@@ -3,6 +3,7 @@ package test_cases
 import (
 	"fmt"
 	"regexp"
+	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -43,7 +44,7 @@ func (e BackgroundJobStatusEntry) ExpectedOutputAndRegex() (string, *regexp.Rege
 	// For 'Running' jobs, bash displays the trailing & sign
 	// Users shall comply with bash for consistency (Ensured this by appending this to expected output)
 	// But this should be optional since ZSH doesn't use this
-	if e.Status == "Running" {
+	if e.hasTrailingAmpersand() {
 		regexString += "( &)?$"
 	} else {
 		regexString += "$"
@@ -55,11 +56,15 @@ func (e BackgroundJobStatusEntry) ExpectedOutputAndRegex() (string, *regexp.Rege
 	)
 
 	// For 'Running' jobs, the trailing sign is expected
-	if e.Status == "Running" {
+	if e.hasTrailingAmpersand() {
 		expectedOutput += " &"
 	}
 
 	return expectedOutput, regexp.MustCompile(regexString)
+}
+
+func (e BackgroundJobStatusEntry) hasTrailingAmpersand() bool {
+	return e.Status == "Running"
 }
 
 type JobsBuiltinResponseTestCase struct {
@@ -97,6 +102,23 @@ func (t JobsBuiltinResponseTestCase) Run(asserter *logged_shell_asserter.LoggedS
 		asserter.AddAssertion(assertions.SingleLineAssertion{
 			ExpectedOutput:   expectedOutput,
 			FallbackPatterns: []*regexp.Regexp{regexPattern},
+			ErrorHintGenerator: func(receivedLine string) string {
+				// If expected entry has a trailing ampersand
+				// don't generate any hint
+				if expectedOutputEntry.hasTrailingAmpersand() {
+					return ""
+				}
+
+				// If the output has the suffix ' &' and the part without the suffix
+				// matches the regex,
+				if outputWithoutTrailingAmpersand, found := strings.CutSuffix(receivedLine, " &"); found {
+					if regexPattern.Match([]byte(outputWithoutTrailingAmpersand)) {
+						return "Finished job entry cannot have a trailing ampersand"
+					}
+				}
+
+				return ""
+			},
 		})
 
 		assertWithPrompt := false

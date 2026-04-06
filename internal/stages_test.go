@@ -153,6 +153,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_incorrect_pid",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"background_jobs_extra_ampersand": {
+			StageSlugs:          []string{"ma9"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_extra_ampersand",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_extra_ampersand",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"pipelines_pass_bash": {
 			StageSlugs:          []string{"br6", "ny9", "xk3"},
 			CodePath:            "./test_helpers/bash",

@@ -15,7 +15,7 @@ func ColorizeString(colorToUse color.Attribute, msg string) string {
 	return c.Sprint(msg)
 }
 
-func BuildColoredErrorMessage(expectedOutput string, receivedOutput string, receivedOutputDescription string) string {
+func BuildColoredErrorMessage(expectedOutput string, receivedOutput string, receivedOutputDescription string, extraHint string) string {
 	errorMsg := ColorizeString(color.FgGreen, "Expected:")
 	errorMsg += " \"" + expectedOutput + "\""
 	errorMsg += "\n"
@@ -24,6 +24,10 @@ func BuildColoredErrorMessage(expectedOutput string, receivedOutput string, rece
 
 	if receivedOutputDescription != "" {
 		errorMsg += " " + ColorizeString(color.FgRed, fmt.Sprintf("(%s)", receivedOutputDescription))
+	}
+
+	if extraHint != "" {
+		errorMsg += "\n" + extraHint
 	}
 
 	return errorMsg
