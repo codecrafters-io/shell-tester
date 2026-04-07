@@ -22,8 +22,8 @@ func testPA4(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	const command = "git"
-	completerPath := path.Join(randomDir, "noStdoutCompleter")
+	command := "git"
+	completerPath := path.Join(randomDir, "noCandidatesCompleter")
 
 	if err := (&custom_executable.CompleterExecutableSpecification{
 		Path:        completerPath,
