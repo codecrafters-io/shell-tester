@@ -17,13 +17,12 @@ func testPA4(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	randomDir, err := CreateShortRandomDirInTmp(stageHarness)
+	completerDir, err := CreateShortRandomDirInTmp(stageHarness)
 	if err != nil {
 		return err
 	}
 
-	command := "git"
-	completerPath := path.Join(randomDir, "noCandidatesCompleter")
+	completerPath := path.Join(completerDir, "noCandidatesCompleter")
 
 	if err := (&custom_executable.CompleterExecutableSpecification{
 		Path:        completerPath,
@@ -39,6 +38,7 @@ func testPA4(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	command := "git"
 	registerCmd := fmt.Sprintf("complete -C %s %s", completerPath, command)
 	registerTestCase := test_cases.CommandWithNoResponseTestCase{
 		Command:        registerCmd,
