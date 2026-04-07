@@ -21,9 +21,26 @@ Debug = true
 [33m[tester::#OI7] [0m[92mTest passed.[0m
 
 [33m[tester::#WL6] [0m[94mRunning tests for Stage #WL6 (wl6)[0m
+[33m[tester::#WL6] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m[0m$ complete -C /tmp/bee/singleCompleter git[0m
+[33m[tester::#WL6] [0m[92m✓ Registered command-based completion[0m
+[33m[tester::#WL6] [0m[94mTyped "git" followed by a <SPACE>[0m
+[33m[tester::#WL6] [0m[92m✓ Prompt line matches "$ git "[0m
+[33m[tester::#WL6] [0m[94mPressed "<TAB>" (expecting autocomplete to "git clone" followed by a space)[0m
+[33m[tester::#WL6] [0m[92m✓ Prompt line matches "git clone "[0m
+[33m[your-program] [0m[0m$ git clone [0m
 [33m[tester::#WL6] [0m[92mTest passed.[0m
 
 [33m[tester::#PM5] [0m[94mRunning tests for Stage #PM5 (pm5)[0m
+[33m[tester::#PM5] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m[0m$ complete -C /tmp/owl/noStdoutCompleter git[0m
+[33m[tester::#PM5] [0m[92m✓ Registered command-based completion[0m
+[33m[tester::#PM5] [0m[94mTyped "git xyz"[0m
+[33m[tester::#PM5] [0m[92m✓ Prompt line matches "$ git xyz"[0m
+[33m[tester::#PM5] [0m[94mPressed "<TAB>" (expecting autocomplete to "git xyz")[0m
+[33m[tester::#PM5] [0m[92m✓ Prompt line unchanged after <TAB> press[0m
+[33m[tester::#PM5] [0m[92m✓ Received bell[0m
+[33m[your-program] [0m[0m$ git xyz[0m
 [33m[tester::#PM5] [0m[92mTest passed.[0m
 
 [33m[tester::#QF1] [0m[94mRunning tests for Stage #QF1 (qf1)[0m
