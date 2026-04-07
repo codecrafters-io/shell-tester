@@ -34,6 +34,7 @@ func main() {
 	// configuration file is not tampered with in between writing and reading
 	if err := cfg.Verify(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 
 	// If there are specified stderrLines, print them and sleep for 120 seconds
