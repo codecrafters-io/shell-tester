@@ -63,9 +63,9 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 
 	// Log expectations
 	if len(t.ExpectedSubsequentLines) > 0 {
-		logTabForMultipleLinesCompletion(logger, t.ExpectedCompletion, t.ExpectedSubsequentLines, t.CheckForBell)
+		logTabForMultipleLinesCompletion(logger, t.ExpectedCompletion, t.ExpectedSubsequentLines, false)
 	} else {
-		logTabForCompletion(logger, t.ExpectedCompletion, t.CheckForBell)
+		logTabForCompletion(logger, t.ExpectedCompletion, false)
 	}
 
 	// Send TAB

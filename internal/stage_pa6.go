@@ -9,31 +9,47 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
+
+type partialAndCompleteAutocompletePair struct {
+	partial  string
+	complete string
+}
 
 func testPA6(stageHarness *test_case_harness.TestCaseHarness) error {
 	logger := stageHarness.Logger
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	randomDir, err := CreateShortRandomDirInTmp(stageHarness)
+	completerDir, err := CreateShortRandomDirInTmp(stageHarness)
 	if err != nil {
 		return err
 	}
 
 	command := "git"
-	completerPath := path.Join(randomDir, "gitRemoteCompleter")
+	subCommand := "remote"
+	completerPath := path.Join(completerDir, "gitRemoteCompleter")
+
+	choices := []partialAndCompleteAutocompletePair{
+		{partial: "set", complete: "set-url"},
+		{partial: "get", complete: "get-url"},
+		{partial: "ad", complete: "add"},
+		{partial: "ren", complete: "rename"},
+	}
+
+	choice := choices[random.RandomInt(0, len(choices))]
 
 	if err := (&custom_executable.CompleterExecutableSpecification{
 		Path:        completerPath,
 		SecretValue: getRandomString(),
 		CompleterConfiguration: completer_configuration.CompleterConfiguration{
-			CompletionCandidates: []string{"set-url"},
+			CompletionCandidates: []string{choice.complete},
 			ExpectedArguments: &completer_configuration.CompleterConfigurationExpectedArguments{
 				Argv1: command,
-				Argv2: "set",
-				Argv3: "remote",
+				Argv2: choice.partial,
+				Argv3: subCommand,
 			},
 		},
 	}).Create(); err != nil {
@@ -54,8 +70,8 @@ func testPA6(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	autocompleteTestCase := test_cases.AutocompleteTestCase{
-		RawInput:            "git remote set",
-		ExpectedCompletion:  "git remote set-url ",
+		RawInput:            fmt.Sprintf("%s %s %s", command, subCommand, choice.partial),
+		ExpectedCompletion:  fmt.Sprintf("%s %s %s ", command, subCommand, choice.complete),
 		SkipPromptAssertion: true,
 	}
 	if err := autocompleteTestCase.Run(asserter, shell, logger); err != nil {

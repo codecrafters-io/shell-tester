@@ -37,7 +37,7 @@ Debug = true
 [33m[tester::#PM5] [0m[92m✓ Registered command-based completion[0m
 [33m[tester::#PM5] [0m[94mTyped "git xyz"[0m
 [33m[tester::#PM5] [0m[92m✓ Prompt line matches "$ git xyz"[0m
-[33m[tester::#PM5] [0m[94mPressed "<TAB>" (expecting bell to ring)[0m
+[33m[tester::#PM5] [0m[94mPressed "<TAB>" (expecting autocomplete to "git xyz")[0m
 [33m[tester::#PM5] [0m[92m✓ Prompt line unchanged after <TAB> press[0m
 [33m[tester::#PM5] [0m[92m✓ Received bell[0m
 [33m[your-program] [0m[0m$ git xyz[0m
@@ -45,19 +45,19 @@ Debug = true
 
 [33m[tester::#QF1] [0m[94mRunning tests for Stage #QF1 (qf1)[0m
 [33m[tester::#QF1] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m[0m$ complete -C /tmp/ant/noStdoutStderrCompleter git[0m
+[33m[your-program] [0m[0m$ complete -C /tmp/bee/noStdoutStderrCompleter git[0m
 [33m[tester::#QF1] [0m[92m✓ Registered command-based completion[0m
 [33m[tester::#QF1] [0m[94mTyped "git" followed by a <SPACE>[0m
 [33m[tester::#QF1] [0m[92m✓ Prompt line matches "$ git "[0m
-[33m[tester::#QF1] [0m[94mPressed "<TAB>" (expecting prompt line to autocomplete to "git Error from completer:Line1")[0m
-[33m[tester::#QF1] [0m[94mExpecting subsequent line #1: "Error from completer:Line2"[0m
-[33m[tester::#QF1] [0m[94mExpecting subsequent line #2: "Error from completer:Line3"[0m
-[33m[your-program] [0m[0m$ git Error from completer:Line1[0m
-[33m[your-program] [0m[0mError from completer:Line2[0m
-[33m[your-program] [0m[0mError from completer:Line3[0m
-[33m[tester::#QF1] [0m[92m✓ Prompt line matches "git Error from completer:Line1"[0m
-[33m[tester::#QF1] [0m[92m✓ Subsequent line #1 matches "Error from completer:Line2"[0m
-[33m[tester::#QF1] [0m[92m✓ Subsequent line #2 matches "Error from completer:Line3"[0m
+[33m[tester::#QF1] [0m[94mPressed "<TAB>" (expecting prompt line to autocomplete to "git Error from completer:raspberry")[0m
+[33m[tester::#QF1] [0m[94mExpecting subsequent line #1: "Error from completer:mango"[0m
+[33m[tester::#QF1] [0m[94mExpecting subsequent line #2: "Error from completer:blueberry"[0m
+[33m[your-program] [0m[0m$ git Error from completer:raspberry[0m
+[33m[your-program] [0m[0mError from completer:mango[0m
+[33m[your-program] [0m[0mError from completer:blueberry[0m
+[33m[tester::#QF1] [0m[92m✓ Prompt line matches "git Error from completer:raspberry"[0m
+[33m[tester::#QF1] [0m[92m✓ Subsequent line #1 matches "Error from completer:mango"[0m
+[33m[tester::#QF1] [0m[92m✓ Subsequent line #2 matches "Error from completer:blueberry"[0m
 [33m[tester::#QF1] [0m[92mTest passed.[0m
 
 [33m[tester::#ZI0] [0m[94mRunning tests for Stage #ZI0 (zi0)[0m
@@ -73,13 +73,13 @@ Debug = true
 
 [33m[tester::#NR7] [0m[94mRunning tests for Stage #NR7 (nr7)[0m
 [33m[tester::#NR7] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m[0m$ complete -C /tmp/cow/gitRemoteCompleter git[0m
+[33m[your-program] [0m[0m$ complete -C /tmp/fox/gitStashCompleter git[0m
 [33m[tester::#NR7] [0m[92m✓ Registered command-based completion[0m
-[33m[tester::#NR7] [0m[94mTyped "git remote get"[0m
-[33m[tester::#NR7] [0m[92m✓ Prompt line matches "$ git remote get"[0m
-[33m[tester::#NR7] [0m[94mPressed "<TAB>" (expecting autocomplete to "git remote get-url" followed by a space)[0m
-[33m[tester::#NR7] [0m[92m✓ Prompt line matches "git remote get-url "[0m
-[33m[your-program] [0m[0m$ git remote get-url [0m
+[33m[tester::#NR7] [0m[94mTyped "git stash lis"[0m
+[33m[tester::#NR7] [0m[92m✓ Prompt line matches "$ git stash lis"[0m
+[33m[tester::#NR7] [0m[94mPressed "<TAB>" (expecting autocomplete to "git stash list" followed by a space)[0m
+[33m[tester::#NR7] [0m[92m✓ Prompt line matches "git stash list "[0m
+[33m[your-program] [0m[0m$ git stash list [0m
 [33m[tester::#NR7] [0m[92mTest passed.[0m
 
 [33m[tester::#EP2] [0m[94mRunning tests for Stage #EP2 (ep2)[0m

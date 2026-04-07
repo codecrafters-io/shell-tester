@@ -10,6 +10,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -18,28 +19,42 @@ func testPA7(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	randomDir, err := CreateShortRandomDirInTmp(stageHarness)
+	completerDir, err := CreateShortRandomDirInTmp(stageHarness)
 	if err != nil {
 		return err
 	}
 
-	const command = "git"
-	completerPath := path.Join(randomDir, "gitRemoteCompleter")
-	compLine := "git remote get"
+	command := "git"
+	subCommand := "stash"
+
+	choices := []partialAndCompleteAutocompletePair{
+		{partial: "pu", complete: "push"},
+		{partial: "po", complete: "pop"},
+		{partial: "lis", complete: "list"},
+		{partial: "cle", complete: "clear"},
+	}
+
+	choice := choices[random.RandomInt(0, len(choices))]
+
+	// This is same as what is typed in the test case
+	compLineEnvVar := fmt.Sprintf("%s %s %s", command, subCommand, choice.partial)
+	expectedCompletion := fmt.Sprintf("%s %s %s ", command, subCommand, choice.complete)
+
+	completerPath := path.Join(completerDir, "gitStashCompleter")
 
 	if err := (&custom_executable.CompleterExecutableSpecification{
 		Path:        completerPath,
 		SecretValue: getRandomString(),
 		CompleterConfiguration: completer_configuration.CompleterConfiguration{
-			CompletionCandidates: []string{"get-url"},
+			CompletionCandidates: []string{choice.complete},
 			ExpectedArguments: &completer_configuration.CompleterConfigurationExpectedArguments{
 				Argv1: command,
-				Argv2: "get",
-				Argv3: "remote",
+				Argv2: choice.partial,
+				Argv3: subCommand,
 			},
 			ExpectedEnvVars: &completer_configuration.CompleterConfigurationEnvVars{
-				CompLine:  compLine,
-				CompPoint: strconv.Itoa(len(compLine)),
+				CompLine:  compLineEnvVar,
+				CompPoint: strconv.Itoa(len(compLineEnvVar)),
 			},
 		},
 	}).Create(); err != nil {
@@ -59,9 +74,8 @@ func testPA7(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	expectedCompletion := "git remote get-url "
 	autocompleteTestCase := test_cases.AutocompleteTestCase{
-		RawInput:            compLine,
+		RawInput:            compLineEnvVar,
 		ExpectedCompletion:  expectedCompletion,
 		SkipPromptAssertion: true,
 	}

@@ -9,6 +9,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -17,19 +18,19 @@ func testPA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	randomDir, err := CreateShortRandomDirInTmp(stageHarness)
+	completerDir, err := CreateShortRandomDirInTmp(stageHarness)
 	if err != nil {
 		return err
 	}
 
-	command := "git"
+	randomWords := random.RandomWords(3)
 	stderrLines := []string{
-		"Error from completer:Line1",
-		"Error from completer:Line2",
-		"Error from completer:Line3",
+		fmt.Sprintf("Error from completer:%s", randomWords[0]),
+		fmt.Sprintf("Error from completer:%s", randomWords[1]),
+		fmt.Sprintf("Error from completer:%s", randomWords[2]),
 	}
 
-	completerPath := path.Join(randomDir, "noStdoutStderrCompleter")
+	completerPath := path.Join(completerDir, "noStdoutStderrCompleter")
 	if err := (&custom_executable.CompleterExecutableSpecification{
 		Path:        completerPath,
 		SecretValue: getRandomString(),
@@ -45,6 +46,7 @@ func testPA5(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
+	command := "git"
 	registerCmd := fmt.Sprintf("complete -C %s %s", completerPath, command)
 	registerTestCase := test_cases.CommandWithNoResponseTestCase{
 		Command:        registerCmd,
