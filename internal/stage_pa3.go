@@ -18,16 +18,16 @@ func testPA3(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	randomDir, err := CreateShortRandomDirInTmp(stageHarness)
+	completerDir, err := CreateShortRandomDirInTmp(stageHarness)
 	if err != nil {
 		return err
 	}
 
+	singleCompleterPath := path.Join(completerDir, "singleCompleter")
+
 	completionSubcommand := random.RandomElementFromArray(
 		[]string{"clone", "add", "commit", "push"},
 	)
-
-	singleCompleterPath := path.Join(randomDir, "singleCompleter")
 
 	if err := (&custom_executable.CompleterExecutableSpecification{
 		Path:        singleCompleterPath,
