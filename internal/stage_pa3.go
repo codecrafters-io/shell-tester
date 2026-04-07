@@ -9,6 +9,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -22,7 +23,10 @@ func testPA3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	completionSubcommand := "clone"
+	completionSubcommand := random.RandomElementFromArray(
+		[]string{"clone", "add", "commit", "push"},
+	)
+
 	singleCompleterPath := path.Join(randomDir, "singleCompleter")
 
 	if err := (&custom_executable.CompleterExecutableSpecification{
