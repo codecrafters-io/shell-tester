@@ -16,7 +16,7 @@ type CompleterExecutableSpecification struct {
 }
 
 func (s *CompleterExecutableSpecification) Create() error {
-	if err := s.verifySpecification(); err != nil {
+	if err := s.verify(); err != nil {
 		return err
 	}
 
@@ -26,6 +26,7 @@ func (s *CompleterExecutableSpecification) Create() error {
 		return fmt.Errorf("CodeCrafters Internal Error: copying executable failed: %w", err)
 	}
 
+	// Add secret to executable
 	err = addSecretCodeToExecutable(s.Path, s.SecretValue)
 	if err != nil {
 		return fmt.Errorf("CodeCrafters Internal Error: adding secret code to executable failed: %w", err)
@@ -36,6 +37,8 @@ func (s *CompleterExecutableSpecification) Create() error {
 		return fmt.Errorf("CodeCrafters Internal Error: marshal completer config failed: %w", err)
 	}
 
+	// Write the configuration file with the same secret name so
+	// the completer can retrieve it later
 	configPath := filepath.Join("/tmp", s.SecretValue)
 	if err := os.WriteFile(configPath, configBytes, 0644); err != nil {
 		return fmt.Errorf("CodeCrafters Internal Error: write completer config failed: %w", err)
@@ -48,7 +51,7 @@ func (s *CompleterExecutableSpecification) Create() error {
 	return nil
 }
 
-func (s *CompleterExecutableSpecification) verifySpecification() error {
+func (s *CompleterExecutableSpecification) verify() error {
 	if len(s.SecretValue) != 10 {
 		return fmt.Errorf("CodeCrafters Internal Error: CompleterExecutableSpecification.SecretValue length must be 10")
 	}
