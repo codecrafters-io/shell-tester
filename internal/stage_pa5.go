@@ -35,8 +35,8 @@ func testPA5(stageHarness *test_case_harness.TestCaseHarness) error {
 		Path:        completerPath,
 		SecretValue: getRandomString(),
 		CompleterConfiguration: completer_configuration.CompleterConfiguration{
-			CompletionCandidates: []string{},
-			StderrLines:          stderrLines,
+			OutputLines:     stderrLines,
+			UseStderrStream: true,
 		},
 	}).Create(); err != nil {
 		return err

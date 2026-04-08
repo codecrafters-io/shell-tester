@@ -60,9 +60,5 @@ func (s *CompleterExecutableSpecification) verify() error {
 		return fmt.Errorf("Codecrafters Internal Error: CompleterExecutableSpecification.Path must be absolute")
 	}
 
-	if err := s.CompleterConfiguration.Verify(); err != nil {
-		return err
-	}
-
 	return nil
 }

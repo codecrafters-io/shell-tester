@@ -1,7 +1,5 @@
 package completer_configuration
 
-import "fmt"
-
 type CompleterConfigurationExpectedArguments struct {
 	Argv1 string
 	Argv2 string
@@ -14,16 +12,12 @@ type CompleterConfigurationEnvVars struct {
 }
 
 type CompleterConfiguration struct {
-	CompletionCandidates []string
-	StderrLines          []string
-	ExpectedArguments    *CompleterConfigurationExpectedArguments
-	ExpectedEnvVars      *CompleterConfigurationEnvVars
-}
-
-func (c *CompleterConfiguration) Verify() error {
-	if len(c.CompletionCandidates) > 0 && len(c.StderrLines) > 0 {
-		return fmt.Errorf("Codecrafters Internal Error: Completer Configuration cannot have both CompletionCandidates and StderrLines")
-	}
-
-	return nil
+	OutputLines []string
+	// UseStderrStream will use os.Stderr to print the output lines
+	// Using stderr stream will also make the script sleep for 120s
+	// to make sure that the error from stderr is streamed to the shell and is
+	// not collected after it's exitted instead
+	UseStderrStream   bool
+	ExpectedArguments *CompleterConfigurationExpectedArguments
+	ExpectedEnvVars   *CompleterConfigurationEnvVars
 }

@@ -46,7 +46,7 @@ func testPA7(stageHarness *test_case_harness.TestCaseHarness) error {
 		Path:        completerPath,
 		SecretValue: getRandomString(),
 		CompleterConfiguration: completer_configuration.CompleterConfiguration{
-			CompletionCandidates: []string{choice.complete},
+			OutputLines: []string{choice.complete},
 			ExpectedArguments: &completer_configuration.CompleterConfigurationExpectedArguments{
 				Argv1: command,
 				Argv2: choice.partial,

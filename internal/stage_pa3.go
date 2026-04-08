@@ -33,7 +33,7 @@ func testPA3(stageHarness *test_case_harness.TestCaseHarness) error {
 		Path:        singleCompleterPath,
 		SecretValue: getRandomString(),
 		CompleterConfiguration: completer_configuration.CompleterConfiguration{
-			CompletionCandidates: []string{completionSubcommand},
+			OutputLines: []string{completionSubcommand},
 		},
 	}).Create(); err != nil {
 		return err

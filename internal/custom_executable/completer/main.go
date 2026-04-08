@@ -5,10 +5,131 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/custom_executable/completer/completer_configuration"
 )
+
+type verifier struct {
+	config                      completer_configuration.CompleterConfiguration
+	accumulatedVerificationLogs []string
+}
+
+func (v *verifier) RegisterLog(line string) {
+	v.accumulatedVerificationLogs = append(v.accumulatedVerificationLogs, line)
+}
+
+func (v *verifier) areExpectationsViolated() bool {
+	return v.argvExpectationsViolated() || v.envExpectationsViolated()
+}
+
+func (v *verifier) argvExpectationsViolated() bool {
+	if v.config.ExpectedArguments == nil {
+		return false
+	}
+
+	if len(os.Args) != 4 {
+		return true
+	}
+
+	exp := v.config.ExpectedArguments
+
+	return os.Args[1] != exp.Argv1 ||
+		os.Args[2] != exp.Argv2 ||
+		os.Args[3] != exp.Argv3
+}
+
+func (v *verifier) envExpectationsViolated() bool {
+	if v.config.ExpectedEnvVars == nil {
+		return false
+	}
+
+	exp := v.config.ExpectedEnvVars
+
+	return os.Getenv("COMP_LINE") != exp.CompLine ||
+		os.Getenv("COMP_POINT") != exp.CompPoint
+}
+
+func (v *verifier) verificationErrorReport() string {
+	v.produceVerificationFailureLogs()
+	return strings.Join(v.accumulatedVerificationLogs, "\n")
+}
+
+func (v *verifier) produceVerificationFailureLogs() {
+	if v.config.ExpectedArguments != nil {
+		v.emitArgvVerificationSection(v.config)
+	}
+
+	if v.config.ExpectedEnvVars != nil {
+		v.emitEnvironmentVerificationSection(v.config)
+	}
+}
+
+func (v *verifier) emitArgvVerificationSection(config completer_configuration.CompleterConfiguration) {
+	exp := config.ExpectedArguments
+	argc := len(os.Args) - 1
+
+	if len(os.Args) < 4 {
+		v.RegisterLog(fmt.Sprintf(
+			"☓ Expected argv[1] through argv[3] to be present, found only up to argv[%d]",
+			argc,
+		))
+		return
+	} else if len(os.Args) > 4 {
+		v.RegisterLog(fmt.Sprintf(
+			"☓ Expected only argv[1] through argv[3] to be present, found up to argv[%d]",
+			argc,
+		))
+		return
+	} else {
+		v.RegisterLog("✓ Arguments are of length 4")
+	}
+
+	argv1, argv2, argv3 := os.Args[1], os.Args[2], os.Args[3]
+
+	if argv1 != exp.Argv1 {
+		v.RegisterLog(fmt.Sprintf("☓ Expected argv[1] to be %q, found %q", exp.Argv1, argv1))
+	} else {
+		v.RegisterLog("✓ Expected value of argv[1] found")
+	}
+
+	if argv2 != exp.Argv2 {
+		v.RegisterLog(fmt.Sprintf("☓ Expected argv[2] to be %q, found %q", exp.Argv2, argv2))
+	} else {
+		v.RegisterLog("✓ Expected value of argv[2] found")
+	}
+
+	if argv3 != exp.Argv3 {
+		v.RegisterLog(fmt.Sprintf("☓ Expected argv[3] to be %q, found %q", exp.Argv3, argv3))
+	} else {
+		v.RegisterLog("✓ Expected value of argv[3] found")
+	}
+}
+
+func (v *verifier) emitEnvironmentVerificationSection(config completer_configuration.CompleterConfiguration) {
+	exp := config.ExpectedEnvVars
+
+	receivedCompLine := os.Getenv("COMP_LINE")
+	if receivedCompLine == exp.CompLine {
+		v.RegisterLog("✓ Expected value of environment variable COMP_LINE found")
+	} else {
+		v.RegisterLog(fmt.Sprintf(
+			"☓ Expected environment variable COMP_LINE to be %q found %q",
+			exp.CompLine, receivedCompLine,
+		))
+	}
+
+	receivedCompPoint := os.Getenv("COMP_POINT")
+	if receivedCompPoint == exp.CompPoint {
+		v.RegisterLog("✓ Expected value of environment variable COMP_POINT found")
+	} else {
+		v.RegisterLog(fmt.Sprintf(
+			"☓ Expected environment variable COMP_POINT to be %q found %q",
+			exp.CompPoint, receivedCompPoint,
+		))
+	}
+}
 
 func main() {
 	secretCode := "<<RANDOM>>"
@@ -21,100 +142,44 @@ func main() {
 		os.Exit(1)
 	}
 
-	var cfg completer_configuration.CompleterConfiguration
+	var config completer_configuration.CompleterConfiguration
 
-	if err := json.Unmarshal(data, &cfg); err != nil {
+	if err := json.Unmarshal(data, &config); err != nil {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
 		os.Exit(1)
 	}
 
-	// This will almost always never occur because the configuration is always verified
-	// while being written
-	// This check is here just to stay on the safe side and to ensure that the
-	// configuration file is not tampered with in between writing and reading
-	if err := cfg.Verify(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+	// Verify args and environment
+	verifier := &verifier{
+		config: config,
+	}
+
+	if verifier.areExpectationsViolated() {
+		fmt.Fprintln(
+			os.Stderr,
+			completerScriptError(verifier.verificationErrorReport()),
+		)
 		os.Exit(1)
 	}
 
-	if err := verifyArgs(&cfg); err != nil {
-		fmt.Fprintln(os.Stderr, completerScriptError(err))
-		os.Exit(1)
+	streamOut := os.Stdout
+	if config.UseStderrStream {
+		streamOut = os.Stderr
 	}
 
-	if err := verifyEnvVars(&cfg); err != nil {
-		fmt.Fprintln(os.Stderr, completerScriptError(err))
-		os.Exit(1)
+	for _, outputLine := range config.OutputLines {
+		fmt.Fprintln(streamOut, outputLine)
 	}
 
-	// If there are specified stderrLines, print them and sleep for 120 seconds
-	// and exit
-	if len(cfg.StderrLines) > 0 {
-		for _, line := range cfg.StderrLines {
-			fmt.Fprintln(os.Stderr, line)
-		}
+	// Sleep for 120ms
+	// Completer which is bound to generate logs to stderr should never exit
+	// to test that the shell has actually streamed the stderr instead of collecting it
+	// after it has exitted
+	if config.UseStderrStream {
 		time.Sleep(120 * time.Millisecond)
-		os.Exit(1)
-	}
-
-	// Print the completion candidates
-	for _, line := range cfg.CompletionCandidates {
-		fmt.Println(line)
 	}
 }
 
-func completerScriptError(err error) string {
-	return "\nError from the completer script:\n" + err.Error()
-}
-
-func verifyArgs(cfg *completer_configuration.CompleterConfiguration) error {
-	if cfg.ExpectedArguments == nil {
-		return nil
-	}
-
-	exp := cfg.ExpectedArguments
-	n := len(os.Args) - 1
-	if n < 3 {
-		return fmt.Errorf("Expected args #1 thru #3 to be present, only found #%d", n)
-	}
-
-	checks := []struct {
-		idx  int
-		want string
-		got  string
-	}{
-		{1, exp.Argv1, os.Args[1]},
-		{2, exp.Argv2, os.Args[2]},
-		{3, exp.Argv3, os.Args[3]},
-	}
-	for _, c := range checks {
-		if c.got != c.want {
-			return fmt.Errorf("Expected argv[%d] to be %q found %q", c.idx, c.want, c.got)
-		}
-	}
-
-	return nil
-}
-
-func verifyEnvVars(cfg *completer_configuration.CompleterConfiguration) error {
-	if cfg.ExpectedEnvVars == nil {
-		return nil
-	}
-
-	e := cfg.ExpectedEnvVars
-	checks := []struct {
-		name string
-		want string
-		got  string
-	}{
-		{"COMP_LINE", e.CompLine, os.Getenv("COMP_LINE")},
-		{"COMP_POINT", e.CompPoint, os.Getenv("COMP_POINT")},
-	}
-	for _, c := range checks {
-		if c.got != c.want {
-			return fmt.Errorf("Expected environment variable %s to be %q found %q", c.name, c.want, c.got)
-		}
-	}
-
-	return nil
+func completerScriptError(message string) string {
+	return "\nError from the completer script:\n" + message
 }
