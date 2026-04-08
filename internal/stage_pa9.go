@@ -10,6 +10,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -27,9 +28,7 @@ func testPA9(stageHarness *test_case_harness.TestCaseHarness) error {
 	completerPath := path.Join(randomDir, "lcpEnvCompleter")
 	secret := getRandomString()
 
-	ambiguousMatches := []string{"cherry-pick", "checkout"}
-
-	prepareCompleterExecutable := func(argv1, argv2, argv3, compLine string, outputLines []string) error {
+	prepareCompleterExecutable := func(argv1, argv2, argv3, compLineEnvVar string, outputLines []string) error {
 		return (&custom_executable.CompleterExecutableSpecification{
 			Path:        completerPath,
 			SecretValue: secret,
@@ -41,26 +40,36 @@ func testPA9(stageHarness *test_case_harness.TestCaseHarness) error {
 					Argv3: argv3,
 				},
 				ExpectedEnvVars: &completer_configuration.CompleterConfigurationEnvVars{
-					CompLine:  compLine,
-					CompPoint: strconv.Itoa(len(compLine)),
+					CompLine:  compLineEnvVar,
+					CompPoint: strconv.Itoa(len(compLineEnvVar)),
 				},
 			},
 		}).Create()
 	}
 
-	// Same shape as PA6/PA7: typed partial → completion segment on the line after TAB.
-	steps := []partialAndCompleteAutocompletePair{
+	lcpBranches := []struct {
+		disambiguationLetter string
+		subcommandName       string
+	}{
+		{disambiguationLetter: "c", subcommandName: "checkout"},
+		{disambiguationLetter: "r", subcommandName: "cherry-pick"},
+	}
+	chosenBranch := lcpBranches[random.RandomInt(0, len(lcpBranches))]
+
+	sortedAmbiguousSubcommands := []string{"checkout", "cherry-pick"}
+
+	partialAndCompletePairs := []partialAndCompleteAutocompletePair{
 		{partial: "c", complete: "che"},
-		{partial: "r", complete: "cherry-pick "},
+		{partial: chosenBranch.disambiguationLetter, complete: chosenBranch.subcommandName + " "},
 	}
 
-	// Line "git c": prefix "c" → LCP of checkout / cherry-pick is "che".
+	// git c -> git che (LCP Completion)
 	if err := prepareCompleterExecutable(
 		command,
-		steps[0].partial,
+		partialAndCompletePairs[0].partial,
 		command,
-		fmt.Sprintf("%s %s", command, steps[0].partial),
-		ambiguousMatches,
+		fmt.Sprintf("%s %s", command, partialAndCompletePairs[0].partial),
+		sortedAmbiguousSubcommands,
 	); err != nil {
 		return err
 	}
@@ -78,29 +87,32 @@ func testPA9(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	pairs := []test_cases.InputAndCompletionPair{
+	partialCompletionPairs := []test_cases.InputAndCompletionPair{
 		{
-			Input:              fmt.Sprintf("%s %s", command, steps[0].partial),
-			ExpectedCompletion: fmt.Sprintf("%s %s", command, steps[0].complete),
+			Input:              fmt.Sprintf("%s %s", command, partialAndCompletePairs[0].partial),
+			ExpectedCompletion: fmt.Sprintf("%s %s", command, partialAndCompletePairs[0].complete),
+			// After the first tab completion, replace the completer script with a new script that expects
+			// the updated argv and env variables
 			CallbackAfterAutocompletion: func() error {
-				// Line will be "git cher" before the final TAB — unique match cherry-pick (vs checkout's "chec…").
+				secondTabPartialWord := fmt.Sprintf("%s%s", partialAndCompletePairs[0].complete, partialAndCompletePairs[1].partial)
+				compLineEnvVarBeforeSecondTab := fmt.Sprintf("%s %s%s", command, partialAndCompletePairs[0].complete, partialAndCompletePairs[1].partial)
 				return prepareCompleterExecutable(
 					command,
-					fmt.Sprintf("%s%s", steps[0].complete, steps[1].partial),
+					secondTabPartialWord,
 					command,
-					fmt.Sprintf("%s %s%s", command, steps[0].complete, steps[1].partial),
-					[]string{"cherry-pick"},
+					compLineEnvVarBeforeSecondTab,
+					[]string{chosenBranch.subcommandName},
 				)
 			},
 		},
 		{
-			Input:              steps[1].partial,
-			ExpectedCompletion: fmt.Sprintf("%s %s", command, steps[1].complete),
+			Input:              partialAndCompletePairs[1].partial,
+			ExpectedCompletion: fmt.Sprintf("%s %s", command, partialAndCompletePairs[1].complete),
 		},
 	}
 
 	if err := (test_cases.PartialCompletionsTestCase{
-		InputAndCompletionPairs: pairs,
+		InputAndCompletionPairs: partialCompletionPairs,
 		SuccessMessage:          "✓ Received all partial completions",
 		SkipPromptAssertion:     true,
 	}).Run(asserter, shell, logger); err != nil {
