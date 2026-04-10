@@ -278,11 +278,10 @@ func normalizeTesterOutput(testerOutput []byte) []byte {
 		"[your-program] [JOB_NUM] PID":                    {regexp.MustCompile(`\[your-program\].*\[\d+\] \d+`)},
 		"[tester::#STAGE] ✓ Found process with PID <PID>": {regexp.MustCompile(`\[tester::#[A-Z]{2}\d+\].*Found process with PID \d+`)},
 		// For background_jobs error cases
-		"[your-program] [JOB_NUM]PID":                         {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
-		"[tester::#AT7] Received: \"[JOB_NUM]PID\"":           {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\]\d+"`)},
-		"[tester::#AT7] Received: \"[JOB_NUM] PID\"":          {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\] \d+"`)},
-		"[tester::#FY4] Received: \"[JOB_NUM] PID\"":          {regexp.MustCompile(`\[tester::#FY4\].*Received:.*"\[\d+\] \d+"`)},
-		"Process with PID <PID> runs the expected executable": {regexp.MustCompile(`Process with PID \d+ runs the expected executable`)},
+		"[your-program] [JOB_NUM]PID":                {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
+		"[tester::#AT7] Received: \"[JOB_NUM]PID\"":  {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\]\d+"`)},
+		"[tester::#AT7] Received: \"[JOB_NUM] PID\"": {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\] \d+"`)},
+		"[tester::#FY4] Received: \"[JOB_NUM] PID\"": {regexp.MustCompile(`\[tester::#FY4\].*Received:.*"\[\d+\] \d+"`)},
 	}
 
 	for replacement, regexes := range replacements {
