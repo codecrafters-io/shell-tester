@@ -78,7 +78,7 @@ func LogReadableFileContents(l *logger.Logger, fileContents string, logMsg strin
 	}
 }
 
-func MustGetAbsolutePathOfCommand(command string, shellExecutablePath string) (absolutePath string) {
+func MustGetAbsolutePathOfCommand(command string) (absolutePath string) {
 	// For fixtures or CI, it's always busybox
 	if testing.IsRecordingOrEvaluatingFixtures() || os.Getenv("GITHUB_ACTIONS") == "true" {
 		absolutePath, err := executable.ResolveAbsolutePath("busybox")
