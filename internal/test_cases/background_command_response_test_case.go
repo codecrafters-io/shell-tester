@@ -73,7 +73,7 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 		panic("Codecrafters Internal Error: Could not parse PID from background command output")
 	}
 
-	childPids := shell.GetChildrenAndGrandChildren()
+	childPids := shell.GetChildrenAndGrandChildrenPids()
 
 	if !slices.Contains(childPids, receivedPid) {
 		return fmt.Errorf("Could not find process with PID %d", receivedPid)

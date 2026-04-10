@@ -6,11 +6,11 @@ import (
 	"github.com/shirou/gopsutil/v3/process"
 )
 
-// GetChildrenAndGrandChildren returns the PIDs of all the children and grandchildren
+// GetChildrenAndGrandChildrenPids returns the PIDs of all the children and grandchildren
 // of the shell process. This is useful because the user code may run under a launcher
 // (e.g. uv, another interpreter); the real
 // shell is often a child, and background jobs are grandchildren of the launcher PID.
-func (b *ShellExecutable) GetChildrenAndGrandChildren() []int {
+func (b *ShellExecutable) GetChildrenAndGrandChildrenPids() []int {
 	shellPid := b.GetPid()
 
 	proc, err := process.NewProcess(int32(shellPid))
