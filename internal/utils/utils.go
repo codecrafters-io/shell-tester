@@ -8,7 +8,6 @@ import (
 
 	"github.com/codecrafters-io/tester-utils/executable"
 	"github.com/codecrafters-io/tester-utils/logger"
-	"github.com/codecrafters-io/tester-utils/testing"
 	"github.com/fatih/color"
 )
 
@@ -79,7 +78,7 @@ func LogReadableFileContents(l *logger.Logger, fileContents string, logMsg strin
 
 func MustGetAbsolutePathOfCommand(command string, shellExecutablePath string) (absolutePath string) {
 	// For fixtures, it's always busybox
-	if testing.IsRecordingOrEvaluatingFixtures() || IsTestingTesterUsingBusyboxOnAlpine(shellExecutablePath) {
+	if IsTestingTester(shellExecutablePath) {
 		absolutePath, err := executable.ResolveAbsolutePath("busybox")
 		if err != nil {
 			panic(fmt.Sprintf("Codecrafters Internal Error - Failed to resolve absolute path for command %s", command))
