@@ -8,6 +8,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
@@ -76,7 +77,7 @@ func testType2(stageHarness *test_case_harness.TestCaseHarness) error {
 			expectedPath = executablePath
 
 			// Alpine Busybox has a bug where it doesn't check permissions
-			if isTestingTesterUsingBusyboxOnAlpine(stageHarness) {
+			if utils.IsTestingTesterUsingBusyboxOnAlpine(shell.GetExecutablePath()) {
 				expectedPath = nonExePath2
 			}
 		}

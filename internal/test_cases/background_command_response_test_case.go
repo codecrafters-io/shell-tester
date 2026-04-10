@@ -116,7 +116,7 @@ func (t *BackgroundCommandResponseTestCase) compareExpectedAndReceivedExecutable
 		panic(fmt.Sprintf("Codecrafters Internal Error - Could not split command %q", t.Command))
 	}
 
-	expectedexecutablePath := utils.MustGetAbsolutePathOfCommand(arguments[0])
+	expectedexecutablePath := utils.MustGetAbsolutePathOfCommand(arguments[0], shell.GetExecutablePath())
 
 	if receivedExecutablePath != expectedexecutablePath {
 		return fmt.Errorf("Expected executable %q to be run, found %q instead", expectedexecutablePath, receivedExecutablePath)
