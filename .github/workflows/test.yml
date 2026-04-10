@@ -36,7 +36,9 @@ jobs:
       - name: Setup Alpine
         uses: jirutka/setup-alpine@v1
         with:
-          branch: v3.22 # Pinning because dash on newer versions comes with more bugs
+          # Keep in sync with test-alpine so PATH, BusyBox, and /proc/PID/exe (e.g. sleep vs busybox) match.
+          # If dash regressions appear on newer Alpine, pin both jobs to the same older branch (e.g. v3.22).
+          branch: latest-stable
 
       - name: Setup Alpine dependencies
         run: |
