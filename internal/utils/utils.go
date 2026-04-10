@@ -79,7 +79,7 @@ func LogReadableFileContents(l *logger.Logger, fileContents string, logMsg strin
 
 func MustGetAbsolutePathOfCommand(command string) (absolutePath string) {
 	// For fixtures or CI, it's always busybox
-	if testing.IsRecordingOrEvaluatingFixtures() {
+	if testing.IsRecordingOrEvaluatingFixtures() || IsOnAlpine() {
 		absolutePath, err := executable.ResolveAbsolutePath("busybox")
 		if err != nil {
 			panic(fmt.Sprintf("Codecrafters Internal Error - Failed to resolve absolute path for command %s", command))

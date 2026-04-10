@@ -1,9 +1,9 @@
 package internal
 
 import (
-	"os"
 	"strings"
 
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -14,8 +14,5 @@ func isTestingTesterUsingBusyboxOnAlpine(stageHarness *test_case_harness.TestCas
 	path := stageHarness.Executable.Path
 	isTestingTesterUsingBusybox := strings.HasSuffix(path, ASH_PATH) || strings.HasSuffix(path, DASH_PATH)
 
-	_, err := os.Stat("/etc/alpine-release")
-	isOnAlpine := err == nil
-
-	return isTestingTesterUsingBusybox && isOnAlpine
+	return isTestingTesterUsingBusybox && utils.IsOnAlpine()
 }
