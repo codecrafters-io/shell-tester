@@ -6,7 +6,9 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/codecrafters-io/tester-utils/executable"
 	"github.com/codecrafters-io/tester-utils/logger"
+	"github.com/codecrafters-io/tester-utils/testing"
 	"github.com/fatih/color"
 )
 
@@ -73,4 +75,23 @@ func LogReadableFileContents(l *logger.Logger, fileContents string, logMsg strin
 			l.Plainf("%s", line)
 		}
 	}
+}
+
+func MustGetAbsolutePathOfCommand(command string) (absolutePath string) {
+	// For fixtures, it's always busybox
+	if testing.IsRecordingOrEvaluatingFixtures() {
+		absolutePath, err := executable.ResolveAbsolutePath("busybox")
+		if err != nil {
+			panic(fmt.Sprintf("Codecrafters Internal Error - Failed to resolve absolute path for command %s", command))
+		}
+		return absolutePath
+	}
+
+	absolutePath, err := executable.ResolveAbsolutePath(command)
+
+	if err != nil {
+		panic(fmt.Sprintf("Codecrafters Internal Error - Failed to resolve absolute path for command %s", command))
+	}
+
+	return absolutePath
 }

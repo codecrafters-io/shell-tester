@@ -6,9 +6,13 @@ import (
 	"slices"
 	"strconv"
 
+	"github.com/google/shlex"
+	"github.com/shirou/gopsutil/v3/process"
+
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
@@ -73,7 +77,7 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 		panic("Codecrafters Internal Error: Could not parse PID from background command output")
 	}
 
-	childPids := shell.GetChildrenAndGrandChildrenPids()
+	childPids := shell.GetAllDescendentsPids()
 
 	if !slices.Contains(childPids, receivedPid) {
 		return fmt.Errorf("Could not find process with PID %d", receivedPid)
@@ -81,8 +85,41 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 
 	logger.Successf("✓ Found process with PID %d", receivedPid)
 
+	if err := t.compareExpectedAndReceivedExecutablePath(receivedPid); err != nil {
+		return err
+	}
+
+	logger.Successf("✓ Process with PID %d runs the expected executable", receivedPid)
+
 	if t.SuccessMessage != "" {
 		logger.Successf("%s", t.SuccessMessage)
+	}
+
+	return nil
+}
+
+func (t *BackgroundCommandResponseTestCase) compareExpectedAndReceivedExecutablePath(receivedPid int) error {
+	childProcess, err := process.NewProcess(int32(receivedPid))
+
+	if err != nil {
+		panic(fmt.Sprintf("Could not inspect process with PID %d: %v", receivedPid, err))
+	}
+
+	receivedExecutablePath, err := childProcess.Exe()
+	if err != nil {
+		panic(fmt.Sprintf("Could not find process' executable path of PID %d: %s", receivedPid, err))
+	}
+
+	arguments, err := shlex.Split(t.Command)
+
+	if err != nil {
+		panic(fmt.Sprintf("Codecrafters Internal Error - Could not split command %q", t.Command))
+	}
+
+	expectedexecutablePath := utils.MustGetAbsolutePathOfCommand(arguments[0])
+
+	if receivedExecutablePath != expectedexecutablePath {
+		return fmt.Errorf("Expected executable %q to be run, found %q instead", expectedexecutablePath, receivedExecutablePath)
 	}
 
 	return nil

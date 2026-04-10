@@ -7,7 +7,7 @@ toolchain go1.24.2
 require (
 	al.essio.dev/pkg/shellescape v1.6.0
 	github.com/charmbracelet/x/vt v0.0.0-20250122132629-a969ddeb820d
-	github.com/codecrafters-io/tester-utils v0.4.17
+	github.com/codecrafters-io/tester-utils v0.4.18-0.20260410081406-0ba7200dfb2a
 	github.com/creack/pty v1.1.24
 	github.com/dustin/go-humanize v1.0.1
 	github.com/fatih/color v1.18.0
