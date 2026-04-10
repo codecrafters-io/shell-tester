@@ -17,17 +17,27 @@ func (b *ShellExecutable) GetAllChildrenPids() []int {
 	}
 
 	children, err := proc.Children()
-
 	if err != nil {
-		// Could not get children, return empty slice
 		return []int{}
 	}
 
-	var pids []int
+	var descendantPids []int
 
+	// User code may run under a launcher (e.g. uv, another interpreter); the real
+	// shell is often a child, and background jobs are grandchildren of the launcher PID.
 	for _, child := range children {
-		pids = append(pids, int(child.Pid))
+		descendantPids = append(descendantPids, int(child.Pid))
+
+		grandchildren, err := child.Children()
+
+		if err != nil {
+			continue
+		}
+
+		for _, gc := range grandchildren {
+			descendantPids = append(descendantPids, int(gc.Pid))
+		}
 	}
 
-	return pids
+	return descendantPids
 }
