@@ -163,7 +163,7 @@ func TestStages(t *testing.T) {
 		"background_jobs_middleware_launch": {
 			StageSlugs:          []string{"at7"},
 			CodePath:            "./test_helpers/scenarios/background_jobs_middleware_launch",
-			ExpectedExitCode:    1,
+			ExpectedExitCode:    0,
 			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_middleware_launch",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
