@@ -72,6 +72,10 @@ func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellE
 	return b
 }
 
+func (b *ShellExecutable) GetExecutablePath() string {
+	return b.executable.Path
+}
+
 func (b *ShellExecutable) Setenv(key, value string) {
 	b.env.Set(key, value)
 }

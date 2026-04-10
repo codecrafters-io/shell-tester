@@ -85,7 +85,7 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 
 	logger.Successf("✓ Found process with PID %d", receivedPid)
 
-	if err := t.compareExpectedAndReceivedExecutablePath(receivedPid); err != nil {
+	if err := t.compareExpectedAndReceivedExecutablePath(receivedPid, shell); err != nil {
 		return err
 	}
 
@@ -98,7 +98,7 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 	return nil
 }
 
-func (t *BackgroundCommandResponseTestCase) compareExpectedAndReceivedExecutablePath(receivedPid int) error {
+func (t *BackgroundCommandResponseTestCase) compareExpectedAndReceivedExecutablePath(receivedPid int, shell *shell_executable.ShellExecutable) error {
 	childProcess, err := process.NewProcess(int32(receivedPid))
 
 	if err != nil {
@@ -116,7 +116,7 @@ func (t *BackgroundCommandResponseTestCase) compareExpectedAndReceivedExecutable
 		panic(fmt.Sprintf("Codecrafters Internal Error - Could not split command %q", t.Command))
 	}
 
-	expectedexecutablePath := utils.MustGetAbsolutePathOfCommand(arguments[0])
+	expectedexecutablePath := utils.MustGetAbsolutePathOfCommand(arguments[0], shell.GetExecutablePath())
 
 	if receivedExecutablePath != expectedexecutablePath {
 		return fmt.Errorf("Expected executable %q to be run, found %q instead", expectedexecutablePath, receivedExecutablePath)
