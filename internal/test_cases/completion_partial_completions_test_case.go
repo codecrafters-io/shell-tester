@@ -12,6 +12,10 @@ import (
 type InputAndCompletionPair struct {
 	Input              string
 	ExpectedCompletion string
+
+	// CallbackAfterAutocompletion runs after this pair's completion assertion succeeds
+	// This field is optional
+	CallbackAfterAutocompletion func() error
 }
 
 // PartialCompletionsTestCase is a test case that does the following:
@@ -51,6 +55,12 @@ func (t PartialCompletionsTestCase) Run(asserter *logged_shell_asserter.LoggedSh
 
 		if err := t.runTabCompletionAssertion(asserter, shell, logger, t.InputAndCompletionPairs[idx]); err != nil {
 			return err
+		}
+
+		if t.InputAndCompletionPairs[idx].CallbackAfterAutocompletion != nil {
+			if err := t.InputAndCompletionPairs[idx].CallbackAfterAutocompletion(); err != nil {
+				return err
+			}
 		}
 	}
 
@@ -124,5 +134,6 @@ func (t PartialCompletionsTestCase) runTabCompletionAssertion(asserter *logged_s
 
 	// Only if we attempted to autocomplete, print the success message
 	logger.Successf("✓ Prompt line matches %q", expectedCompletion)
+
 	return nil
 }
