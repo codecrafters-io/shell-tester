@@ -176,7 +176,7 @@ func main() {
 	// to test that the shell has actually streamed the stderr instead of collecting it
 	// after it has exitted
 	if config.UseStderrStream {
-		time.Sleep(120 * time.Millisecond)
+		time.Sleep(120 * time.Second)
 	}
 }
 
