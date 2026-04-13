@@ -83,10 +83,47 @@ Debug = true
 [33m[tester::#NR7] [0m[92mTest passed.[0m
 
 [33m[tester::#EP2] [0m[94mRunning tests for Stage #EP2 (ep2)[0m
+[33m[tester::#EP2] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m[0m$ complete -C /tmp/bee/multiCandidateEnvCompleter git[0m
+[33m[tester::#EP2] [0m[92m✓ Registered command-based completion[0m
+[33m[tester::#EP2] [0m[94mTyped "git re"[0m
+[33m[your-program] [0m[0m$ git re[0m
+[33m[tester::#EP2] [0m[92m✓ Prompt line matches "$ git re"[0m
+[33m[tester::#EP2] [0m[94mPressed "<TAB>" (expecting bell to ring)[0m
+[33m[tester::#EP2] [0m[92m✓ Received bell[0m
+[33m[tester::#EP2] [0m[94mPressed "<TAB>" (expecting "rebase  remote  reset" as completion options)[0m
+[33m[your-program] [0m[0mrebase  remote  reset[0m
+[33m[tester::#EP2] [0m[92m3 matching completion options found[0m
+[33m[tester::#EP2] [0m[92m✓ Multiple programmable completion options listed[0m
+[33m[your-program] [0m[0m$ git re[0m
 [33m[tester::#EP2] [0m[92mTest passed.[0m
 
 [33m[tester::#XZ3] [0m[94mRunning tests for Stage #XZ3 (xz3)[0m
+[33m[tester::#XZ3] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m[0m$ complete -C /tmp/bee/lcpEnvCompleter git[0m
+[33m[tester::#XZ3] [0m[92m✓ Registered command-based completion[0m
+[33m[tester::#XZ3] [0m[94mTyped "git c"[0m
+[33m[tester::#XZ3] [0m[92m✓ Prompt line matches "$ git c"[0m
+[33m[tester::#XZ3] [0m[94mPressed "<TAB>" (expecting autocomplete to "git che")[0m
+[33m[tester::#XZ3] [0m[92m✓ Prompt line matches "$ git che"[0m
+[33m[tester::#XZ3] [0m[94mTyped "r"[0m
+[33m[tester::#XZ3] [0m[92m✓ Prompt line matches "$ git cher"[0m
+[33m[tester::#XZ3] [0m[94mPressed "<TAB>" (expecting autocomplete to "git cherry-pick" followed by a space)[0m
+[33m[tester::#XZ3] [0m[92m✓ Prompt line matches "$ git cherry-pick "[0m
+[33m[tester::#XZ3] [0m[92m✓ Received all partial completions[0m
+[33m[your-program] [0m[0m$ git cherry-pick [0m
 [33m[tester::#XZ3] [0m[92mTest passed.[0m
 
 [33m[tester::#TZ2] [0m[94mRunning tests for Stage #TZ2 (tz2)[0m
+[33m[tester::#TZ2] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m[0m$ complete  -C  '/tmp/ant/singleCompleter'  git[0m
+[33m[tester::#TZ2] [0m[92m✓ Registered command-based completion[0m
+[33m[your-program] [0m[0m$ complete -r git[0m
+[33m[tester::#TZ2] [0m[92m✓ No output from complete -r[0m
+[33m[tester::#TZ2] [0m[94mTyped "git" followed by a <SPACE>[0m
+[33m[tester::#TZ2] [0m[92m✓ Prompt line matches "$ git "[0m
+[33m[tester::#TZ2] [0m[94mPressed "<TAB>" (expecting autocomplete to "git" followed by a space)[0m
+[33m[tester::#TZ2] [0m[92m✓ Prompt line unchanged after <TAB> press[0m
+[33m[tester::#TZ2] [0m[92m✓ Received bell[0m
+[33m[your-program] [0m[0m$ git [0m
 [33m[tester::#TZ2] [0m[92mTest passed.[0m
