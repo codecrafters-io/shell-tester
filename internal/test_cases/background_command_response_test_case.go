@@ -100,12 +100,12 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 func (t *BackgroundCommandResponseTestCase) checkBackgroundCommandExecutablePath(pid int) error {
 	bgProcess, err := process.NewProcess(int32(pid))
 	if err != nil {
-		return fmt.Errorf("Failed to extract process information on PID %d: %s", pid, err)
+		return fmt.Errorf("Failed to extract process information on process with PID %d: %s", pid, err)
 	}
 
 	receivedExecutablePath, err := bgProcess.Exe()
 	if err != nil {
-		return fmt.Errorf("Failed to extract executable path for PID %d: %s", pid, err)
+		return fmt.Errorf("Failed to extract arguments for process with PID %d: %s", pid, err)
 	}
 
 	cmdlineArgs, err := shlex.Split(t.Command)
@@ -114,9 +114,17 @@ func (t *BackgroundCommandResponseTestCase) checkBackgroundCommandExecutablePath
 	}
 
 	argv0 := cmdlineArgs[0]
-	expectedExecutablePath := utils.MustGetExecutablePathForCommand(argv0)
-	if receivedExecutablePath != expectedExecutablePath {
-		return fmt.Errorf("Expected executable path for %s to be %s, got %s", t.Command, expectedExecutablePath, receivedExecutablePath)
+	expectedExecutableAbsPath, expectedExecutableResolvedSymlinkPath :=
+		utils.MustGetExecutablePathAndResolvedSymlinkForCommand(argv0)
+
+	// If the received executable path is neither the absolute path or the resolved symlink, raise an error
+	if !slices.Contains(
+		[]string{expectedExecutableAbsPath, expectedExecutableResolvedSymlinkPath},
+		receivedExecutablePath,
+	) {
+		// The error message should contain the unresolved symlink
+		return fmt.Errorf("Expected executable path for %s to be %q, got %q", argv0, expectedExecutableAbsPath, receivedExecutablePath)
 	}
+
 	return nil
 }
