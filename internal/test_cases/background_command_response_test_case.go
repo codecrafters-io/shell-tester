@@ -110,7 +110,7 @@ func (t *BackgroundCommandResponseTestCase) checkBackgroundCommandExecutablePath
 
 	cmdlineArgs, err := shlex.Split(t.Command)
 	if err != nil {
-		panic(fmt.Sprintf("Codecrafters Internal Error - Failed to extract arguments for command %s: %s", t.Command, err))
+		panic(fmt.Sprintf("Codecrafters Internal Error - Failed to extract executable path for command %s: %s", t.Command, err))
 	}
 
 	argv0 := cmdlineArgs[0]
