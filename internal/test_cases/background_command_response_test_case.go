@@ -9,7 +9,10 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/logger"
+	"github.com/google/shlex"
+	"github.com/shirou/gopsutil/v3/process"
 )
 
 // BackgroundCommandResponseTestCase launches the given command with an & symbol
@@ -81,9 +84,39 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 
 	logger.Successf("✓ Found process with PID %d", receivedPid)
 
+	if err := t.checkBackgroundCommandExecutablePath(receivedPid); err != nil {
+		return err
+	}
+
+	logger.Successf("✓ Expected executable path found for process with PID %d", receivedPid)
+
 	if t.SuccessMessage != "" {
 		logger.Successf("%s", t.SuccessMessage)
 	}
 
+	return nil
+}
+
+func (t *BackgroundCommandResponseTestCase) checkBackgroundCommandExecutablePath(pid int) error {
+	bgProcess, err := process.NewProcess(int32(pid))
+	if err != nil {
+		return fmt.Errorf("Failed to extract process information on PID %d: %s", pid, err)
+	}
+
+	receivedExecutablePath, err := bgProcess.Exe()
+	if err != nil {
+		return fmt.Errorf("Failed to extract executable path for PID %d: %s", pid, err)
+	}
+
+	cmdlineArgs, err := shlex.Split(t.Command)
+	if err != nil {
+		panic(fmt.Sprintf("Codecrafters Internal Error - Failed to extract arguments for command %s: %s", t.Command, err))
+	}
+
+	argv0 := cmdlineArgs[0]
+	expectedExecutablePath := utils.MustGetExecutablePathForCommand(argv0)
+	if receivedExecutablePath != expectedExecutablePath {
+		return fmt.Errorf("Expected executable path for %s to be %s, got %s", t.Command, expectedExecutablePath, receivedExecutablePath)
+	}
 	return nil
 }

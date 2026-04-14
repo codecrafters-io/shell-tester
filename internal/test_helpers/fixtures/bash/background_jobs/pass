@@ -13,8 +13,9 @@ Debug = true
 [33m[tester::#AT7] [0m[94mRunning tests for Stage #AT7 (at7)[0m
 [33m[tester::#AT7] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 500 &[0m
-[33m[your-program] [0m[0m[1] 2729[0m
-[33m[tester::#AT7] [0m[92m✓ Found process with PID 2729[0m
+[33m[your-program] [0m[0m[1] 2872[0m
+[33m[tester::#AT7] [0m[92m✓ Found process with PID 2872[0m
+[33m[tester::#AT7] [0m[92m✓ Expected executable path found for process with PID 2872[0m
 [33m[tester::#AT7] [0m[92m✓ Received next prompt[0m
 [33m[your-program] [0m[0m$ [0m
 [33m[tester::#AT7] [0m[92mTest passed.[0m
@@ -24,8 +25,9 @@ Debug = true
 [33m[tester::#SI2] [setup] [0m[94mmkfifo /tmp/apple-80[0m
 [33m[tester::#SI2] [setup] [0m[94mmkfifo /tmp/blueberry-54[0m
 [33m[your-program] [0m[0m$ cat /tmp/apple-80 &[0m
-[33m[your-program] [0m[0m[1] 2733[0m
-[33m[tester::#SI2] [0m[92m✓ Found process with PID 2733[0m
+[33m[your-program] [0m[0m[1] 2876[0m
+[33m[tester::#SI2] [0m[92m✓ Found process with PID 2876[0m
+[33m[tester::#SI2] [0m[92m✓ Expected executable path found for process with PID 2876[0m
 [33m[tester::#SI2] [0m[92m✓ Received next prompt[0m
 [33m[your-program] [0m[0m$ cat /tmp/blueberry-54[0m
 [33m[tester::#SI2] [setup] [0m[94mecho -e "Hello from FIFO #1" > "/tmp/apple-80"[0m
@@ -39,8 +41,9 @@ Debug = true
 [33m[tester::#JD6] [0m[94mRunning tests for Stage #JD6 (jd6)[0m
 [33m[tester::#JD6] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2738[0m
-[33m[tester::#JD6] [0m[92m✓ Found process with PID 2738[0m
+[33m[your-program] [0m[0m[1] 2885[0m
+[33m[tester::#JD6] [0m[92m✓ Found process with PID 2885[0m
+[33m[tester::#JD6] [0m[92m✓ Expected executable path found for process with PID 2885[0m
 [33m[tester::#JD6] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    sleep 100 &[0m
@@ -51,23 +54,26 @@ Debug = true
 [33m[tester::#DK5] [0m[94mRunning tests for Stage #DK5 (dk5)[0m
 [33m[tester::#DK5] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2742[0m
-[33m[tester::#DK5] [0m[92m✓ Found process with PID 2742[0m
+[33m[your-program] [0m[0m[1] 2889[0m
+[33m[tester::#DK5] [0m[92m✓ Found process with PID 2889[0m
+[33m[tester::#DK5] [0m[92m✓ Expected executable path found for process with PID 2889[0m
 [33m[tester::#DK5] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    sleep 100 &[0m
 [33m[tester::#DK5] [0m[92m✓ 1 entry match the running job[0m
 [33m[your-program] [0m[0m$ sleep 200 &[0m
-[33m[your-program] [0m[0m[2] 2745[0m
-[33m[tester::#DK5] [0m[92m✓ Found process with PID 2745[0m
+[33m[your-program] [0m[0m[2] 2892[0m
+[33m[tester::#DK5] [0m[92m✓ Found process with PID 2892[0m
+[33m[tester::#DK5] [0m[92m✓ Expected executable path found for process with PID 2892[0m
 [33m[tester::#DK5] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]-  Running                    sleep 100 &[0m
 [33m[your-program] [0m[0m[2]+  Running                    sleep 200 &[0m
 [33m[tester::#DK5] [0m[92m✓ 2 entries match the running jobs[0m
 [33m[your-program] [0m[0m$ sleep 300 &[0m
-[33m[your-program] [0m[0m[3] 2749[0m
-[33m[tester::#DK5] [0m[92m✓ Found process with PID 2749[0m
+[33m[your-program] [0m[0m[3] 2896[0m
+[33m[tester::#DK5] [0m[92m✓ Found process with PID 2896[0m
+[33m[tester::#DK5] [0m[92m✓ Expected executable path found for process with PID 2896[0m
 [33m[tester::#DK5] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]   Running                    sleep 100 &[0m
@@ -81,8 +87,9 @@ Debug = true
 [33m[tester::#MA9] [0m[94mRunning ./your_shell.sh[0m
 [33m[tester::#MA9] [setup] [0m[94mmkfifo /tmp/apple-26[0m
 [33m[your-program] [0m[0m$ cat /tmp/apple-26 &[0m
-[33m[your-program] [0m[0m[1] 2755[0m
-[33m[tester::#MA9] [0m[92m✓ Found process with PID 2755[0m
+[33m[your-program] [0m[0m[1] 2902[0m
+[33m[tester::#MA9] [0m[92m✓ Found process with PID 2902[0m
+[33m[tester::#MA9] [0m[92m✓ Expected executable path found for process with PID 2902[0m
 [33m[tester::#MA9] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    cat /tmp/apple-26 &[0m
@@ -101,16 +108,19 @@ Debug = true
 [33m[tester::#RQ2] [setup] [0m[94mmkfifo /tmp/grape-92[0m
 [33m[tester::#RQ2] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 500 &[0m
-[33m[your-program] [0m[0m[1] 2761[0m
-[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2761[0m
+[33m[your-program] [0m[0m[1] 2907[0m
+[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2907[0m
+[33m[tester::#RQ2] [0m[92m✓ Expected executable path found for process with PID 2907[0m
 [33m[tester::#RQ2] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ cat /tmp/pineapple-90 &[0m
-[33m[your-program] [0m[0m[2] 2764[0m
-[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2764[0m
+[33m[your-program] [0m[0m[2] 2910[0m
+[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2910[0m
+[33m[tester::#RQ2] [0m[92m✓ Expected executable path found for process with PID 2910[0m
 [33m[tester::#RQ2] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ cat /tmp/grape-92 &[0m
-[33m[your-program] [0m[0m[3] 2768[0m
-[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2768[0m
+[33m[your-program] [0m[0m[3] 2914[0m
+[33m[tester::#RQ2] [0m[92m✓ Found process with PID 2914[0m
+[33m[tester::#RQ2] [0m[92m✓ Expected executable path found for process with PID 2914[0m
 [33m[tester::#RQ2] [0m[92m✓ Output includes job number with PID[0m
 [33m[tester::#RQ2] [setup] [0m[94mecho -ne "" > "/tmp/pineapple-90"[0m
 [33m[your-program] [0m[0m$ jobs[0m
@@ -133,12 +143,14 @@ Debug = true
 [33m[tester::#BV8] [setup] [0m[94mmkfifo /tmp/mango-48[0m
 [33m[tester::#BV8] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 500 &[0m
-[33m[your-program] [0m[0m[1] 2778[0m
-[33m[tester::#BV8] [0m[92m✓ Found process with PID 2778[0m
+[33m[your-program] [0m[0m[1] 2920[0m
+[33m[tester::#BV8] [0m[92m✓ Found process with PID 2920[0m
+[33m[tester::#BV8] [0m[92m✓ Expected executable path found for process with PID 2920[0m
 [33m[tester::#BV8] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ cat /tmp/mango-48 &[0m
-[33m[your-program] [0m[0m[2] 2781[0m
-[33m[tester::#BV8] [0m[92m✓ Found process with PID 2781[0m
+[33m[your-program] [0m[0m[2] 2923[0m
+[33m[tester::#BV8] [0m[92m✓ Found process with PID 2923[0m
+[33m[tester::#BV8] [0m[92m✓ Expected executable path found for process with PID 2923[0m
 [33m[tester::#BV8] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]-  Running                    sleep 500 &[0m
@@ -159,8 +171,9 @@ Debug = true
 [33m[tester::#FY4] [setup] [0m[94mmkfifo /tmp/apple-55[0m
 [33m[tester::#FY4] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ cat /tmp/apple-55 &[0m
-[33m[your-program] [0m[0m[1] 2786[0m
-[33m[tester::#FY4] [0m[92m✓ Found process with PID 2786[0m
+[33m[your-program] [0m[0m[1] 2929[0m
+[33m[tester::#FY4] [0m[92m✓ Found process with PID 2929[0m
+[33m[tester::#FY4] [0m[92m✓ Expected executable path found for process with PID 2929[0m
 [33m[tester::#FY4] [0m[92m✓ Output includes job number with PID[0m
 [33m[tester::#FY4] [setup] [0m[94mecho -ne "" > "/tmp/apple-55"[0m
 [33m[your-program] [0m[0m$ echo blueberry[0m
@@ -173,8 +186,9 @@ Debug = true
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[tester::#FY4] [0m[92m✓ No jobs[0m
 [33m[your-program] [0m[0m$ sleep 10 &[0m
-[33m[your-program] [0m[0m[1] 2790[0m
-[33m[tester::#FY4] [0m[92m✓ Found process with PID 2790[0m
+[33m[your-program] [0m[0m[1] 2932[0m
+[33m[tester::#FY4] [0m[92m✓ Found process with PID 2932[0m
+[33m[tester::#FY4] [0m[92m✓ Expected executable path found for process with PID 2932[0m
 [33m[tester::#FY4] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]+  Running                    sleep 10 &[0m
@@ -183,12 +197,14 @@ Debug = true
 [33m[tester::#FY4] [setup] [0m[94mmkfifo /tmp/blueberry-25[0m
 [33m[tester::#FY4] [0m[94mRunning ./your_shell.sh[0m
 [33m[your-program] [0m[0m$ sleep 100 &[0m
-[33m[your-program] [0m[0m[1] 2794[0m
-[33m[tester::#FY4] [0m[92m✓ Found process with PID 2794[0m
+[33m[your-program] [0m[0m[1] 2936[0m
+[33m[tester::#FY4] [0m[92m✓ Found process with PID 2936[0m
+[33m[tester::#FY4] [0m[92m✓ Expected executable path found for process with PID 2936[0m
 [33m[tester::#FY4] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ cat /tmp/blueberry-25 &[0m
-[33m[your-program] [0m[0m[2] 2797[0m
-[33m[tester::#FY4] [0m[92m✓ Found process with PID 2797[0m
+[33m[your-program] [0m[0m[2] 2939[0m
+[33m[tester::#FY4] [0m[92m✓ Found process with PID 2939[0m
+[33m[tester::#FY4] [0m[92m✓ Expected executable path found for process with PID 2939[0m
 [33m[tester::#FY4] [0m[92m✓ Output includes job number with PID[0m
 [33m[tester::#FY4] [setup] [0m[94mecho -ne "" > "/tmp/blueberry-25"[0m
 [33m[your-program] [0m[0m$ echo apple[0m
@@ -196,8 +212,9 @@ Debug = true
 [33m[your-program] [0m[0m[2]+  Done                       cat /tmp/blueberry-25[0m
 [33m[tester::#FY4] [0m[92m✓ Received output for echo followed by an entry for the reaped job[0m
 [33m[your-program] [0m[0m$ sleep 50 &[0m
-[33m[your-program] [0m[0m[2] 2801[0m
-[33m[tester::#FY4] [0m[92m✓ Found process with PID 2801[0m
+[33m[your-program] [0m[0m[2] 2943[0m
+[33m[tester::#FY4] [0m[92m✓ Found process with PID 2943[0m
+[33m[tester::#FY4] [0m[92m✓ Expected executable path found for process with PID 2943[0m
 [33m[tester::#FY4] [0m[92m✓ Output includes job number with PID[0m
 [33m[your-program] [0m[0m$ jobs[0m
 [33m[your-program] [0m[0m[1]-  Running                    sleep 100 &[0m
