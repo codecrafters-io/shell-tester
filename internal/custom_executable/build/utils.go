@@ -1,6 +1,7 @@
 package custom_executable
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -8,6 +9,36 @@ import (
 	"path"
 	"runtime"
 )
+
+func addSecretCodeToExecutable(filePath, randomString string) error {
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		return fmt.Errorf("CodeCrafters Internal Error: read file failed: %w", err)
+	}
+	placeholder := []byte("<<RANDOM>>")
+	if !bytes.Contains(data, placeholder) {
+		return fmt.Errorf("CodeCrafters Internal Error: placeholder %q not found in %s", placeholder, filePath)
+	}
+
+	newData := bytes.ReplaceAll(data, placeholder, []byte(randomString))
+	if err := os.WriteFile(filePath, newData, 0644); err != nil {
+		return fmt.Errorf("CodeCrafters Internal Error: write file failed: %w", err)
+	}
+	return nil
+}
+
+func reSignExecutableDarwinArm64(executablePath string) error {
+	if runtime.GOOS != "darwin" || runtime.GOARCH != "arm64" {
+		return nil
+	}
+	if err := exec.Command("codesign", "--remove-signature", executablePath).Run(); err != nil {
+		return fmt.Errorf("CodeCrafters Internal Error: removing signature from executable failed: %w", err)
+	}
+	if err := exec.Command("codesign", "-s", "-", executablePath).Run(); err != nil {
+		return fmt.Errorf("CodeCrafters Internal Error: signing executable failed: %w", err)
+	}
+	return nil
+}
 
 // fetchCustomExecutableForOSAndArch is a helper function to
 // fetch the correct custom executable for the current OS and architecture

@@ -1,29 +1,6 @@
 package custom_executable
 
-import (
-	"bytes"
-	"fmt"
-	"os"
-	"os/exec"
-	"runtime"
-)
-
-func addSecretCodeToExecutable(filePath, randomString string) error {
-	data, err := os.ReadFile(filePath)
-	if err != nil {
-		return fmt.Errorf("CodeCrafters Internal Error: read file failed: %w", err)
-	}
-	placeholder := []byte("<<RANDOM>>")
-	if !bytes.Contains(data, placeholder) {
-		return fmt.Errorf("CodeCrafters Internal Error: placeholder %q not found in %s", placeholder, filePath)
-	}
-
-	newData := bytes.ReplaceAll(data, placeholder, []byte(randomString))
-	if err := os.WriteFile(filePath, newData, 0644); err != nil {
-		return fmt.Errorf("CodeCrafters Internal Error: write file failed: %w", err)
-	}
-	return nil
-}
+import "fmt"
 
 func CreateSignaturePrinterExecutable(randomString, outputPath string) error {
 	// Our executable contains a placeholder for the random string
@@ -48,19 +25,8 @@ func CreateSignaturePrinterExecutable(randomString, outputPath string) error {
 		return fmt.Errorf("CodeCrafters Internal Error: adding secret code to executable failed: %w", err)
 	}
 
-	// We are okay with keeping this here
-	if runtime.GOOS == "darwin" && runtime.GOARCH == "arm64" {
-		// Remove the signature from the executable
-		err = exec.Command("codesign", "--remove-signature", outputPath).Run()
-		if err != nil {
-			return fmt.Errorf("CodeCrafters Internal Error: removing signature from executable failed: %w", err)
-		}
-
-		// Sign the executable
-		err = exec.Command("codesign", "-s", "-", outputPath).Run()
-		if err != nil {
-			return fmt.Errorf("CodeCrafters Internal Error: signing executable failed: %w", err)
-		}
+	if err := reSignExecutableDarwinArm64(outputPath); err != nil {
+		return err
 	}
 
 	return nil

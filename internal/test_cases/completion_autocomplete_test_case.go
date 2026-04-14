@@ -25,6 +25,9 @@ type AutocompleteTestCase struct {
 	// ExpectedCompletion is the completion that is expected after the tab press
 	ExpectedCompletion string
 
+	// ExpectedSubsequentLines is the used if the completion extends to multiple lines
+	ExpectedSubsequentLines []string
+
 	// CheckForBell is true if we should check for a bell
 	CheckForBell bool
 
@@ -58,30 +61,27 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 	// It will have been replaced by the expected completion
 	asserter.PopAssertion()
 
+	// Log expectations
+	if len(t.ExpectedSubsequentLines) > 0 {
+		logTabForMultipleLinesCompletion(logger, t.ExpectedCompletion, t.ExpectedSubsequentLines, false)
+	} else {
+		logTabForCompletion(logger, t.ExpectedCompletion, false)
+	}
+
 	// Send TAB
-	logTabForCompletion(logger, t.ExpectedCompletion, false)
 	if err := shell.SendText("\t"); err != nil {
 		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
 
-	expectedCompletion := fmt.Sprintf("$ %s", t.ExpectedCompletion)
-
 	// Assert auto-completion
-	asserter.AddAssertion(assertions.SingleLineAssertion{
-		ExpectedOutput: expectedCompletion,
-		StayOnSameLine: true,
-	})
+	asserter.AddAssertion(t.getAssertionAfterTabPress())
+
 	// Run the assertion, before sending the enter key
 	if err := asserter.AssertWithoutPrompt(); err != nil {
 		return err
 	}
 
-	// If the completion does not change the prompt line: notify that prompt line is unchanged
-	if t.ExpectedCompletion != t.PreviousInputOnLine+t.RawInput {
-		logger.Successf("✓ Prompt line matches %q", t.ExpectedCompletion)
-	} else {
-		logger.Successf("✓ Prompt line unchanged after <TAB> press")
-	}
+	t.logCompletionSuccessMessage(logger)
 
 	// Remove the assertion after expected completion has been met
 	asserter.PopAssertion()
@@ -115,6 +115,36 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 	return nil
 }
 
+func (t AutocompleteTestCase) getAssertionAfterTabPress() assertions.Assertion {
+	expectedCompletion := fmt.Sprintf("$ %s", t.ExpectedCompletion)
+
+	if len(t.ExpectedSubsequentLines) == 0 {
+		return assertions.SingleLineAssertion{
+			ExpectedOutput: expectedCompletion,
+			StayOnSameLine: true,
+		}
+	}
+
+	multiLineAssertion := assertions.NewMultiLineAssertion(
+		append([]string{expectedCompletion}, t.ExpectedSubsequentLines...),
+	)
+
+	return &multiLineAssertion
+}
+
+func (t AutocompleteTestCase) logCompletionSuccessMessage(logger *logger.Logger) {
+	if t.ExpectedCompletion != t.PreviousInputOnLine+t.RawInput {
+		logger.Successf("✓ Prompt line matches %q", t.ExpectedCompletion)
+		if len(t.ExpectedSubsequentLines) > 0 {
+			for i, line := range t.ExpectedSubsequentLines {
+				logger.Successf("✓ Subsequent line #%d matches %q", i+1, line)
+			}
+		}
+	} else {
+		logger.Successf("✓ Prompt line unchanged after <TAB> press")
+	}
+}
+
 func logNewLine(logger *logger.Logger) {
 	logger.Infof("Pressed %q", "<ENTER>")
 }
@@ -132,6 +162,18 @@ func logTabForCompletion(logger *logger.Logger, expectedCompletion string, expec
 	}
 
 	logger.Infof("Pressed %q (expecting autocomplete to %q)", "<TAB>", expectedCompletion)
+}
+
+func logTabForMultipleLinesCompletion(logger *logger.Logger, expectedCompletion string, expectedSubsequentLines []string, expectBell bool) {
+	if expectBell {
+		logger.Infof("Pressed %q (expecting bell to ring)", "<TAB>")
+		return
+	}
+
+	logger.Infof("Pressed %q (expecting prompt line to autocomplete to %q)", "<TAB>", expectedCompletion)
+	for i, line := range expectedSubsequentLines {
+		logger.Infof("Expecting subsequent line #%d: %q", i+1, line)
+	}
 }
 
 func logTypedText(logger *logger.Logger, text string) {
