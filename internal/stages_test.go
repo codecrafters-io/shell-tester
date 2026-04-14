@@ -167,6 +167,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_middleware_launch",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"background_jobs_wrong_executable_path": {
+			StageSlugs:          []string{"at7"},
+			CodePath:            "./test_helpers/scenarios/background_jobs_wrong_executable",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/background_jobs_wrong_executable",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"pipelines_pass_bash": {
 			StageSlugs:          []string{"br6", "ny9", "xk3"},
 			CodePath:            "./test_helpers/bash",
@@ -278,10 +285,11 @@ func normalizeTesterOutput(testerOutput []byte) []byte {
 		"[your-program] [JOB_NUM] PID":                    {regexp.MustCompile(`\[your-program\].*\[\d+\] \d+`)},
 		"[tester::#STAGE] ✓ Found process with PID <PID>": {regexp.MustCompile(`\[tester::#[A-Z]{2}\d+\].*Found process with PID \d+`)},
 		// For background_jobs error cases
-		"[your-program] [JOB_NUM]PID":                {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
-		"[tester::#AT7] Received: \"[JOB_NUM]PID\"":  {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\]\d+"`)},
-		"[tester::#AT7] Received: \"[JOB_NUM] PID\"": {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\] \d+"`)},
-		"[tester::#FY4] Received: \"[JOB_NUM] PID\"": {regexp.MustCompile(`\[tester::#FY4\].*Received:.*"\[\d+\] \d+"`)},
+		"[your-program] [JOB_NUM]PID":                               {regexp.MustCompile(`\[your-program\].*\[\d+\]\d+`)},
+		"[tester::#AT7] Received: \"[JOB_NUM]PID\"":                 {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\]\d+"`)},
+		"[tester::#AT7] Received: \"[JOB_NUM] PID\"":                {regexp.MustCompile(`\[tester::#AT7\].*Received:.*"\[\d+\] \d+"`)},
+		"[tester::#FY4] Received: \"[JOB_NUM] PID\"":                {regexp.MustCompile(`\[tester::#FY4\].*Received:.*"\[\d+\] \d+"`)},
+		"Expected executable path found for process with PID <PID>": {regexp.MustCompile(`Expected executable path found for process with PID \d+`)},
 	}
 
 	for replacement, regexes := range replacements {
