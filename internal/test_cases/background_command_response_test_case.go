@@ -105,12 +105,12 @@ func (t *BackgroundCommandResponseTestCase) checkBackgroundCommandExecutablePath
 
 	receivedExecutablePath, err := bgProcess.Exe()
 	if err != nil {
-		return fmt.Errorf("Failed to extract arguments for process with PID %d: %s", pid, err)
+		return fmt.Errorf("Failed to extract executable path for process with PID %d: %s", pid, err)
 	}
 
 	cmdlineArgs, err := shlex.Split(t.Command)
 	if err != nil {
-		panic(fmt.Sprintf("Codecrafters Internal Error - Failed to extract executable path for command %s: %s", t.Command, err))
+		panic(fmt.Sprintf("Codecrafters Internal Error - Failed to extract arguments for command %s: %s", t.Command, err))
 	}
 
 	argv0 := cmdlineArgs[0]
