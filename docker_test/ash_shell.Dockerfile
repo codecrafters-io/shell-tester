@@ -9,7 +9,11 @@ RUN apk add --no-cache \
     # Required to run zsh tests
     zsh \
     # Required for fixtures
-    python3
+    python3 \
+    # Install uv
+    curl \
+    ca-certificates \
+    && curl -LsSf https://astral.sh/uv/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh
 
 # Match GitHub Actions runner workspace path so recorded fixtures match CI
 WORKDIR /home/runner/work/shell-tester/shell-tester

@@ -15,3 +15,7 @@ shell_notes.md
 
 .vscode/
 .zcompdump
+
+.venv/
+uv.lock
+*.pyc

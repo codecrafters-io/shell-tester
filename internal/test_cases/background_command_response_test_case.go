@@ -9,7 +9,10 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
+	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/logger"
+	"github.com/google/shlex"
+	"github.com/shirou/gopsutil/v3/process"
 )
 
 // BackgroundCommandResponseTestCase launches the given command with an & symbol
@@ -73,7 +76,7 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 		panic("Codecrafters Internal Error: Could not parse PID from background command output")
 	}
 
-	childPids := shell.GetAllChildrenPids()
+	childPids := shell.GetAllDescendentsPids()
 
 	if !slices.Contains(childPids, receivedPid) {
 		return fmt.Errorf("Could not find process with PID %d", receivedPid)
@@ -81,8 +84,46 @@ func (t *BackgroundCommandResponseTestCase) Run(asserter *logged_shell_asserter.
 
 	logger.Successf("✓ Found process with PID %d", receivedPid)
 
+	if err := t.checkBackgroundCommandExecutablePath(receivedPid); err != nil {
+		return err
+	}
+
+	logger.Successf("✓ Expected executable path found for process with PID %d", receivedPid)
+
 	if t.SuccessMessage != "" {
 		logger.Successf("%s", t.SuccessMessage)
+	}
+
+	return nil
+}
+
+func (t *BackgroundCommandResponseTestCase) checkBackgroundCommandExecutablePath(pid int) error {
+	bgProcess, err := process.NewProcess(int32(pid))
+	if err != nil {
+		return fmt.Errorf("Failed to extract process information on process with PID %d: %s", pid, err)
+	}
+
+	receivedExecutablePath, err := bgProcess.Exe()
+	if err != nil {
+		return fmt.Errorf("Failed to extract executable path for process with PID %d: %s", pid, err)
+	}
+
+	cmdlineArgs, err := shlex.Split(t.Command)
+	if err != nil {
+		panic(fmt.Sprintf("Codecrafters Internal Error - Failed to extract arguments for command %s: %s", t.Command, err))
+	}
+
+	argv0 := cmdlineArgs[0]
+	expectedExecutableAbsPath, expectedExecutableResolvedSymlinkPath :=
+		utils.MustGetExecutablePathAndResolvedSymlinkForCommand(argv0)
+
+	// If the received executable path is neither the absolute path or the resolved symlink, raise an error
+	if !slices.Contains(
+		[]string{expectedExecutableAbsPath, expectedExecutableResolvedSymlinkPath},
+		receivedExecutablePath,
+	) {
+		// The error message should contain the unresolved symlink
+		return fmt.Errorf("Expected executable path for %s to be %q, got %q", argv0, expectedExecutableAbsPath, receivedExecutablePath)
 	}
 
 	return nil
