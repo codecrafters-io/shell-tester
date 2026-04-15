@@ -86,7 +86,7 @@ Debug = true
 [33m[your-program] [0m[0m$ cat /tmp/rat/owl.md[0m
 [33m[your-program] [0m[0mls: nonexistent: No such file or directory[0m
 [33m[tester::#UN3] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m[0m$ echo "David says Error" 2>> /tmp/rat/pig.md[0m
+[33m[your-program] [0m[0m$ echo David says Error 2>> /tmp/rat/pig.md[0m
 [33m[your-program] [0m[0mDavid says Error[0m
 [33m[tester::#UN3] [0m[92m✓ Received redirected file content[0m
 [33m[your-program] [0m[0m$ cat nonexistent 2>> /tmp/rat/pig.md[0m
