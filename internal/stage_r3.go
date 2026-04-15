@@ -85,8 +85,8 @@ func testR3(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	message1 := "Hello " + getRandomName()
 	message2 := "Hello " + getRandomName()
-	command4 := fmt.Sprintf("echo '%s' 1>> %s", message1, outputFilePath2)
-	command5 := fmt.Sprintf("echo '%s' 1>> %s", message2, outputFilePath2)
+	command4 := fmt.Sprintf("echo %s 1>> %s", message1, outputFilePath2)
+	command5 := fmt.Sprintf("echo %s 1>> %s", message2, outputFilePath2)
 	command6 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath2)
 
 	err = test_cases.CommandWithNoResponseTestCase{
