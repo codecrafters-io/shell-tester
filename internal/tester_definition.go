@@ -366,5 +366,41 @@ var testerDefinition = tester_definition.TesterDefinition{
 			TestFunc: testHP6,
 			Timeout:  15 * time.Second,
 		},
+		// Parameter Expansion
+		{
+			Slug:     "ji0",
+			TestFunc: testPEX1,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "oa2",
+			TestFunc: testPEX2,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "kv5",
+			TestFunc: testPEX3,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "db8",
+			TestFunc: testPEX4,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "ge9",
+			TestFunc: testPEX5,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "br2",
+			TestFunc: testPEX6,
+			Timeout:  15 * time.Second,
+		},
+		{
+			Slug:     "my0",
+			TestFunc: testPEX7,
+			Timeout:  15 * time.Second,
+		},
 	},
 }

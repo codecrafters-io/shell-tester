@@ -1,0 +1,55 @@
+Debug = true
+
+[33m[tester::#JI0] [0m[94mRunning tests for Stage #JI0 (ji0)[0m
+[33m[tester::#JI0] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m[0m$ type declare[0m
+[33m[your-program] [0m[0mdeclare is a shell builtin[0m
+[33m[tester::#JI0] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ [0m
+[33m[tester::#JI0] [0m[92mTest passed.[0m
+
+[33m[tester::#OA2] [0m[94mRunning tests for Stage #OA2 (oa2)[0m
+[33m[tester::#OA2] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m[0m$ declare -p missing_variable_28[0m
+[33m[your-program] [0m[0mbash: declare: missing_variable_28: not found[0m
+[33m[tester::#OA2] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ [0m
+[33m[tester::#OA2] [0m[92mTest passed.[0m
+
+[33m[tester::#KV5] [0m[94mRunning tests for Stage #KV5 (kv5)[0m
+[33m[tester::#KV5] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m[0m$ declare orange=pear[0m
+[33m[tester::#KV5] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ declare -p orange[0m
+[33m[your-program] [0m[0mdeclare -- orange="pear"[0m
+[33m[tester::#KV5] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ declare -p missing_pineapple[0m
+[33m[your-program] [0m[0mbash: declare: missing_pineapple: not found[0m
+[33m[tester::#KV5] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ [0m
+[33m[tester::#KV5] [0m[92mTest passed.[0m
+
+[33m[tester::#DB8] [0m[94mRunning tests for Stage #DB8 (db8)[0m
+[33m[tester::#DB8] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m[0m$ declare _pineapple=orange[0m
+[33m[tester::#DB8] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ declare 5raspberry=apple[0m
+[33m[your-program] [0m[0mbash: declare: `5raspberry=apple': not a valid identifier[0m
+[33m[tester::#DB8] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ declare -p _pineapple[0m
+[33m[your-program] [0m[0mdeclare -- _pineapple="orange"[0m
+[33m[tester::#DB8] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ declare -p 5raspberry[0m
+[33m[your-program] [0m[0mbash: declare: 5raspberry: not found[0m
+[33m[tester::#DB8] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ [0m
+[33m[tester::#DB8] [0m[92mTest passed.[0m
+
+[33m[tester::#GE9] [0m[94mRunning tests for Stage #GE9 (ge9)[0m
+[33m[tester::#GE9] [0m[92mTest passed.[0m
+
+[33m[tester::#BR2] [0m[94mRunning tests for Stage #BR2 (br2)[0m
+[33m[tester::#BR2] [0m[92mTest passed.[0m
+
+[33m[tester::#MY0] [0m[94mRunning tests for Stage #MY0 (my0)[0m
+[33m[tester::#MY0] [0m[92mTest passed.[0m
