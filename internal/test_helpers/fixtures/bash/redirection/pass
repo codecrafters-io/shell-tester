@@ -64,7 +64,7 @@ Debug = true
 [33m[your-program] [0m[0mHello Maria[0m
 [33m[your-program] [0m[0mHello David[0m
 [33m[tester::#EL9] [0m[92m✓ Received redirected file content[0m
-[33m[your-program] [0m[0m$ echo "List of files: " > /tmp/rat/fox.md[0m
+[33m[your-program] [0m[0m$ echo List of files: > /tmp/rat/fox.md[0m
 [33m[your-program] [0m[0m$ ls -1 /tmp/fox >> /tmp/rat/fox.md[0m
 [33m[your-program] [0m[0m$ cat /tmp/rat/fox.md[0m
 [33m[your-program] [0m[0mList of files:[0m
