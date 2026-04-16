@@ -3,7 +3,6 @@ package internal
 import (
 	"fmt"
 	"strconv"
-	"strings"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -55,7 +54,7 @@ func testPEX7(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	testCase := test_cases.CommandWithMultilineResponseTestCase{
-		Command:            strings.Join([]string{command}, " "),
+		Command:            command,
 		MultiLineAssertion: assertions.NewMultiLineAssertion(expectedLines),
 		SuccessMessage:     "✓ Received expected response",
 	}
