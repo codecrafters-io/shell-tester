@@ -46,10 +46,56 @@ Debug = true
 [33m[tester::#DB8] [0m[92mTest passed.[0m
 
 [33m[tester::#GE9] [0m[94mRunning tests for Stage #GE9 (ge9)[0m
+[33m[tester::#GE9] [setup] [0m[94mexport PATH=/tmp/pig:$PATH[0m
+[33m[tester::#GE9] [setup] [0m[94mAvailable executables:[0m
+[33m[tester::#GE9] [setup] [0m[94m- custom_exe_6864[0m
+[33m[tester::#GE9] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m[0m$ declare Grape_1=strawberry[0m
+[33m[tester::#GE9] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ declare Pear_2=banana[0m
+[33m[tester::#GE9] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ custom_exe_6864 $Grape_1 $Pear_2[0m
+[33m[your-program] [0m[0mProgram was passed 3 args (including program name).[0m
+[33m[your-program] [0m[0mArg #0 (program name): custom_exe_6864[0m
+[33m[your-program] [0m[0mArg #1: strawberry[0m
+[33m[your-program] [0m[0mArg #2: banana[0m
+[33m[your-program] [0m[0mProgram Signature: 2314588360[0m
+[33m[tester::#GE9] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ [0m
 [33m[tester::#GE9] [0m[92mTest passed.[0m
 
 [33m[tester::#BR2] [0m[94mRunning tests for Stage #BR2 (br2)[0m
+[33m[tester::#BR2] [setup] [0m[94mexport PATH=/tmp/owl:$PATH[0m
+[33m[tester::#BR2] [setup] [0m[94mAvailable executables:[0m
+[33m[tester::#BR2] [setup] [0m[94m- custom_exe_5355[0m
+[33m[tester::#BR2] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m[0m$ declare Raspberry_2=mango[0m
+[33m[tester::#BR2] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ declare Pineapple_9=pear[0m
+[33m[tester::#BR2] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ custom_exe_5355 grape_${Raspberry_2}_banana ${Pineapple_9}[0m
+[33m[your-program] [0m[0mProgram was passed 3 args (including program name).[0m
+[33m[your-program] [0m[0mArg #0 (program name): custom_exe_5355[0m
+[33m[your-program] [0m[0mArg #1: grape_mango_banana[0m
+[33m[your-program] [0m[0mArg #2: pear[0m
+[33m[your-program] [0m[0mProgram Signature: 4420233970[0m
+[33m[tester::#BR2] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ [0m
 [33m[tester::#BR2] [0m[92mTest passed.[0m
 
 [33m[tester::#MY0] [0m[94mRunning tests for Stage #MY0 (my0)[0m
+[33m[tester::#MY0] [setup] [0m[94mexport PATH=/tmp/rat:$PATH[0m
+[33m[tester::#MY0] [setup] [0m[94mAvailable executables:[0m
+[33m[tester::#MY0] [setup] [0m[94m- custom_exe_8866[0m
+[33m[tester::#MY0] [0m[94mRunning ./your_shell.sh[0m
+[33m[your-program] [0m[0m$ declare existing=mango[0m
+[33m[tester::#MY0] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ custom_exe_8866 ${missing_var_8}_suffix ${existing} ${missing_var_46}[0m
+[33m[your-program] [0m[0mProgram was passed 3 args (including program name).[0m
+[33m[your-program] [0m[0mArg #0 (program name): custom_exe_8866[0m
+[33m[your-program] [0m[0mArg #1: _suffix[0m
+[33m[your-program] [0m[0mArg #2: mango[0m
+[33m[your-program] [0m[0mProgram Signature: 7313273050[0m
+[33m[tester::#MY0] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ [0m
 [33m[tester::#MY0] [0m[92mTest passed.[0m
