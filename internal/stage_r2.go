@@ -80,7 +80,7 @@ func testR2(stageHarness *test_case_harness.TestCaseHarness) error {
 	// echo 'File not found' 2> tmp.md; cat tmp.md
 
 	message := fmt.Sprintf("%s file cannot be found", getRandomName())
-	command3 := fmt.Sprintf("echo %s 2> %s", fmt.Sprintf("'%s'", message), outputFilePath2)
+	command3 := fmt.Sprintf("echo %s 2> %s", message, outputFilePath2)
 
 	responseTestCase = test_cases.CommandResponseTestCase{
 		Command:          command3,
