@@ -23,20 +23,13 @@ func testPA5(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	randomWords := random.RandomWords(3)
-	stderrLines := []string{
-		fmt.Sprintf("Error from completer:%s", randomWords[0]),
-		fmt.Sprintf("Error from completer:%s", randomWords[1]),
-		fmt.Sprintf("Error from completer:%s", randomWords[2]),
-	}
+	completerPath := path.Join(completerDir, "noCandidatesCompleter")
 
-	completerPath := path.Join(completerDir, "noStdoutStderrCompleter")
 	if err := (&custom_executable.CompleterExecutableSpecification{
 		Path:        completerPath,
 		SecretValue: getRandomString(),
 		CompleterConfiguration: completer_configuration.CompleterConfiguration{
-			OutputLines:     stderrLines,
-			UseStderrStream: true,
+			OutputLines: []string{},
 		},
 	}).Create(); err != nil {
 		return err
@@ -46,7 +39,7 @@ func testPA5(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	command := "git"
+	command := random.RandomElementFromArray([]string{"docker", "git", "systemctl"})
 	registerCmd := fmt.Sprintf("complete -C %s %s", completerPath, command)
 	registerTestCase := test_cases.CommandWithNoResponseTestCase{
 		Command:        registerCmd,
@@ -57,10 +50,10 @@ func testPA5(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	autocompleteTestCase := test_cases.AutocompleteTestCase{
-		RawInput:                command + " ",
-		ExpectedCompletion:      command + " " + stderrLines[0],
-		ExpectedSubsequentLines: stderrLines[1:],
-		SkipPromptAssertion:     true,
+		RawInput:            command + " xyz",
+		ExpectedCompletion:  command + " xyz",
+		CheckForBell:        true,
+		SkipPromptAssertion: true,
 	}
 
 	if err := autocompleteTestCase.Run(asserter, shell, logger); err != nil {

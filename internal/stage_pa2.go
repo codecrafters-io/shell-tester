@@ -2,7 +2,7 @@ package internal
 
 import (
 	"fmt"
-	"path/filepath"
+	"regexp"
 
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
@@ -20,30 +20,18 @@ func testPA2(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	commandName := "git"
-	// The file need not exist in this stage
-	completerPath := filepath.Join(
-		"/tmp",
-		fmt.Sprintf("%s.py", random.RandomWord()),
-	)
+	commandName := random.RandomElementFromArray([]string{"git", "docker", "systemctl"})
 
-	registerTestCase := test_cases.CommandWithNoResponseTestCase{
-		// Insert extra spaces in between to prevent byte-copying
-		Command:        fmt.Sprintf("complete  -C  '%s'  %s", completerPath, commandName),
-		SuccessMessage: "✓ No output found",
+	printCompletionSpecTestCase := test_cases.CommandResponseTestCase{
+		Command:        fmt.Sprintf("complete -p %s", commandName),
+		ExpectedOutput: fmt.Sprintf("complete: %s: no completion specification", commandName),
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(fmt.Sprintf(`^bash: complete: %s: no completion specification$`, regexp.QuoteMeta(commandName))),
+		},
+		SuccessMessage: "✓ Found missing completion specification",
 	}
 
-	if err := registerTestCase.Run(asserter, shell, logger, false); err != nil {
-		return err
-	}
-
-	listCompletionTestCase := test_cases.CommandResponseTestCase{
-		Command:        "complete",
-		ExpectedOutput: fmt.Sprintf("complete -C '%s' %s", completerPath, commandName),
-		SuccessMessage: "✓ Registered completion found in normalized form",
-	}
-
-	if err := listCompletionTestCase.Run(asserter, shell, logger); err != nil {
+	if err := printCompletionSpecTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 

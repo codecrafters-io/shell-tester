@@ -56,9 +56,10 @@ func testPA8(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	completerPath := path.Join(randomDir, "multiCandidateEnvCompleter")
 
+	secretValue := getRandomString()
 	if err := (&custom_executable.CompleterExecutableSpecification{
 		Path:        completerPath,
-		SecretValue: getRandomString(),
+		SecretValue: secretValue,
 		CompleterConfiguration: completer_configuration.CompleterConfiguration{
 			OutputLines: sortedCompletions,
 			ExpectedArguments: &completer_configuration.CompleterConfigurationExpectedArguments{
@@ -66,7 +67,7 @@ func testPA8(stageHarness *test_case_harness.TestCaseHarness) error {
 				Argv2: choice.partial,
 				Argv3: command,
 			},
-			ExpectedEnvVars: &completer_configuration.CompleterConfigurationEnvVars{
+			ExpectedEnvVars: &completer_configuration.CompleterConfigurationExpectedEnvVars{
 				CompLine:  compLineEnvVar,
 				CompPoint: strconv.Itoa(len(compLineEnvVar)),
 			},
@@ -106,6 +107,7 @@ func testPA8(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	if err := multiCase.Run(asserter, shell, logger); err != nil {
+		completer_configuration.LogCompleterErrors(logger, secretValue)
 		return err
 	}
 

@@ -41,9 +41,10 @@ func testPA6(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	choice := choices[random.RandomInt(0, len(choices))]
 
+	secretValue := getRandomString()
 	if err := (&custom_executable.CompleterExecutableSpecification{
 		Path:        completerPath,
-		SecretValue: getRandomString(),
+		SecretValue: secretValue,
 		CompleterConfiguration: completer_configuration.CompleterConfiguration{
 			OutputLines: []string{choice.complete},
 			ExpectedArguments: &completer_configuration.CompleterConfigurationExpectedArguments{
@@ -74,7 +75,9 @@ func testPA6(stageHarness *test_case_harness.TestCaseHarness) error {
 		ExpectedCompletion:  fmt.Sprintf("%s %s %s ", command, subCommand, choice.complete),
 		SkipPromptAssertion: true,
 	}
+
 	if err := autocompleteTestCase.Run(asserter, shell, logger); err != nil {
+		completer_configuration.LogCompleterErrors(logger, secretValue)
 		return err
 	}
 

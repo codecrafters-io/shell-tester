@@ -10,7 +10,6 @@ import os
 import shlex
 import subprocess
 import sys
-import threading
 
 try:
     import readline
@@ -150,34 +149,19 @@ def _programmable_completer(text: str, state: int) -> str | None:
     # Intentional bug: swap argv[2] (current word) and argv[3] (previous word).
     argv_swapped = [comp, cmd, prev, cur]
 
-    # Stream completer stderr to the shell's stderr while capturing stdout for candidates.
-    # PA5 completer may sleep a long time after writing stderr; bash waits for exit.
+    # Capture stdout only; completer stderr is discarded (not streamed to the shell).
     proc = subprocess.Popen(
         argv_swapped,
         env=env,
         stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
         text=True,
     )
-    err_chunks: list[str] = []
-
-    def _forward_stderr() -> None:
-        if proc.stderr is None:
-            return
-        for line in proc.stderr:
-            sys.stderr.write(line)
-            sys.stderr.flush()
-            err_chunks.append(line)
-
-    thr = threading.Thread(target=_forward_stderr, daemon=True)
-    thr.start()
-    stdout_data = proc.stdout.read() if proc.stdout else ""
-    rc = proc.wait()
-    thr.join()
+    stdout_data = proc.communicate()[0] or ""
+    rc = proc.returncode if proc.returncode is not None else 0
 
     out_lines = [x.strip() for x in stdout_data.splitlines() if x.strip() != ""]
-    err_text = "".join(err_chunks)
-    err_lines = [x for x in err_text.splitlines() if x.strip() != ""]
+    err_lines: list[str] = []
 
     if rc != 0:
         return None

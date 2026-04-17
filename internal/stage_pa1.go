@@ -24,14 +24,5 @@ func testPA1(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	completeTestCase := test_cases.CommandWithNoResponseTestCase{
-		Command:        "complete",
-		SuccessMessage: "✓ No output found",
-	}
-
-	if err := completeTestCase.Run(asserter, shell, logger, false); err != nil {
-		return err
-	}
-
 	return logAndQuit(asserter, nil)
 }
