@@ -164,15 +164,15 @@ func (b *ShellExecutable) ReadUntilConditionOrTimeout(condition func() bool, tim
 	deadline := time.Now().Add(timeout)
 
 	for !time.Now().After(deadline) {
+		if condition() {
+			return nil
+		}
+
 		if b.relay.processExited() {
 			if isPtyTerminalError(b.relay.terminalErr) {
 				return ErrProgramExited
 			}
 			return b.relay.terminalErr
-		}
-
-		if condition() {
-			return nil
 		}
 
 		time.Sleep(2 * time.Millisecond)
