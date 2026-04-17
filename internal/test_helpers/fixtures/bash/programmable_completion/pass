@@ -114,6 +114,9 @@ Debug = true
 [33m[tester::#TZ2] [0m[92m✓ Registered command-based completion[0m
 [33m[your-program] [0m[0m$ complete -r git[0m
 [33m[tester::#TZ2] [0m[92m✓ No output from complete -r[0m
+[33m[your-program] [0m[0m$ complete -p git[0m
+[33m[your-program] [0m[0mbash: complete: git: no completion specification[0m
+[33m[tester::#TZ2] [0m[92m✓ Found missing completion specification after unregister[0m
 [33m[tester::#TZ2] [0m[94mTyped "git" followed by a <SPACE>[0m
 [33m[tester::#TZ2] [0m[92m✓ Prompt line matches "$ git "[0m
 [33m[tester::#TZ2] [0m[94mPressed "<TAB>" (expecting autocomplete to "git" followed by a space)[0m

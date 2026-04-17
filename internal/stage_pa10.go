@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 	"path"
+	"regexp"
 	"strconv"
 
 	custom_executable "github.com/codecrafters-io/shell-tester/internal/custom_executable/build"
@@ -47,7 +48,7 @@ func testPA10(stageHarness *test_case_harness.TestCaseHarness) error {
 				Argv2: "",
 				Argv3: commandName,
 			},
-			ExpectedEnvVars: &completer_configuration.CompleterConfigurationEnvVars{
+			ExpectedEnvVars: &completer_configuration.CompleterConfigurationExpectedEnvVars{
 				CompLine:  compLine,
 				CompPoint: compPoint,
 			},
@@ -75,6 +76,18 @@ func testPA10(stageHarness *test_case_harness.TestCaseHarness) error {
 		Command:        unregisterCmd,
 		SuccessMessage: "✓ No output from complete -r",
 	}).Run(asserter, shell, logger, false); err != nil {
+		return err
+	}
+
+	printCompletionSpecTestCase := test_cases.CommandResponseTestCase{
+		Command:        fmt.Sprintf("complete -p %s", commandName),
+		ExpectedOutput: fmt.Sprintf("complete: %s: no completion specification", commandName),
+		FallbackPatterns: []*regexp.Regexp{
+			regexp.MustCompile(fmt.Sprintf(`^bash: complete: %s: no completion specification$`, regexp.QuoteMeta(commandName))),
+		},
+		SuccessMessage: "✓ Found missing completion specification after unregister",
+	}
+	if err := printCompletionSpecTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
