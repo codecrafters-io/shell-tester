@@ -6,7 +6,6 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/codecrafters-io/shell-tester/internal/condition_reader"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/utils"
@@ -46,7 +45,7 @@ func (t ExitTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, s
 	if !errors.Is(readErr, shell_executable.ErrProgramExited) {
 		if readErr == nil {
 			return fmt.Errorf("Expected program to exit, program is still running.")
-		} else if errors.Is(readErr, condition_reader.ErrConditionNotMet) {
+		} else if errors.Is(readErr, shell_executable.ErrConditionNotMet) {
 			return fmt.Errorf("Expected program to exit, program is still running.")
 		} else {
 			return fmt.Errorf("Error reading output: %v", readErr)

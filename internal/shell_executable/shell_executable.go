@@ -3,7 +3,6 @@ package shell_executable
 import (
 	"errors"
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"path"
@@ -12,7 +11,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/codecrafters-io/shell-tester/internal/condition_reader"
 	"github.com/codecrafters-io/shell-tester/internal/screen_state"
 	"github.com/codecrafters-io/shell-tester/internal/utils"
 	virtual_terminal "github.com/codecrafters-io/shell-tester/internal/vt"
@@ -23,8 +21,12 @@ import (
 	"go.chromium.org/luci/common/system/environ"
 )
 
-// ErrProgramExited is returned when the program exits
+// ErrProgramExited is returned when the child process has exited and the PTY is closed.
 var ErrProgramExited = errors.New("Program exited")
+
+// ErrConditionNotMet is returned when ReadUntilConditionOrTimeout exhausts its deadline
+// without the condition ever becoming true.
+var ErrConditionNotMet = errors.New("condition not met")
 
 // ErrMemoryLimitExceeded is returned when a process exceeds its memory limit
 var ErrMemoryLimitExceeded = errors.New("process exceeded memory limit")
@@ -50,10 +52,10 @@ type ShellExecutable struct {
 	workingDir string
 
 	// Set after starting
-	cmd       *exec.Cmd
-	pty       *os.File
-	ptyReader condition_reader.ConditionReader
-	vt        *virtual_terminal.VirtualTerminal
+	cmd   *exec.Cmd
+	pty   *os.File
+	relay *ptyRelay
+	vt    *virtual_terminal.VirtualTerminal
 }
 
 func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellExecutable {
@@ -124,7 +126,8 @@ func (b *ShellExecutable) Start(args ...string) error {
 	}
 
 	b.pty = pty
-	b.ptyReader = condition_reader.NewConditionReader(io.TeeReader(b.pty, b.vt))
+	b.relay = newPtyRelay(pty, b.vt)
+	b.relay.start()
 
 	// Stop any existing memory monitor so we don't leak its goroutine on repeated Start()
 	if b.memoryMonitor != nil {
@@ -151,13 +154,31 @@ func (b *ShellExecutable) VTBellChannel() chan bool {
 	return b.vt.BellChannel()
 }
 
+// ReadUntilConditionOrTimeout polls the virtual terminal screen state until the condition
+// returns true, or the timeout elapses, or the child process exits.
+//
+// The pump goroutine continuously streams PTY output into the virtual terminal, so each
+// call to condition() always sees the most current screen state without needing to read
+// from the PTY here.
 func (b *ShellExecutable) ReadUntilConditionOrTimeout(condition func() bool, timeout time.Duration) error {
-	err := b.ptyReader.ReadUntilConditionOrTimeout(condition, timeout)
-	if err != nil {
-		return wrapReaderError(err)
+	deadline := time.Now().Add(timeout)
+
+	for !time.Now().After(deadline) {
+		if b.relay.processExited() {
+			if isPtyTerminalError(b.relay.terminalErr) {
+				return ErrProgramExited
+			}
+			return b.relay.terminalErr
+		}
+
+		if condition() {
+			return nil
+		}
+
+		time.Sleep(2 * time.Millisecond)
 	}
 
-	return nil
+	return ErrConditionNotMet
 }
 
 func (b *ShellExecutable) SendCommand(command string) error {
@@ -244,15 +265,6 @@ func (b *ShellExecutable) getInitialLogLine(args ...string) string {
 	}
 
 	return log
-}
-
-func wrapReaderError(readerErr error) error {
-	// Linux returns syscall.EIO when the process is killed, macOS returns io.EOF
-	if errors.Is(readerErr, io.EOF) || errors.Is(readerErr, syscall.EIO) {
-		return ErrProgramExited
-	}
-
-	return readerErr
 }
 
 // formatBytesHumanReadable formats bytes as a human-readable string (e.g., "50 MB", "2 GB")
