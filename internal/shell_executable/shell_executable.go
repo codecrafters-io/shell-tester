@@ -163,11 +163,10 @@ func (b *ShellExecutable) VTBellChannel() chan bool {
 func (b *ShellExecutable) ReadUntilConditionOrTimeout(condition func() bool, timeout time.Duration) error {
 	deadline := time.Now().Add(timeout)
 
-	if condition() {
-		return nil
-	}
-
 	for !time.Now().After(deadline) {
+		if condition() {
+			return nil
+		}
 
 		if b.relay.processExited() {
 			// Do one final condition check: the relay may have written data to the VT
