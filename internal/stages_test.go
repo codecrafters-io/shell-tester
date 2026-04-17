@@ -104,6 +104,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/programmable_completion/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"autocompletion_tc_error_extra_completion_fail": {
+			StageSlugs:          []string{"qm8"},
+			CodePath:            "./test_helpers/scenarios/autocompletion_tc_error_extra_completion",
+			ExpectedExitCode:    1,
+			StdoutFixturePath:   "./test_helpers/fixtures/autocompletion_tc_error_extra_completion",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"programmable_completion_argv_incorrect": {
 			StageSlugs:          []string{"zi0"},
 			CodePath:            "./test_helpers/scenarios/programmable_completion_argv_incorrect",
