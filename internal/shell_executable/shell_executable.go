@@ -163,16 +163,25 @@ func (b *ShellExecutable) VTBellChannel() chan bool {
 func (b *ShellExecutable) ReadUntilConditionOrTimeout(condition func() bool, timeout time.Duration) error {
 	deadline := time.Now().Add(timeout)
 
+	if condition() {
+		return nil
+	}
+
 	for !time.Now().After(deadline) {
+
 		if b.relay.processExited() {
+			// Do one final condition check: the relay may have written data to the VT
+			// in the same PTY read that returned EOF/EIO, so the condition could be
+			// satisfied even though the process has now exited.
+			if condition() {
+				return nil
+			}
+
 			if isPtyTerminalError(b.relay.terminalErr) {
 				return ErrProgramExited
 			}
-			return b.relay.terminalErr
-		}
 
-		if condition() {
-			return nil
+			return b.relay.terminalErr
 		}
 
 		time.Sleep(2 * time.Millisecond)
