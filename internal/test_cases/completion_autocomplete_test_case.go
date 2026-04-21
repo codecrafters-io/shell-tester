@@ -2,6 +2,7 @@ package test_cases
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/codecrafters-io/shell-tester/internal/assertions"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
@@ -72,6 +73,10 @@ func (t AutocompleteTestCase) Run(asserter *logged_shell_asserter.LoggedShellAss
 	if err := shell.SendText("\t"); err != nil {
 		return fmt.Errorf("Error sending text to shell: %v", err)
 	}
+
+	// Sleep after sending tab so the changes are written to the virtual terminal
+	// before the next assertion is run
+	time.Sleep(10 * time.Millisecond)
 
 	// Assert auto-completion
 	asserter.AddAssertion(t.getAssertionAfterTabPress())
