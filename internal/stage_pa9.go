@@ -39,7 +39,7 @@ func testPA9(stageHarness *test_case_harness.TestCaseHarness) error {
 					Argv2: argv2,
 					Argv3: argv3,
 				},
-				ExpectedEnvVars: &completer_configuration.CompleterConfigurationEnvVars{
+				ExpectedEnvVars: &completer_configuration.CompleterConfigurationExpectedEnvVars{
 					CompLine:  compLineEnvVar,
 					CompPoint: strconv.Itoa(len(compLineEnvVar)),
 				},
@@ -116,6 +116,7 @@ func testPA9(stageHarness *test_case_harness.TestCaseHarness) error {
 		SuccessMessage:          "✓ Received all partial completions",
 		SkipPromptAssertion:     true,
 	}).Run(asserter, shell, logger); err != nil {
+		completer_configuration.LogCompleterErrors(logger, secret)
 		return err
 	}
 

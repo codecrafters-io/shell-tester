@@ -9,6 +9,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
+	"github.com/codecrafters-io/tester-utils/random"
 	"github.com/codecrafters-io/tester-utils/test_case_harness"
 )
 
@@ -22,13 +23,27 @@ func testPA4(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	completerPath := path.Join(completerDir, "noCandidatesCompleter")
+	singleCompleterPath := path.Join(completerDir, "singleCompleter")
+
+	type commandAndCompletionsSpecification struct {
+		command     string
+		completions []string
+	}
+
+	completionSpecifications := []commandAndCompletionsSpecification{
+		{command: "git", completions: []string{"clone", "add", "commit", "push"}},
+		{command: "docker", completions: []string{"run", "ps", "exec", "build"}},
+	}
+
+	chosenSpecification := random.RandomElementFromArray(completionSpecifications)
+	command := chosenSpecification.command
+	completion := random.RandomElementFromArray(chosenSpecification.completions)
 
 	if err := (&custom_executable.CompleterExecutableSpecification{
-		Path:        completerPath,
+		Path:        singleCompleterPath,
 		SecretValue: getRandomString(),
 		CompleterConfiguration: completer_configuration.CompleterConfiguration{
-			OutputLines: []string{},
+			OutputLines: []string{completion},
 		},
 	}).Create(); err != nil {
 		return err
@@ -38,8 +53,7 @@ func testPA4(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	command := "git"
-	registerCmd := fmt.Sprintf("complete -C %s %s", completerPath, command)
+	registerCmd := fmt.Sprintf("complete -C %s %s", singleCompleterPath, command)
 	registerTestCase := test_cases.CommandWithNoResponseTestCase{
 		Command:        registerCmd,
 		SuccessMessage: "✓ Registered command-based completion",
@@ -49,9 +63,8 @@ func testPA4(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	autocompleteTestCase := test_cases.AutocompleteTestCase{
-		RawInput:            command + " xyz",
-		ExpectedCompletion:  command + " xyz",
-		CheckForBell:        true,
+		RawInput:            command + " ",
+		ExpectedCompletion:  fmt.Sprintf("%s %s ", command, completion),
 		SkipPromptAssertion: true,
 	}
 

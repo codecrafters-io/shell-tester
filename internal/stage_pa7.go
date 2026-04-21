@@ -42,9 +42,10 @@ func testPA7(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	completerPath := path.Join(completerDir, "gitStashCompleter")
 
+	secretValue := getRandomString()
 	if err := (&custom_executable.CompleterExecutableSpecification{
 		Path:        completerPath,
-		SecretValue: getRandomString(),
+		SecretValue: secretValue,
 		CompleterConfiguration: completer_configuration.CompleterConfiguration{
 			OutputLines: []string{choice.complete},
 			ExpectedArguments: &completer_configuration.CompleterConfigurationExpectedArguments{
@@ -52,7 +53,7 @@ func testPA7(stageHarness *test_case_harness.TestCaseHarness) error {
 				Argv2: choice.partial,
 				Argv3: subCommand,
 			},
-			ExpectedEnvVars: &completer_configuration.CompleterConfigurationEnvVars{
+			ExpectedEnvVars: &completer_configuration.CompleterConfigurationExpectedEnvVars{
 				CompLine:  compLineEnvVar,
 				CompPoint: strconv.Itoa(len(compLineEnvVar)),
 			},
@@ -79,7 +80,9 @@ func testPA7(stageHarness *test_case_harness.TestCaseHarness) error {
 		ExpectedCompletion:  expectedCompletion,
 		SkipPromptAssertion: true,
 	}
+
 	if err := autocompleteTestCase.Run(asserter, shell, logger); err != nil {
+		completer_configuration.LogCompleterErrors(logger, secretValue)
 		return err
 	}
 

@@ -2,10 +2,8 @@ package internal
 
 import (
 	"fmt"
-	"path"
+	"path/filepath"
 
-	custom_executable "github.com/codecrafters-io/shell-tester/internal/custom_executable/build"
-	"github.com/codecrafters-io/shell-tester/internal/custom_executable/completer/completer_configuration"
 	"github.com/codecrafters-io/shell-tester/internal/logged_shell_asserter"
 	"github.com/codecrafters-io/shell-tester/internal/shell_executable"
 	"github.com/codecrafters-io/shell-tester/internal/test_cases"
@@ -18,47 +16,46 @@ func testPA3(stageHarness *test_case_harness.TestCaseHarness) error {
 	shell := shell_executable.NewShellExecutable(stageHarness)
 	asserter := logged_shell_asserter.NewLoggedShellAsserter(shell)
 
-	completerDir, err := CreateShortRandomDirInTmp(stageHarness)
-	if err != nil {
-		return err
-	}
-
-	singleCompleterPath := path.Join(completerDir, "singleCompleter")
-
-	completionSubcommand := random.RandomElementFromArray(
-		[]string{"clone", "add", "commit", "push"},
-	)
-
-	if err := (&custom_executable.CompleterExecutableSpecification{
-		Path:        singleCompleterPath,
-		SecretValue: getRandomString(),
-		CompleterConfiguration: completer_configuration.CompleterConfiguration{
-			OutputLines: []string{completionSubcommand},
-		},
-	}).Create(); err != nil {
-		return err
-	}
-
 	if err := asserter.StartShellAndAssertPrompt(true); err != nil {
 		return err
 	}
 
-	registerCmd := fmt.Sprintf("complete -C %s git", singleCompleterPath)
-	registerTestCase := test_cases.CommandWithNoResponseTestCase{
-		Command:        registerCmd,
-		SuccessMessage: "✓ Registered command-based completion",
+	// Scripts need not exist; paths must differ (two random basenames under /tmp).
+	words := random.RandomWords(2)
+	gitCompleterPath := filepath.Join("/tmp", fmt.Sprintf("%s.py", words[0]))
+	dockerCompleterPath := filepath.Join("/tmp", fmt.Sprintf("%s.py", words[1]))
+
+	registerGitTestCase := test_cases.CommandWithNoResponseTestCase{
+		Command:        fmt.Sprintf("complete  -C  '%s'  git", gitCompleterPath),
+		SuccessMessage: "✓ No output found",
 	}
-	if err := registerTestCase.Run(asserter, shell, logger, false); err != nil {
+	if err := registerGitTestCase.Run(asserter, shell, logger, false); err != nil {
 		return err
 	}
 
-	autocompleteTestCase := test_cases.AutocompleteTestCase{
-		RawInput:            "git ",
-		ExpectedCompletion:  fmt.Sprintf("git %s ", completionSubcommand),
-		SkipPromptAssertion: true,
+	registerDockerTestCase := test_cases.CommandWithNoResponseTestCase{
+		Command:        fmt.Sprintf("complete  -C  '%s'  docker", dockerCompleterPath),
+		SuccessMessage: "✓ No output found",
+	}
+	if err := registerDockerTestCase.Run(asserter, shell, logger, false); err != nil {
+		return err
 	}
 
-	if err := autocompleteTestCase.Run(asserter, shell, logger); err != nil {
+	printGitSpecTestCase := test_cases.CommandResponseTestCase{
+		Command:        "complete -p git",
+		ExpectedOutput: fmt.Sprintf("complete -C '%s' git", gitCompleterPath),
+		SuccessMessage: "✓ Registered git completion found in normalized form",
+	}
+	if err := printGitSpecTestCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	printDockerSpecTestCase := test_cases.CommandResponseTestCase{
+		Command:        "complete -p docker",
+		ExpectedOutput: fmt.Sprintf("complete -C '%s' docker", dockerCompleterPath),
+		SuccessMessage: "✓ Registered docker completion found in normalized form",
+	}
+	if err := printDockerSpecTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
