@@ -97,7 +97,7 @@ func testR4(stageHarness *test_case_harness.TestCaseHarness) error {
 	// cat tmp.md
 
 	message := fmt.Sprintf("%s says Error", getRandomName())
-	command4 := fmt.Sprintf(`echo "%s" 2>> %s`, message, outputFilePath3)
+	command4 := fmt.Sprintf(`echo %s 2>> %s`, message, outputFilePath3)
 	command5 := fmt.Sprintf(`%s %s 2>> %s`, CUSTOM_CAT_COMMAND, "nonexistent", outputFilePath3)
 	command6 := fmt.Sprintf("%s -1 %s 2>> %s", CUSTOM_LS_COMMAND, "nonexistent", outputFilePath3)
 	command7 := fmt.Sprintf("%s %s", CUSTOM_CAT_COMMAND, outputFilePath3)
