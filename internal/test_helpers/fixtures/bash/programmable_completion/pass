@@ -18,9 +18,9 @@ Debug = true
 
 [33m[tester::#WL6] [0m[94mRunning tests for Stage #WL6 (wl6)[0m
 [33m[tester::#WL6] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m[0m$ complete  -C  '/tmp/blueberry.py'  git[0m
+[33m[your-program] [0m[0m$ complete  -C  /tmp/blueberry.py  git[0m
 [33m[tester::#WL6] [0m[92m✓ No output found[0m
-[33m[your-program] [0m[0m$ complete  -C  '/tmp/mango.py'  docker[0m
+[33m[your-program] [0m[0m$ complete  -C  /tmp/mango.py  docker[0m
 [33m[tester::#WL6] [0m[92m✓ No output found[0m
 [33m[your-program] [0m[0m$ complete -p git[0m
 [33m[your-program] [0m[0mcomplete -C '/tmp/blueberry.py' git[0m
@@ -110,7 +110,7 @@ Debug = true
 
 [33m[tester::#TZ2] [0m[94mRunning tests for Stage #TZ2 (tz2)[0m
 [33m[tester::#TZ2] [0m[94mRunning ./your_shell.sh[0m
-[33m[your-program] [0m[0m$ complete  -C  '/tmp/ant/singleCompleter'  git[0m
+[33m[your-program] [0m[0m$ complete  -C  /tmp/ant/singleCompleter  git[0m
 [33m[tester::#TZ2] [0m[92m✓ Registered command-based completion[0m
 [33m[your-program] [0m[0m$ complete -r git[0m
 [33m[tester::#TZ2] [0m[92m✓ No output from complete -r[0m

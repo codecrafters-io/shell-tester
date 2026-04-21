@@ -61,7 +61,7 @@ func testPA10(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	registerCmd := fmt.Sprintf("complete  -C  '%s'  %s", completerPath, commandName)
+	registerCmd := fmt.Sprintf("complete  -C  %s  %s", completerPath, commandName)
 
 	if err := (test_cases.CommandWithNoResponseTestCase{
 		Command:        registerCmd,
