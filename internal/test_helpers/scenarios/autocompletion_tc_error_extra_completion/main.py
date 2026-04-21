@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """
 Buggy shell scenario: passes A1 (qp2) and A2 (gm9) autocompletion stages,
-fails A3 (qm8) by appending "_foo" to "xyz" on TAB instead of ringing the bell.
+fails A3 (qm8).
 
-A correct shell receiving TAB on "xyz" (an unrecognised command with no completions)
-should ring the bell and leave the line unchanged. This shell instead returns "xyz_foo"
-as a completion, so readline rewrites the line to "xyz_foo" and never rings the bell.
+On TAB after "xyz" it rings the bell (correct) but also rewrites the line to
+"xyz_foo" (incorrect — the line should be left unchanged).
 """
 
 from __future__ import annotations
@@ -32,17 +31,15 @@ BUILTIN_COMPLETIONS: dict[str, str] = {
 
 
 def _tab_completer(text: str, state: int) -> str | None:
-    """
-    readline completer. Called with state=0, 1, 2, ... until we return None.
-
-    Bug: when text is "xyz" we return "xyz_foo" at state=0 instead of returning
-    None (which would make readline ring the bell and leave the line unchanged).
-    """
+    """readline completer. Called with state=0, 1, 2, ... until we return None."""
     if state != 0:
         return None
 
-    # Bug: pretend "xyz" has a completion so readline rewrites the line and skips the bell.
+    # Bug: ring the bell but still rewrite the line to "xyz_foo" instead of
+    # leaving it unchanged.
     if text == "xyz":
+        sys.stdout.write("\x07")
+        sys.stdout.flush()
         return "xyz_foo"
 
     matches = [v for k, v in BUILTIN_COMPLETIONS.items() if k.startswith(text)]
