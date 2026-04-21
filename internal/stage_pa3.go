@@ -26,7 +26,7 @@ func testPA3(stageHarness *test_case_harness.TestCaseHarness) error {
 	dockerCompleterPath := filepath.Join("/tmp", fmt.Sprintf("%s.py", words[1]))
 
 	registerGitTestCase := test_cases.CommandWithNoResponseTestCase{
-		Command:        fmt.Sprintf("complete  -C  '%s'  git", gitCompleterPath),
+		Command:        fmt.Sprintf("complete  -C  %s  git", gitCompleterPath),
 		SuccessMessage: "✓ No output found",
 	}
 	if err := registerGitTestCase.Run(asserter, shell, logger, false); err != nil {
@@ -34,7 +34,7 @@ func testPA3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	registerDockerTestCase := test_cases.CommandWithNoResponseTestCase{
-		Command:        fmt.Sprintf("complete  -C  '%s'  docker", dockerCompleterPath),
+		Command:        fmt.Sprintf("complete  -C  %s  docker", dockerCompleterPath),
 		SuccessMessage: "✓ No output found",
 	}
 	if err := registerDockerTestCase.Run(asserter, shell, logger, false); err != nil {

@@ -12,7 +12,7 @@ Debug = true
 [33m[tester::#NR7] [0m[91m[32mExpected:[0m "$ git stash clear "[0m
 [33m[tester::#NR7] [0m[91m[31mReceived:[0m "$ git stash cle" [31m(no trailing space)[0m[0m
 [33m[tester::#NR7] [0m[94mErrors from the completer script:[0m
-[33m[tester::#NR7] [0m[92m✓ Arguments are of length 4[0m
+[33m[tester::#NR7] [0m[92m✓ Arguments are of length 4 (including program name)[0m
 [33m[tester::#NR7] [0m[92m✓ Expected value of argv[1] found[0m
 [33m[tester::#NR7] [0m[92m✓ Expected value of argv[2] found[0m
 [33m[tester::#NR7] [0m[92m✓ Expected value of argv[3] found[0m
