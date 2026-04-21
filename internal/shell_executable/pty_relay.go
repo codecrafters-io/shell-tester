@@ -16,7 +16,7 @@ const ptyReadBufferSize = 4096
 //  2. It keeps the virtual terminal up-to-date so assertion polling always sees current screen state.
 //
 // The relay runs in a dedicated goroutine. When the PTY signals EOF or EIO (process exited),
-// the relay stores the terminal error and closes relayExited, which callers can select on.
+// the relay stores the terminal error and closes relayExited, which caller can select on.
 type ptyRelay struct {
 	ptyFile         *os.File
 	virtualTerminal io.Writer
@@ -25,8 +25,6 @@ type ptyRelay struct {
 	relayExited chan bool
 
 	// terminalErr holds the error that caused the relay to stop.
-	// It is written exactly once before relayExited is closed, so readers
-	// that receive from relayExited can safely read terminalErr without a mutex.
 	terminalErr error
 }
 
