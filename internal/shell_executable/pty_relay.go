@@ -52,7 +52,7 @@ func (r *ptyRelay) run() {
 		if bytesRead > 0 {
 			// Write to the virtual terminal before handling the error, because on some
 			// platforms (Linux) the final data arrives in the same call that returns EIO.
-			r.virtualTerminal.Write(buf[:bytesRead]) //nolint:errcheck
+			r.virtualTerminal.Write(buf[:bytesRead])
 		}
 
 		if readErr != nil {
