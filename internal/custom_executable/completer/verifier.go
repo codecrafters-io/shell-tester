@@ -98,7 +98,7 @@ func (v *verifier) emitArgvVerificationErrorReport() {
 		))
 		return
 	}
-	v.logSuccess("Arguments are of length 4")
+	v.logSuccess("Arguments are of length 4 (including program name)")
 
 	argv1, argv2, argv3 := os.Args[1], os.Args[2], os.Args[3]
 
