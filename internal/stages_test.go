@@ -216,6 +216,13 @@ func TestStages(t *testing.T) {
 			StdoutFixturePath:   "./test_helpers/fixtures/bash/history_persistence/pass",
 			NormalizeOutputFunc: normalizeTesterOutput,
 		},
+		"parameter_expansion_pass_bash": {
+			StageSlugs:          []string{"ji0", "oa2", "kv5", "db8", "ge9", "br2", "my0"},
+			CodePath:            "./test_helpers/bash",
+			ExpectedExitCode:    0,
+			StdoutFixturePath:   "./test_helpers/fixtures/bash/parameter_expansion/pass",
+			NormalizeOutputFunc: normalizeTesterOutput,
+		},
 		"base_pass_ash": {
 			UntilStageSlug:      "ip1",
 			CodePath:            "./test_helpers/ash",

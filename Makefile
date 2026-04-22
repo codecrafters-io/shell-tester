@@ -243,6 +243,18 @@ define _HISTORY_PERSISTENCE_STAGES
 ]
 endef
 
+define _PARAMETER_EXPANSION_STAGES
+[ \
+	{"slug":"ji0","tester_log_prefix":"tester::#ji0","title":"Stage#1: The declare builtin"}, \
+	{"slug":"oa2","tester_log_prefix":"tester::#oa2","title":"Stage#2: Printing non-existing variables"}, \
+	{"slug":"kv5","tester_log_prefix":"tester::#kv5","title":"Stage#3: Storing shell variables"}, \
+	{"slug":"db8","tester_log_prefix":"tester::#db8","title":"Stage#4: Validating shell variable names"}, \
+	{"slug":"ge9","tester_log_prefix":"tester::#ge9","title":"Stage#5: Expanding variables"}, \
+	{"slug":"br2","tester_log_prefix":"tester::#br2","title":"Stage#6: Expansion with braces"}, \
+	{"slug":"my0","tester_log_prefix":"tester::#my0","title":"Stage#7: Expansion when a name is unset"} \
+]
+endef
+
 # Use eval to properly escape the stage arrays
 define quote_strings
 	$(shell echo '$(1)' | sed 's/"/\\"/g')
@@ -275,6 +287,7 @@ HISTORY_STAGES = $(call quote_strings,$(_HISTORY_STAGES))
 HISTORY_STAGES_ZSH = $(call quote_strings,$(_HISTORY_STAGES_ZSH))
 HISTORY_STAGES_ASH = $(call quote_strings,$(_HISTORY_STAGES_ASH))
 HISTORY_PERSISTENCE_STAGES = $(call quote_strings,$(_HISTORY_PERSISTENCE_STAGES))
+PARAMETER_EXPANSION_STAGES = $(call quote_strings,$(_PARAMETER_EXPANSION_STAGES))
 
 test_base_w_ash: build
 	$(call run_test,$(BASE_STAGES),ash)
@@ -363,6 +376,12 @@ test_history_w_ash: build
 test_history_persistence_w_bash: build
 	$(call run_test,$(HISTORY_PERSISTENCE_STAGES),bash)
 
+test_parameter_expansion_w_bash: build
+	$(call run_test,$(PARAMETER_EXPANSION_STAGES),bash)
+
+test_parameter_expansion_w_zsh: build
+	$(call run_test,$(PARAMETER_EXPANSION_STAGES),zsh)
+
 test_ash:
 	make test_base_w_ash
 	make test_nav_w_ash
@@ -383,6 +402,7 @@ test_bash:
 	make test_background_jobs_w_bash
 	make test_history_w_bash
 	make test_history_persistence_w_bash
+	make test_parameter_expansion_w_bash
 
 # Doesn't support completions, history
 test_dash:
@@ -400,6 +420,7 @@ test_zsh:
 	make test_completions_w_zsh
 	make test_filename_completion_w_zsh
 	make test_history_w_zsh
+	make test_parameter_expansion_w_zsh
 
 # Clone the repo in `debug` directory
 test_debug: build

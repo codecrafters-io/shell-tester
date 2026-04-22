@@ -11,14 +11,20 @@ import (
 )
 
 type TypeOfCommandTestCase struct {
-	Command string
+	Command                    string
+	IsCommandAlsoAReservedWord bool
 }
 
 func (t *TypeOfCommandTestCase) RunForBuiltin(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
+	fallbackPatterns := []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^%s is a( special)? shell builtin$`, t.Command))}
+	if t.IsCommandAlsoAReservedWord {
+		fallbackPatterns = append(fallbackPatterns, regexp.MustCompile(fmt.Sprintf(`^%s is a reserved word$`, t.Command)))
+	}
+
 	testCase := CommandResponseTestCase{
 		Command:          fmt.Sprintf("type %s", t.Command),
 		ExpectedOutput:   fmt.Sprintf(`%s is a shell builtin`, t.Command),
-		FallbackPatterns: []*regexp.Regexp{regexp.MustCompile(fmt.Sprintf(`^%s is a( special)? shell builtin$`, t.Command))},
+		FallbackPatterns: fallbackPatterns,
 		SuccessMessage:   "✓ Received expected response",
 	}
 
