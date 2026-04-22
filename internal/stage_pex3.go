@@ -17,31 +17,34 @@ func testPEX3(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	words := random.RandomWords(2)
+	words := random.RandomWords(3)
 	variableName := words[0]
 	variableValue := words[1]
+	newVariableValue := words[2]
 
-	assignTestCase := test_cases.DeclareAssignmentTestCase{
-		Variable: variableName,
-		Value:    variableValue,
-	}
+	assignTestCase := test_cases.DeclareAssignmentTestCase{Variable: variableName, Value: variableValue}
 	if err := assignTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
-	printTestCase := test_cases.DeclarePrintTestCase{
-		Variable: variableName,
-		Value:    variableValue,
-	}
+	printTestCase := test_cases.DeclarePrintTestCase{Variable: variableName, Value: variableValue}
 	if err := printTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
 	missingVariable := "missing_" + random.RandomWords(1)[0]
-	printErrorTestCase := test_cases.DeclarePrintErrorTestCase{
-		Variable: missingVariable,
-	}
+	printErrorTestCase := test_cases.DeclarePrintErrorTestCase{Variable: missingVariable}
 	if err := printErrorTestCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	reassignTestCase := test_cases.DeclareAssignmentTestCase{Variable: variableName, Value: newVariableValue}
+	if err := reassignTestCase.Run(asserter, shell, logger); err != nil {
+		return err
+	}
+
+	printNewValueTestCase := test_cases.DeclarePrintTestCase{Variable: variableName, Value: newVariableValue}
+	if err := printNewValueTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 

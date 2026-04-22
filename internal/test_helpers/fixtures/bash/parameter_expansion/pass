@@ -26,6 +26,11 @@ Debug = true
 [33m[your-program] [0m[0m$ declare -p missing_pineapple[0m
 [33m[your-program] [0m[0mbash: declare: missing_pineapple: not found[0m
 [33m[tester::#KV5] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ declare orange=grape[0m
+[33m[tester::#KV5] [0m[92m✓ Received expected response[0m
+[33m[your-program] [0m[0m$ declare -p orange[0m
+[33m[your-program] [0m[0mdeclare -- orange="grape"[0m
+[33m[tester::#KV5] [0m[92m✓ Received expected response[0m
 [33m[your-program] [0m[0m$ [0m
 [33m[tester::#KV5] [0m[92mTest passed.[0m
 
