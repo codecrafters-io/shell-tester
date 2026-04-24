@@ -43,7 +43,7 @@ func (t DeclareAssignmentTestCase) Run(asserter *logged_shell_asserter.LoggedShe
 			// zsh uses "not an identifier" for names starting with a digit
 			regexp.MustCompile(fmt.Sprintf(`^declare: not an identifier: %s$`, regexp.QuoteMeta(t.Variable))),
 			// zsh uses "not valid in this context"
-			// for names with valid starting character but invalid characters in the middle
+			// for names with valid starting character but with invalid characters in the middle
 			regexp.MustCompile(fmt.Sprintf(`^declare: not valid in this context: %s$`, regexp.QuoteMeta(t.Variable))),
 		},
 		SuccessMessage: "✓ Received expected response",
