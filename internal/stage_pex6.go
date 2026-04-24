@@ -33,8 +33,7 @@ func testPEX6(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	// Declare two variables with valid names and random values
-	words := random.RandomWords(6)
+	words := random.RandomWords(7)
 	integerSuffixes := random.RandomInts(1, 10, 2)
 	variableName1 := fmt.Sprintf(
 		"%s_%d",
@@ -50,22 +49,26 @@ func testPEX6(stageHarness *test_case_harness.TestCaseHarness) error {
 	variableValue2 := words[3]
 	literalPrefix := words[4]
 	literalSuffix := words[5]
+	literalSuffix2 := words[6]
 
-	if err := (test_cases.DeclareAssignmentTestCase{Variable: variableName1, Value: variableValue1}).Run(asserter, shell, logger); err != nil {
+	assignVar1 := test_cases.DeclareAssignmentTestCase{Variable: variableName1, Value: variableValue1}
+	if err := assignVar1.Run(asserter, shell, logger); err != nil {
 		return err
 	}
-	if err := (test_cases.DeclareAssignmentTestCase{Variable: variableName2, Value: variableValue2}).Run(asserter, shell, logger); err != nil {
+	assignVar2 := test_cases.DeclareAssignmentTestCase{Variable: variableName2, Value: variableValue2}
+	if err := assignVar2.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
-	// Run the executable with ${VAR1} embedded between random literal prefix/suffix,
-	// and ${VAR2} as a standalone brace-expansion argument.
+	// Run the executable with:
+	//   prefix_${VAR1}_suffix  — braces in the middle of a word
+	//   ${VAR2}_literal        — braces at the start of a word
 	argument1 := fmt.Sprintf("%s_${%s}_%s", literalPrefix, variableName1, literalSuffix)
-	argument2 := fmt.Sprintf("${%s}", variableName2)
+	argument2 := fmt.Sprintf("${%s}_%s", variableName2, literalSuffix2)
 	command := fmt.Sprintf("%s %s %s", executableName, argument1, argument2)
 
 	expectedArgument1 := fmt.Sprintf("%s_%s_%s", literalPrefix, variableValue1, literalSuffix)
-	expectedArgument2 := variableValue2
+	expectedArgument2 := fmt.Sprintf("%s_%s", variableValue2, literalSuffix2)
 
 	expectedLines := []string{
 		"Program was passed 3 args (including program name).",
@@ -75,12 +78,12 @@ func testPEX6(stageHarness *test_case_harness.TestCaseHarness) error {
 		fmt.Sprintf("Program Signature: %s", commandMetadata),
 	}
 
-	testCase := test_cases.CommandWithMultilineResponseTestCase{
+	bracedExpansionCall := test_cases.CommandWithMultilineResponseTestCase{
 		Command:            command,
 		MultiLineAssertion: assertions.NewMultiLineAssertion(expectedLines),
 		SuccessMessage:     "✓ Received expected response",
 	}
-	if err := testCase.Run(asserter, shell, logger); err != nil {
+	if err := bracedExpansionCall.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 

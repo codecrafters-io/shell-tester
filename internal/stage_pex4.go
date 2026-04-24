@@ -19,27 +19,33 @@ func testPEX4(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	words := random.RandomWords(4)
+	words := random.RandomWords(6)
 
-	// Valid assignment: underscore-prefixed name
+	// Valid assignment: name starting with an underscore
 	validVariable := "_" + words[0]
 	validVariableValue := words[1]
-	if err := (test_cases.DeclareAssignmentTestCase{Variable: validVariable, Value: validVariableValue}).Run(asserter, shell, logger); err != nil {
+	underscorePrefixedAssignment := test_cases.DeclareAssignmentTestCase{Variable: validVariable, Value: validVariableValue}
+	if err := underscorePrefixedAssignment.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
 	// Invalid assignment: name starting with a digit
-	invalidVariable := fmt.Sprintf("%d%s", random.RandomInt(2, 9), words[2])
+	invalidDigitPrefixedVariable := fmt.Sprintf("%d%s", random.RandomInt(2, 9), words[2])
 	invalidVariableValue := words[3]
-	if err := (test_cases.DeclareAssignmentTestCase{Variable: invalidVariable, Value: invalidVariableValue}).Run(asserter, shell, logger); err != nil {
+	digitPrefixedAssignment := test_cases.DeclareAssignmentTestCase{Variable: invalidDigitPrefixedVariable, Value: invalidVariableValue}
+	if err := digitPrefixedAssignment.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
-	if err := (test_cases.DeclarePrintTestCase{Variable: validVariable, Value: validVariableValue}).Run(asserter, shell, logger); err != nil {
+	// Invalid assignment: name with a hyphen in the middle
+	hyphenInMiddleVariable := words[4] + "-" + words[5]
+	hyphenInMiddleAssignment := test_cases.DeclareAssignmentTestCase{Variable: hyphenInMiddleVariable, Value: validVariableValue}
+	if err := hyphenInMiddleAssignment.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
-	if err := (test_cases.DeclarePrintErrorTestCase{Variable: invalidVariable}).Run(asserter, shell, logger); err != nil {
+	printValidVariable := test_cases.DeclarePrintTestCase{Variable: validVariable, Value: validVariableValue}
+	if err := printValidVariable.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 

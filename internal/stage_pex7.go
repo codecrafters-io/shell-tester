@@ -32,33 +32,41 @@ func testPEX7(stageHarness *test_case_harness.TestCaseHarness) error {
 		return err
 	}
 
-	existingValue := random.RandomWords(1)[0]
-	if err := (test_cases.DeclareAssignmentTestCase{Variable: "existing", Value: existingValue}).Run(asserter, shell, logger); err != nil {
+	words := random.RandomWords(2)
+	variableName := words[0]
+	variableValue := words[1]
+
+	assignVariable := test_cases.DeclareAssignmentTestCase{Variable: variableName, Value: variableValue}
+	if err := assignVariable.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
-	integerSuffixes := random.RandomInts(1, 99, 2)
+	integerSuffixes := random.RandomInts(0, 10, 3)
+
 	command := fmt.Sprintf(
-		"%s ${missing_var_%d}_suffix ${existing} ${missing_var_%d}",
+		"%s ${missing_var_%d}_suffix ${%s} ${missing_var_%d} $missing_var_%d",
 		executableName,
 		integerSuffixes[0],
+		variableName,
 		integerSuffixes[1],
+		integerSuffixes[2],
 	)
 
 	expectedLines := []string{
 		"Program was passed 3 args (including program name).",
 		fmt.Sprintf("Arg #0 (program name): %s", executableName),
 		"Arg #1: _suffix",
-		fmt.Sprintf("Arg #2: %s", existingValue),
+		fmt.Sprintf("Arg #2: %s", variableValue),
 		fmt.Sprintf("Program Signature: %s", commandMetadata),
 	}
 
-	testCase := test_cases.CommandWithMultilineResponseTestCase{
+	missingVarExpansionCall := test_cases.CommandWithMultilineResponseTestCase{
 		Command:            command,
 		MultiLineAssertion: assertions.NewMultiLineAssertion(expectedLines),
 		SuccessMessage:     "✓ Received expected response",
 	}
-	if err := testCase.Run(asserter, shell, logger); err != nil {
+
+	if err := missingVarExpansionCall.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 

@@ -21,7 +21,7 @@ func testPEX2(stageHarness *test_case_harness.TestCaseHarness) error {
 
 	missingVariable := "missing_variable_" + strconv.Itoa(random.RandomInt(1, 100))
 
-	testCase := test_cases.DeclarePrintErrorTestCase{
+	testCase := test_cases.DeclarePrintMissingVariableTestCase{
 		Variable: missingVariable,
 	}
 
