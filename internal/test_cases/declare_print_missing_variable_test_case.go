@@ -22,7 +22,7 @@ func (t DeclarePrintMissingVariableTestCase) Run(asserter *logged_shell_asserter
 	}
 
 	if !isValidIdentifier(t.Variable) {
-		panic(fmt.Sprintf("Codecrafters Internal Error - DeclarePrintErrorTestCase called on invalid identifier %s", t.Variable))
+		panic(fmt.Sprintf("Codecrafters Internal Error - DeclarePrintMissingVariableTestCase called on invalid identifier %s", t.Variable))
 	}
 
 	testCase := CommandResponseTestCase{
