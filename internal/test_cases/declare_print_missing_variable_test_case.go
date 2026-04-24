@@ -9,21 +9,20 @@ import (
 	"github.com/codecrafters-io/tester-utils/logger"
 )
 
-// DeclarePrintErrorTestCase tests `declare -p VAR` when the variable does not exist.
+// DeclarePrintMissingVariableTestCase tests `declare -p VAR` when the variable does not exist.
 // Expected output: declare: VAR: not found
-type DeclarePrintErrorTestCase struct {
+type DeclarePrintMissingVariableTestCase struct {
 	Variable string
 }
 
-func (t DeclarePrintErrorTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
+func (t DeclarePrintMissingVariableTestCase) Run(asserter *logged_shell_asserter.LoggedShellAsserter, shell *shell_executable.ShellExecutable, logger *logger.Logger) error {
 	fallbackPatterns := []*regexp.Regexp{
 		regexp.MustCompile(fmt.Sprintf(`^bash: declare: %s: not found$`, regexp.QuoteMeta(t.Variable))),
 		regexp.MustCompile(fmt.Sprintf(`^declare: no such variable: %s$`, regexp.QuoteMeta(t.Variable))),
 	}
 
 	if !isValidIdentifier(t.Variable) {
-		// zsh rejects invalid identifiers passed to -p
-		fallbackPatterns = append(fallbackPatterns, regexp.MustCompile(fmt.Sprintf(`^declare: bad argument to -p: %s$`, regexp.QuoteMeta(t.Variable))))
+		panic(fmt.Sprintf("Codecrafters Internal Error - DeclarePrintMissingVariableTestCase called on invalid identifier %s", t.Variable))
 	}
 
 	testCase := CommandResponseTestCase{

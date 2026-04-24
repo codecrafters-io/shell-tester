@@ -34,8 +34,8 @@ func testPEX5(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	// Declare two variables with valid names and random values
-	words := random.RandomWords(4)
-	integerSuffixes := random.RandomInts(1, 10, 2)
+	words := random.RandomWords(5)
+	integerSuffixes := random.RandomInts(0, 10, 2)
 	variableName1 := fmt.Sprintf(
 		"%s_%d",
 		strings.ToUpper(words[0][:1])+words[0][1:],
@@ -46,32 +46,38 @@ func testPEX5(stageHarness *test_case_harness.TestCaseHarness) error {
 		strings.ToUpper(words[1][:1])+words[1][1:],
 		integerSuffixes[1],
 	)
-	varValue1 := words[2]
-	varValue2 := words[3]
+	variableValue1 := words[2]
+	variableValue2 := words[3]
+	literalPrefix := words[4]
 
-	if err := (test_cases.DeclareAssignmentTestCase{Variable: variableName1, Value: varValue1}).Run(asserter, shell, logger); err != nil {
+	assignVariable1 := test_cases.DeclareAssignmentTestCase{Variable: variableName1, Value: variableValue1}
+	if err := assignVariable1.Run(asserter, shell, logger); err != nil {
 		return err
 	}
-	if err := (test_cases.DeclareAssignmentTestCase{Variable: variableName2, Value: varValue2}).Run(asserter, shell, logger); err != nil {
+
+	assignVariable2 := test_cases.DeclareAssignmentTestCase{Variable: variableName2, Value: variableValue2}
+	if err := assignVariable2.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
-	// Run the executable with $VAR1 $VAR2 — shell must expand before passing args
-	command := fmt.Sprintf("%s $%s $%s", executableName, variableName1, variableName2)
+	// Run the executable with:
+	//   $VAR1             — standalone expansion
+	//   literalPrefix_$VAR2 — expansion embedded mid-word (no braces)
+	command := fmt.Sprintf("%s $%s %s_$%s", executableName, variableName1, literalPrefix, variableName2)
 	expectedLines := []string{
 		"Program was passed 3 args (including program name).",
 		fmt.Sprintf("Arg #0 (program name): %s", executableName),
-		fmt.Sprintf("Arg #1: %s", varValue1),
-		fmt.Sprintf("Arg #2: %s", varValue2),
+		fmt.Sprintf("Arg #1: %s", variableValue1),
+		fmt.Sprintf("Arg #2: %s_%s", literalPrefix, variableValue2),
 		fmt.Sprintf("Program Signature: %s", commandMetadata),
 	}
 
-	testCase := test_cases.CommandWithMultilineResponseTestCase{
+	bareExpansionCall := test_cases.CommandWithMultilineResponseTestCase{
 		Command:            command,
 		MultiLineAssertion: assertions.NewMultiLineAssertion(expectedLines),
 		SuccessMessage:     "✓ Received expected response",
 	}
-	if err := testCase.Run(asserter, shell, logger); err != nil {
+	if err := bareExpansionCall.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 

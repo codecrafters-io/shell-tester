@@ -33,14 +33,18 @@ func (t DeclareAssignmentTestCase) Run(asserter *logged_shell_asserter.LoggedShe
 	}
 
 	expectedOutput := fmt.Sprintf("declare: `%s': not a valid identifier", assignment)
+
 	testCase := CommandResponseTestCase{
 		Command:        fmt.Sprintf("declare %s", assignment),
 		ExpectedOutput: expectedOutput,
 		FallbackPatterns: []*regexp.Regexp{
 			// bash prefixes with "bash: "
 			regexp.MustCompile(fmt.Sprintf("^bash: declare: `%s': not a valid identifier$", regexp.QuoteMeta(assignment))),
-			// zsh uses "not an identifier" phrasing
+			// zsh uses "not an identifier" for names starting with a digit
 			regexp.MustCompile(fmt.Sprintf(`^declare: not an identifier: %s$`, regexp.QuoteMeta(t.Variable))),
+			// zsh uses "not valid in this context"
+			// for names with valid starting character but with invalid characters in the middle
+			regexp.MustCompile(fmt.Sprintf(`^declare: not valid in this context: %s$`, regexp.QuoteMeta(t.Variable))),
 		},
 		SuccessMessage: "✓ Received expected response",
 	}

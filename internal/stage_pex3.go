@@ -33,8 +33,8 @@ func testPEX3(stageHarness *test_case_harness.TestCaseHarness) error {
 	}
 
 	missingVariable := "missing_" + random.RandomWords(1)[0]
-	printErrorTestCase := test_cases.DeclarePrintErrorTestCase{Variable: missingVariable}
-	if err := printErrorTestCase.Run(asserter, shell, logger); err != nil {
+	printMissingVariableTestCase := test_cases.DeclarePrintMissingVariableTestCase{Variable: missingVariable}
+	if err := printMissingVariableTestCase.Run(asserter, shell, logger); err != nil {
 		return err
 	}
 
