@@ -1,11 +1,14 @@
 package virtual_terminal
 
 import (
+	"sync"
+
 	"github.com/charmbracelet/x/vt"
 	"github.com/codecrafters-io/shell-tester/internal/screen_state"
 )
 
 type VirtualTerminal struct {
+	mu       sync.RWMutex
 	vt       *vt.Terminal
 	rows     int
 	cols     int
@@ -50,10 +53,15 @@ func (vt *VirtualTerminal) Write(p []byte) (n int, err error) {
 	if len(p) == 0 {
 		return 0, nil
 	}
+	vt.mu.Lock()
+	defer vt.mu.Unlock()
 	return vt.vt.Write(p)
 }
 
 func (vt *VirtualTerminal) GetScreenState() screen_state.ScreenState {
+	vt.mu.RLock()
+	defer vt.mu.RUnlock()
+
 	cellMatrix := make([][]string, vt.rows)
 
 	for i := 0; i < vt.rows; i++ {

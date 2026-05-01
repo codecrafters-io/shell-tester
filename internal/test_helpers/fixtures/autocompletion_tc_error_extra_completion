@@ -1,0 +1,13 @@
+Debug = true
+
+[33m[tester::#QM8] [0m[94mRunning tests for Stage #QM8 (qm8)[0m
+[33m[tester::#QM8] [0m[94mRunning ./your_program.sh[0m
+[33m[tester::#QM8] [0m[92m✓ Received prompt ($ )[0m
+[33m[tester::#QM8] [0m[94mTyped "xyz"[0m
+[33m[tester::#QM8] [0m[92m✓ Prompt line matches "$ xyz"[0m
+[33m[tester::#QM8] [0m[94mPressed "<TAB>" (expecting autocomplete to "xyz")[0m
+[33m[your-program] [0m[0m$ xyz_foo[0m
+[33m[tester::#QM8] [0m[91m^ Line does not match expected value.[0m
+[33m[tester::#QM8] [0m[91m[32mExpected:[0m "$ xyz"[0m
+[33m[tester::#QM8] [0m[91m[31mReceived:[0m "$ xyz_foo"[0m
+[33m[tester::#QM8] [0m[91mTest failed[0m
