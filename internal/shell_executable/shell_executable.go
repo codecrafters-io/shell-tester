@@ -157,7 +157,7 @@ func (b *ShellExecutable) VTBellChannel() chan bool {
 // ReadUntilConditionOrTimeout polls the virtual terminal screen state until the condition
 // returns true, or the timeout elapses, or the child process exits.
 //
-// The pump goroutine continuously streams PTY output into the virtual terminal, so each
+// The ptyRelay.run() goroutine inside ptyRelay.start() continuously streams PTY output into the virtual terminal, so each
 // call to condition() always sees the most current screen state without needing to read
 // from the PTY here.
 func (b *ShellExecutable) ReadUntilConditionOrTimeout(condition func() bool, timeout time.Duration) error {
