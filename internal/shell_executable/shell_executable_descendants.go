@@ -3,7 +3,7 @@ package shell_executable
 import (
 	"fmt"
 
-	"github.com/shirou/gopsutil/v3/process"
+	"github.com/shirou/gopsutil/v4/process"
 )
 
 // GetAllDescendentsPids returns the PIDs of every descendant of the shell process (recursive).

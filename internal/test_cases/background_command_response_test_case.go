@@ -12,7 +12,7 @@ import (
 	"github.com/codecrafters-io/shell-tester/internal/utils"
 	"github.com/codecrafters-io/tester-utils/logger"
 	"github.com/google/shlex"
-	"github.com/shirou/gopsutil/v3/process"
+	"github.com/shirou/gopsutil/v4/process"
 )
 
 // BackgroundCommandResponseTestCase launches the given command with an & symbol
