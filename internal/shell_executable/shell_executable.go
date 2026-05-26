@@ -98,7 +98,7 @@ func (b *ShellExecutable) GetPid() int {
 
 func (b *ShellExecutable) Kill() {
 	if b.cmd == nil || b.cmd.Process == nil {
-		panic("Codecrafters Internal Error: ShellExecutable.Kill called without starting shell")
+		return
 	}
 	b.cmd.Process.Kill()
 }
