@@ -68,8 +68,7 @@ func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellE
 
 	b.env = environ.New(os.Environ())
 
-	// TODO: Kill pty process?
-	// stageHarness.RegisterTeardownFunc(func() { b.Kill() })
+	stageHarness.RegisterTeardownFunc(func() { b.Kill() })
 
 	return b
 }
@@ -95,6 +94,13 @@ func (b *ShellExecutable) GetPid() int {
 		panic("Codecrafters Internal Error: ShellExecutable.GetPid called without starting shell")
 	}
 	return b.cmd.Process.Pid
+}
+
+func (b *ShellExecutable) Kill() {
+	if b.cmd == nil || b.cmd.Process == nil {
+		panic("Codecrafters Internal Error: ShellExecutable.Kill called without starting shell")
+	}
+	b.cmd.Process.Kill()
 }
 
 func (b *ShellExecutable) Start(args ...string) error {
