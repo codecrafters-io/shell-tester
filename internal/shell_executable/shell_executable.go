@@ -68,8 +68,7 @@ func NewShellExecutable(stageHarness *test_case_harness.TestCaseHarness) *ShellE
 
 	b.env = environ.New(os.Environ())
 
-	// TODO: Kill pty process?
-	// stageHarness.RegisterTeardownFunc(func() { b.Kill() })
+	stageHarness.RegisterTeardownFunc(func() { b.Kill() })
 
 	return b
 }
@@ -95,6 +94,21 @@ func (b *ShellExecutable) GetPid() int {
 		panic("Codecrafters Internal Error: ShellExecutable.GetPid called without starting shell")
 	}
 	return b.cmd.Process.Pid
+}
+
+func (b *ShellExecutable) Kill() {
+	if b.cmd == nil || b.cmd.Process == nil {
+		return
+	}
+	if b.memoryMonitor != nil {
+		b.memoryMonitor.stop()
+		b.memoryMonitor = nil
+	}
+	pid := b.cmd.Process.Pid
+	// Kill the process group so child processes do not outlive teardown (creack/pty sets Setsid=true).
+	// Same approach as memory_limit_linux.go when OOM killing.
+	syscall.Kill(-pid, syscall.SIGKILL)
+	syscall.Kill(pid, syscall.SIGKILL)
 }
 
 func (b *ShellExecutable) Start(args ...string) error {
