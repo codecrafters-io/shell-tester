@@ -100,7 +100,15 @@ func (b *ShellExecutable) Kill() {
 	if b.cmd == nil || b.cmd.Process == nil {
 		return
 	}
-	b.cmd.Process.Kill()
+	if b.memoryMonitor != nil {
+		b.memoryMonitor.stop()
+		b.memoryMonitor = nil
+	}
+	pid := b.cmd.Process.Pid
+	// Kill the process group so child processes do not outlive teardown (creack/pty sets Setsid=true).
+	// Same approach as memory_limit_linux.go when OOM killing.
+	syscall.Kill(-pid, syscall.SIGKILL)
+	syscall.Kill(pid, syscall.SIGKILL)
 }
 
 func (b *ShellExecutable) Start(args ...string) error {

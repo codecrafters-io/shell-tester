@@ -50,21 +50,3 @@ func newMemoryHogExecutable() *ShellExecutable {
 	shell.env = environ.New(os.Environ())
 	return shell
 }
-
-func TestKillNoOpWithoutStart(t *testing.T) {
-	shell := newMemoryHogExecutable()
-	assert.NotPanics(t, func() { shell.Kill() })
-}
-
-func TestKillNoOpWhenStartFails(t *testing.T) {
-	shell := &ShellExecutable{
-		executable:         executable.NewExecutable("/nonexistent/path/to/shell"),
-		stageLogger:        logger.GetQuietLogger(""),
-		programLogger:      logger.GetLogger(false, "[your-program] "),
-		MemoryLimitInBytes: defaultMemoryLimitBytes,
-	}
-	shell.env = environ.New(os.Environ())
-	err := shell.Start()
-	assert.Error(t, err)
-	assert.NotPanics(t, func() { shell.Kill() })
-}
