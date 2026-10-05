@@ -11,7 +11,8 @@ builds:
 archives:
   - name_template: "{{ .Tag }}_{{ .Os }}_{{ .Arch }}"
     strip_binary_directory: true
-    format: tar.gz
+    formats:
+      - tar.gz
     files:
       - test.sh
       - built_executables/*
